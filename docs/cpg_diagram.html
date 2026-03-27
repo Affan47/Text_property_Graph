@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Property Graph — example()</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0c12;--bg2:#10131c;--bg3:#161a26;--surface:#1c2030;--surface2:#222638;--text:#e4e6f0;--muted:#8a8faa;--dim:#4e5370;--purple:#a78bfa;--purple-fill:#1e1640;--purple-stroke:#6d5cc8;--coral:#f0845a;--coral-fill:#2a1510;--coral-stroke:#b05530;--teal:#34d399;--teal-fill:#0c2318;--teal-stroke:#1a8a5e;--blue:#60a5fa;--blue-fill:#101c32;--blue-stroke:#3070b0;--amber:#fbbf24;--amber-fill:#211a08;--amber-stroke:#a07818;--green:#6ee7b7;--green-fill:#0e201a;--green-stroke:#2a8060;--red:#f87171;--red-fill:#201010;--radius:10px;--radius-lg:14px}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.7}
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,12,18,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(78,83,112,.2);padding:0 32px}
+.nav-inner{max-width:920px;margin:0 auto;display:flex;gap:24px;overflow-x:auto}
+.nav a{color:var(--muted);font:500 12px 'JetBrains Mono',monospace;letter-spacing:.6px;text-transform:uppercase;text-decoration:none;padding:14px 0;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
+.nav a:hover,.nav a.active{color:var(--text);border-bottom-color:var(--purple)}
+.container{max-width:920px;margin:0 auto;padding:0 28px}
+section{padding:56px 0 0}section:last-of-type{padding-bottom:60px}
+.hero{padding:64px 0 0;text-align:center;animation:fadeUp .7s ease both}
+.hero h1{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;letter-spacing:-1px;background:linear-gradient(135deg,var(--purple),var(--blue),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero .subtitle{color:var(--muted);font-size:15px;margin-top:8px}
+.hero .subtitle code{font-family:'JetBrains Mono',monospace;color:var(--coral);font-size:14px}
+.badge{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:5px 14px;border-radius:999px;background:var(--surface);border:1px solid rgba(167,139,250,.2);font:500 11px 'JetBrains Mono',monospace;color:var(--purple);letter-spacing:.5px}
+.badge .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+.section-label{font:700 10px 'JetBrains Mono',monospace;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.section-title{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;margin-bottom:6px}
+.section-desc{color:var(--muted);font-size:14px;max-width:660px;margin-bottom:28px;line-height:1.7}
+.code-wrap{margin-top:36px;animation:fadeUp .7s .1s ease both}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--surface);border:1px solid var(--dim);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.code-header span{font:600 10px 'JetBrains Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim)}
+.code-dots{display:flex;gap:6px}.code-dots i{width:10px;height:10px;border-radius:50%;opacity:.5}
+.code-dots i:nth-child(1){background:#f87171}.code-dots i:nth-child(2){background:#fbbf24}.code-dots i:nth-child(3){background:#34d399}
+.code-block{background:var(--bg2);border:1px solid var(--dim);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:20px 24px;font-family:'JetBrains Mono',monospace;font-size:13.5px;line-height:2;overflow-x:auto}
+.code-block .kw{color:var(--purple)}.code-block .fn{color:var(--coral)}.code-block .tp{color:var(--teal)}.code-block .str{color:var(--green)}.code-block .cm{color:var(--dim);font-style:italic}.code-block .num{color:var(--amber)}
+.code-block .ln{color:var(--dim);user-select:none;display:inline-block;width:20px;text-align:right;margin-right:20px;font-size:12px}
+.table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid rgba(78,83,112,.25);background:var(--bg2)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead{background:var(--surface)}
+thead th{font:600 10px 'JetBrains Mono',monospace;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);padding:14px 18px;text-align:left;border-bottom:1px solid rgba(78,83,112,.3)}
+tbody td{padding:12px 18px;border-bottom:1px solid rgba(78,83,112,.1);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}tbody tr:hover{background:rgba(255,255,255,.015)}
+td code{font-family:'JetBrains Mono',monospace;font-size:12px;padding:2px 7px;border-radius:4px;background:var(--surface);white-space:nowrap}
+td .node-tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:6px;font:600 11px 'JetBrains Mono',monospace;letter-spacing:.3px;border:1px solid}
+td .node-tag.method{color:var(--purple);border-color:var(--purple-stroke);background:var(--purple-fill)}
+td .node-tag.param{color:var(--teal);border-color:var(--teal-stroke);background:var(--teal-fill)}
+td .node-tag.local{color:var(--blue);border-color:var(--blue-stroke);background:var(--blue-fill)}
+td .node-tag.call{color:var(--coral);border-color:var(--coral-stroke);background:var(--coral-fill)}
+td .node-tag.id{color:var(--amber);border-color:var(--amber-stroke);background:var(--amber-fill)}
+td .node-tag.lit{color:var(--green);border-color:var(--green-stroke);background:var(--green-fill)}
+td .node-tag.ctrl{color:var(--dim);border-color:rgba(78,83,112,.4);background:var(--surface)}
+td .line-ref{color:var(--dim);font-size:11px;font-style:italic}
+.edge-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.edge-grid{grid-template-columns:1fr}}
+.edge-card{background:var(--bg2);border:1px solid rgba(78,83,112,.2);border-radius:var(--radius-lg);padding:20px 22px;position:relative;overflow:hidden}
+.edge-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.edge-card[data-type="ast"]::before{background:var(--purple)}.edge-card[data-type="cfg"]::before{background:var(--coral)}.edge-card[data-type="rdef"]::before{background:var(--teal)}.edge-card[data-type="cdg"]::before{background:var(--blue)}
+.edge-card h3{font:700 14px 'JetBrains Mono',monospace;margin-bottom:4px}
+.edge-card[data-type="ast"] h3{color:var(--purple)}.edge-card[data-type="cfg"] h3{color:var(--coral)}.edge-card[data-type="rdef"] h3{color:var(--teal)}.edge-card[data-type="cdg"] h3{color:var(--blue)}
+.edge-card .edge-desc{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:14px}
+.edge-card .edge-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.edge-card .edge-list li{font:400 12px 'JetBrains Mono',monospace;color:var(--text);padding:6px 10px;border-radius:6px;background:var(--surface);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.edge-card .edge-list .arrow{font-weight:700;flex-shrink:0}
+.edge-card[data-type="ast"] .arrow{color:var(--purple)}.edge-card[data-type="cfg"] .arrow{color:var(--coral)}.edge-card[data-type="rdef"] .arrow{color:var(--teal)}.edge-card[data-type="cdg"] .arrow{color:var(--blue)}
+.edge-card .edge-list .var-label{font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600;letter-spacing:.3px}
+.edge-card[data-type="rdef"] .var-label{color:var(--teal);background:var(--teal-fill);border:1px solid var(--teal-stroke)}
+.edge-card .edge-list .note{color:var(--dim);font-size:11px;font-style:italic;margin-left:auto}
+.graph-controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:8px}
+.toggle-btn{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;border:1.5px solid;cursor:pointer;font:600 11px 'JetBrains Mono',monospace;letter-spacing:.6px;transition:all .3s;user-select:none;background:transparent;position:relative;overflow:hidden}
+.toggle-btn::before{content:'';position:absolute;inset:0;border-radius:999px;opacity:.06;transition:opacity .3s}
+.toggle-btn:hover::before{opacity:.14}
+.toggle-btn .dot{width:8px;height:8px;border-radius:50%;transition:all .3s;box-shadow:0 0 8px currentColor}
+.toggle-btn.off{opacity:.28;filter:grayscale(.7)}.toggle-btn.off .dot{box-shadow:none;opacity:.35}
+.toggle-btn[data-e="ast"]{border-color:var(--purple);color:var(--purple)}.toggle-btn[data-e="ast"]::before{background:var(--purple)}
+.toggle-btn[data-e="cfg"]{border-color:var(--coral);color:var(--coral)}.toggle-btn[data-e="cfg"]::before{background:var(--coral)}
+.toggle-btn[data-e="rdef"]{border-color:var(--teal);color:var(--teal)}.toggle-btn[data-e="rdef"]::before{background:var(--teal)}
+.toggle-btn[data-e="cdg"]{border-color:var(--blue);color:var(--blue)}.toggle-btn[data-e="cdg"]::before{background:var(--blue)}
+.hint{font-size:11px;color:var(--dim);text-align:center;margin-bottom:24px;letter-spacing:.3px}
+.graph-wrap{position:relative;animation:fadeUp .7s ease both}.graph-wrap svg{width:100%;height:auto;filter:drop-shadow(0 4px 40px rgba(0,0,0,.4))}
+.node-box{cursor:pointer;transition:filter .2s}.node-box:hover{filter:brightness(1.3)}
+.edge-group{transition:opacity .4s}.edge-group.hidden{opacity:0;pointer-events:none}
+.footer{text-align:center;padding:48px 0 36px;color:var(--dim);font:400 11px 'JetBrains Mono',monospace;letter-spacing:.8px;border-top:1px solid rgba(78,83,112,.15);margin-top:48px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+@media(max-width:600px){.hero h1{font-size:24px}.container{padding:0 16px}section{padding:40px 0 0}.code-block{font-size:11.5px;padding:14px}table{font-size:11.5px}thead th,tbody td{padding:10px 12px}}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="nav-inner">
+  <a href="#source" class="active">Source</a>
+  <a href="#nodes">Nodes</a>
+  <a href="#edges">Edges</a>
+  <a href="#graph">Interactive graph</a>
+</div></nav>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Code Property Graph</h1>
+  <p class="subtitle">CPG visualization for <code>void example(char *input)</code></p>
+  <div class="badge"><span class="dot"></span> Joern-generated · 10 nodes · 17 edges · 4 edge types</div>
+</div>
+
+<!-- §1 SOURCE -->
+<section id="source">
+  <p class="section-label">Step 0</p>
+  <h2 class="section-title">Source code</h2>
+  <p class="section-desc">A minimal C function that copies user-supplied input into a fixed-size stack buffer — a textbook buffer overflow vulnerability. Joern parses this into a Code Property Graph.</p>
+  <div class="code-wrap">
+    <div class="code-header"><div class="code-dots"><i></i><i></i><i></i></div><span>example.c</span></div>
+    <div class="code-block">
+<div><span class="ln">1</span><span class="kw">void</span> <span class="fn">example</span>(<span class="tp">char</span> *<span class="tp">input</span>) {</div>
+<div><span class="ln">2</span>    <span class="tp">char</span> buffer[<span class="num">64</span>];</div>
+<div><span class="ln">3</span>    <span class="fn">strcpy</span>(buffer, input);      <span class="cm">// ⚠ unbounded copy → overflow</span></div>
+<div><span class="ln">4</span>    <span class="fn">printf</span>(<span class="str">"%s\n"</span>, buffer);</div>
+<div><span class="ln">5</span>}</div>
+    </div>
+  </div>
+</section>
+
+<!-- §2 NODES -->
+<section id="nodes">
+  <p class="section-label">Step 1</p>
+  <h2 class="section-title">Nodes (vertices)</h2>
+  <p class="section-desc">Every syntactic element in the function becomes a node. Each carries a <strong>label</strong> (type) and <strong>CODE</strong> property (source text). Joern produces 10 nodes:</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Node</th><th>Label</th><th>CODE</th><th>What it represents</th></tr></thead>
+    <tbody>
+      <tr><td><strong>N1</strong></td><td><span class="node-tag method">METHOD</span></td><td><code>example</code></td><td>Function definition — root of the AST subtree. <span class="line-ref">Line 1</span></td></tr>
+      <tr><td><strong>N2</strong></td><td><span class="node-tag param">PARAM</span></td><td><code>char *input</code></td><td>Formal parameter — user-controlled data enters here. <span class="line-ref">Line 1</span></td></tr>
+      <tr><td><strong>N3</strong></td><td><span class="node-tag local">LOCAL</span></td><td><code>char buffer[64]</code></td><td>Stack-allocated local — 64-byte fixed buffer. <span class="line-ref">Line 2</span></td></tr>
+      <tr><td><strong>N4</strong></td><td><span class="node-tag call">CALL</span></td><td><code>strcpy(buffer, input)</code></td><td>Dangerous call — copies input with no bounds check. <span class="line-ref">Line 3</span></td></tr>
+      <tr><td><strong>N5</strong></td><td><span class="node-tag id">IDENTIFIER</span></td><td><code>buffer</code></td><td>Use of buffer as destination in strcpy. <span class="line-ref">Line 3</span></td></tr>
+      <tr><td><strong>N6</strong></td><td><span class="node-tag id">IDENTIFIER</span></td><td><code>input</code></td><td>Use of input as source in strcpy. <span class="line-ref">Line 3</span></td></tr>
+      <tr><td><strong>N7</strong></td><td><span class="node-tag call">CALL</span></td><td><code>printf(...)</code></td><td>Output call — prints buffer contents to stdout. <span class="line-ref">Line 4</span></td></tr>
+      <tr><td><strong>N8</strong></td><td><span class="node-tag id">IDENTIFIER</span></td><td><code>buffer</code></td><td>Use of buffer as argument inside printf. <span class="line-ref">Line 4</span></td></tr>
+      <tr><td><strong>N9</strong></td><td><span class="node-tag lit">LITERAL</span></td><td><code>"%s\n"</code></td><td>Format string literal — first argument to printf. <span class="line-ref">Line 4</span></td></tr>
+      <tr><td><strong>N10</strong></td><td><span class="node-tag ctrl">CTRL_STRUCT</span></td><td><code>(none)</code></td><td>Placeholder — no if/while/for exists in this function.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- §3 EDGES — NOW COMPLETE WITH ALL 17 -->
+<section id="edges">
+  <p class="section-label">Step 2</p>
+  <h2 class="section-title">Edges (relationships)</h2>
+  <p class="section-desc">The power of a CPG is in its <strong>four types of edges</strong> overlaying different semantic dimensions onto the same nodes — syntax structure, execution order, data flow, and control dependence. <strong>17 edges total.</strong></p>
+  <div class="edge-grid">
+    <div class="edge-card" data-type="ast">
+      <h3>AST — Abstract syntax tree (8 edges)</h3>
+      <p class="edge-desc">Parent → child in the syntax hierarchy. The method owns its declarations and calls; each call owns its arguments.</p>
+      <ul class="edge-list">
+        <li>N1 METHOD <span class="arrow">──▸</span> N2 PARAM</li>
+        <li>N1 METHOD <span class="arrow">──▸</span> N3 LOCAL</li>
+        <li>N1 METHOD <span class="arrow">──▸</span> N4 CALL:strcpy</li>
+        <li>N1 METHOD <span class="arrow">──▸</span> N7 CALL:printf</li>
+        <li>N4 CALL <span class="arrow">──▸</span> N5 ID:buffer</li>
+        <li>N4 CALL <span class="arrow">──▸</span> N6 ID:input</li>
+        <li>N7 CALL <span class="arrow">──▸</span> N8 ID:buffer</li>
+        <li>N7 CALL <span class="arrow">──▸</span> N9 LITERAL:"%s\n"</li>
+      </ul>
+    </div>
+    <div class="edge-card" data-type="cfg">
+      <h3>CFG — Control flow graph (3 edges)</h3>
+      <p class="edge-desc">Execution order — which statement runs after which. A straight chain since there are no branches.</p>
+      <ul class="edge-list">
+        <li>N1 METHOD <span class="arrow">──▸</span> N3 LOCAL</li>
+        <li>N3 LOCAL <span class="arrow">──▸</span> N4 CALL:strcpy</li>
+        <li>N4 CALL:strcpy <span class="arrow">──▸</span> N7 CALL:printf</li>
+      </ul>
+    </div>
+    <div class="edge-card" data-type="rdef">
+      <h3>REACHING_DEF — Data flow (3 edges)</h3>
+      <p class="edge-desc">Tracks where variable values originate and flow to. Each edge carries a VARIABLE property.</p>
+      <ul class="edge-list">
+        <li>N2 PARAM:input <span class="arrow">──▸</span> N6 use of input <span class="var-label">var: input</span></li>
+        <li>N3 LOCAL:buffer <span class="arrow">──▸</span> N5 use of buffer <span class="var-label">var: buffer</span></li>
+        <li>N4 CALL:strcpy <span class="arrow">──▸</span> N8 use in printf <span class="var-label">var: buffer</span> <span class="note">⚠ tainted flow</span></li>
+      </ul>
+    </div>
+    <div class="edge-card" data-type="cdg">
+      <h3>CDG — Control dependence (3 edges)</h3>
+      <p class="edge-desc">Which statement's execution depends on which control decision. All depend on the method entry — unconditional.</p>
+      <ul class="edge-list">
+        <li>N1 METHOD <span class="arrow">──▸</span> N3 LOCAL <span class="note">always executes</span></li>
+        <li>N1 METHOD <span class="arrow">──▸</span> N4 CALL <span class="note">always executes</span></li>
+        <li>N1 METHOD <span class="arrow">──▸</span> N7 CALL <span class="note">always executes</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- §4 INTERACTIVE GRAPH — ALL 17 EDGES -->
+<section id="graph">
+  <p class="section-label">Step 3</p>
+  <h2 class="section-title">Interactive graph</h2>
+  <p class="section-desc">All four edge layers overlaid on 10 nodes. Toggle each layer to see how the CPG encodes syntax, control flow, data flow, and control dependence simultaneously. <strong>17 edges total.</strong></p>
+  <div class="graph-controls">
+    <button class="toggle-btn" data-e="ast" onclick="toggle('ast',this)"><span class="dot"></span>AST (8)</button>
+    <button class="toggle-btn" data-e="cfg" onclick="toggle('cfg',this)"><span class="dot"></span>CFG (3)</button>
+    <button class="toggle-btn" data-e="rdef" onclick="toggle('rdef',this)"><span class="dot"></span>REACHING DEF (3)</button>
+    <button class="toggle-btn" data-e="cdg" onclick="toggle('cdg',this)"><span class="dot"></span>CDG (3)</button>
+  </div>
+  <div class="hint">Click each button to show / hide edge layers</div>
+  <div class="graph-wrap">
+  <svg viewBox="0 0 700 580" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a-ast" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-cfg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#f0845a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-rdef" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-cdg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <filter id="gl-p"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#a78bfa" flood-opacity=".25"/></filter>
+    <filter id="gl-c"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#f0845a" flood-opacity=".25"/></filter>
+    <filter id="gl-t"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#34d399" flood-opacity=".25"/></filter>
+    <filter id="gl-b"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#60a5fa" flood-opacity=".25"/></filter>
+    <filter id="gl-a"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#fbbf24" flood-opacity=".2"/></filter>
+    <filter id="gl-g"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#6ee7b7" flood-opacity=".2"/></filter>
+  </defs>
+
+  <!-- ═══ AST EDGES (8 — purple solid) ═══ -->
+  <g id="ast" class="edge-group">
+    <!-- N1→N2 METHOD→PARAM -->
+    <path d="M305 80 L175 145" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity=".65" marker-end="url(#a-ast)"/>
+    <text x="205" y="106" fill="#a78bfa" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".75">AST</text>
+    <!-- N1→N3 METHOD→LOCAL -->
+    <path d="M395 80 L525 145" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity=".65" marker-end="url(#a-ast)"/>
+    <text x="430" y="106" fill="#a78bfa" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".75">AST</text>
+    <!-- N1→N4 METHOD→CALL:strcpy (wide curve left) -->
+    <path d="M268 80 C 28 88, 28 278, 160 278" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity=".65" marker-end="url(#a-ast)"/>
+    <text x="36" y="178" fill="#a78bfa" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".75">AST</text>
+    <!-- N1→N7 METHOD→CALL:printf (wide curve right) — NEW -->
+    <path d="M432 80 C 672 88, 672 278, 545 278" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity=".65" marker-end="url(#a-ast)"/>
+    <text x="660" y="178" fill="#a78bfa" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".75" text-anchor="end">AST</text>
+    <!-- N4→N5 CALL:strcpy→ID:buffer -->
+    <path d="M118 336 L110 396" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity=".65" marker-end="url(#a-ast)"/>
+    <text x="86" y="374" fill="#a78bfa" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".75">AST</text>
+    <!-- N4→N6 CALL:strcpy→ID:input -->
+    <path d="M232 336 L265 396" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity=".65" marker-end="url(#a-ast)"/>
+    <text x="248" y="374" fill="#a78bfa" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".75">AST</text>
+    <!-- N7→N8 CALL:printf→ID:buffer — NEW -->
+    <path d="M490 336 L478 396" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity=".65" marker-end="url(#a-ast)"/>
+    <text x="460" y="374" fill="#a78bfa" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".75">AST</text>
+    <!-- N7→N9 CALL:printf→LITERAL — NEW -->
+    <path d="M570 336 L615 396" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity=".65" marker-end="url(#a-ast)"/>
+    <text x="600" y="374" fill="#a78bfa" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".75">AST</text>
+  </g>
+
+  <!-- ═══ CFG EDGES (3 — coral solid) ═══ -->
+  <g id="cfg" class="edge-group">
+    <path d="M400 72 Q 462 112, 525 145" fill="none" stroke="#f0845a" stroke-width="2.2" opacity=".7" marker-end="url(#a-cfg)"/>
+    <path d="M455 208 Q 365 245, 278 278" fill="none" stroke="#f0845a" stroke-width="2.2" opacity=".7" marker-end="url(#a-cfg)"/>
+    <path d="M282 308 L432 308" fill="none" stroke="#f0845a" stroke-width="2.2" opacity=".7" marker-end="url(#a-cfg)"/>
+    <text x="455" y="100" fill="#f0845a" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".85">CFG</text>
+    <text x="352" y="238" fill="#f0845a" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".85">CFG</text>
+    <text x="346" y="298" fill="#f0845a" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".85">CFG</text>
+  </g>
+
+  <!-- ═══ REACHING_DEF EDGES (3 — teal dashed) ═══ -->
+  <g id="rdef" class="edge-group">
+    <!-- N2→N6 PARAM:input → use of input -->
+    <path d="M158 208 C 8 208, 8 428, 68 428" fill="none" stroke="#34d399" stroke-width="1.8" stroke-dasharray="7 4" opacity=".65" marker-end="url(#a-rdef)"/>
+    <text x="6" y="338" fill="#34d399" font-family="JetBrains Mono" font-size="9" font-style="italic" opacity=".75">input</text>
+    <!-- N3→N5 LOCAL:buffer → use of buffer -->
+    <path d="M580 208 C 685 298, 685 428, 548 428" fill="none" stroke="#34d399" stroke-width="1.8" stroke-dasharray="7 4" opacity=".65" marker-end="url(#a-rdef)"/>
+    <text x="672" y="338" fill="#34d399" font-family="JetBrains Mono" font-size="9" font-style="italic" opacity=".75" text-anchor="end">buffer</text>
+    <!-- N4→N8 CALL:strcpy → use in printf (tainted!) -->
+    <path d="M278 332 C 362 368, 405 388, 445 398" fill="none" stroke="#34d399" stroke-width="1.8" stroke-dasharray="7 4" opacity=".65" marker-end="url(#a-rdef)"/>
+    <text x="378" y="366" fill="#34d399" font-family="JetBrains Mono" font-size="9" font-style="italic" opacity=".75">buffer ⚠</text>
+  </g>
+
+  <!-- ═══ CDG EDGES (3 — blue dotted) ═══ -->
+  <g id="cdg" class="edge-group">
+    <path d="M325 80 C 335 125, 525 125, 525 145" fill="none" stroke="#60a5fa" stroke-width="1.3" stroke-dasharray="4 4" opacity=".55" marker-end="url(#a-cdg)"/>
+    <path d="M292 80 C 212 140, 192 210, 188 278" fill="none" stroke="#60a5fa" stroke-width="1.3" stroke-dasharray="4 4" opacity=".55" marker-end="url(#a-cdg)"/>
+    <path d="M412 80 C 565 140, 585 210, 540 278" fill="none" stroke="#60a5fa" stroke-width="1.3" stroke-dasharray="4 4" opacity=".55" marker-end="url(#a-cdg)"/>
+    <text x="460" y="126" fill="#60a5fa" font-family="JetBrains Mono" font-size="9" font-weight="500" opacity=".65">CDG</text>
+    <text x="172" y="218" fill="#60a5fa" font-family="JetBrains Mono" font-size="9" font-weight="500" opacity=".65">CDG</text>
+    <text x="578" y="218" fill="#60a5fa" font-family="JetBrains Mono" font-size="9" font-weight="500" opacity=".65">CDG</text>
+  </g>
+
+  <!-- ═══ NODES (10) ═══ -->
+  <!-- N1: METHOD -->
+  <g class="node-box" filter="url(#gl-p)"><rect x="258" y="24" width="184" height="56" rx="12" fill="#1e1640" stroke="#a78bfa" stroke-width="1.2"/><text x="350" y="44" text-anchor="middle" dominant-baseline="central" fill="#a78bfa" font-family="JetBrains Mono" font-size="14" font-weight="700">example</text><text x="350" y="64" text-anchor="middle" dominant-baseline="central" fill="#6d5cc8" font-family="JetBrains Mono" font-size="10">N1 · METHOD</text></g>
+  <!-- N2: PARAM -->
+  <g class="node-box" filter="url(#gl-t)"><rect x="62" y="148" width="196" height="56" rx="12" fill="#0c2318" stroke="#34d399" stroke-width="1"/><text x="160" y="168" text-anchor="middle" dominant-baseline="central" fill="#34d399" font-family="JetBrains Mono" font-size="13" font-weight="600">char *input</text><text x="160" y="188" text-anchor="middle" dominant-baseline="central" fill="#1a8a5e" font-family="JetBrains Mono" font-size="10">N2 · PARAM</text></g>
+  <!-- N3: LOCAL -->
+  <g class="node-box" filter="url(#gl-b)"><rect x="428" y="148" width="218" height="56" rx="12" fill="#101c32" stroke="#60a5fa" stroke-width="1"/><text x="537" y="168" text-anchor="middle" dominant-baseline="central" fill="#60a5fa" font-family="JetBrains Mono" font-size="13" font-weight="600">char buffer[64]</text><text x="537" y="188" text-anchor="middle" dominant-baseline="central" fill="#3070b0" font-family="JetBrains Mono" font-size="10">N3 · LOCAL</text></g>
+  <!-- N4: CALL strcpy -->
+  <g class="node-box" filter="url(#gl-c)"><rect x="55" y="278" width="228" height="56" rx="12" fill="#2a1510" stroke="#f0845a" stroke-width="1.2"/><text x="169" y="298" text-anchor="middle" dominant-baseline="central" fill="#f0845a" font-family="JetBrains Mono" font-size="13" font-weight="600">strcpy(buf, input)</text><text x="169" y="318" text-anchor="middle" dominant-baseline="central" fill="#b05530" font-family="JetBrains Mono" font-size="10">N4 · CALL ⚠</text></g>
+  <!-- N7: CALL printf -->
+  <g class="node-box" filter="url(#gl-c)"><rect x="435" y="278" width="210" height="56" rx="12" fill="#2a1510" stroke="#f0845a" stroke-width="1"/><text x="540" y="298" text-anchor="middle" dominant-baseline="central" fill="#f0845a" font-family="JetBrains Mono" font-size="13" font-weight="600">printf(...)</text><text x="540" y="318" text-anchor="middle" dominant-baseline="central" fill="#b05530" font-family="JetBrains Mono" font-size="10">N7 · CALL</text></g>
+  <!-- N5: ID buffer (strcpy) -->
+  <g class="node-box" filter="url(#gl-a)"><rect x="40" y="398" width="142" height="48" rx="10" fill="#211a08" stroke="#fbbf24" stroke-width=".8"/><text x="111" y="416" text-anchor="middle" dominant-baseline="central" fill="#fbbf24" font-family="JetBrains Mono" font-size="12" font-weight="600">buffer</text><text x="111" y="434" text-anchor="middle" dominant-baseline="central" fill="#a07818" font-family="JetBrains Mono" font-size="9">N5 · ID (strcpy)</text></g>
+  <!-- N6: ID input (strcpy) -->
+  <g class="node-box" filter="url(#gl-a)"><rect x="200" y="398" width="142" height="48" rx="10" fill="#211a08" stroke="#fbbf24" stroke-width=".8"/><text x="271" y="416" text-anchor="middle" dominant-baseline="central" fill="#fbbf24" font-family="JetBrains Mono" font-size="12" font-weight="600">input</text><text x="271" y="434" text-anchor="middle" dominant-baseline="central" fill="#a07818" font-family="JetBrains Mono" font-size="9">N6 · ID (strcpy)</text></g>
+  <!-- N8: ID buffer (printf) -->
+  <g class="node-box" filter="url(#gl-a)"><rect x="404" y="398" width="142" height="48" rx="10" fill="#211a08" stroke="#fbbf24" stroke-width=".8"/><text x="475" y="416" text-anchor="middle" dominant-baseline="central" fill="#fbbf24" font-family="JetBrains Mono" font-size="12" font-weight="600">buffer</text><text x="475" y="434" text-anchor="middle" dominant-baseline="central" fill="#a07818" font-family="JetBrains Mono" font-size="9">N8 · ID (printf)</text></g>
+  <!-- N9: LITERAL -->
+  <g class="node-box" filter="url(#gl-g)"><rect x="564" y="398" width="108" height="48" rx="10" fill="#0e201a" stroke="#6ee7b7" stroke-width=".8"/><text x="618" y="416" text-anchor="middle" dominant-baseline="central" fill="#6ee7b7" font-family="JetBrains Mono" font-size="12" font-weight="600">"%s\n"</text><text x="618" y="434" text-anchor="middle" dominant-baseline="central" fill="#2a8060" font-family="JetBrains Mono" font-size="9">N9 · LITERAL</text></g>
+  <!-- N10: CTRL_STRUCT (unused) -->
+  <g class="node-box" opacity=".4"><rect x="252" y="500" width="196" height="44" rx="10" fill="#10131c" stroke="#4e5370" stroke-width=".8" stroke-dasharray="5 4"/><text x="350" y="516" text-anchor="middle" dominant-baseline="central" fill="#4e5370" font-family="JetBrains Mono" font-size="12" font-weight="500">(none)</text><text x="350" y="534" text-anchor="middle" dominant-baseline="central" fill="#363a50" font-family="JetBrains Mono" font-size="9">N10 · CTRL_STRUCT</text></g>
+
+  <!-- Legend -->
+  <g font-family="JetBrains Mono" font-size="10">
+    <rect x="50" y="562" width="8" height="8" rx="2" fill="#a78bfa"/><text x="64" y="570" fill="#8a8faa">AST (8)</text>
+    <rect x="155" y="562" width="8" height="8" rx="2" fill="#f0845a"/><text x="169" y="570" fill="#8a8faa">CFG (3)</text>
+    <rect x="250" y="562" width="8" height="8" rx="2" fill="#34d399"/><text x="264" y="570" fill="#8a8faa">REACHING DEF (3)</text>
+    <rect x="440" y="562" width="8" height="8" rx="2" fill="#60a5fa"/><text x="454" y="570" fill="#8a8faa">CDG (3)</text>
+  </g>
+  </svg>
+  </div>
+</section>
+
+</div>
+
+<div class="footer">SemVul — GNN + CPG-based vulnerability detection · Università di Cagliari</div>
+
+<script>
+function toggle(id,btn){document.getElementById(id).classList.toggle('hidden');btn.classList.toggle('off')}
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('.nav a');
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){navLinks.forEach(l=>l.classList.remove('active'));document.querySelector('.nav a[href="#'+e.target.id+'"]').classList.add('active')}})},{rootMargin:'-40% 0px -55% 0px'});
+sections.forEach(s=>obs.observe(s));
+document.querySelectorAll('.node-box').forEach((n,i)=>{n.style.animation='fadeUp .5s '+(0.2+i*0.05)+'s ease both'});
+</script>
+</body>
+</html>
