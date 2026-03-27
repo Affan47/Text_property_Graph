@@ -1,0 +1,9168 @@
+{
+  "directed": true,
+  "type": "TPG",
+  "label": "tpg",
+  "doc_id": "sample_security",
+  "metadata": {
+    "source_text": "CVE-2024-1234: A buffer overflow vulnerability (CWE-120) has been discovered in Apache HTTP Server version 2.4.51. The flaw exists in the mod_ssl module where user-supplied input is copied to a fixed-",
+    "spacy_model": "en_core_web_sm",
+    "has_parser": true,
+    "passes_applied": [
+      "spacy_frontend",
+      "coreference_pass",
+      "discourse_pass",
+      "entity_relation_pass",
+      "topic_pass"
+    ]
+  },
+  "schema": {
+    "node_types": [
+      "DOCUMENT",
+      "PARAGRAPH",
+      "SENTENCE",
+      "TOKEN",
+      "ENTITY",
+      "PREDICATE",
+      "ARGUMENT",
+      "CONCEPT",
+      "NOUN_PHRASE",
+      "VERB_PHRASE",
+      "CLAUSE",
+      "MENTION",
+      "TOPIC"
+    ],
+    "edge_types": [
+      "DEP",
+      "NEXT_TOKEN",
+      "NEXT_SENT",
+      "NEXT_PARA",
+      "COREF",
+      "SRL_ARG",
+      "AMR_EDGE",
+      "RST_RELATION",
+      "DISCOURSE",
+      "CONTAINS",
+      "BELONGS_TO",
+      "ENTITY_REL",
+      "SIMILARITY"
+    ],
+    "num_node_types": 13,
+    "num_edge_types": 13
+  },
+  "stats": {
+    "doc_id": "sample_security",
+    "total_nodes": 232,
+    "total_edges": 708,
+    "node_types": {
+      "DOCUMENT": 1,
+      "PARAGRAPH": 3,
+      "SENTENCE": 6,
+      "TOKEN": 121,
+      "ENTITY": 3,
+      "PREDICATE": 17,
+      "ARGUMENT": 32,
+      "NOUN_PHRASE": 26,
+      "VERB_PHRASE": 10,
+      "CLAUSE": 5,
+      "MENTION": 3,
+      "TOPIC": 5
+    },
+    "edge_types": {
+      "DEP": 115,
+      "NEXT_TOKEN": 120,
+      "NEXT_SENT": 5,
+      "NEXT_PARA": 2,
+      "COREF": 3,
+      "SRL_ARG": 64,
+      "DISCOURSE": 16,
+      "CONTAINS": 196,
+      "BELONGS_TO": 186,
+      "ENTITY_REL": 1
+    },
+    "passes_applied": [
+      "spacy_frontend",
+      "coreference_pass",
+      "discourse_pass",
+      "entity_relation_pass",
+      "topic_pass"
+    ]
+  },
+  "vertices": [
+    {
+      "id": 0,
+      "label": "DOCUMENT",
+      "properties": {
+        "TEXT": "CVE-2024-1234: A buffer overflow vulnerability (CWE-120) has been discovered in Apache HTTP Server version 2.4.51. The flaw exists in the mod_ssl module where user-supplied input is copied to a fixed-",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 1,
+      "label": "PARAGRAPH",
+      "properties": {
+        "TEXT": "CVE-2024-1234: A buffer overflow vulnerability (CWE-120) has been discovered in Apache HTTP Server v",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 2,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "CVE-2024-1234: A buffer overflow vulnerability (CWE-120) has been discovered in Apache HTTP Server version 2.4.51.",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 114,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 3,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "CVE-2024",
+        "LEMMA": "CVE-2024",
+        "POS": "PROPN",
+        "DEP_REL": "npadvmod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 8,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 4,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "-",
+        "LEMMA": "-",
+        "POS": "SYM",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 8,
+        "CHAR_END": 9,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 5,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "1234",
+        "LEMMA": "1234",
+        "POS": "NUM",
+        "DEP_REL": "nummod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 9,
+        "CHAR_END": 13,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 6,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ":",
+        "LEMMA": ":",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 13,
+        "CHAR_END": 14,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 7,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "A",
+        "LEMMA": "a",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 15,
+        "CHAR_END": 16,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 8,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "buffer",
+        "LEMMA": "buffer",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 17,
+        "CHAR_END": 23,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 9,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "overflow",
+        "LEMMA": "overflow",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 24,
+        "CHAR_END": 32,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 10,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "vulnerability",
+        "LEMMA": "vulnerability",
+        "POS": "NOUN",
+        "DEP_REL": "nsubjpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 33,
+        "CHAR_END": 46,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 11,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "(",
+        "LEMMA": "(",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 47,
+        "CHAR_END": 48,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 12,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "CWE-120",
+        "LEMMA": "CWE-120",
+        "POS": "PROPN",
+        "DEP_REL": "appos",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 48,
+        "CHAR_END": 55,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 13,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ")",
+        "LEMMA": ")",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 55,
+        "CHAR_END": 56,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 14,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "has",
+        "LEMMA": "have",
+        "POS": "AUX",
+        "DEP_REL": "aux",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 57,
+        "CHAR_END": 60,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 15,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "been",
+        "LEMMA": "be",
+        "POS": "AUX",
+        "DEP_REL": "auxpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 61,
+        "CHAR_END": 65,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 16,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "discovered",
+        "LEMMA": "discover",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 66,
+        "CHAR_END": 76,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 17,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "in",
+        "LEMMA": "in",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 14,
+        "CHAR_START": 77,
+        "CHAR_END": 79,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 18,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Apache",
+        "LEMMA": "Apache",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_TYPE": "PRODUCT",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 15,
+        "CHAR_START": 80,
+        "CHAR_END": 86,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 19,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "HTTP",
+        "LEMMA": "HTTP",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 16,
+        "CHAR_START": 87,
+        "CHAR_END": 91,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 20,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Server",
+        "LEMMA": "Server",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 17,
+        "CHAR_START": 92,
+        "CHAR_END": 98,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 21,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "version",
+        "LEMMA": "version",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 18,
+        "CHAR_START": 99,
+        "CHAR_END": 106,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 22,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "2.4.51",
+        "LEMMA": "2.4.51",
+        "POS": "PROPN",
+        "DEP_REL": "appos",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 19,
+        "CHAR_START": 107,
+        "CHAR_END": 113,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 23,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 20,
+        "CHAR_START": 113,
+        "CHAR_END": 114,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 24,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "Apache",
+        "ENTITY_TYPE": "PRODUCT",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 80,
+        "CHAR_END": 86,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 25,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "discovered",
+        "LEMMA": "discover",
+        "POS": "VERB",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 26,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "CVE-2024",
+        "LEMMA": "CVE-2024",
+        "DEP_REL": "npadvmod",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-TMP",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 27,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "vulnerability",
+        "LEMMA": "vulnerability",
+        "DEP_REL": "nsubjpass",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 28,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "in",
+        "LEMMA": "in",
+        "DEP_REL": "prep",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 14,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 29,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "A buffer overflow vulnerability",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 30,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "CWE-120",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 31,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Apache HTTP Server version",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 32,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "2.4.51",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 33,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "has been discovered",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 34,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "The flaw exists in the mod_ssl module where user-supplied input is copied to a fixed-size buffer using strcpy without bounds checking.",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 115,
+        "CHAR_END": 249,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 35,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "The",
+        "LEMMA": "the",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 115,
+        "CHAR_END": 118,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 36,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "flaw",
+        "LEMMA": "flaw",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 119,
+        "CHAR_END": 123,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 37,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "exists",
+        "LEMMA": "exist",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 124,
+        "CHAR_END": 130,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 38,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "in",
+        "LEMMA": "in",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 131,
+        "CHAR_END": 133,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 39,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "the",
+        "LEMMA": "the",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 134,
+        "CHAR_END": 137,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 40,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "mod_ssl",
+        "LEMMA": "mod_ssl",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 138,
+        "CHAR_END": 145,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 41,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "module",
+        "LEMMA": "module",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 146,
+        "CHAR_END": 152,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 42,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "where",
+        "LEMMA": "where",
+        "POS": "SCONJ",
+        "DEP_REL": "advmod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 153,
+        "CHAR_END": 158,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 43,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "user",
+        "LEMMA": "user",
+        "POS": "NOUN",
+        "DEP_REL": "npadvmod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 159,
+        "CHAR_END": 163,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 44,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "-",
+        "LEMMA": "-",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 163,
+        "CHAR_END": 164,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 45,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "supplied",
+        "LEMMA": "supply",
+        "POS": "VERB",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 164,
+        "CHAR_END": 172,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 46,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "input",
+        "LEMMA": "input",
+        "POS": "NOUN",
+        "DEP_REL": "nsubjpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 173,
+        "CHAR_END": 178,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 47,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "is",
+        "LEMMA": "be",
+        "POS": "AUX",
+        "DEP_REL": "auxpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 179,
+        "CHAR_END": 181,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 48,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "copied",
+        "LEMMA": "copy",
+        "POS": "VERB",
+        "DEP_REL": "relcl",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 182,
+        "CHAR_END": 188,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 49,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "to",
+        "LEMMA": "to",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 14,
+        "CHAR_START": 189,
+        "CHAR_END": 191,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 50,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "a",
+        "LEMMA": "a",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 15,
+        "CHAR_START": 192,
+        "CHAR_END": 193,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 51,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "fixed",
+        "LEMMA": "fix",
+        "POS": "VERB",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 16,
+        "CHAR_START": 194,
+        "CHAR_END": 199,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 52,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "-",
+        "LEMMA": "-",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 17,
+        "CHAR_START": 199,
+        "CHAR_END": 200,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 53,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "size",
+        "LEMMA": "size",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 18,
+        "CHAR_START": 200,
+        "CHAR_END": 204,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 54,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "buffer",
+        "LEMMA": "buffer",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 19,
+        "CHAR_START": 205,
+        "CHAR_END": 211,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 55,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "using",
+        "LEMMA": "use",
+        "POS": "VERB",
+        "DEP_REL": "acl",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 20,
+        "CHAR_START": 212,
+        "CHAR_END": 217,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 56,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "strcpy",
+        "LEMMA": "strcpy",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 21,
+        "CHAR_START": 218,
+        "CHAR_END": 224,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 57,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "without",
+        "LEMMA": "without",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 22,
+        "CHAR_START": 225,
+        "CHAR_END": 232,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 58,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "bounds",
+        "LEMMA": "bound",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 23,
+        "CHAR_START": 233,
+        "CHAR_END": 239,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 59,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "checking",
+        "LEMMA": "check",
+        "POS": "VERB",
+        "DEP_REL": "pcomp",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 24,
+        "CHAR_START": 240,
+        "CHAR_END": 248,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 60,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 25,
+        "CHAR_START": 248,
+        "CHAR_END": 249,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 61,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "exists",
+        "LEMMA": "exist",
+        "POS": "VERB",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 62,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "flaw",
+        "LEMMA": "flaw",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 63,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "in",
+        "LEMMA": "in",
+        "DEP_REL": "prep",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 64,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "supplied",
+        "LEMMA": "supply",
+        "POS": "VERB",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 65,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "user",
+        "LEMMA": "user",
+        "DEP_REL": "npadvmod",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-TMP",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 66,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "copied",
+        "LEMMA": "copy",
+        "POS": "VERB",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 67,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "where",
+        "LEMMA": "where",
+        "DEP_REL": "advmod",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-ADV",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 68,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "input",
+        "LEMMA": "input",
+        "DEP_REL": "nsubjpass",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 69,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "to",
+        "LEMMA": "to",
+        "DEP_REL": "prep",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 14,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 70,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "fixed",
+        "LEMMA": "fix",
+        "POS": "VERB",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 16,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 71,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "using",
+        "LEMMA": "use",
+        "POS": "VERB",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 20,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 72,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "strcpy",
+        "LEMMA": "strcpy",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 21,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 73,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "without",
+        "LEMMA": "without",
+        "DEP_REL": "prep",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 22,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 74,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "checking",
+        "LEMMA": "check",
+        "POS": "VERB",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 24,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 75,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "bounds",
+        "LEMMA": "bound",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 23,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 76,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "The flaw",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 77,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "the mod_ssl module",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 78,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "user-supplied input",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 79,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "a fixed-size buffer",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 80,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "strcpy",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 81,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "bounds",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 82,
+      "label": "CLAUSE",
+      "properties": {
+        "TEXT": "where user - supplied input is copied to a fixed - size buffer using strcpy without bounds checking",
+        "DEP_REL": "relcl",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 83,
+      "label": "CLAUSE",
+      "properties": {
+        "TEXT": "using strcpy without bounds checking",
+        "DEP_REL": "acl",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 84,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "where is copied",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 85,
+      "label": "PARAGRAPH",
+      "properties": {
+        "TEXT": "A remote attacker can exploit this vulnerability by sending a specially crafted HTTP request, potent",
+        "SENT_IDX": 0,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 86,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "A remote attacker can exploit this vulnerability by sending a specially crafted HTTP request, potentially achieving arbitrary code execution on the target system.",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 162,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 87,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "A",
+        "LEMMA": "a",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 1,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 88,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "remote",
+        "LEMMA": "remote",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 2,
+        "CHAR_END": 8,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 89,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "attacker",
+        "LEMMA": "attacker",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 9,
+        "CHAR_END": 17,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 90,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "can",
+        "LEMMA": "can",
+        "POS": "AUX",
+        "DEP_REL": "aux",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 18,
+        "CHAR_END": 21,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 91,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "exploit",
+        "LEMMA": "exploit",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 22,
+        "CHAR_END": 29,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 92,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "this",
+        "LEMMA": "this",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 30,
+        "CHAR_END": 34,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 93,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "vulnerability",
+        "LEMMA": "vulnerability",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 35,
+        "CHAR_END": 48,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 94,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "by",
+        "LEMMA": "by",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 49,
+        "CHAR_END": 51,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 95,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "sending",
+        "LEMMA": "send",
+        "POS": "VERB",
+        "DEP_REL": "pcomp",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 52,
+        "CHAR_END": 59,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 96,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "a",
+        "LEMMA": "a",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 60,
+        "CHAR_END": 61,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 97,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "specially",
+        "LEMMA": "specially",
+        "POS": "ADV",
+        "DEP_REL": "advmod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 62,
+        "CHAR_END": 71,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 98,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "crafted",
+        "LEMMA": "craft",
+        "POS": "VERB",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 72,
+        "CHAR_END": 79,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 99,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "HTTP",
+        "LEMMA": "HTTP",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 80,
+        "CHAR_END": 84,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 100,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "request",
+        "LEMMA": "request",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 85,
+        "CHAR_END": 92,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 101,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ",",
+        "LEMMA": ",",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 14,
+        "CHAR_START": 92,
+        "CHAR_END": 93,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 102,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "potentially",
+        "LEMMA": "potentially",
+        "POS": "ADV",
+        "DEP_REL": "advmod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 15,
+        "CHAR_START": 94,
+        "CHAR_END": 105,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 103,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "achieving",
+        "LEMMA": "achieve",
+        "POS": "VERB",
+        "DEP_REL": "advcl",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 16,
+        "CHAR_START": 106,
+        "CHAR_END": 115,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 104,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "arbitrary",
+        "LEMMA": "arbitrary",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 17,
+        "CHAR_START": 116,
+        "CHAR_END": 125,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 105,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "code",
+        "LEMMA": "code",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 18,
+        "CHAR_START": 126,
+        "CHAR_END": 130,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 106,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "execution",
+        "LEMMA": "execution",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 19,
+        "CHAR_START": 131,
+        "CHAR_END": 140,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 107,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "on",
+        "LEMMA": "on",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 20,
+        "CHAR_START": 141,
+        "CHAR_END": 143,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 108,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "the",
+        "LEMMA": "the",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 21,
+        "CHAR_START": 144,
+        "CHAR_END": 147,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 109,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "target",
+        "LEMMA": "target",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 22,
+        "CHAR_START": 148,
+        "CHAR_END": 154,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 110,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "system",
+        "LEMMA": "system",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 23,
+        "CHAR_START": 155,
+        "CHAR_END": 161,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 111,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 24,
+        "CHAR_START": 161,
+        "CHAR_END": 162,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 112,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "exploit",
+        "LEMMA": "exploit",
+        "POS": "VERB",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 113,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "attacker",
+        "LEMMA": "attacker",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 114,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "vulnerability",
+        "LEMMA": "vulnerability",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 115,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "by",
+        "LEMMA": "by",
+        "DEP_REL": "prep",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 116,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "sending",
+        "LEMMA": "send",
+        "POS": "VERB",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 117,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "request",
+        "LEMMA": "request",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 118,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "crafted",
+        "LEMMA": "craft",
+        "POS": "VERB",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 119,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "specially",
+        "LEMMA": "specially",
+        "DEP_REL": "advmod",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-ADV",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 120,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "achieving",
+        "LEMMA": "achieve",
+        "POS": "VERB",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 16,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 121,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "potentially",
+        "LEMMA": "potentially",
+        "DEP_REL": "advmod",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 15,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-ADV",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 122,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "execution",
+        "LEMMA": "execution",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 19,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 123,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "A remote attacker",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 124,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "this vulnerability",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 125,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "a specially crafted HTTP request",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 126,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "arbitrary code execution",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 127,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "the target system",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 128,
+      "label": "CLAUSE",
+      "properties": {
+        "TEXT": "potentially achieving arbitrary code execution on the target system",
+        "DEP_REL": "advcl",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 129,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "can exploit",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 130,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "specially crafted",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 131,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "potentially achieving",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 132,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "The vulnerability has been rated as critical with a CVSS score of 9.8/10.",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 163,
+        "CHAR_END": 236,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 133,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "The",
+        "LEMMA": "the",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 163,
+        "CHAR_END": 166,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 134,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "vulnerability",
+        "LEMMA": "vulnerability",
+        "POS": "NOUN",
+        "DEP_REL": "nsubjpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 167,
+        "CHAR_END": 180,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 135,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "has",
+        "LEMMA": "have",
+        "POS": "AUX",
+        "DEP_REL": "aux",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 181,
+        "CHAR_END": 184,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 136,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "been",
+        "LEMMA": "be",
+        "POS": "AUX",
+        "DEP_REL": "auxpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 185,
+        "CHAR_END": 189,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 137,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "rated",
+        "LEMMA": "rat",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 190,
+        "CHAR_END": 195,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 138,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "as",
+        "LEMMA": "as",
+        "POS": "ADV",
+        "DEP_REL": "advmod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 196,
+        "CHAR_END": 198,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 139,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "critical",
+        "LEMMA": "critical",
+        "POS": "ADJ",
+        "DEP_REL": "oprd",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 199,
+        "CHAR_END": 207,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 140,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "with",
+        "LEMMA": "with",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 208,
+        "CHAR_END": 212,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 141,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "a",
+        "LEMMA": "a",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 213,
+        "CHAR_END": 214,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 142,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "CVSS",
+        "LEMMA": "CVSS",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 215,
+        "CHAR_END": 219,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 143,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "score",
+        "LEMMA": "score",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 220,
+        "CHAR_END": 225,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 144,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "of",
+        "LEMMA": "of",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 226,
+        "CHAR_END": 228,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 145,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "9.8/10",
+        "LEMMA": "9.8/10",
+        "POS": "NUM",
+        "DEP_REL": "pobj",
+        "ENTITY_TYPE": "CARDINAL",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 229,
+        "CHAR_END": 235,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 146,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 235,
+        "CHAR_END": 236,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 147,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "CVSS",
+        "ENTITY_TYPE": "ORG",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 215,
+        "CHAR_END": 219,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 148,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "9.8/10",
+        "ENTITY_TYPE": "CARDINAL",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 229,
+        "CHAR_END": 235,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 149,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "rated",
+        "LEMMA": "rat",
+        "POS": "VERB",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 150,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "vulnerability",
+        "LEMMA": "vulnerability",
+        "DEP_REL": "nsubjpass",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 151,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "critical",
+        "LEMMA": "critical",
+        "DEP_REL": "oprd",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG2",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 152,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "The vulnerability",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 153,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "a CVSS score",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 154,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "has been rated",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 155,
+      "label": "PARAGRAPH",
+      "properties": {
+        "TEXT": "Users are strongly recommended to upgrade to version 2.4.52, which includes a fix for this issue. As",
+        "SENT_IDX": 0,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 156,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "Users are strongly recommended to upgrade to version 2.4.52, which includes a fix for this issue.",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 97,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 157,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Users",
+        "LEMMA": "user",
+        "POS": "NOUN",
+        "DEP_REL": "nsubjpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 5,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 158,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "are",
+        "LEMMA": "be",
+        "POS": "AUX",
+        "DEP_REL": "auxpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 6,
+        "CHAR_END": 9,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 159,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "strongly",
+        "LEMMA": "strongly",
+        "POS": "ADV",
+        "DEP_REL": "advmod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 10,
+        "CHAR_END": 18,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 160,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "recommended",
+        "LEMMA": "recommend",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 19,
+        "CHAR_END": 30,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 161,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "to",
+        "LEMMA": "to",
+        "POS": "PART",
+        "DEP_REL": "aux",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 31,
+        "CHAR_END": 33,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 162,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "upgrade",
+        "LEMMA": "upgrade",
+        "POS": "VERB",
+        "DEP_REL": "xcomp",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 34,
+        "CHAR_END": 41,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 163,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "to",
+        "LEMMA": "to",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 42,
+        "CHAR_END": 44,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 164,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "version",
+        "LEMMA": "version",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 45,
+        "CHAR_END": 52,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 165,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "2.4.52",
+        "LEMMA": "2.4.52",
+        "POS": "PROPN",
+        "DEP_REL": "nummod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 53,
+        "CHAR_END": 59,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 166,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ",",
+        "LEMMA": ",",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 59,
+        "CHAR_END": 60,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 167,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "which",
+        "LEMMA": "which",
+        "POS": "PRON",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 61,
+        "CHAR_END": 66,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 168,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "includes",
+        "LEMMA": "include",
+        "POS": "VERB",
+        "DEP_REL": "relcl",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 67,
+        "CHAR_END": 75,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 169,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "a",
+        "LEMMA": "a",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 76,
+        "CHAR_END": 77,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 170,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "fix",
+        "LEMMA": "fix",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 78,
+        "CHAR_END": 81,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 171,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "for",
+        "LEMMA": "for",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 14,
+        "CHAR_START": 82,
+        "CHAR_END": 85,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 172,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "this",
+        "LEMMA": "this",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 15,
+        "CHAR_START": 86,
+        "CHAR_END": 90,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 173,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "issue",
+        "LEMMA": "issue",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 16,
+        "CHAR_START": 91,
+        "CHAR_END": 96,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 174,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 17,
+        "CHAR_START": 96,
+        "CHAR_END": 97,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 175,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "recommended",
+        "LEMMA": "recommend",
+        "POS": "VERB",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 176,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "Users",
+        "LEMMA": "user",
+        "DEP_REL": "nsubjpass",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 177,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "strongly",
+        "LEMMA": "strongly",
+        "DEP_REL": "advmod",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-ADV",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 178,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "upgrade",
+        "LEMMA": "upgrade",
+        "DEP_REL": "xcomp",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 179,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "upgrade",
+        "LEMMA": "upgrade",
+        "POS": "VERB",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 180,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "to",
+        "LEMMA": "to",
+        "DEP_REL": "prep",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 181,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "includes",
+        "LEMMA": "include",
+        "POS": "VERB",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 182,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "which",
+        "LEMMA": "which",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 183,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "fix",
+        "LEMMA": "fix",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 184,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Users",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 185,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "version",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 186,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "which",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 187,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "a fix",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 188,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "this issue",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 189,
+      "label": "CLAUSE",
+      "properties": {
+        "TEXT": "which includes a fix for this issue",
+        "DEP_REL": "relcl",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 190,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "are strongly recommended",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 191,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "to upgrade",
+        "SENT_IDX": 4,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 192,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "As a temporary workaround, administrators can disable the mod_ssl module until the patch is applied.",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 98,
+        "CHAR_END": 198,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 193,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "As",
+        "LEMMA": "as",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 98,
+        "CHAR_END": 100,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 194,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "a",
+        "LEMMA": "a",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 101,
+        "CHAR_END": 102,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 195,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "temporary",
+        "LEMMA": "temporary",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 103,
+        "CHAR_END": 112,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 196,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "workaround",
+        "LEMMA": "workaround",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 113,
+        "CHAR_END": 123,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 197,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ",",
+        "LEMMA": ",",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 123,
+        "CHAR_END": 124,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 198,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "administrators",
+        "LEMMA": "administrator",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 125,
+        "CHAR_END": 139,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 199,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "can",
+        "LEMMA": "can",
+        "POS": "AUX",
+        "DEP_REL": "aux",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 140,
+        "CHAR_END": 143,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 200,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "disable",
+        "LEMMA": "disable",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 144,
+        "CHAR_END": 151,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 201,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "the",
+        "LEMMA": "the",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 152,
+        "CHAR_END": 155,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 202,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "mod_ssl",
+        "LEMMA": "mod_ssl",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 156,
+        "CHAR_END": 163,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 203,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "module",
+        "LEMMA": "module",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 164,
+        "CHAR_END": 170,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 204,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "until",
+        "LEMMA": "until",
+        "POS": "SCONJ",
+        "DEP_REL": "mark",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 171,
+        "CHAR_END": 176,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 205,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "the",
+        "LEMMA": "the",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 177,
+        "CHAR_END": 180,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 206,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "patch",
+        "LEMMA": "patch",
+        "POS": "NOUN",
+        "DEP_REL": "nsubjpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 181,
+        "CHAR_END": 186,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 207,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "is",
+        "LEMMA": "be",
+        "POS": "AUX",
+        "DEP_REL": "auxpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 14,
+        "CHAR_START": 187,
+        "CHAR_END": 189,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 208,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "applied",
+        "LEMMA": "apply",
+        "POS": "VERB",
+        "DEP_REL": "advcl",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 15,
+        "CHAR_START": 190,
+        "CHAR_END": 197,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 209,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 16,
+        "CHAR_START": 197,
+        "CHAR_END": 198,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 210,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "disable",
+        "LEMMA": "disable",
+        "POS": "VERB",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 211,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "As",
+        "LEMMA": "as",
+        "DEP_REL": "prep",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 212,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "administrators",
+        "LEMMA": "administrator",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 213,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "module",
+        "LEMMA": "module",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 214,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "applied",
+        "LEMMA": "apply",
+        "POS": "VERB",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 15,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 215,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "until",
+        "LEMMA": "until",
+        "DEP_REL": "mark",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-DIS",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 216,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "patch",
+        "LEMMA": "patch",
+        "DEP_REL": "nsubjpass",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 217,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "a temporary workaround",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 218,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "administrators",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 219,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "the mod_ssl module",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 220,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "the patch",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 221,
+      "label": "CLAUSE",
+      "properties": {
+        "TEXT": "until the patch is applied",
+        "DEP_REL": "advcl",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 222,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "can disable",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 223,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "is applied",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 224,
+      "label": "MENTION",
+      "properties": {
+        "TEXT": "this",
+        "SENT_IDX": 2,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "coreference_pass"
+      }
+    },
+    {
+      "id": 225,
+      "label": "MENTION",
+      "properties": {
+        "TEXT": "which",
+        "SENT_IDX": 4,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "coreference_pass"
+      }
+    },
+    {
+      "id": 226,
+      "label": "MENTION",
+      "properties": {
+        "TEXT": "this",
+        "SENT_IDX": 4,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 15,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "coreference_pass"
+      }
+    },
+    {
+      "id": 227,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "vulnerability",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.024793388429752067,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 228,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "buffer",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.01652892561983471,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 229,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "http",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.01652892561983471,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 230,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "version",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.01652892561983471,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 231,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "mod_ssl",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.01652892561983471,
+        "SOURCE": "topic_pass"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "outV": 0,
+      "inV": 1,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e1",
+      "outV": 1,
+      "inV": 2,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e2",
+      "outV": 2,
+      "inV": 3,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e3",
+      "outV": 2,
+      "inV": 4,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e4",
+      "outV": 2,
+      "inV": 5,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e5",
+      "outV": 2,
+      "inV": 6,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e6",
+      "outV": 2,
+      "inV": 7,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e7",
+      "outV": 2,
+      "inV": 8,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e8",
+      "outV": 2,
+      "inV": 9,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e9",
+      "outV": 2,
+      "inV": 10,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e10",
+      "outV": 2,
+      "inV": 11,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e11",
+      "outV": 2,
+      "inV": 12,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e12",
+      "outV": 2,
+      "inV": 13,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e13",
+      "outV": 2,
+      "inV": 14,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e14",
+      "outV": 2,
+      "inV": 15,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e15",
+      "outV": 2,
+      "inV": 16,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e16",
+      "outV": 2,
+      "inV": 17,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e17",
+      "outV": 2,
+      "inV": 18,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e18",
+      "outV": 2,
+      "inV": 19,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e19",
+      "outV": 2,
+      "inV": 20,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e20",
+      "outV": 2,
+      "inV": 21,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e21",
+      "outV": 2,
+      "inV": 22,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e22",
+      "outV": 2,
+      "inV": 23,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e23",
+      "outV": 2,
+      "inV": 24,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e24",
+      "outV": 24,
+      "inV": 18,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e25",
+      "outV": 2,
+      "inV": 25,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e26",
+      "outV": 25,
+      "inV": 16,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e27",
+      "outV": 26,
+      "inV": 3,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e28",
+      "outV": 3,
+      "inV": 25,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "npadvmod",
+        "SRL_LABEL": "ARGM-TMP"
+      }
+    },
+    {
+      "id": "e29",
+      "outV": 26,
+      "inV": 25,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "npadvmod",
+        "SRL_LABEL": "ARGM-TMP"
+      }
+    },
+    {
+      "id": "e30",
+      "outV": 27,
+      "inV": 10,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e31",
+      "outV": 10,
+      "inV": 25,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e32",
+      "outV": 27,
+      "inV": 25,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e33",
+      "outV": 28,
+      "inV": 17,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e34",
+      "outV": 17,
+      "inV": 25,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e35",
+      "outV": 28,
+      "inV": 25,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e36",
+      "outV": 2,
+      "inV": 29,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e37",
+      "outV": 29,
+      "inV": 7,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e38",
+      "outV": 29,
+      "inV": 8,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e39",
+      "outV": 29,
+      "inV": 9,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e40",
+      "outV": 29,
+      "inV": 10,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e41",
+      "outV": 2,
+      "inV": 30,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e42",
+      "outV": 30,
+      "inV": 12,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e43",
+      "outV": 2,
+      "inV": 31,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e44",
+      "outV": 31,
+      "inV": 18,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e45",
+      "outV": 31,
+      "inV": 19,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e46",
+      "outV": 31,
+      "inV": 20,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e47",
+      "outV": 31,
+      "inV": 21,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e48",
+      "outV": 2,
+      "inV": 32,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e49",
+      "outV": 32,
+      "inV": 22,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e50",
+      "outV": 2,
+      "inV": 33,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e51",
+      "outV": 33,
+      "inV": 14,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e52",
+      "outV": 33,
+      "inV": 15,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e53",
+      "outV": 33,
+      "inV": 16,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e54",
+      "outV": 16,
+      "inV": 3,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "npadvmod"
+      }
+    },
+    {
+      "id": "e55",
+      "outV": 5,
+      "inV": 4,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e56",
+      "outV": 3,
+      "inV": 5,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nummod"
+      }
+    },
+    {
+      "id": "e57",
+      "outV": 3,
+      "inV": 6,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e58",
+      "outV": 10,
+      "inV": 7,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e59",
+      "outV": 9,
+      "inV": 8,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e60",
+      "outV": 10,
+      "inV": 9,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e61",
+      "outV": 16,
+      "inV": 10,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubjpass"
+      }
+    },
+    {
+      "id": "e62",
+      "outV": 10,
+      "inV": 11,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e63",
+      "outV": 10,
+      "inV": 12,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "appos"
+      }
+    },
+    {
+      "id": "e64",
+      "outV": 10,
+      "inV": 13,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e65",
+      "outV": 16,
+      "inV": 14,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "aux"
+      }
+    },
+    {
+      "id": "e66",
+      "outV": 16,
+      "inV": 15,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "auxpass"
+      }
+    },
+    {
+      "id": "e67",
+      "outV": 16,
+      "inV": 17,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e68",
+      "outV": 20,
+      "inV": 18,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e69",
+      "outV": 20,
+      "inV": 19,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e70",
+      "outV": 21,
+      "inV": 20,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e71",
+      "outV": 17,
+      "inV": 21,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e72",
+      "outV": 21,
+      "inV": 22,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "appos"
+      }
+    },
+    {
+      "id": "e73",
+      "outV": 16,
+      "inV": 23,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e74",
+      "outV": 3,
+      "inV": 4,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e75",
+      "outV": 4,
+      "inV": 5,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e76",
+      "outV": 5,
+      "inV": 6,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e77",
+      "outV": 6,
+      "inV": 7,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e78",
+      "outV": 7,
+      "inV": 8,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e79",
+      "outV": 8,
+      "inV": 9,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e80",
+      "outV": 9,
+      "inV": 10,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e81",
+      "outV": 10,
+      "inV": 11,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e82",
+      "outV": 11,
+      "inV": 12,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e83",
+      "outV": 12,
+      "inV": 13,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e84",
+      "outV": 13,
+      "inV": 14,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e85",
+      "outV": 14,
+      "inV": 15,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e86",
+      "outV": 15,
+      "inV": 16,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e87",
+      "outV": 16,
+      "inV": 17,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e88",
+      "outV": 17,
+      "inV": 18,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e89",
+      "outV": 18,
+      "inV": 19,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e90",
+      "outV": 19,
+      "inV": 20,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e91",
+      "outV": 20,
+      "inV": 21,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e92",
+      "outV": 21,
+      "inV": 22,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e93",
+      "outV": 22,
+      "inV": 23,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e94",
+      "outV": 1,
+      "inV": 34,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e95",
+      "outV": 34,
+      "inV": 35,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e96",
+      "outV": 34,
+      "inV": 36,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e97",
+      "outV": 34,
+      "inV": 37,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e98",
+      "outV": 34,
+      "inV": 38,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e99",
+      "outV": 34,
+      "inV": 39,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e100",
+      "outV": 34,
+      "inV": 40,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e101",
+      "outV": 34,
+      "inV": 41,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e102",
+      "outV": 34,
+      "inV": 42,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e103",
+      "outV": 34,
+      "inV": 43,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e104",
+      "outV": 34,
+      "inV": 44,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e105",
+      "outV": 34,
+      "inV": 45,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e106",
+      "outV": 34,
+      "inV": 46,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e107",
+      "outV": 34,
+      "inV": 47,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e108",
+      "outV": 34,
+      "inV": 48,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e109",
+      "outV": 34,
+      "inV": 49,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e110",
+      "outV": 34,
+      "inV": 50,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e111",
+      "outV": 34,
+      "inV": 51,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e112",
+      "outV": 34,
+      "inV": 52,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e113",
+      "outV": 34,
+      "inV": 53,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e114",
+      "outV": 34,
+      "inV": 54,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e115",
+      "outV": 34,
+      "inV": 55,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e116",
+      "outV": 34,
+      "inV": 56,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e117",
+      "outV": 34,
+      "inV": 57,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e118",
+      "outV": 34,
+      "inV": 58,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e119",
+      "outV": 34,
+      "inV": 59,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e120",
+      "outV": 34,
+      "inV": 60,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e121",
+      "outV": 34,
+      "inV": 61,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e122",
+      "outV": 61,
+      "inV": 37,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e123",
+      "outV": 62,
+      "inV": 36,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e124",
+      "outV": 36,
+      "inV": 61,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e125",
+      "outV": 62,
+      "inV": 61,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e126",
+      "outV": 63,
+      "inV": 38,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e127",
+      "outV": 38,
+      "inV": 61,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e128",
+      "outV": 63,
+      "inV": 61,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e129",
+      "outV": 34,
+      "inV": 64,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e130",
+      "outV": 64,
+      "inV": 45,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e131",
+      "outV": 65,
+      "inV": 43,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e132",
+      "outV": 43,
+      "inV": 64,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "npadvmod",
+        "SRL_LABEL": "ARGM-TMP"
+      }
+    },
+    {
+      "id": "e133",
+      "outV": 65,
+      "inV": 64,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "npadvmod",
+        "SRL_LABEL": "ARGM-TMP"
+      }
+    },
+    {
+      "id": "e134",
+      "outV": 34,
+      "inV": 66,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e135",
+      "outV": 66,
+      "inV": 48,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e136",
+      "outV": 67,
+      "inV": 42,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e137",
+      "outV": 42,
+      "inV": 66,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e138",
+      "outV": 67,
+      "inV": 66,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e139",
+      "outV": 68,
+      "inV": 46,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e140",
+      "outV": 46,
+      "inV": 66,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e141",
+      "outV": 68,
+      "inV": 66,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e142",
+      "outV": 69,
+      "inV": 49,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e143",
+      "outV": 49,
+      "inV": 66,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e144",
+      "outV": 69,
+      "inV": 66,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e145",
+      "outV": 34,
+      "inV": 70,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e146",
+      "outV": 70,
+      "inV": 51,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e147",
+      "outV": 34,
+      "inV": 71,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e148",
+      "outV": 71,
+      "inV": 55,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e149",
+      "outV": 72,
+      "inV": 56,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e150",
+      "outV": 56,
+      "inV": 71,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e151",
+      "outV": 72,
+      "inV": 71,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e152",
+      "outV": 73,
+      "inV": 57,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e153",
+      "outV": 57,
+      "inV": 71,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e154",
+      "outV": 73,
+      "inV": 71,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e155",
+      "outV": 34,
+      "inV": 74,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e156",
+      "outV": 74,
+      "inV": 59,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e157",
+      "outV": 75,
+      "inV": 58,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e158",
+      "outV": 58,
+      "inV": 74,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e159",
+      "outV": 75,
+      "inV": 74,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e160",
+      "outV": 34,
+      "inV": 76,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e161",
+      "outV": 76,
+      "inV": 35,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e162",
+      "outV": 76,
+      "inV": 36,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e163",
+      "outV": 34,
+      "inV": 77,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e164",
+      "outV": 77,
+      "inV": 39,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e165",
+      "outV": 77,
+      "inV": 40,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e166",
+      "outV": 77,
+      "inV": 41,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e167",
+      "outV": 34,
+      "inV": 78,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e168",
+      "outV": 78,
+      "inV": 43,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e169",
+      "outV": 78,
+      "inV": 44,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e170",
+      "outV": 78,
+      "inV": 45,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e171",
+      "outV": 78,
+      "inV": 46,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e172",
+      "outV": 34,
+      "inV": 79,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e173",
+      "outV": 79,
+      "inV": 50,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e174",
+      "outV": 79,
+      "inV": 51,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e175",
+      "outV": 79,
+      "inV": 52,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e176",
+      "outV": 79,
+      "inV": 53,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e177",
+      "outV": 79,
+      "inV": 54,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e178",
+      "outV": 34,
+      "inV": 80,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e179",
+      "outV": 80,
+      "inV": 56,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e180",
+      "outV": 34,
+      "inV": 81,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e181",
+      "outV": 81,
+      "inV": 58,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e182",
+      "outV": 34,
+      "inV": 82,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e183",
+      "outV": 82,
+      "inV": 42,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e184",
+      "outV": 82,
+      "inV": 43,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e185",
+      "outV": 82,
+      "inV": 44,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e186",
+      "outV": 82,
+      "inV": 45,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e187",
+      "outV": 82,
+      "inV": 46,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e188",
+      "outV": 82,
+      "inV": 47,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e189",
+      "outV": 82,
+      "inV": 48,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e190",
+      "outV": 82,
+      "inV": 49,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e191",
+      "outV": 82,
+      "inV": 50,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e192",
+      "outV": 82,
+      "inV": 51,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e193",
+      "outV": 82,
+      "inV": 52,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e194",
+      "outV": 82,
+      "inV": 53,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e195",
+      "outV": 82,
+      "inV": 54,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e196",
+      "outV": 82,
+      "inV": 55,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e197",
+      "outV": 82,
+      "inV": 56,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e198",
+      "outV": 82,
+      "inV": 57,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e199",
+      "outV": 82,
+      "inV": 58,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e200",
+      "outV": 82,
+      "inV": 59,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e201",
+      "outV": 34,
+      "inV": 83,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e202",
+      "outV": 83,
+      "inV": 55,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e203",
+      "outV": 83,
+      "inV": 56,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e204",
+      "outV": 83,
+      "inV": 57,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e205",
+      "outV": 83,
+      "inV": 58,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e206",
+      "outV": 83,
+      "inV": 59,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e207",
+      "outV": 34,
+      "inV": 84,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e208",
+      "outV": 84,
+      "inV": 42,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e209",
+      "outV": 84,
+      "inV": 47,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e210",
+      "outV": 84,
+      "inV": 48,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e211",
+      "outV": 36,
+      "inV": 35,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e212",
+      "outV": 37,
+      "inV": 36,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e213",
+      "outV": 37,
+      "inV": 38,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e214",
+      "outV": 41,
+      "inV": 39,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e215",
+      "outV": 41,
+      "inV": 40,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e216",
+      "outV": 38,
+      "inV": 41,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e217",
+      "outV": 48,
+      "inV": 42,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "advmod"
+      }
+    },
+    {
+      "id": "e218",
+      "outV": 45,
+      "inV": 43,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "npadvmod"
+      }
+    },
+    {
+      "id": "e219",
+      "outV": 45,
+      "inV": 44,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e220",
+      "outV": 46,
+      "inV": 45,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e221",
+      "outV": 48,
+      "inV": 46,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubjpass"
+      }
+    },
+    {
+      "id": "e222",
+      "outV": 48,
+      "inV": 47,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "auxpass"
+      }
+    },
+    {
+      "id": "e223",
+      "outV": 41,
+      "inV": 48,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "relcl"
+      }
+    },
+    {
+      "id": "e224",
+      "outV": 48,
+      "inV": 49,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e225",
+      "outV": 54,
+      "inV": 50,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e226",
+      "outV": 53,
+      "inV": 51,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e227",
+      "outV": 53,
+      "inV": 52,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e228",
+      "outV": 54,
+      "inV": 53,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e229",
+      "outV": 49,
+      "inV": 54,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e230",
+      "outV": 54,
+      "inV": 55,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "acl"
+      }
+    },
+    {
+      "id": "e231",
+      "outV": 55,
+      "inV": 56,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e232",
+      "outV": 55,
+      "inV": 57,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e233",
+      "outV": 59,
+      "inV": 58,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e234",
+      "outV": 57,
+      "inV": 59,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pcomp"
+      }
+    },
+    {
+      "id": "e235",
+      "outV": 37,
+      "inV": 60,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e236",
+      "outV": 35,
+      "inV": 36,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e237",
+      "outV": 36,
+      "inV": 37,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e238",
+      "outV": 37,
+      "inV": 38,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e239",
+      "outV": 38,
+      "inV": 39,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e240",
+      "outV": 39,
+      "inV": 40,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e241",
+      "outV": 40,
+      "inV": 41,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e242",
+      "outV": 41,
+      "inV": 42,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e243",
+      "outV": 42,
+      "inV": 43,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e244",
+      "outV": 43,
+      "inV": 44,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e245",
+      "outV": 44,
+      "inV": 45,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e246",
+      "outV": 45,
+      "inV": 46,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e247",
+      "outV": 46,
+      "inV": 47,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e248",
+      "outV": 47,
+      "inV": 48,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e249",
+      "outV": 48,
+      "inV": 49,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e250",
+      "outV": 49,
+      "inV": 50,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e251",
+      "outV": 50,
+      "inV": 51,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e252",
+      "outV": 51,
+      "inV": 52,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e253",
+      "outV": 52,
+      "inV": 53,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e254",
+      "outV": 53,
+      "inV": 54,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e255",
+      "outV": 54,
+      "inV": 55,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e256",
+      "outV": 55,
+      "inV": 56,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e257",
+      "outV": 56,
+      "inV": 57,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e258",
+      "outV": 57,
+      "inV": 58,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e259",
+      "outV": 58,
+      "inV": 59,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e260",
+      "outV": 59,
+      "inV": 60,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e261",
+      "outV": 0,
+      "inV": 85,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e262",
+      "outV": 85,
+      "inV": 86,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e263",
+      "outV": 86,
+      "inV": 87,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e264",
+      "outV": 86,
+      "inV": 88,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e265",
+      "outV": 86,
+      "inV": 89,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e266",
+      "outV": 86,
+      "inV": 90,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e267",
+      "outV": 86,
+      "inV": 91,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e268",
+      "outV": 86,
+      "inV": 92,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e269",
+      "outV": 86,
+      "inV": 93,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e270",
+      "outV": 86,
+      "inV": 94,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e271",
+      "outV": 86,
+      "inV": 95,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e272",
+      "outV": 86,
+      "inV": 96,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e273",
+      "outV": 86,
+      "inV": 97,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e274",
+      "outV": 86,
+      "inV": 98,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e275",
+      "outV": 86,
+      "inV": 99,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e276",
+      "outV": 86,
+      "inV": 100,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e277",
+      "outV": 86,
+      "inV": 101,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e278",
+      "outV": 86,
+      "inV": 102,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e279",
+      "outV": 86,
+      "inV": 103,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e280",
+      "outV": 86,
+      "inV": 104,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e281",
+      "outV": 86,
+      "inV": 105,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e282",
+      "outV": 86,
+      "inV": 106,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e283",
+      "outV": 86,
+      "inV": 107,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e284",
+      "outV": 86,
+      "inV": 108,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e285",
+      "outV": 86,
+      "inV": 109,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e286",
+      "outV": 86,
+      "inV": 110,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e287",
+      "outV": 86,
+      "inV": 111,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e288",
+      "outV": 86,
+      "inV": 112,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e289",
+      "outV": 112,
+      "inV": 91,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e290",
+      "outV": 113,
+      "inV": 89,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e291",
+      "outV": 89,
+      "inV": 112,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e292",
+      "outV": 113,
+      "inV": 112,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e293",
+      "outV": 114,
+      "inV": 93,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e294",
+      "outV": 93,
+      "inV": 112,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e295",
+      "outV": 114,
+      "inV": 112,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e296",
+      "outV": 115,
+      "inV": 94,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e297",
+      "outV": 94,
+      "inV": 112,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e298",
+      "outV": 115,
+      "inV": 112,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e299",
+      "outV": 86,
+      "inV": 116,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e300",
+      "outV": 116,
+      "inV": 95,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e301",
+      "outV": 117,
+      "inV": 100,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e302",
+      "outV": 100,
+      "inV": 116,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e303",
+      "outV": 117,
+      "inV": 116,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e304",
+      "outV": 86,
+      "inV": 118,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e305",
+      "outV": 118,
+      "inV": 98,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e306",
+      "outV": 119,
+      "inV": 97,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e307",
+      "outV": 97,
+      "inV": 118,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e308",
+      "outV": 119,
+      "inV": 118,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e309",
+      "outV": 86,
+      "inV": 120,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e310",
+      "outV": 120,
+      "inV": 103,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e311",
+      "outV": 121,
+      "inV": 102,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e312",
+      "outV": 102,
+      "inV": 120,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e313",
+      "outV": 121,
+      "inV": 120,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e314",
+      "outV": 122,
+      "inV": 106,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e315",
+      "outV": 106,
+      "inV": 120,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e316",
+      "outV": 122,
+      "inV": 120,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e317",
+      "outV": 86,
+      "inV": 123,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e318",
+      "outV": 123,
+      "inV": 87,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e319",
+      "outV": 123,
+      "inV": 88,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e320",
+      "outV": 123,
+      "inV": 89,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e321",
+      "outV": 86,
+      "inV": 124,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e322",
+      "outV": 124,
+      "inV": 92,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e323",
+      "outV": 124,
+      "inV": 93,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e324",
+      "outV": 86,
+      "inV": 125,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e325",
+      "outV": 125,
+      "inV": 96,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e326",
+      "outV": 125,
+      "inV": 97,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e327",
+      "outV": 125,
+      "inV": 98,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e328",
+      "outV": 125,
+      "inV": 99,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e329",
+      "outV": 125,
+      "inV": 100,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e330",
+      "outV": 86,
+      "inV": 126,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e331",
+      "outV": 126,
+      "inV": 104,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e332",
+      "outV": 126,
+      "inV": 105,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e333",
+      "outV": 126,
+      "inV": 106,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e334",
+      "outV": 86,
+      "inV": 127,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e335",
+      "outV": 127,
+      "inV": 108,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e336",
+      "outV": 127,
+      "inV": 109,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e337",
+      "outV": 127,
+      "inV": 110,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e338",
+      "outV": 86,
+      "inV": 128,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e339",
+      "outV": 128,
+      "inV": 102,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e340",
+      "outV": 128,
+      "inV": 103,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e341",
+      "outV": 128,
+      "inV": 104,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e342",
+      "outV": 128,
+      "inV": 105,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e343",
+      "outV": 128,
+      "inV": 106,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e344",
+      "outV": 128,
+      "inV": 107,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e345",
+      "outV": 128,
+      "inV": 108,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e346",
+      "outV": 128,
+      "inV": 109,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e347",
+      "outV": 128,
+      "inV": 110,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e348",
+      "outV": 86,
+      "inV": 129,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e349",
+      "outV": 129,
+      "inV": 90,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e350",
+      "outV": 129,
+      "inV": 91,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e351",
+      "outV": 86,
+      "inV": 130,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e352",
+      "outV": 130,
+      "inV": 97,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e353",
+      "outV": 130,
+      "inV": 98,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e354",
+      "outV": 86,
+      "inV": 131,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e355",
+      "outV": 131,
+      "inV": 102,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e356",
+      "outV": 131,
+      "inV": 103,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e357",
+      "outV": 89,
+      "inV": 87,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e358",
+      "outV": 89,
+      "inV": 88,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e359",
+      "outV": 91,
+      "inV": 89,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e360",
+      "outV": 91,
+      "inV": 90,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "aux"
+      }
+    },
+    {
+      "id": "e361",
+      "outV": 93,
+      "inV": 92,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e362",
+      "outV": 91,
+      "inV": 93,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e363",
+      "outV": 91,
+      "inV": 94,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e364",
+      "outV": 94,
+      "inV": 95,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pcomp"
+      }
+    },
+    {
+      "id": "e365",
+      "outV": 100,
+      "inV": 96,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e366",
+      "outV": 98,
+      "inV": 97,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "advmod"
+      }
+    },
+    {
+      "id": "e367",
+      "outV": 100,
+      "inV": 98,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e368",
+      "outV": 100,
+      "inV": 99,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e369",
+      "outV": 95,
+      "inV": 100,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e370",
+      "outV": 95,
+      "inV": 101,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e371",
+      "outV": 103,
+      "inV": 102,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "advmod"
+      }
+    },
+    {
+      "id": "e372",
+      "outV": 95,
+      "inV": 103,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "advcl"
+      }
+    },
+    {
+      "id": "e373",
+      "outV": 106,
+      "inV": 104,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e374",
+      "outV": 106,
+      "inV": 105,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e375",
+      "outV": 103,
+      "inV": 106,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e376",
+      "outV": 106,
+      "inV": 107,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e377",
+      "outV": 110,
+      "inV": 108,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e378",
+      "outV": 110,
+      "inV": 109,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e379",
+      "outV": 107,
+      "inV": 110,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e380",
+      "outV": 91,
+      "inV": 111,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e381",
+      "outV": 87,
+      "inV": 88,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e382",
+      "outV": 88,
+      "inV": 89,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e383",
+      "outV": 89,
+      "inV": 90,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e384",
+      "outV": 90,
+      "inV": 91,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e385",
+      "outV": 91,
+      "inV": 92,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e386",
+      "outV": 92,
+      "inV": 93,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e387",
+      "outV": 93,
+      "inV": 94,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e388",
+      "outV": 94,
+      "inV": 95,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e389",
+      "outV": 95,
+      "inV": 96,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e390",
+      "outV": 96,
+      "inV": 97,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e391",
+      "outV": 97,
+      "inV": 98,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e392",
+      "outV": 98,
+      "inV": 99,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e393",
+      "outV": 99,
+      "inV": 100,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e394",
+      "outV": 100,
+      "inV": 101,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e395",
+      "outV": 101,
+      "inV": 102,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e396",
+      "outV": 102,
+      "inV": 103,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e397",
+      "outV": 103,
+      "inV": 104,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e398",
+      "outV": 104,
+      "inV": 105,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e399",
+      "outV": 105,
+      "inV": 106,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e400",
+      "outV": 106,
+      "inV": 107,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e401",
+      "outV": 107,
+      "inV": 108,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e402",
+      "outV": 108,
+      "inV": 109,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e403",
+      "outV": 109,
+      "inV": 110,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e404",
+      "outV": 110,
+      "inV": 111,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e405",
+      "outV": 85,
+      "inV": 132,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e406",
+      "outV": 132,
+      "inV": 133,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e407",
+      "outV": 132,
+      "inV": 134,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e408",
+      "outV": 132,
+      "inV": 135,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e409",
+      "outV": 132,
+      "inV": 136,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e410",
+      "outV": 132,
+      "inV": 137,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e411",
+      "outV": 132,
+      "inV": 138,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e412",
+      "outV": 132,
+      "inV": 139,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e413",
+      "outV": 132,
+      "inV": 140,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e414",
+      "outV": 132,
+      "inV": 141,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e415",
+      "outV": 132,
+      "inV": 142,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e416",
+      "outV": 132,
+      "inV": 143,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e417",
+      "outV": 132,
+      "inV": 144,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e418",
+      "outV": 132,
+      "inV": 145,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e419",
+      "outV": 132,
+      "inV": 146,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e420",
+      "outV": 132,
+      "inV": 147,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e421",
+      "outV": 147,
+      "inV": 142,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e422",
+      "outV": 132,
+      "inV": 148,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e423",
+      "outV": 148,
+      "inV": 145,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e424",
+      "outV": 132,
+      "inV": 149,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e425",
+      "outV": 149,
+      "inV": 137,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e426",
+      "outV": 150,
+      "inV": 134,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e427",
+      "outV": 134,
+      "inV": 149,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e428",
+      "outV": 150,
+      "inV": 149,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e429",
+      "outV": 151,
+      "inV": 139,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e430",
+      "outV": 139,
+      "inV": 149,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "oprd",
+        "SRL_LABEL": "ARG2"
+      }
+    },
+    {
+      "id": "e431",
+      "outV": 151,
+      "inV": 149,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "oprd",
+        "SRL_LABEL": "ARG2"
+      }
+    },
+    {
+      "id": "e432",
+      "outV": 132,
+      "inV": 152,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e433",
+      "outV": 152,
+      "inV": 133,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e434",
+      "outV": 152,
+      "inV": 134,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e435",
+      "outV": 132,
+      "inV": 153,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e436",
+      "outV": 153,
+      "inV": 141,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e437",
+      "outV": 153,
+      "inV": 142,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e438",
+      "outV": 153,
+      "inV": 143,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e439",
+      "outV": 132,
+      "inV": 154,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e440",
+      "outV": 154,
+      "inV": 135,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e441",
+      "outV": 154,
+      "inV": 136,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e442",
+      "outV": 154,
+      "inV": 137,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e443",
+      "outV": 134,
+      "inV": 133,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e444",
+      "outV": 137,
+      "inV": 134,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubjpass"
+      }
+    },
+    {
+      "id": "e445",
+      "outV": 137,
+      "inV": 135,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "aux"
+      }
+    },
+    {
+      "id": "e446",
+      "outV": 137,
+      "inV": 136,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "auxpass"
+      }
+    },
+    {
+      "id": "e447",
+      "outV": 139,
+      "inV": 138,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "advmod"
+      }
+    },
+    {
+      "id": "e448",
+      "outV": 137,
+      "inV": 139,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "oprd"
+      }
+    },
+    {
+      "id": "e449",
+      "outV": 139,
+      "inV": 140,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e450",
+      "outV": 143,
+      "inV": 141,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e451",
+      "outV": 143,
+      "inV": 142,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e452",
+      "outV": 140,
+      "inV": 143,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e453",
+      "outV": 143,
+      "inV": 144,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e454",
+      "outV": 144,
+      "inV": 145,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e455",
+      "outV": 137,
+      "inV": 146,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e456",
+      "outV": 133,
+      "inV": 134,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e457",
+      "outV": 134,
+      "inV": 135,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e458",
+      "outV": 135,
+      "inV": 136,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e459",
+      "outV": 136,
+      "inV": 137,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e460",
+      "outV": 137,
+      "inV": 138,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e461",
+      "outV": 138,
+      "inV": 139,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e462",
+      "outV": 139,
+      "inV": 140,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e463",
+      "outV": 140,
+      "inV": 141,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e464",
+      "outV": 141,
+      "inV": 142,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e465",
+      "outV": 142,
+      "inV": 143,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e466",
+      "outV": 143,
+      "inV": 144,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e467",
+      "outV": 144,
+      "inV": 145,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e468",
+      "outV": 145,
+      "inV": 146,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e469",
+      "outV": 0,
+      "inV": 155,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e470",
+      "outV": 155,
+      "inV": 156,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e471",
+      "outV": 156,
+      "inV": 157,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e472",
+      "outV": 156,
+      "inV": 158,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e473",
+      "outV": 156,
+      "inV": 159,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e474",
+      "outV": 156,
+      "inV": 160,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e475",
+      "outV": 156,
+      "inV": 161,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e476",
+      "outV": 156,
+      "inV": 162,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e477",
+      "outV": 156,
+      "inV": 163,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e478",
+      "outV": 156,
+      "inV": 164,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e479",
+      "outV": 156,
+      "inV": 165,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e480",
+      "outV": 156,
+      "inV": 166,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e481",
+      "outV": 156,
+      "inV": 167,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e482",
+      "outV": 156,
+      "inV": 168,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e483",
+      "outV": 156,
+      "inV": 169,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e484",
+      "outV": 156,
+      "inV": 170,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e485",
+      "outV": 156,
+      "inV": 171,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e486",
+      "outV": 156,
+      "inV": 172,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e487",
+      "outV": 156,
+      "inV": 173,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e488",
+      "outV": 156,
+      "inV": 174,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e489",
+      "outV": 156,
+      "inV": 175,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e490",
+      "outV": 175,
+      "inV": 160,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e491",
+      "outV": 176,
+      "inV": 157,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e492",
+      "outV": 157,
+      "inV": 175,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e493",
+      "outV": 176,
+      "inV": 175,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e494",
+      "outV": 177,
+      "inV": 159,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e495",
+      "outV": 159,
+      "inV": 175,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e496",
+      "outV": 177,
+      "inV": 175,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e497",
+      "outV": 178,
+      "inV": 162,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e498",
+      "outV": 162,
+      "inV": 175,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "xcomp",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e499",
+      "outV": 178,
+      "inV": 175,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "xcomp",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e500",
+      "outV": 156,
+      "inV": 179,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e501",
+      "outV": 179,
+      "inV": 162,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e502",
+      "outV": 180,
+      "inV": 163,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e503",
+      "outV": 163,
+      "inV": 179,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e504",
+      "outV": 180,
+      "inV": 179,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e505",
+      "outV": 156,
+      "inV": 181,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e506",
+      "outV": 181,
+      "inV": 168,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e507",
+      "outV": 182,
+      "inV": 167,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e508",
+      "outV": 167,
+      "inV": 181,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e509",
+      "outV": 182,
+      "inV": 181,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e510",
+      "outV": 183,
+      "inV": 170,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e511",
+      "outV": 170,
+      "inV": 181,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e512",
+      "outV": 183,
+      "inV": 181,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e513",
+      "outV": 156,
+      "inV": 184,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e514",
+      "outV": 184,
+      "inV": 157,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e515",
+      "outV": 156,
+      "inV": 185,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e516",
+      "outV": 185,
+      "inV": 164,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e517",
+      "outV": 156,
+      "inV": 186,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e518",
+      "outV": 186,
+      "inV": 167,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e519",
+      "outV": 156,
+      "inV": 187,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e520",
+      "outV": 187,
+      "inV": 169,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e521",
+      "outV": 187,
+      "inV": 170,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e522",
+      "outV": 156,
+      "inV": 188,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e523",
+      "outV": 188,
+      "inV": 172,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e524",
+      "outV": 188,
+      "inV": 173,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e525",
+      "outV": 156,
+      "inV": 189,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e526",
+      "outV": 189,
+      "inV": 167,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e527",
+      "outV": 189,
+      "inV": 168,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e528",
+      "outV": 189,
+      "inV": 169,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e529",
+      "outV": 189,
+      "inV": 170,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e530",
+      "outV": 189,
+      "inV": 171,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e531",
+      "outV": 189,
+      "inV": 172,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e532",
+      "outV": 189,
+      "inV": 173,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e533",
+      "outV": 156,
+      "inV": 190,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e534",
+      "outV": 190,
+      "inV": 158,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e535",
+      "outV": 190,
+      "inV": 159,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e536",
+      "outV": 190,
+      "inV": 160,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e537",
+      "outV": 156,
+      "inV": 191,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e538",
+      "outV": 191,
+      "inV": 161,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e539",
+      "outV": 191,
+      "inV": 162,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e540",
+      "outV": 160,
+      "inV": 157,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubjpass"
+      }
+    },
+    {
+      "id": "e541",
+      "outV": 160,
+      "inV": 158,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "auxpass"
+      }
+    },
+    {
+      "id": "e542",
+      "outV": 160,
+      "inV": 159,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "advmod"
+      }
+    },
+    {
+      "id": "e543",
+      "outV": 162,
+      "inV": 161,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "aux"
+      }
+    },
+    {
+      "id": "e544",
+      "outV": 160,
+      "inV": 162,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "xcomp"
+      }
+    },
+    {
+      "id": "e545",
+      "outV": 162,
+      "inV": 163,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e546",
+      "outV": 163,
+      "inV": 164,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e547",
+      "outV": 164,
+      "inV": 165,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nummod"
+      }
+    },
+    {
+      "id": "e548",
+      "outV": 164,
+      "inV": 166,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e549",
+      "outV": 168,
+      "inV": 167,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e550",
+      "outV": 164,
+      "inV": 168,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "relcl"
+      }
+    },
+    {
+      "id": "e551",
+      "outV": 170,
+      "inV": 169,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e552",
+      "outV": 168,
+      "inV": 170,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e553",
+      "outV": 170,
+      "inV": 171,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e554",
+      "outV": 173,
+      "inV": 172,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e555",
+      "outV": 171,
+      "inV": 173,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e556",
+      "outV": 160,
+      "inV": 174,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e557",
+      "outV": 157,
+      "inV": 158,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e558",
+      "outV": 158,
+      "inV": 159,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e559",
+      "outV": 159,
+      "inV": 160,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e560",
+      "outV": 160,
+      "inV": 161,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e561",
+      "outV": 161,
+      "inV": 162,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e562",
+      "outV": 162,
+      "inV": 163,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e563",
+      "outV": 163,
+      "inV": 164,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e564",
+      "outV": 164,
+      "inV": 165,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e565",
+      "outV": 165,
+      "inV": 166,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e566",
+      "outV": 166,
+      "inV": 167,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e567",
+      "outV": 167,
+      "inV": 168,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e568",
+      "outV": 168,
+      "inV": 169,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e569",
+      "outV": 169,
+      "inV": 170,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e570",
+      "outV": 170,
+      "inV": 171,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e571",
+      "outV": 171,
+      "inV": 172,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e572",
+      "outV": 172,
+      "inV": 173,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e573",
+      "outV": 173,
+      "inV": 174,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e574",
+      "outV": 155,
+      "inV": 192,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e575",
+      "outV": 192,
+      "inV": 193,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e576",
+      "outV": 192,
+      "inV": 194,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e577",
+      "outV": 192,
+      "inV": 195,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e578",
+      "outV": 192,
+      "inV": 196,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e579",
+      "outV": 192,
+      "inV": 197,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e580",
+      "outV": 192,
+      "inV": 198,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e581",
+      "outV": 192,
+      "inV": 199,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e582",
+      "outV": 192,
+      "inV": 200,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e583",
+      "outV": 192,
+      "inV": 201,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e584",
+      "outV": 192,
+      "inV": 202,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e585",
+      "outV": 192,
+      "inV": 203,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e586",
+      "outV": 192,
+      "inV": 204,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e587",
+      "outV": 192,
+      "inV": 205,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e588",
+      "outV": 192,
+      "inV": 206,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e589",
+      "outV": 192,
+      "inV": 207,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e590",
+      "outV": 192,
+      "inV": 208,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e591",
+      "outV": 192,
+      "inV": 209,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e592",
+      "outV": 192,
+      "inV": 210,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e593",
+      "outV": 210,
+      "inV": 200,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e594",
+      "outV": 211,
+      "inV": 193,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e595",
+      "outV": 193,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e596",
+      "outV": 211,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e597",
+      "outV": 212,
+      "inV": 198,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e598",
+      "outV": 198,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e599",
+      "outV": 212,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e600",
+      "outV": 213,
+      "inV": 203,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e601",
+      "outV": 203,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e602",
+      "outV": 213,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e603",
+      "outV": 192,
+      "inV": 214,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e604",
+      "outV": 214,
+      "inV": 208,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e605",
+      "outV": 215,
+      "inV": 204,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e606",
+      "outV": 204,
+      "inV": 214,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "mark",
+        "SRL_LABEL": "ARGM-DIS"
+      }
+    },
+    {
+      "id": "e607",
+      "outV": 215,
+      "inV": 214,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "mark",
+        "SRL_LABEL": "ARGM-DIS"
+      }
+    },
+    {
+      "id": "e608",
+      "outV": 216,
+      "inV": 206,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e609",
+      "outV": 206,
+      "inV": 214,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e610",
+      "outV": 216,
+      "inV": 214,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e611",
+      "outV": 192,
+      "inV": 217,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e612",
+      "outV": 217,
+      "inV": 194,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e613",
+      "outV": 217,
+      "inV": 195,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e614",
+      "outV": 217,
+      "inV": 196,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e615",
+      "outV": 192,
+      "inV": 218,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e616",
+      "outV": 218,
+      "inV": 198,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e617",
+      "outV": 192,
+      "inV": 219,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e618",
+      "outV": 219,
+      "inV": 201,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e619",
+      "outV": 219,
+      "inV": 202,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e620",
+      "outV": 219,
+      "inV": 203,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e621",
+      "outV": 192,
+      "inV": 220,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e622",
+      "outV": 220,
+      "inV": 205,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e623",
+      "outV": 220,
+      "inV": 206,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e624",
+      "outV": 192,
+      "inV": 221,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e625",
+      "outV": 221,
+      "inV": 204,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e626",
+      "outV": 221,
+      "inV": 205,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e627",
+      "outV": 221,
+      "inV": 206,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e628",
+      "outV": 221,
+      "inV": 207,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e629",
+      "outV": 221,
+      "inV": 208,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e630",
+      "outV": 192,
+      "inV": 222,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e631",
+      "outV": 222,
+      "inV": 199,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e632",
+      "outV": 222,
+      "inV": 200,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e633",
+      "outV": 192,
+      "inV": 223,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e634",
+      "outV": 223,
+      "inV": 207,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e635",
+      "outV": 223,
+      "inV": 208,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e636",
+      "outV": 200,
+      "inV": 193,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e637",
+      "outV": 196,
+      "inV": 194,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e638",
+      "outV": 196,
+      "inV": 195,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e639",
+      "outV": 193,
+      "inV": 196,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e640",
+      "outV": 200,
+      "inV": 197,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e641",
+      "outV": 200,
+      "inV": 198,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e642",
+      "outV": 200,
+      "inV": 199,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "aux"
+      }
+    },
+    {
+      "id": "e643",
+      "outV": 203,
+      "inV": 201,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e644",
+      "outV": 203,
+      "inV": 202,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e645",
+      "outV": 200,
+      "inV": 203,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e646",
+      "outV": 208,
+      "inV": 204,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "mark"
+      }
+    },
+    {
+      "id": "e647",
+      "outV": 206,
+      "inV": 205,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e648",
+      "outV": 208,
+      "inV": 206,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubjpass"
+      }
+    },
+    {
+      "id": "e649",
+      "outV": 208,
+      "inV": 207,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "auxpass"
+      }
+    },
+    {
+      "id": "e650",
+      "outV": 200,
+      "inV": 208,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "advcl"
+      }
+    },
+    {
+      "id": "e651",
+      "outV": 200,
+      "inV": 209,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e652",
+      "outV": 193,
+      "inV": 194,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e653",
+      "outV": 194,
+      "inV": 195,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e654",
+      "outV": 195,
+      "inV": 196,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e655",
+      "outV": 196,
+      "inV": 197,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e656",
+      "outV": 197,
+      "inV": 198,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e657",
+      "outV": 198,
+      "inV": 199,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e658",
+      "outV": 199,
+      "inV": 200,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e659",
+      "outV": 200,
+      "inV": 201,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e660",
+      "outV": 201,
+      "inV": 202,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e661",
+      "outV": 202,
+      "inV": 203,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e662",
+      "outV": 203,
+      "inV": 204,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e663",
+      "outV": 204,
+      "inV": 205,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e664",
+      "outV": 205,
+      "inV": 206,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e665",
+      "outV": 206,
+      "inV": 207,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e666",
+      "outV": 207,
+      "inV": 208,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e667",
+      "outV": 208,
+      "inV": 209,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e668",
+      "outV": 2,
+      "inV": 34,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e669",
+      "outV": 34,
+      "inV": 86,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e670",
+      "outV": 86,
+      "inV": 132,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e671",
+      "outV": 132,
+      "inV": 156,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e672",
+      "outV": 156,
+      "inV": 192,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e673",
+      "outV": 1,
+      "inV": 85,
+      "label": "NEXT_PARA",
+      "properties": {}
+    },
+    {
+      "id": "e674",
+      "outV": 85,
+      "inV": 155,
+      "label": "NEXT_PARA",
+      "properties": {}
+    },
+    {
+      "id": "e675",
+      "outV": 23,
+      "inV": 35,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e676",
+      "outV": 60,
+      "inV": 87,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e677",
+      "outV": 111,
+      "inV": 133,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e678",
+      "outV": 146,
+      "inV": 157,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e679",
+      "outV": 174,
+      "inV": 193,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e680",
+      "outV": 224,
+      "inV": 92,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e681",
+      "outV": 224,
+      "inV": 24,
+      "label": "COREF",
+      "properties": {
+        "COREF_CLUSTER": 0
+      }
+    },
+    {
+      "id": "e682",
+      "outV": 225,
+      "inV": 167,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e683",
+      "outV": 225,
+      "inV": 148,
+      "label": "COREF",
+      "properties": {
+        "COREF_CLUSTER": 2
+      }
+    },
+    {
+      "id": "e684",
+      "outV": 226,
+      "inV": 172,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e685",
+      "outV": 226,
+      "inV": 148,
+      "label": "COREF",
+      "properties": {
+        "COREF_CLUSTER": 2
+      }
+    },
+    {
+      "id": "e686",
+      "outV": 2,
+      "inV": 34,
+      "label": "DISCOURSE",
+      "properties": {
+        "relation": "continuation"
+      }
+    },
+    {
+      "id": "e687",
+      "outV": 34,
+      "inV": 86,
+      "label": "DISCOURSE",
+      "properties": {
+        "relation": "continuation"
+      }
+    },
+    {
+      "id": "e688",
+      "outV": 86,
+      "inV": 132,
+      "label": "DISCOURSE",
+      "properties": {
+        "relation": "continuation"
+      }
+    },
+    {
+      "id": "e689",
+      "outV": 132,
+      "inV": 156,
+      "label": "DISCOURSE",
+      "properties": {
+        "relation": "continuation"
+      }
+    },
+    {
+      "id": "e690",
+      "outV": 156,
+      "inV": 192,
+      "label": "DISCOURSE",
+      "properties": {
+        "relation": "continuation"
+      }
+    },
+    {
+      "id": "e691",
+      "outV": 147,
+      "inV": 148,
+      "label": "ENTITY_REL",
+      "properties": {
+        "ENTITY_REL_TYPE": "rat"
+      }
+    },
+    {
+      "id": "e692",
+      "outV": 0,
+      "inV": 227,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e693",
+      "outV": 227,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e694",
+      "outV": 227,
+      "inV": 86,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e695",
+      "outV": 227,
+      "inV": 132,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e696",
+      "outV": 0,
+      "inV": 228,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e697",
+      "outV": 228,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e698",
+      "outV": 228,
+      "inV": 34,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e699",
+      "outV": 0,
+      "inV": 229,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e700",
+      "outV": 229,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e701",
+      "outV": 229,
+      "inV": 86,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e702",
+      "outV": 0,
+      "inV": 230,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e703",
+      "outV": 230,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e704",
+      "outV": 230,
+      "inV": 156,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e705",
+      "outV": 0,
+      "inV": 231,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e706",
+      "outV": 231,
+      "inV": 34,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e707",
+      "outV": 231,
+      "inV": 192,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    }
+  ]
+}

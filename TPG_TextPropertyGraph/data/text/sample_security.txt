@@ -1,0 +1,5 @@
+CVE-2024-1234: A buffer overflow vulnerability (CWE-120) has been discovered in Apache HTTP Server version 2.4.51. The flaw exists in the mod_ssl module where user-supplied input is copied to a fixed-size buffer using strcpy without bounds checking.
+
+A remote attacker can exploit this vulnerability by sending a specially crafted HTTP request, potentially achieving arbitrary code execution on the target system. The vulnerability has been rated as critical with a CVSS score of 9.8/10.
+
+Users are strongly recommended to upgrade to version 2.4.52, which includes a fix for this issue. As a temporary workaround, administrators can disable the mod_ssl module until the patch is applied.

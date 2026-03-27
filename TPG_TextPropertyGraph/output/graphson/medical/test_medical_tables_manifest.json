@@ -1,0 +1,34 @@
+{
+  "doc_id": "test_medical_tables",
+  "total_chunks": 4,
+  "total_words": 1282,
+  "total_nodes": 2850,
+  "total_edges": 8913,
+  "chunk_size": 500,
+  "chunks": [
+    {
+      "chunk_id": "test_medical_tables_chunk000",
+      "words": 274,
+      "graphson": "test_medical_tables_chunk000_tpg.json",
+      "pyg": "test_medical_tables_chunk000_pyg.json"
+    },
+    {
+      "chunk_id": "test_medical_tables_chunk001",
+      "words": 465,
+      "graphson": "test_medical_tables_chunk001_tpg.json",
+      "pyg": "test_medical_tables_chunk001_pyg.json"
+    },
+    {
+      "chunk_id": "test_medical_tables_chunk002",
+      "words": 434,
+      "graphson": "test_medical_tables_chunk002_tpg.json",
+      "pyg": "test_medical_tables_chunk002_pyg.json"
+    },
+    {
+      "chunk_id": "test_medical_tables_chunk003",
+      "words": 109,
+      "graphson": "test_medical_tables_chunk003_tpg.json",
+      "pyg": "test_medical_tables_chunk003_pyg.json"
+    }
+  ]
+}

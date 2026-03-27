@@ -1,0 +1,933 @@
+{
+  "comparisons": [
+    {
+      "name": "Rule-Based",
+      "frontend": "SecurityFrontend",
+      "processing_time": 0.0638,
+      "total_nodes": 486,
+      "total_edges": 1790,
+      "entities": [
+        {
+          "text": "Apache Tomcat",
+          "type": "PRODUCT",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Content-Type",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "CrowdStrike",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "January 15, 2024",
+          "type": "DATE",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "December 2023",
+          "type": "DATE",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Apache Tomcat",
+          "type": "PRODUCT",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "CVSS",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "9.8/10",
+          "type": "CARDINAL",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "CVE-2024-7890",
+          "type": "CVE_ID",
+          "domain_type": "vulnerability_id",
+          "confidence": 1.0,
+          "source": "security_frontend"
+        },
+        {
+          "text": "CWE-78",
+          "type": "CWE_ID",
+          "domain_type": "weakness_class",
+          "confidence": 1.0,
+          "source": "security_frontend"
+        },
+        {
+          "text": "9.0.65",
+          "type": "VERSION",
+          "domain_type": "software_version",
+          "confidence": 0.8,
+          "source": "security_frontend"
+        },
+        {
+          "text": "9.0.66",
+          "type": "VERSION",
+          "domain_type": "software_version",
+          "confidence": 0.8,
+          "source": "security_frontend"
+        },
+        {
+          "text": "9.8",
+          "type": "VERSION",
+          "domain_type": "software_version",
+          "confidence": 0.8,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Apache",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Apache",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "java",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "system",
+          "type": "CODE_ELEMENT",
+          "domain_type": "code_construct",
+          "confidence": 1.0,
+          "source": "security_frontend"
+        },
+        {
+          "text": "sprintf",
+          "type": "CODE_ELEMENT",
+          "domain_type": "code_construct",
+          "confidence": 1.0,
+          "source": "security_frontend"
+        },
+        {
+          "text": "system",
+          "type": "CODE_ELEMENT",
+          "domain_type": "code_construct",
+          "confidence": 1.0,
+          "source": "security_frontend"
+        },
+        {
+          "text": "specially crafted",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "crafted_input",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "remote attacker",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "remote",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "malicious input",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "malicious_input",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "user input",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "user_input",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "remote",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "remote",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "arbitrary code execution",
+          "type": "IMPACT",
+          "domain_type": "rce",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "remote code execution",
+          "type": "IMPACT",
+          "domain_type": "rce",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "code execution",
+          "type": "IMPACT",
+          "domain_type": "rce",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "critical ",
+          "type": "SEVERITY",
+          "domain_type": "critical",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "critical impact",
+          "type": "SEVERITY",
+          "domain_type": "critical",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "upgrade to Apache",
+          "type": "REMEDIATION",
+          "domain_type": "upgrade",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "workaround",
+          "type": "REMEDIATION",
+          "domain_type": "workaround",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        }
+      ],
+      "node_counts": {
+        "DOCUMENT": 1,
+        "PARAGRAPH": 4,
+        "SENTENCE": 11,
+        "TOKEN": 245,
+        "ENTITY": 37,
+        "PREDICATE": 30,
+        "ARGUMENT": 60,
+        "NOUN_PHRASE": 58,
+        "VERB_PHRASE": 14,
+        "CLAUSE": 13,
+        "MENTION": 8,
+        "TOPIC": 5
+      },
+      "edge_counts": {
+        "DEP": 234,
+        "NEXT_TOKEN": 244,
+        "NEXT_SENT": 10,
+        "NEXT_PARA": 3,
+        "COREF": 16,
+        "SRL_ARG": 120,
+        "DISCOURSE": 28,
+        "CONTAINS": 403,
+        "BELONGS_TO": 408,
+        "ENTITY_REL": 324
+      }
+    },
+    {
+      "name": "Model-Based (SecBERT)",
+      "frontend": "ModelSecurityFrontend",
+      "processing_time": 0.3175,
+      "total_nodes": 474,
+      "total_edges": 1502,
+      "entities": [
+        {
+          "text": "Apache Tomcat",
+          "type": "PRODUCT",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Content-Type",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "CrowdStrike",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "January 15, 2024",
+          "type": "DATE",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "December 2023",
+          "type": "DATE",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Apache Tomcat",
+          "type": "PRODUCT",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "CVSS",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "9.8/10",
+          "type": "CARDINAL",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "the request",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "attack_vector",
+          "confidence": 0.46,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "proper validation",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.49,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "RequestParser.java",
+          "type": "CODE_ELEMENT",
+          "domain_type": "code_construct",
+          "confidence": 0.455,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "system",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.505,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "execution",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.462,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "the privileges",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.458,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "the Tomcat service account",
+          "type": "IMPACT",
+          "domain_type": "impact",
+          "confidence": 0.478,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "The vulnerability",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.484,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "threat actors",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "attack_vector",
+          "confidence": 0.464,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "The attack vector",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "attack_vector",
+          "confidence": 0.544,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "affected versions",
+          "type": "VERSION",
+          "domain_type": "software_version",
+          "confidence": 0.485,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "a temporary workaround",
+          "type": "IMPACT",
+          "domain_type": "impact",
+          "confidence": 0.484,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "a CVSS score",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.521,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "critical impact",
+          "type": "SEVERITY",
+          "domain_type": "severity",
+          "confidence": 0.509,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "CVSS",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.469,
+          "source": "model_security_frontend"
+        }
+      ],
+      "node_counts": {
+        "DOCUMENT": 1,
+        "PARAGRAPH": 4,
+        "SENTENCE": 11,
+        "TOKEN": 245,
+        "ENTITY": 25,
+        "PREDICATE": 30,
+        "ARGUMENT": 60,
+        "NOUN_PHRASE": 58,
+        "VERB_PHRASE": 14,
+        "CLAUSE": 13,
+        "MENTION": 8,
+        "TOPIC": 5
+      },
+      "edge_counts": {
+        "DEP": 234,
+        "NEXT_TOKEN": 244,
+        "NEXT_SENT": 10,
+        "NEXT_PARA": 3,
+        "COREF": 11,
+        "SRL_ARG": 120,
+        "DISCOURSE": 28,
+        "CONTAINS": 405,
+        "BELONGS_TO": 408,
+        "ENTITY_REL": 39
+      },
+      "embedding_stats": {
+        "total_nodes": 474,
+        "nodes_with_embeddings": 339,
+        "by_type": {
+          "SENTENCE": 11,
+          "TOKEN": 245,
+          "ENTITY": 25,
+          "NOUN_PHRASE": 58
+        },
+        "embedding_dim": 768,
+        "model": "jackaduma/SecBERT"
+      }
+    },
+    {
+      "name": "Hybrid (Rule + Model)",
+      "frontend": "HybridSecurityFrontend",
+      "processing_time": 0.3472,
+      "total_nodes": 499,
+      "total_edges": 1878,
+      "entities": [
+        {
+          "text": "Apache Tomcat",
+          "type": "PRODUCT",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Content-Type",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "CrowdStrike",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "January 15, 2024",
+          "type": "DATE",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "December 2023",
+          "type": "DATE",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "Apache Tomcat",
+          "type": "PRODUCT",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "CVSS",
+          "type": "ORG",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "9.8/10",
+          "type": "CARDINAL",
+          "domain_type": "",
+          "confidence": 1.0,
+          "source": "spacy_frontend"
+        },
+        {
+          "text": "CVE-2024-7890",
+          "type": "CVE_ID",
+          "domain_type": "vulnerability_id",
+          "confidence": 1.0,
+          "source": "security_frontend"
+        },
+        {
+          "text": "CWE-78",
+          "type": "CWE_ID",
+          "domain_type": "weakness_class",
+          "confidence": 1.0,
+          "source": "security_frontend"
+        },
+        {
+          "text": "9.0.65",
+          "type": "VERSION",
+          "domain_type": "software_version",
+          "confidence": 0.8,
+          "source": "security_frontend"
+        },
+        {
+          "text": "9.0.66",
+          "type": "VERSION",
+          "domain_type": "software_version",
+          "confidence": 0.8,
+          "source": "security_frontend"
+        },
+        {
+          "text": "9.8",
+          "type": "VERSION",
+          "domain_type": "software_version",
+          "confidence": 0.8,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Tomcat",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Apache",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "Apache",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "java",
+          "type": "SOFTWARE",
+          "domain_type": "software_product",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "system",
+          "type": "CODE_ELEMENT",
+          "domain_type": "code_construct",
+          "confidence": 1.0,
+          "source": "security_frontend"
+        },
+        {
+          "text": "sprintf",
+          "type": "CODE_ELEMENT",
+          "domain_type": "code_construct",
+          "confidence": 1.0,
+          "source": "security_frontend"
+        },
+        {
+          "text": "system",
+          "type": "CODE_ELEMENT",
+          "domain_type": "code_construct",
+          "confidence": 1.0,
+          "source": "security_frontend"
+        },
+        {
+          "text": "specially crafted",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "crafted_input",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "remote attacker",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "remote",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "malicious input",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "malicious_input",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "user input",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "user_input",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "remote",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "remote",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "arbitrary code execution",
+          "type": "IMPACT",
+          "domain_type": "rce",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "remote code execution",
+          "type": "IMPACT",
+          "domain_type": "rce",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "code execution",
+          "type": "IMPACT",
+          "domain_type": "rce",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "critical ",
+          "type": "SEVERITY",
+          "domain_type": "critical",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "critical impact",
+          "type": "SEVERITY",
+          "domain_type": "critical",
+          "confidence": 0.9,
+          "source": "security_frontend"
+        },
+        {
+          "text": "upgrade to Apache",
+          "type": "REMEDIATION",
+          "domain_type": "upgrade",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "workaround",
+          "type": "REMEDIATION",
+          "domain_type": "workaround",
+          "confidence": 0.85,
+          "source": "security_frontend"
+        },
+        {
+          "text": "the request",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "attack_vector",
+          "confidence": 0.46,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "proper validation",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.49,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "RequestParser.java",
+          "type": "CODE_ELEMENT",
+          "domain_type": "code_construct",
+          "confidence": 0.455,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "execution",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.462,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "the privileges",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.458,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "the Tomcat service account",
+          "type": "IMPACT",
+          "domain_type": "impact",
+          "confidence": 0.478,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "The vulnerability",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.484,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "threat actors",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "attack_vector",
+          "confidence": 0.464,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "The attack vector",
+          "type": "ATTACK_VECTOR",
+          "domain_type": "attack_vector",
+          "confidence": 0.544,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "affected versions",
+          "type": "VERSION",
+          "domain_type": "software_version",
+          "confidence": 0.485,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "a temporary workaround",
+          "type": "IMPACT",
+          "domain_type": "impact",
+          "confidence": 0.484,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "a CVSS score",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.521,
+          "source": "model_security_frontend"
+        },
+        {
+          "text": "CVSS",
+          "type": "VULN_TYPE",
+          "domain_type": "vuln_type",
+          "confidence": 0.469,
+          "source": "model_security_frontend"
+        }
+      ],
+      "node_counts": {
+        "DOCUMENT": 1,
+        "PARAGRAPH": 4,
+        "SENTENCE": 11,
+        "TOKEN": 245,
+        "ENTITY": 50,
+        "PREDICATE": 30,
+        "ARGUMENT": 60,
+        "NOUN_PHRASE": 58,
+        "VERB_PHRASE": 14,
+        "CLAUSE": 13,
+        "MENTION": 8,
+        "TOPIC": 5
+      },
+      "edge_counts": {
+        "DEP": 234,
+        "NEXT_TOKEN": 244,
+        "NEXT_SENT": 10,
+        "NEXT_PARA": 3,
+        "COREF": 17,
+        "SRL_ARG": 120,
+        "DISCOURSE": 28,
+        "CONTAINS": 416,
+        "BELONGS_TO": 408,
+        "ENTITY_REL": 398
+      },
+      "comparison_stats": {
+        "rule_based_entities": 27,
+        "model_based_entities": 13,
+        "spacy_entities": 10,
+        "total_entities": 50,
+        "rule_types": {
+          "CVE_ID": 1,
+          "CWE_ID": 1,
+          "VERSION": 3,
+          "SOFTWARE": 7,
+          "CODE_ELEMENT": 3,
+          "ATTACK_VECTOR": 5,
+          "IMPACT": 3,
+          "SEVERITY": 2,
+          "REMEDIATION": 2
+        },
+        "model_types": {
+          "ATTACK_VECTOR": 3,
+          "VULN_TYPE": 6,
+          "CODE_ELEMENT": 1,
+          "IMPACT": 2,
+          "VERSION": 1
+        },
+        "nodes_with_embeddings": 364,
+        "total_nodes": 499,
+        "embedding_coverage": 0.729,
+        "model": "jackaduma/SecBERT"
+      }
+    }
+  ]
+}

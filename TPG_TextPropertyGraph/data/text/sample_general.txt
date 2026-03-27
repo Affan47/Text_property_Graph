@@ -1,0 +1,5 @@
+Artificial intelligence has transformed the way companies process information. Machine learning models can now analyze vast amounts of data in seconds.
+
+For example, natural language processing enables computers to understand human text. Google and OpenAI have developed large language models that generate coherent responses. These systems rely on transformer architectures introduced by Vaswani et al. in 2017.
+
+However, concerns about bias and safety remain significant. Researchers at Stanford and MIT have published studies showing that training data can introduce harmful stereotypes. Consequently, responsible AI development requires careful dataset curation and continuous evaluation.

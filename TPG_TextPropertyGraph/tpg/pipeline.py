@@ -128,10 +128,74 @@ class CrossModalPipeline(TPGPipeline):
             tpg_graph, self.cpg_data, doc_id=tpg_graph.doc_id)
 
 
+class ModelSecurityPipeline(TPGPipeline):
+    """Level 2b — Model-Based Security TPG Pipeline (SecBERT)."""
+
+    def __init__(self, transformer_model: str = "jackaduma/SecBERT",
+                 passes: Optional[List[BasePass]] = None,
+                 schema: Optional[TPGSchema] = None,
+                 similarity_threshold: float = 0.45,
+                 device: Optional[str] = None):
+        from tpg.frontends.model_security_frontend import ModelSecurityFrontend
+        super().__init__(
+            frontend=ModelSecurityFrontend(
+                transformer_model=transformer_model,
+                schema=schema or SECURITY_SCHEMA,
+                similarity_threshold=similarity_threshold,
+                device=device,
+            ),
+            passes=passes,
+            schema=schema or SECURITY_SCHEMA,
+        )
+
+
+class HybridSecurityPipeline(TPGPipeline):
+    """Level 2c — Hybrid Security TPG Pipeline (Rule + Model)."""
+
+    def __init__(self, transformer_model: str = "jackaduma/SecBERT",
+                 passes: Optional[List[BasePass]] = None,
+                 schema: Optional[TPGSchema] = None,
+                 similarity_threshold: float = 0.45,
+                 device: Optional[str] = None,
+                 use_model: bool = True):
+        from tpg.frontends.hybrid_security_frontend import HybridSecurityFrontend
+        super().__init__(
+            frontend=HybridSecurityFrontend(
+                transformer_model=transformer_model,
+                schema=schema or SECURITY_SCHEMA,
+                similarity_threshold=similarity_threshold,
+                device=device,
+                use_model=use_model,
+            ),
+            passes=passes,
+            schema=schema or SECURITY_SCHEMA,
+        )
+
+
 def parse_text(text: str, doc_id: str = "") -> TextPropertyGraph:
     """One-liner to parse text into a TPG. Like Joern's importCode()."""
     return TPGPipeline().run(text, doc_id=doc_id)
 
-def parse_security_text(text: str, doc_id: str = "") -> TextPropertyGraph:
-    """One-liner to parse security text into a security-aware TPG."""
+def parse_security_text(text: str, doc_id: str = "",
+                        use_hybrid: bool = True) -> TextPropertyGraph:
+    """One-liner to parse security text into a security-aware TPG.
+
+    Uses the Hybrid pipeline (rule + SecBERT model) by default.
+    Set use_hybrid=False to use the rule-only SecurityPipeline.
+    """
+    if use_hybrid:
+        try:
+            return HybridSecurityPipeline().run(text, doc_id=doc_id)
+        except ImportError:
+            pass  # Fall back to rule-only if torch/transformers not installed
     return SecurityPipeline().run(text, doc_id=doc_id)
+
+def parse_security_text_model(text: str, doc_id: str = "",
+                               model: str = "jackaduma/SecBERT") -> TextPropertyGraph:
+    """One-liner to parse security text with transformer model."""
+    return ModelSecurityPipeline(transformer_model=model).run(text, doc_id=doc_id)
+
+def parse_security_text_hybrid(text: str, doc_id: str = "",
+                                model: str = "jackaduma/SecBERT") -> TextPropertyGraph:
+    """One-liner to parse security text with hybrid (rule + model) pipeline."""
+    return HybridSecurityPipeline(transformer_model=model).run(text, doc_id=doc_id)

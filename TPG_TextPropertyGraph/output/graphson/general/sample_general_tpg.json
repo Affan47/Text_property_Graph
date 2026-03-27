@@ -1,0 +1,8600 @@
+{
+  "directed": true,
+  "type": "TPG",
+  "label": "tpg",
+  "doc_id": "sample_general",
+  "metadata": {
+    "source_text": "Artificial intelligence has transformed the way companies process information. Machine learning models can now analyze vast amounts of data in seconds.\n\nFor example, natural language processing enable",
+    "spacy_model": "en_core_web_sm",
+    "has_parser": true,
+    "passes_applied": [
+      "spacy_frontend",
+      "coreference_pass",
+      "discourse_pass",
+      "entity_relation_pass",
+      "topic_pass"
+    ]
+  },
+  "schema": {
+    "node_types": [
+      "DOCUMENT",
+      "PARAGRAPH",
+      "SENTENCE",
+      "TOKEN",
+      "ENTITY",
+      "PREDICATE",
+      "ARGUMENT",
+      "CONCEPT",
+      "NOUN_PHRASE",
+      "VERB_PHRASE",
+      "CLAUSE",
+      "MENTION",
+      "TOPIC"
+    ],
+    "edge_types": [
+      "DEP",
+      "NEXT_TOKEN",
+      "NEXT_SENT",
+      "NEXT_PARA",
+      "COREF",
+      "SRL_ARG",
+      "AMR_EDGE",
+      "RST_RELATION",
+      "DISCOURSE",
+      "CONTAINS",
+      "BELONGS_TO",
+      "ENTITY_REL",
+      "SIMILARITY"
+    ],
+    "num_node_types": 13,
+    "num_edge_types": 13
+  },
+  "stats": {
+    "doc_id": "sample_general",
+    "total_nodes": 226,
+    "total_edges": 647,
+    "node_types": {
+      "DOCUMENT": 1,
+      "PARAGRAPH": 3,
+      "SENTENCE": 8,
+      "TOKEN": 104,
+      "ENTITY": 7,
+      "PREDICATE": 14,
+      "ARGUMENT": 35,
+      "NOUN_PHRASE": 32,
+      "VERB_PHRASE": 8,
+      "CLAUSE": 6,
+      "MENTION": 3,
+      "TOPIC": 5
+    },
+    "edge_types": {
+      "DEP": 96,
+      "NEXT_TOKEN": 103,
+      "NEXT_SENT": 7,
+      "NEXT_PARA": 2,
+      "COREF": 3,
+      "SRL_ARG": 70,
+      "RST_RELATION": 3,
+      "DISCOURSE": 13,
+      "CONTAINS": 187,
+      "BELONGS_TO": 161,
+      "ENTITY_REL": 2
+    },
+    "passes_applied": [
+      "spacy_frontend",
+      "coreference_pass",
+      "discourse_pass",
+      "entity_relation_pass",
+      "topic_pass"
+    ]
+  },
+  "vertices": [
+    {
+      "id": 0,
+      "label": "DOCUMENT",
+      "properties": {
+        "TEXT": "Artificial intelligence has transformed the way companies process information. Machine learning models can now analyze vast amounts of data in seconds.\n\nFor example, natural language processing enable",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 1,
+      "label": "PARAGRAPH",
+      "properties": {
+        "TEXT": "Artificial intelligence has transformed the way companies process information. Machine learning mode",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 2,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "Artificial intelligence has transformed the way companies process information.",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 78,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 3,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Artificial",
+        "LEMMA": "artificial",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 10,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 4,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "intelligence",
+        "LEMMA": "intelligence",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 11,
+        "CHAR_END": 23,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 5,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "has",
+        "LEMMA": "have",
+        "POS": "AUX",
+        "DEP_REL": "aux",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 24,
+        "CHAR_END": 27,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 6,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "transformed",
+        "LEMMA": "transform",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 28,
+        "CHAR_END": 39,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 7,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "the",
+        "LEMMA": "the",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 40,
+        "CHAR_END": 43,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 8,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "way",
+        "LEMMA": "way",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 44,
+        "CHAR_END": 47,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 9,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "companies",
+        "LEMMA": "company",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 48,
+        "CHAR_END": 57,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 10,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "process",
+        "LEMMA": "process",
+        "POS": "VERB",
+        "DEP_REL": "relcl",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 58,
+        "CHAR_END": 65,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 11,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "information",
+        "LEMMA": "information",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 66,
+        "CHAR_END": 77,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 12,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 77,
+        "CHAR_END": 78,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 13,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "transformed",
+        "LEMMA": "transform",
+        "POS": "VERB",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 14,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "intelligence",
+        "LEMMA": "intelligence",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 15,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "way",
+        "LEMMA": "way",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 16,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "process",
+        "LEMMA": "process",
+        "POS": "VERB",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 17,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "companies",
+        "LEMMA": "company",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 18,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "information",
+        "LEMMA": "information",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 19,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Artificial intelligence",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 20,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "the way",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 21,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "companies",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 22,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "information",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 23,
+      "label": "CLAUSE",
+      "properties": {
+        "TEXT": "companies process information",
+        "DEP_REL": "relcl",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 24,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "has transformed",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 25,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "Machine learning models can now analyze vast amounts of data in seconds.",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 79,
+        "CHAR_END": 151,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 26,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Machine",
+        "LEMMA": "machine",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 79,
+        "CHAR_END": 86,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 27,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "learning",
+        "LEMMA": "learning",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 87,
+        "CHAR_END": 95,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 28,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "models",
+        "LEMMA": "model",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 96,
+        "CHAR_END": 102,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 29,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "can",
+        "LEMMA": "can",
+        "POS": "AUX",
+        "DEP_REL": "aux",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 103,
+        "CHAR_END": 106,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 30,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "now",
+        "LEMMA": "now",
+        "POS": "ADV",
+        "DEP_REL": "advmod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 107,
+        "CHAR_END": 110,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 31,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "analyze",
+        "LEMMA": "analyze",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 111,
+        "CHAR_END": 118,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 32,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "vast",
+        "LEMMA": "vast",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 119,
+        "CHAR_END": 123,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 33,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "amounts",
+        "LEMMA": "amount",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 124,
+        "CHAR_END": 131,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 34,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "of",
+        "LEMMA": "of",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 132,
+        "CHAR_END": 134,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 35,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "data",
+        "LEMMA": "datum",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 135,
+        "CHAR_END": 139,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 36,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "in",
+        "LEMMA": "in",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 140,
+        "CHAR_END": 142,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 37,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "seconds",
+        "LEMMA": "second",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_TYPE": "TIME",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 143,
+        "CHAR_END": 150,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 38,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 150,
+        "CHAR_END": 151,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 39,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "seconds",
+        "ENTITY_TYPE": "TIME",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 143,
+        "CHAR_END": 150,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 40,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "analyze",
+        "LEMMA": "analyze",
+        "POS": "VERB",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 41,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "models",
+        "LEMMA": "model",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 42,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "now",
+        "LEMMA": "now",
+        "DEP_REL": "advmod",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-ADV",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 43,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "amounts",
+        "LEMMA": "amount",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 44,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "in",
+        "LEMMA": "in",
+        "DEP_REL": "prep",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 45,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Machine learning models",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 46,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "vast amounts",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 47,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "data",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 48,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "seconds",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 49,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "can now analyze",
+        "SENT_IDX": 1,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 50,
+      "label": "PARAGRAPH",
+      "properties": {
+        "TEXT": "For example, natural language processing enables computers to understand human text. Google and Open",
+        "SENT_IDX": 0,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 51,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "For example, natural language processing enables computers to understand human text.",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 84,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 52,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "For",
+        "LEMMA": "for",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 3,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 53,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "example",
+        "LEMMA": "example",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 4,
+        "CHAR_END": 11,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 54,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ",",
+        "LEMMA": ",",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 11,
+        "CHAR_END": 12,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 55,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "natural",
+        "LEMMA": "natural",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 13,
+        "CHAR_END": 20,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 56,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "language",
+        "LEMMA": "language",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 21,
+        "CHAR_END": 29,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 57,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "processing",
+        "LEMMA": "processing",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 30,
+        "CHAR_END": 40,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 58,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "enables",
+        "LEMMA": "enable",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 41,
+        "CHAR_END": 48,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 59,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "computers",
+        "LEMMA": "computer",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 49,
+        "CHAR_END": 58,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 60,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "to",
+        "LEMMA": "to",
+        "POS": "PART",
+        "DEP_REL": "aux",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 59,
+        "CHAR_END": 61,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 61,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "understand",
+        "LEMMA": "understand",
+        "POS": "VERB",
+        "DEP_REL": "ccomp",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 62,
+        "CHAR_END": 72,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 62,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "human",
+        "LEMMA": "human",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 73,
+        "CHAR_END": 78,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 63,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "text",
+        "LEMMA": "text",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 79,
+        "CHAR_END": 83,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 64,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 83,
+        "CHAR_END": 84,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 65,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "enables",
+        "LEMMA": "enable",
+        "POS": "VERB",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 66,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "For",
+        "LEMMA": "for",
+        "DEP_REL": "prep",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 67,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "processing",
+        "LEMMA": "processing",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 68,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "understand",
+        "LEMMA": "understand",
+        "DEP_REL": "ccomp",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 69,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "understand",
+        "LEMMA": "understand",
+        "POS": "VERB",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 70,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "computers",
+        "LEMMA": "computer",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 71,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "text",
+        "LEMMA": "text",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 72,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "example",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 73,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "natural language processing",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 74,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "computers",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 75,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "human text",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 76,
+      "label": "CLAUSE",
+      "properties": {
+        "TEXT": "computers to understand human text",
+        "DEP_REL": "ccomp",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 77,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "to understand",
+        "SENT_IDX": 2,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 78,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "Google and OpenAI have developed large language models that generate coherent responses.",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 85,
+        "CHAR_END": 173,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 79,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Google",
+        "LEMMA": "Google",
+        "POS": "PROPN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 85,
+        "CHAR_END": 91,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 80,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "and",
+        "LEMMA": "and",
+        "POS": "CCONJ",
+        "DEP_REL": "cc",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 92,
+        "CHAR_END": 95,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 81,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "OpenAI",
+        "LEMMA": "OpenAI",
+        "POS": "PROPN",
+        "DEP_REL": "conj",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 96,
+        "CHAR_END": 102,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 82,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "have",
+        "LEMMA": "have",
+        "POS": "AUX",
+        "DEP_REL": "aux",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 103,
+        "CHAR_END": 107,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 83,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "developed",
+        "LEMMA": "develop",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 108,
+        "CHAR_END": 117,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 84,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "large",
+        "LEMMA": "large",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 118,
+        "CHAR_END": 123,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 85,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "language",
+        "LEMMA": "language",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 124,
+        "CHAR_END": 132,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 86,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "models",
+        "LEMMA": "model",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 133,
+        "CHAR_END": 139,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 87,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "that",
+        "LEMMA": "that",
+        "POS": "PRON",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 140,
+        "CHAR_END": 144,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 88,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "generate",
+        "LEMMA": "generate",
+        "POS": "VERB",
+        "DEP_REL": "relcl",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 145,
+        "CHAR_END": 153,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 89,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "coherent",
+        "LEMMA": "coherent",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 154,
+        "CHAR_END": 162,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 90,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "responses",
+        "LEMMA": "response",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 163,
+        "CHAR_END": 172,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 91,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 172,
+        "CHAR_END": 173,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 92,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "OpenAI",
+        "ENTITY_TYPE": "ORG",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 96,
+        "CHAR_END": 102,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 93,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "developed",
+        "LEMMA": "develop",
+        "POS": "VERB",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 94,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "Google",
+        "LEMMA": "Google",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 95,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "models",
+        "LEMMA": "model",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 96,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "generate",
+        "LEMMA": "generate",
+        "POS": "VERB",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 97,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "that",
+        "LEMMA": "that",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 98,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "responses",
+        "LEMMA": "response",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 99,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Google",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 100,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "OpenAI",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 101,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "large language models",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 102,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "that",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 103,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "coherent responses",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 104,
+      "label": "CLAUSE",
+      "properties": {
+        "TEXT": "that generate coherent responses",
+        "DEP_REL": "relcl",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 105,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "have developed",
+        "SENT_IDX": 3,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 106,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "These systems rely on transformer architectures introduced by Vaswani et al. in 2017.",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 174,
+        "CHAR_END": 259,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 107,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "These",
+        "LEMMA": "these",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 174,
+        "CHAR_END": 179,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 108,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "systems",
+        "LEMMA": "system",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 180,
+        "CHAR_END": 187,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 109,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "rely",
+        "LEMMA": "rely",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 188,
+        "CHAR_END": 192,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 110,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "on",
+        "LEMMA": "on",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 193,
+        "CHAR_END": 195,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 111,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "transformer",
+        "LEMMA": "transformer",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 196,
+        "CHAR_END": 207,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 112,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "architectures",
+        "LEMMA": "architecture",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 208,
+        "CHAR_END": 221,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 113,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "introduced",
+        "LEMMA": "introduce",
+        "POS": "VERB",
+        "DEP_REL": "acl",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 222,
+        "CHAR_END": 232,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 114,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "by",
+        "LEMMA": "by",
+        "POS": "ADP",
+        "DEP_REL": "agent",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 233,
+        "CHAR_END": 235,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 115,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Vaswani",
+        "LEMMA": "Vaswani",
+        "POS": "PROPN",
+        "DEP_REL": "pobj",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 236,
+        "CHAR_END": 243,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 116,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "et",
+        "LEMMA": "et",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "I",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 244,
+        "CHAR_END": 246,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 117,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "al",
+        "LEMMA": "al",
+        "POS": "PROPN",
+        "DEP_REL": "npadvmod",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "I",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 247,
+        "CHAR_END": 249,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 118,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PROPN",
+        "DEP_REL": "npadvmod",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "I",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 249,
+        "CHAR_END": 250,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 119,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "in",
+        "LEMMA": "in",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 251,
+        "CHAR_END": 253,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 120,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "2017",
+        "LEMMA": "2017",
+        "POS": "NUM",
+        "DEP_REL": "pobj",
+        "ENTITY_TYPE": "DATE",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 254,
+        "CHAR_END": 258,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 121,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 14,
+        "CHAR_START": 258,
+        "CHAR_END": 259,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 122,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "Vaswani et al.",
+        "ENTITY_TYPE": "ORG",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 236,
+        "CHAR_END": 250,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 123,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "2017",
+        "ENTITY_TYPE": "DATE",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 254,
+        "CHAR_END": 258,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 124,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "rely",
+        "LEMMA": "rely",
+        "POS": "VERB",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 125,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "systems",
+        "LEMMA": "system",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 126,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "on",
+        "LEMMA": "on",
+        "DEP_REL": "prep",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 127,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "al",
+        "LEMMA": "al",
+        "DEP_REL": "npadvmod",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-TMP",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 128,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "DEP_REL": "npadvmod",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-TMP",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 129,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "in",
+        "LEMMA": "in",
+        "DEP_REL": "prep",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 130,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "introduced",
+        "LEMMA": "introduce",
+        "POS": "VERB",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 131,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "by",
+        "LEMMA": "by",
+        "DEP_REL": "agent",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 132,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "These systems",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 133,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "transformer architectures",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 134,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Vaswani",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 135,
+      "label": "CLAUSE",
+      "properties": {
+        "TEXT": "introduced by Vaswani",
+        "DEP_REL": "acl",
+        "SENT_IDX": 4,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 136,
+      "label": "PARAGRAPH",
+      "properties": {
+        "TEXT": "However, concerns about bias and safety remain significant. Researchers at Stanford and MIT have pub",
+        "SENT_IDX": 0,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 137,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "However, concerns about bias and safety remain significant.",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 59,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 138,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "However",
+        "LEMMA": "however",
+        "POS": "ADV",
+        "DEP_REL": "advmod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 7,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 139,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ",",
+        "LEMMA": ",",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 7,
+        "CHAR_END": 8,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 140,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "concerns",
+        "LEMMA": "concern",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 9,
+        "CHAR_END": 17,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 141,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "about",
+        "LEMMA": "about",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 18,
+        "CHAR_END": 23,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 142,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "bias",
+        "LEMMA": "bias",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 24,
+        "CHAR_END": 28,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 143,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "and",
+        "LEMMA": "and",
+        "POS": "CCONJ",
+        "DEP_REL": "cc",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 29,
+        "CHAR_END": 32,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 144,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "safety",
+        "LEMMA": "safety",
+        "POS": "NOUN",
+        "DEP_REL": "conj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 33,
+        "CHAR_END": 39,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 145,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "remain",
+        "LEMMA": "remain",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 40,
+        "CHAR_END": 46,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 146,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "significant",
+        "LEMMA": "significant",
+        "POS": "ADJ",
+        "DEP_REL": "acomp",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 47,
+        "CHAR_END": 58,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 147,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 58,
+        "CHAR_END": 59,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 148,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "remain",
+        "LEMMA": "remain",
+        "POS": "VERB",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 149,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "However",
+        "LEMMA": "however",
+        "DEP_REL": "advmod",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-ADV",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 150,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "concerns",
+        "LEMMA": "concern",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 151,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "significant",
+        "LEMMA": "significant",
+        "DEP_REL": "acomp",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG2",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 152,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "concerns",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 153,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "bias",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 154,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "safety",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 155,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "However remain",
+        "SENT_IDX": 5,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 156,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "Researchers at Stanford and MIT have published studies showing that training data can introduce harmful stereotypes.",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 60,
+        "CHAR_END": 176,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 157,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Researchers",
+        "LEMMA": "researcher",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 60,
+        "CHAR_END": 71,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 158,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "at",
+        "LEMMA": "at",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 72,
+        "CHAR_END": 74,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 159,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Stanford",
+        "LEMMA": "Stanford",
+        "POS": "PROPN",
+        "DEP_REL": "pobj",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 75,
+        "CHAR_END": 83,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 160,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "and",
+        "LEMMA": "and",
+        "POS": "CCONJ",
+        "DEP_REL": "cc",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 84,
+        "CHAR_END": 87,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 161,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "MIT",
+        "LEMMA": "MIT",
+        "POS": "PROPN",
+        "DEP_REL": "conj",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 88,
+        "CHAR_END": 91,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 162,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "have",
+        "LEMMA": "have",
+        "POS": "AUX",
+        "DEP_REL": "aux",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 92,
+        "CHAR_END": 96,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 163,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "published",
+        "LEMMA": "publish",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 97,
+        "CHAR_END": 106,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 164,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "studies",
+        "LEMMA": "study",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 107,
+        "CHAR_END": 114,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 165,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "showing",
+        "LEMMA": "show",
+        "POS": "VERB",
+        "DEP_REL": "acl",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 115,
+        "CHAR_END": 122,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 166,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "that",
+        "LEMMA": "that",
+        "POS": "SCONJ",
+        "DEP_REL": "mark",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 123,
+        "CHAR_END": 127,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 167,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "training",
+        "LEMMA": "training",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 128,
+        "CHAR_END": 136,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 168,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "data",
+        "LEMMA": "datum",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 137,
+        "CHAR_END": 141,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 169,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "can",
+        "LEMMA": "can",
+        "POS": "AUX",
+        "DEP_REL": "aux",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 142,
+        "CHAR_END": 145,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 170,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "introduce",
+        "LEMMA": "introduce",
+        "POS": "VERB",
+        "DEP_REL": "ccomp",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 146,
+        "CHAR_END": 155,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 171,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "harmful",
+        "LEMMA": "harmful",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 14,
+        "CHAR_START": 156,
+        "CHAR_END": 163,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 172,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "stereotypes",
+        "LEMMA": "stereotype",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 15,
+        "CHAR_START": 164,
+        "CHAR_END": 175,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 173,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 16,
+        "CHAR_START": 175,
+        "CHAR_END": 176,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 174,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "Stanford",
+        "ENTITY_TYPE": "ORG",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 75,
+        "CHAR_END": 83,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 175,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "MIT",
+        "ENTITY_TYPE": "ORG",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 88,
+        "CHAR_END": 91,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 176,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "published",
+        "LEMMA": "publish",
+        "POS": "VERB",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 177,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "Researchers",
+        "LEMMA": "researcher",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 178,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "studies",
+        "LEMMA": "study",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 179,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "showing",
+        "LEMMA": "show",
+        "POS": "VERB",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 180,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "introduce",
+        "LEMMA": "introduce",
+        "DEP_REL": "ccomp",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 181,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "introduce",
+        "LEMMA": "introduce",
+        "POS": "VERB",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 182,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "that",
+        "LEMMA": "that",
+        "DEP_REL": "mark",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-DIS",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 183,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "data",
+        "LEMMA": "datum",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 184,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "stereotypes",
+        "LEMMA": "stereotype",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 15,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 185,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Researchers",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 186,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Stanford",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 187,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "MIT",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 188,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "studies",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 189,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "training data",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 190,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "harmful stereotypes",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 191,
+      "label": "CLAUSE",
+      "properties": {
+        "TEXT": "showing that training data can introduce harmful stereotypes",
+        "DEP_REL": "acl",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 192,
+      "label": "CLAUSE",
+      "properties": {
+        "TEXT": "that training data can introduce harmful stereotypes",
+        "DEP_REL": "ccomp",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 193,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "have published",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 194,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "can introduce",
+        "SENT_IDX": 6,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 195,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "Consequently, responsible AI development requires careful dataset curation and continuous evaluation.",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 177,
+        "CHAR_END": 278,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 196,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Consequently",
+        "LEMMA": "consequently",
+        "POS": "ADV",
+        "DEP_REL": "advmod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 177,
+        "CHAR_END": 189,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 197,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ",",
+        "LEMMA": ",",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 189,
+        "CHAR_END": 190,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 198,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "responsible",
+        "LEMMA": "responsible",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 191,
+        "CHAR_END": 202,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 199,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "AI",
+        "LEMMA": "AI",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_TYPE": "GPE",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 203,
+        "CHAR_END": 205,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 200,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "development",
+        "LEMMA": "development",
+        "POS": "NOUN",
+        "DEP_REL": "nsubj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 206,
+        "CHAR_END": 217,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 201,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "requires",
+        "LEMMA": "require",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 218,
+        "CHAR_END": 226,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 202,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "careful",
+        "LEMMA": "careful",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 227,
+        "CHAR_END": 234,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 203,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "dataset",
+        "LEMMA": "dataset",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 235,
+        "CHAR_END": 242,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 204,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "curation",
+        "LEMMA": "curation",
+        "POS": "NOUN",
+        "DEP_REL": "dobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 243,
+        "CHAR_END": 251,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 205,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "and",
+        "LEMMA": "and",
+        "POS": "CCONJ",
+        "DEP_REL": "cc",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 252,
+        "CHAR_END": 255,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 206,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "continuous",
+        "LEMMA": "continuous",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 256,
+        "CHAR_END": 266,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 207,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "evaluation",
+        "LEMMA": "evaluation",
+        "POS": "NOUN",
+        "DEP_REL": "conj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 267,
+        "CHAR_END": 277,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 208,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 277,
+        "CHAR_END": 278,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 209,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "AI",
+        "ENTITY_TYPE": "GPE",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 203,
+        "CHAR_END": 205,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 210,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "requires",
+        "LEMMA": "require",
+        "POS": "VERB",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 211,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "Consequently",
+        "LEMMA": "consequently",
+        "DEP_REL": "advmod",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-ADV",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 212,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "development",
+        "LEMMA": "development",
+        "DEP_REL": "nsubj",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG0",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 213,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "curation",
+        "LEMMA": "curation",
+        "DEP_REL": "dobj",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 214,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "responsible AI development",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 215,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "careful dataset curation",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 216,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "continuous evaluation",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 217,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "Consequently requires",
+        "SENT_IDX": 7,
+        "PARA_IDX": 2,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 218,
+      "label": "MENTION",
+      "properties": {
+        "TEXT": "that",
+        "SENT_IDX": 3,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "coreference_pass"
+      }
+    },
+    {
+      "id": 219,
+      "label": "MENTION",
+      "properties": {
+        "TEXT": "These",
+        "SENT_IDX": 4,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "coreference_pass"
+      }
+    },
+    {
+      "id": 220,
+      "label": "MENTION",
+      "properties": {
+        "TEXT": "that",
+        "SENT_IDX": 6,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "coreference_pass"
+      }
+    },
+    {
+      "id": 221,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "model",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.019230769230769232,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 222,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "datum",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.019230769230769232,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 223,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "language",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.019230769230769232,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 224,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "introduce",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.019230769230769232,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 225,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "artificial",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.009615384615384616,
+        "SOURCE": "topic_pass"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "outV": 0,
+      "inV": 1,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e1",
+      "outV": 1,
+      "inV": 2,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e2",
+      "outV": 2,
+      "inV": 3,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e3",
+      "outV": 2,
+      "inV": 4,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e4",
+      "outV": 2,
+      "inV": 5,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e5",
+      "outV": 2,
+      "inV": 6,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e6",
+      "outV": 2,
+      "inV": 7,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e7",
+      "outV": 2,
+      "inV": 8,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e8",
+      "outV": 2,
+      "inV": 9,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e9",
+      "outV": 2,
+      "inV": 10,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e10",
+      "outV": 2,
+      "inV": 11,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e11",
+      "outV": 2,
+      "inV": 12,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e12",
+      "outV": 2,
+      "inV": 13,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e13",
+      "outV": 13,
+      "inV": 6,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e14",
+      "outV": 14,
+      "inV": 4,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e15",
+      "outV": 4,
+      "inV": 13,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e16",
+      "outV": 14,
+      "inV": 13,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e17",
+      "outV": 15,
+      "inV": 8,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e18",
+      "outV": 8,
+      "inV": 13,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e19",
+      "outV": 15,
+      "inV": 13,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e20",
+      "outV": 2,
+      "inV": 16,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e21",
+      "outV": 16,
+      "inV": 10,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e22",
+      "outV": 17,
+      "inV": 9,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e23",
+      "outV": 9,
+      "inV": 16,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e24",
+      "outV": 17,
+      "inV": 16,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e25",
+      "outV": 18,
+      "inV": 11,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e26",
+      "outV": 11,
+      "inV": 16,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e27",
+      "outV": 18,
+      "inV": 16,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e28",
+      "outV": 2,
+      "inV": 19,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e29",
+      "outV": 19,
+      "inV": 3,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e30",
+      "outV": 19,
+      "inV": 4,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e31",
+      "outV": 2,
+      "inV": 20,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e32",
+      "outV": 20,
+      "inV": 7,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e33",
+      "outV": 20,
+      "inV": 8,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e34",
+      "outV": 2,
+      "inV": 21,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e35",
+      "outV": 21,
+      "inV": 9,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e36",
+      "outV": 2,
+      "inV": 22,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e37",
+      "outV": 22,
+      "inV": 11,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e38",
+      "outV": 2,
+      "inV": 23,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e39",
+      "outV": 23,
+      "inV": 9,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e40",
+      "outV": 23,
+      "inV": 10,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e41",
+      "outV": 23,
+      "inV": 11,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e42",
+      "outV": 2,
+      "inV": 24,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e43",
+      "outV": 24,
+      "inV": 5,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e44",
+      "outV": 24,
+      "inV": 6,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e45",
+      "outV": 4,
+      "inV": 3,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e46",
+      "outV": 6,
+      "inV": 4,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e47",
+      "outV": 6,
+      "inV": 5,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "aux"
+      }
+    },
+    {
+      "id": "e48",
+      "outV": 8,
+      "inV": 7,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e49",
+      "outV": 6,
+      "inV": 8,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e50",
+      "outV": 10,
+      "inV": 9,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e51",
+      "outV": 8,
+      "inV": 10,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "relcl"
+      }
+    },
+    {
+      "id": "e52",
+      "outV": 10,
+      "inV": 11,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e53",
+      "outV": 6,
+      "inV": 12,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e54",
+      "outV": 3,
+      "inV": 4,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e55",
+      "outV": 4,
+      "inV": 5,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e56",
+      "outV": 5,
+      "inV": 6,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e57",
+      "outV": 6,
+      "inV": 7,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e58",
+      "outV": 7,
+      "inV": 8,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e59",
+      "outV": 8,
+      "inV": 9,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e60",
+      "outV": 9,
+      "inV": 10,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e61",
+      "outV": 10,
+      "inV": 11,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e62",
+      "outV": 11,
+      "inV": 12,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e63",
+      "outV": 1,
+      "inV": 25,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e64",
+      "outV": 25,
+      "inV": 26,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e65",
+      "outV": 25,
+      "inV": 27,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e66",
+      "outV": 25,
+      "inV": 28,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e67",
+      "outV": 25,
+      "inV": 29,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e68",
+      "outV": 25,
+      "inV": 30,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e69",
+      "outV": 25,
+      "inV": 31,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e70",
+      "outV": 25,
+      "inV": 32,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e71",
+      "outV": 25,
+      "inV": 33,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e72",
+      "outV": 25,
+      "inV": 34,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e73",
+      "outV": 25,
+      "inV": 35,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e74",
+      "outV": 25,
+      "inV": 36,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e75",
+      "outV": 25,
+      "inV": 37,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e76",
+      "outV": 25,
+      "inV": 38,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e77",
+      "outV": 25,
+      "inV": 39,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e78",
+      "outV": 39,
+      "inV": 37,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e79",
+      "outV": 25,
+      "inV": 40,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e80",
+      "outV": 40,
+      "inV": 31,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e81",
+      "outV": 41,
+      "inV": 28,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e82",
+      "outV": 28,
+      "inV": 40,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e83",
+      "outV": 41,
+      "inV": 40,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e84",
+      "outV": 42,
+      "inV": 30,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e85",
+      "outV": 30,
+      "inV": 40,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e86",
+      "outV": 42,
+      "inV": 40,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e87",
+      "outV": 43,
+      "inV": 33,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e88",
+      "outV": 33,
+      "inV": 40,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e89",
+      "outV": 43,
+      "inV": 40,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e90",
+      "outV": 44,
+      "inV": 36,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e91",
+      "outV": 36,
+      "inV": 40,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e92",
+      "outV": 44,
+      "inV": 40,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e93",
+      "outV": 25,
+      "inV": 45,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e94",
+      "outV": 45,
+      "inV": 26,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e95",
+      "outV": 45,
+      "inV": 27,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e96",
+      "outV": 45,
+      "inV": 28,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e97",
+      "outV": 25,
+      "inV": 46,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e98",
+      "outV": 46,
+      "inV": 32,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e99",
+      "outV": 46,
+      "inV": 33,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e100",
+      "outV": 25,
+      "inV": 47,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e101",
+      "outV": 47,
+      "inV": 35,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e102",
+      "outV": 25,
+      "inV": 48,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e103",
+      "outV": 48,
+      "inV": 37,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e104",
+      "outV": 25,
+      "inV": 49,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e105",
+      "outV": 49,
+      "inV": 29,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e106",
+      "outV": 49,
+      "inV": 30,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e107",
+      "outV": 49,
+      "inV": 31,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e108",
+      "outV": 27,
+      "inV": 26,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e109",
+      "outV": 28,
+      "inV": 27,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e110",
+      "outV": 31,
+      "inV": 28,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e111",
+      "outV": 31,
+      "inV": 29,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "aux"
+      }
+    },
+    {
+      "id": "e112",
+      "outV": 31,
+      "inV": 30,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "advmod"
+      }
+    },
+    {
+      "id": "e113",
+      "outV": 33,
+      "inV": 32,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e114",
+      "outV": 31,
+      "inV": 33,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e115",
+      "outV": 33,
+      "inV": 34,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e116",
+      "outV": 34,
+      "inV": 35,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e117",
+      "outV": 31,
+      "inV": 36,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e118",
+      "outV": 36,
+      "inV": 37,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e119",
+      "outV": 31,
+      "inV": 38,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e120",
+      "outV": 26,
+      "inV": 27,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e121",
+      "outV": 27,
+      "inV": 28,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e122",
+      "outV": 28,
+      "inV": 29,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e123",
+      "outV": 29,
+      "inV": 30,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e124",
+      "outV": 30,
+      "inV": 31,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e125",
+      "outV": 31,
+      "inV": 32,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e126",
+      "outV": 32,
+      "inV": 33,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e127",
+      "outV": 33,
+      "inV": 34,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e128",
+      "outV": 34,
+      "inV": 35,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e129",
+      "outV": 35,
+      "inV": 36,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e130",
+      "outV": 36,
+      "inV": 37,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e131",
+      "outV": 37,
+      "inV": 38,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e132",
+      "outV": 0,
+      "inV": 50,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e133",
+      "outV": 50,
+      "inV": 51,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e134",
+      "outV": 51,
+      "inV": 52,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e135",
+      "outV": 51,
+      "inV": 53,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e136",
+      "outV": 51,
+      "inV": 54,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e137",
+      "outV": 51,
+      "inV": 55,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e138",
+      "outV": 51,
+      "inV": 56,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e139",
+      "outV": 51,
+      "inV": 57,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e140",
+      "outV": 51,
+      "inV": 58,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e141",
+      "outV": 51,
+      "inV": 59,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e142",
+      "outV": 51,
+      "inV": 60,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e143",
+      "outV": 51,
+      "inV": 61,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e144",
+      "outV": 51,
+      "inV": 62,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e145",
+      "outV": 51,
+      "inV": 63,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e146",
+      "outV": 51,
+      "inV": 64,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e147",
+      "outV": 51,
+      "inV": 65,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e148",
+      "outV": 65,
+      "inV": 58,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e149",
+      "outV": 66,
+      "inV": 52,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e150",
+      "outV": 52,
+      "inV": 65,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e151",
+      "outV": 66,
+      "inV": 65,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e152",
+      "outV": 67,
+      "inV": 57,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e153",
+      "outV": 57,
+      "inV": 65,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e154",
+      "outV": 67,
+      "inV": 65,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e155",
+      "outV": 68,
+      "inV": 61,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e156",
+      "outV": 61,
+      "inV": 65,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "ccomp",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e157",
+      "outV": 68,
+      "inV": 65,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "ccomp",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e158",
+      "outV": 51,
+      "inV": 69,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e159",
+      "outV": 69,
+      "inV": 61,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e160",
+      "outV": 70,
+      "inV": 59,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e161",
+      "outV": 59,
+      "inV": 69,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e162",
+      "outV": 70,
+      "inV": 69,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e163",
+      "outV": 71,
+      "inV": 63,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e164",
+      "outV": 63,
+      "inV": 69,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e165",
+      "outV": 71,
+      "inV": 69,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e166",
+      "outV": 51,
+      "inV": 72,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e167",
+      "outV": 72,
+      "inV": 53,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e168",
+      "outV": 51,
+      "inV": 73,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e169",
+      "outV": 73,
+      "inV": 55,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e170",
+      "outV": 73,
+      "inV": 56,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e171",
+      "outV": 73,
+      "inV": 57,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e172",
+      "outV": 51,
+      "inV": 74,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e173",
+      "outV": 74,
+      "inV": 59,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e174",
+      "outV": 51,
+      "inV": 75,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e175",
+      "outV": 75,
+      "inV": 62,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e176",
+      "outV": 75,
+      "inV": 63,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e177",
+      "outV": 51,
+      "inV": 76,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e178",
+      "outV": 76,
+      "inV": 59,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e179",
+      "outV": 76,
+      "inV": 60,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e180",
+      "outV": 76,
+      "inV": 61,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e181",
+      "outV": 76,
+      "inV": 62,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e182",
+      "outV": 76,
+      "inV": 63,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e183",
+      "outV": 51,
+      "inV": 77,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e184",
+      "outV": 77,
+      "inV": 60,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e185",
+      "outV": 77,
+      "inV": 61,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e186",
+      "outV": 58,
+      "inV": 52,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e187",
+      "outV": 52,
+      "inV": 53,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e188",
+      "outV": 58,
+      "inV": 54,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e189",
+      "outV": 56,
+      "inV": 55,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e190",
+      "outV": 57,
+      "inV": 56,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e191",
+      "outV": 58,
+      "inV": 57,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e192",
+      "outV": 61,
+      "inV": 59,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e193",
+      "outV": 61,
+      "inV": 60,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "aux"
+      }
+    },
+    {
+      "id": "e194",
+      "outV": 58,
+      "inV": 61,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "ccomp"
+      }
+    },
+    {
+      "id": "e195",
+      "outV": 63,
+      "inV": 62,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e196",
+      "outV": 61,
+      "inV": 63,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e197",
+      "outV": 58,
+      "inV": 64,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e198",
+      "outV": 52,
+      "inV": 53,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e199",
+      "outV": 53,
+      "inV": 54,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e200",
+      "outV": 54,
+      "inV": 55,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e201",
+      "outV": 55,
+      "inV": 56,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e202",
+      "outV": 56,
+      "inV": 57,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e203",
+      "outV": 57,
+      "inV": 58,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e204",
+      "outV": 58,
+      "inV": 59,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e205",
+      "outV": 59,
+      "inV": 60,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e206",
+      "outV": 60,
+      "inV": 61,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e207",
+      "outV": 61,
+      "inV": 62,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e208",
+      "outV": 62,
+      "inV": 63,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e209",
+      "outV": 63,
+      "inV": 64,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e210",
+      "outV": 50,
+      "inV": 78,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e211",
+      "outV": 78,
+      "inV": 79,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e212",
+      "outV": 78,
+      "inV": 80,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e213",
+      "outV": 78,
+      "inV": 81,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e214",
+      "outV": 78,
+      "inV": 82,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e215",
+      "outV": 78,
+      "inV": 83,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e216",
+      "outV": 78,
+      "inV": 84,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e217",
+      "outV": 78,
+      "inV": 85,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e218",
+      "outV": 78,
+      "inV": 86,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e219",
+      "outV": 78,
+      "inV": 87,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e220",
+      "outV": 78,
+      "inV": 88,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e221",
+      "outV": 78,
+      "inV": 89,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e222",
+      "outV": 78,
+      "inV": 90,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e223",
+      "outV": 78,
+      "inV": 91,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e224",
+      "outV": 78,
+      "inV": 92,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e225",
+      "outV": 92,
+      "inV": 81,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e226",
+      "outV": 78,
+      "inV": 93,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e227",
+      "outV": 93,
+      "inV": 83,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e228",
+      "outV": 94,
+      "inV": 79,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e229",
+      "outV": 79,
+      "inV": 93,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e230",
+      "outV": 94,
+      "inV": 93,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e231",
+      "outV": 95,
+      "inV": 86,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e232",
+      "outV": 86,
+      "inV": 93,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e233",
+      "outV": 95,
+      "inV": 93,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e234",
+      "outV": 78,
+      "inV": 96,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e235",
+      "outV": 96,
+      "inV": 88,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e236",
+      "outV": 97,
+      "inV": 87,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e237",
+      "outV": 87,
+      "inV": 96,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e238",
+      "outV": 97,
+      "inV": 96,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e239",
+      "outV": 98,
+      "inV": 90,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e240",
+      "outV": 90,
+      "inV": 96,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e241",
+      "outV": 98,
+      "inV": 96,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e242",
+      "outV": 78,
+      "inV": 99,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e243",
+      "outV": 99,
+      "inV": 79,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e244",
+      "outV": 78,
+      "inV": 100,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e245",
+      "outV": 100,
+      "inV": 81,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e246",
+      "outV": 78,
+      "inV": 101,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e247",
+      "outV": 101,
+      "inV": 84,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e248",
+      "outV": 101,
+      "inV": 85,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e249",
+      "outV": 101,
+      "inV": 86,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e250",
+      "outV": 78,
+      "inV": 102,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e251",
+      "outV": 102,
+      "inV": 87,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e252",
+      "outV": 78,
+      "inV": 103,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e253",
+      "outV": 103,
+      "inV": 89,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e254",
+      "outV": 103,
+      "inV": 90,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e255",
+      "outV": 78,
+      "inV": 104,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e256",
+      "outV": 104,
+      "inV": 87,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e257",
+      "outV": 104,
+      "inV": 88,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e258",
+      "outV": 104,
+      "inV": 89,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e259",
+      "outV": 104,
+      "inV": 90,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e260",
+      "outV": 78,
+      "inV": 105,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e261",
+      "outV": 105,
+      "inV": 82,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e262",
+      "outV": 105,
+      "inV": 83,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e263",
+      "outV": 83,
+      "inV": 79,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e264",
+      "outV": 79,
+      "inV": 80,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "cc"
+      }
+    },
+    {
+      "id": "e265",
+      "outV": 79,
+      "inV": 81,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "conj"
+      }
+    },
+    {
+      "id": "e266",
+      "outV": 83,
+      "inV": 82,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "aux"
+      }
+    },
+    {
+      "id": "e267",
+      "outV": 86,
+      "inV": 84,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e268",
+      "outV": 86,
+      "inV": 85,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e269",
+      "outV": 83,
+      "inV": 86,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e270",
+      "outV": 88,
+      "inV": 87,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e271",
+      "outV": 86,
+      "inV": 88,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "relcl"
+      }
+    },
+    {
+      "id": "e272",
+      "outV": 90,
+      "inV": 89,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e273",
+      "outV": 88,
+      "inV": 90,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e274",
+      "outV": 83,
+      "inV": 91,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e275",
+      "outV": 79,
+      "inV": 80,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e276",
+      "outV": 80,
+      "inV": 81,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e277",
+      "outV": 81,
+      "inV": 82,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e278",
+      "outV": 82,
+      "inV": 83,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e279",
+      "outV": 83,
+      "inV": 84,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e280",
+      "outV": 84,
+      "inV": 85,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e281",
+      "outV": 85,
+      "inV": 86,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e282",
+      "outV": 86,
+      "inV": 87,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e283",
+      "outV": 87,
+      "inV": 88,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e284",
+      "outV": 88,
+      "inV": 89,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e285",
+      "outV": 89,
+      "inV": 90,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e286",
+      "outV": 90,
+      "inV": 91,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e287",
+      "outV": 50,
+      "inV": 106,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e288",
+      "outV": 106,
+      "inV": 107,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e289",
+      "outV": 106,
+      "inV": 108,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e290",
+      "outV": 106,
+      "inV": 109,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e291",
+      "outV": 106,
+      "inV": 110,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e292",
+      "outV": 106,
+      "inV": 111,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e293",
+      "outV": 106,
+      "inV": 112,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e294",
+      "outV": 106,
+      "inV": 113,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e295",
+      "outV": 106,
+      "inV": 114,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e296",
+      "outV": 106,
+      "inV": 115,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e297",
+      "outV": 106,
+      "inV": 116,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e298",
+      "outV": 106,
+      "inV": 117,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e299",
+      "outV": 106,
+      "inV": 118,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e300",
+      "outV": 106,
+      "inV": 119,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e301",
+      "outV": 106,
+      "inV": 120,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e302",
+      "outV": 106,
+      "inV": 121,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e303",
+      "outV": 106,
+      "inV": 122,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e304",
+      "outV": 122,
+      "inV": 115,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e305",
+      "outV": 122,
+      "inV": 116,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e306",
+      "outV": 122,
+      "inV": 117,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e307",
+      "outV": 122,
+      "inV": 118,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e308",
+      "outV": 106,
+      "inV": 123,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e309",
+      "outV": 123,
+      "inV": 120,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e310",
+      "outV": 106,
+      "inV": 124,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e311",
+      "outV": 124,
+      "inV": 109,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e312",
+      "outV": 125,
+      "inV": 108,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e313",
+      "outV": 108,
+      "inV": 124,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e314",
+      "outV": 125,
+      "inV": 124,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e315",
+      "outV": 126,
+      "inV": 110,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e316",
+      "outV": 110,
+      "inV": 124,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e317",
+      "outV": 126,
+      "inV": 124,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e318",
+      "outV": 127,
+      "inV": 117,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e319",
+      "outV": 117,
+      "inV": 124,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "npadvmod",
+        "SRL_LABEL": "ARGM-TMP"
+      }
+    },
+    {
+      "id": "e320",
+      "outV": 127,
+      "inV": 124,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "npadvmod",
+        "SRL_LABEL": "ARGM-TMP"
+      }
+    },
+    {
+      "id": "e321",
+      "outV": 128,
+      "inV": 118,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e322",
+      "outV": 118,
+      "inV": 124,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "npadvmod",
+        "SRL_LABEL": "ARGM-TMP"
+      }
+    },
+    {
+      "id": "e323",
+      "outV": 128,
+      "inV": 124,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "npadvmod",
+        "SRL_LABEL": "ARGM-TMP"
+      }
+    },
+    {
+      "id": "e324",
+      "outV": 129,
+      "inV": 119,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e325",
+      "outV": 119,
+      "inV": 124,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e326",
+      "outV": 129,
+      "inV": 124,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e327",
+      "outV": 106,
+      "inV": 130,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e328",
+      "outV": 130,
+      "inV": 113,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e329",
+      "outV": 131,
+      "inV": 114,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e330",
+      "outV": 114,
+      "inV": 130,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "agent",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e331",
+      "outV": 131,
+      "inV": 130,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "agent",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e332",
+      "outV": 106,
+      "inV": 132,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e333",
+      "outV": 132,
+      "inV": 107,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e334",
+      "outV": 132,
+      "inV": 108,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e335",
+      "outV": 106,
+      "inV": 133,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e336",
+      "outV": 133,
+      "inV": 111,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e337",
+      "outV": 133,
+      "inV": 112,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e338",
+      "outV": 106,
+      "inV": 134,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e339",
+      "outV": 134,
+      "inV": 115,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e340",
+      "outV": 106,
+      "inV": 135,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e341",
+      "outV": 135,
+      "inV": 113,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e342",
+      "outV": 135,
+      "inV": 114,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e343",
+      "outV": 135,
+      "inV": 115,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e344",
+      "outV": 108,
+      "inV": 107,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e345",
+      "outV": 109,
+      "inV": 108,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e346",
+      "outV": 109,
+      "inV": 110,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e347",
+      "outV": 112,
+      "inV": 111,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e348",
+      "outV": 110,
+      "inV": 112,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e349",
+      "outV": 112,
+      "inV": 113,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "acl"
+      }
+    },
+    {
+      "id": "e350",
+      "outV": 113,
+      "inV": 114,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "agent"
+      }
+    },
+    {
+      "id": "e351",
+      "outV": 114,
+      "inV": 115,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e352",
+      "outV": 117,
+      "inV": 116,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e353",
+      "outV": 109,
+      "inV": 117,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "npadvmod"
+      }
+    },
+    {
+      "id": "e354",
+      "outV": 109,
+      "inV": 118,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "npadvmod"
+      }
+    },
+    {
+      "id": "e355",
+      "outV": 109,
+      "inV": 119,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e356",
+      "outV": 119,
+      "inV": 120,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e357",
+      "outV": 109,
+      "inV": 121,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e358",
+      "outV": 107,
+      "inV": 108,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e359",
+      "outV": 108,
+      "inV": 109,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e360",
+      "outV": 109,
+      "inV": 110,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e361",
+      "outV": 110,
+      "inV": 111,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e362",
+      "outV": 111,
+      "inV": 112,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e363",
+      "outV": 112,
+      "inV": 113,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e364",
+      "outV": 113,
+      "inV": 114,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e365",
+      "outV": 114,
+      "inV": 115,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e366",
+      "outV": 115,
+      "inV": 116,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e367",
+      "outV": 116,
+      "inV": 117,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e368",
+      "outV": 117,
+      "inV": 118,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e369",
+      "outV": 118,
+      "inV": 119,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e370",
+      "outV": 119,
+      "inV": 120,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e371",
+      "outV": 120,
+      "inV": 121,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e372",
+      "outV": 0,
+      "inV": 136,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e373",
+      "outV": 136,
+      "inV": 137,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e374",
+      "outV": 137,
+      "inV": 138,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e375",
+      "outV": 137,
+      "inV": 139,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e376",
+      "outV": 137,
+      "inV": 140,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e377",
+      "outV": 137,
+      "inV": 141,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e378",
+      "outV": 137,
+      "inV": 142,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e379",
+      "outV": 137,
+      "inV": 143,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e380",
+      "outV": 137,
+      "inV": 144,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e381",
+      "outV": 137,
+      "inV": 145,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e382",
+      "outV": 137,
+      "inV": 146,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e383",
+      "outV": 137,
+      "inV": 147,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e384",
+      "outV": 137,
+      "inV": 148,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e385",
+      "outV": 148,
+      "inV": 145,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e386",
+      "outV": 149,
+      "inV": 138,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e387",
+      "outV": 138,
+      "inV": 148,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e388",
+      "outV": 149,
+      "inV": 148,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e389",
+      "outV": 150,
+      "inV": 140,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e390",
+      "outV": 140,
+      "inV": 148,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e391",
+      "outV": 150,
+      "inV": 148,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e392",
+      "outV": 151,
+      "inV": 146,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e393",
+      "outV": 146,
+      "inV": 148,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "acomp",
+        "SRL_LABEL": "ARG2"
+      }
+    },
+    {
+      "id": "e394",
+      "outV": 151,
+      "inV": 148,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "acomp",
+        "SRL_LABEL": "ARG2"
+      }
+    },
+    {
+      "id": "e395",
+      "outV": 137,
+      "inV": 152,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e396",
+      "outV": 152,
+      "inV": 140,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e397",
+      "outV": 137,
+      "inV": 153,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e398",
+      "outV": 153,
+      "inV": 142,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e399",
+      "outV": 137,
+      "inV": 154,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e400",
+      "outV": 154,
+      "inV": 144,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e401",
+      "outV": 137,
+      "inV": 155,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e402",
+      "outV": 155,
+      "inV": 138,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e403",
+      "outV": 155,
+      "inV": 145,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e404",
+      "outV": 145,
+      "inV": 138,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "advmod"
+      }
+    },
+    {
+      "id": "e405",
+      "outV": 145,
+      "inV": 139,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e406",
+      "outV": 145,
+      "inV": 140,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e407",
+      "outV": 140,
+      "inV": 141,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e408",
+      "outV": 141,
+      "inV": 142,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e409",
+      "outV": 142,
+      "inV": 143,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "cc"
+      }
+    },
+    {
+      "id": "e410",
+      "outV": 142,
+      "inV": 144,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "conj"
+      }
+    },
+    {
+      "id": "e411",
+      "outV": 145,
+      "inV": 146,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "acomp"
+      }
+    },
+    {
+      "id": "e412",
+      "outV": 145,
+      "inV": 147,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e413",
+      "outV": 138,
+      "inV": 139,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e414",
+      "outV": 139,
+      "inV": 140,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e415",
+      "outV": 140,
+      "inV": 141,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e416",
+      "outV": 141,
+      "inV": 142,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e417",
+      "outV": 142,
+      "inV": 143,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e418",
+      "outV": 143,
+      "inV": 144,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e419",
+      "outV": 144,
+      "inV": 145,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e420",
+      "outV": 145,
+      "inV": 146,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e421",
+      "outV": 146,
+      "inV": 147,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e422",
+      "outV": 136,
+      "inV": 156,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e423",
+      "outV": 156,
+      "inV": 157,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e424",
+      "outV": 156,
+      "inV": 158,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e425",
+      "outV": 156,
+      "inV": 159,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e426",
+      "outV": 156,
+      "inV": 160,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e427",
+      "outV": 156,
+      "inV": 161,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e428",
+      "outV": 156,
+      "inV": 162,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e429",
+      "outV": 156,
+      "inV": 163,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e430",
+      "outV": 156,
+      "inV": 164,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e431",
+      "outV": 156,
+      "inV": 165,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e432",
+      "outV": 156,
+      "inV": 166,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e433",
+      "outV": 156,
+      "inV": 167,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e434",
+      "outV": 156,
+      "inV": 168,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e435",
+      "outV": 156,
+      "inV": 169,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e436",
+      "outV": 156,
+      "inV": 170,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e437",
+      "outV": 156,
+      "inV": 171,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e438",
+      "outV": 156,
+      "inV": 172,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e439",
+      "outV": 156,
+      "inV": 173,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e440",
+      "outV": 156,
+      "inV": 174,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e441",
+      "outV": 174,
+      "inV": 159,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e442",
+      "outV": 156,
+      "inV": 175,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e443",
+      "outV": 175,
+      "inV": 161,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e444",
+      "outV": 156,
+      "inV": 176,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e445",
+      "outV": 176,
+      "inV": 163,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e446",
+      "outV": 177,
+      "inV": 157,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e447",
+      "outV": 157,
+      "inV": 176,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e448",
+      "outV": 177,
+      "inV": 176,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e449",
+      "outV": 178,
+      "inV": 164,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e450",
+      "outV": 164,
+      "inV": 176,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e451",
+      "outV": 178,
+      "inV": 176,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e452",
+      "outV": 156,
+      "inV": 179,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e453",
+      "outV": 179,
+      "inV": 165,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e454",
+      "outV": 180,
+      "inV": 170,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e455",
+      "outV": 170,
+      "inV": 179,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "ccomp",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e456",
+      "outV": 180,
+      "inV": 179,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "ccomp",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e457",
+      "outV": 156,
+      "inV": 181,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e458",
+      "outV": 181,
+      "inV": 170,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e459",
+      "outV": 182,
+      "inV": 166,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e460",
+      "outV": 166,
+      "inV": 181,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "mark",
+        "SRL_LABEL": "ARGM-DIS"
+      }
+    },
+    {
+      "id": "e461",
+      "outV": 182,
+      "inV": 181,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "mark",
+        "SRL_LABEL": "ARGM-DIS"
+      }
+    },
+    {
+      "id": "e462",
+      "outV": 183,
+      "inV": 168,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e463",
+      "outV": 168,
+      "inV": 181,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e464",
+      "outV": 183,
+      "inV": 181,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e465",
+      "outV": 184,
+      "inV": 172,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e466",
+      "outV": 172,
+      "inV": 181,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e467",
+      "outV": 184,
+      "inV": 181,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e468",
+      "outV": 156,
+      "inV": 185,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e469",
+      "outV": 185,
+      "inV": 157,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e470",
+      "outV": 156,
+      "inV": 186,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e471",
+      "outV": 186,
+      "inV": 159,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e472",
+      "outV": 156,
+      "inV": 187,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e473",
+      "outV": 187,
+      "inV": 161,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e474",
+      "outV": 156,
+      "inV": 188,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e475",
+      "outV": 188,
+      "inV": 164,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e476",
+      "outV": 156,
+      "inV": 189,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e477",
+      "outV": 189,
+      "inV": 167,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e478",
+      "outV": 189,
+      "inV": 168,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e479",
+      "outV": 156,
+      "inV": 190,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e480",
+      "outV": 190,
+      "inV": 171,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e481",
+      "outV": 190,
+      "inV": 172,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e482",
+      "outV": 156,
+      "inV": 191,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e483",
+      "outV": 191,
+      "inV": 165,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e484",
+      "outV": 191,
+      "inV": 166,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e485",
+      "outV": 191,
+      "inV": 167,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e486",
+      "outV": 191,
+      "inV": 168,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e487",
+      "outV": 191,
+      "inV": 169,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e488",
+      "outV": 191,
+      "inV": 170,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e489",
+      "outV": 191,
+      "inV": 171,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e490",
+      "outV": 191,
+      "inV": 172,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e491",
+      "outV": 156,
+      "inV": 192,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e492",
+      "outV": 192,
+      "inV": 166,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e493",
+      "outV": 192,
+      "inV": 167,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e494",
+      "outV": 192,
+      "inV": 168,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e495",
+      "outV": 192,
+      "inV": 169,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e496",
+      "outV": 192,
+      "inV": 170,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e497",
+      "outV": 192,
+      "inV": 171,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e498",
+      "outV": 192,
+      "inV": 172,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e499",
+      "outV": 156,
+      "inV": 193,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e500",
+      "outV": 193,
+      "inV": 162,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e501",
+      "outV": 193,
+      "inV": 163,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e502",
+      "outV": 156,
+      "inV": 194,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e503",
+      "outV": 194,
+      "inV": 169,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e504",
+      "outV": 194,
+      "inV": 170,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e505",
+      "outV": 163,
+      "inV": 157,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e506",
+      "outV": 157,
+      "inV": 158,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e507",
+      "outV": 158,
+      "inV": 159,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e508",
+      "outV": 159,
+      "inV": 160,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "cc"
+      }
+    },
+    {
+      "id": "e509",
+      "outV": 159,
+      "inV": 161,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "conj"
+      }
+    },
+    {
+      "id": "e510",
+      "outV": 163,
+      "inV": 162,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "aux"
+      }
+    },
+    {
+      "id": "e511",
+      "outV": 163,
+      "inV": 164,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e512",
+      "outV": 164,
+      "inV": 165,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "acl"
+      }
+    },
+    {
+      "id": "e513",
+      "outV": 170,
+      "inV": 166,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "mark"
+      }
+    },
+    {
+      "id": "e514",
+      "outV": 168,
+      "inV": 167,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e515",
+      "outV": 170,
+      "inV": 168,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e516",
+      "outV": 170,
+      "inV": 169,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "aux"
+      }
+    },
+    {
+      "id": "e517",
+      "outV": 165,
+      "inV": 170,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "ccomp"
+      }
+    },
+    {
+      "id": "e518",
+      "outV": 172,
+      "inV": 171,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e519",
+      "outV": 170,
+      "inV": 172,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e520",
+      "outV": 163,
+      "inV": 173,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e521",
+      "outV": 157,
+      "inV": 158,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e522",
+      "outV": 158,
+      "inV": 159,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e523",
+      "outV": 159,
+      "inV": 160,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e524",
+      "outV": 160,
+      "inV": 161,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e525",
+      "outV": 161,
+      "inV": 162,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e526",
+      "outV": 162,
+      "inV": 163,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e527",
+      "outV": 163,
+      "inV": 164,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e528",
+      "outV": 164,
+      "inV": 165,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e529",
+      "outV": 165,
+      "inV": 166,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e530",
+      "outV": 166,
+      "inV": 167,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e531",
+      "outV": 167,
+      "inV": 168,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e532",
+      "outV": 168,
+      "inV": 169,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e533",
+      "outV": 169,
+      "inV": 170,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e534",
+      "outV": 170,
+      "inV": 171,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e535",
+      "outV": 171,
+      "inV": 172,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e536",
+      "outV": 172,
+      "inV": 173,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e537",
+      "outV": 136,
+      "inV": 195,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e538",
+      "outV": 195,
+      "inV": 196,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e539",
+      "outV": 195,
+      "inV": 197,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e540",
+      "outV": 195,
+      "inV": 198,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e541",
+      "outV": 195,
+      "inV": 199,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e542",
+      "outV": 195,
+      "inV": 200,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e543",
+      "outV": 195,
+      "inV": 201,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e544",
+      "outV": 195,
+      "inV": 202,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e545",
+      "outV": 195,
+      "inV": 203,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e546",
+      "outV": 195,
+      "inV": 204,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e547",
+      "outV": 195,
+      "inV": 205,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e548",
+      "outV": 195,
+      "inV": 206,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e549",
+      "outV": 195,
+      "inV": 207,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e550",
+      "outV": 195,
+      "inV": 208,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e551",
+      "outV": 195,
+      "inV": 209,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e552",
+      "outV": 209,
+      "inV": 199,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e553",
+      "outV": 195,
+      "inV": 210,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e554",
+      "outV": 210,
+      "inV": 201,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e555",
+      "outV": 211,
+      "inV": 196,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e556",
+      "outV": 196,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e557",
+      "outV": 211,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "advmod",
+        "SRL_LABEL": "ARGM-ADV"
+      }
+    },
+    {
+      "id": "e558",
+      "outV": 212,
+      "inV": 200,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e559",
+      "outV": 200,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e560",
+      "outV": 212,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubj",
+        "SRL_LABEL": "ARG0"
+      }
+    },
+    {
+      "id": "e561",
+      "outV": 213,
+      "inV": 204,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e562",
+      "outV": 204,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e563",
+      "outV": 213,
+      "inV": 210,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "dobj",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e564",
+      "outV": 195,
+      "inV": 214,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e565",
+      "outV": 214,
+      "inV": 198,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e566",
+      "outV": 214,
+      "inV": 199,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e567",
+      "outV": 214,
+      "inV": 200,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e568",
+      "outV": 195,
+      "inV": 215,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e569",
+      "outV": 215,
+      "inV": 202,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e570",
+      "outV": 215,
+      "inV": 203,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e571",
+      "outV": 215,
+      "inV": 204,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e572",
+      "outV": 195,
+      "inV": 216,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e573",
+      "outV": 216,
+      "inV": 206,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e574",
+      "outV": 216,
+      "inV": 207,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e575",
+      "outV": 195,
+      "inV": 217,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e576",
+      "outV": 217,
+      "inV": 196,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e577",
+      "outV": 217,
+      "inV": 201,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e578",
+      "outV": 201,
+      "inV": 196,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "advmod"
+      }
+    },
+    {
+      "id": "e579",
+      "outV": 201,
+      "inV": 197,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e580",
+      "outV": 200,
+      "inV": 198,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e581",
+      "outV": 200,
+      "inV": 199,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e582",
+      "outV": 201,
+      "inV": 200,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubj"
+      }
+    },
+    {
+      "id": "e583",
+      "outV": 204,
+      "inV": 202,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e584",
+      "outV": 204,
+      "inV": 203,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e585",
+      "outV": 201,
+      "inV": 204,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "dobj"
+      }
+    },
+    {
+      "id": "e586",
+      "outV": 204,
+      "inV": 205,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "cc"
+      }
+    },
+    {
+      "id": "e587",
+      "outV": 207,
+      "inV": 206,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e588",
+      "outV": 204,
+      "inV": 207,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "conj"
+      }
+    },
+    {
+      "id": "e589",
+      "outV": 201,
+      "inV": 208,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e590",
+      "outV": 196,
+      "inV": 197,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e591",
+      "outV": 197,
+      "inV": 198,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e592",
+      "outV": 198,
+      "inV": 199,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e593",
+      "outV": 199,
+      "inV": 200,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e594",
+      "outV": 200,
+      "inV": 201,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e595",
+      "outV": 201,
+      "inV": 202,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e596",
+      "outV": 202,
+      "inV": 203,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e597",
+      "outV": 203,
+      "inV": 204,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e598",
+      "outV": 204,
+      "inV": 205,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e599",
+      "outV": 205,
+      "inV": 206,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e600",
+      "outV": 206,
+      "inV": 207,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e601",
+      "outV": 207,
+      "inV": 208,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e602",
+      "outV": 2,
+      "inV": 25,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e603",
+      "outV": 25,
+      "inV": 51,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e604",
+      "outV": 51,
+      "inV": 78,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e605",
+      "outV": 78,
+      "inV": 106,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e606",
+      "outV": 106,
+      "inV": 137,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e607",
+      "outV": 137,
+      "inV": 156,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e608",
+      "outV": 156,
+      "inV": 195,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e609",
+      "outV": 1,
+      "inV": 50,
+      "label": "NEXT_PARA",
+      "properties": {}
+    },
+    {
+      "id": "e610",
+      "outV": 50,
+      "inV": 136,
+      "label": "NEXT_PARA",
+      "properties": {}
+    },
+    {
+      "id": "e611",
+      "outV": 12,
+      "inV": 26,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e612",
+      "outV": 38,
+      "inV": 52,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e613",
+      "outV": 64,
+      "inV": 79,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e614",
+      "outV": 91,
+      "inV": 107,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e615",
+      "outV": 121,
+      "inV": 138,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e616",
+      "outV": 147,
+      "inV": 157,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e617",
+      "outV": 173,
+      "inV": 196,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e618",
+      "outV": 218,
+      "inV": 87,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e619",
+      "outV": 218,
+      "inV": 92,
+      "label": "COREF",
+      "properties": {
+        "COREF_CLUSTER": 1
+      }
+    },
+    {
+      "id": "e620",
+      "outV": 219,
+      "inV": 107,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e621",
+      "outV": 219,
+      "inV": 92,
+      "label": "COREF",
+      "properties": {
+        "COREF_CLUSTER": 1
+      }
+    },
+    {
+      "id": "e622",
+      "outV": 220,
+      "inV": 166,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e623",
+      "outV": 220,
+      "inV": 175,
+      "label": "COREF",
+      "properties": {
+        "COREF_CLUSTER": 5
+      }
+    },
+    {
+      "id": "e624",
+      "outV": 2,
+      "inV": 25,
+      "label": "DISCOURSE",
+      "properties": {
+        "relation": "continuation"
+      }
+    },
+    {
+      "id": "e625",
+      "outV": 25,
+      "inV": 51,
+      "label": "RST_RELATION",
+      "properties": {
+        "RST_LABEL": "elaboration",
+        "marker": "for example"
+      }
+    },
+    {
+      "id": "e626",
+      "outV": 51,
+      "inV": 78,
+      "label": "DISCOURSE",
+      "properties": {
+        "relation": "continuation"
+      }
+    },
+    {
+      "id": "e627",
+      "outV": 78,
+      "inV": 106,
+      "label": "DISCOURSE",
+      "properties": {
+        "relation": "continuation"
+      }
+    },
+    {
+      "id": "e628",
+      "outV": 106,
+      "inV": 137,
+      "label": "RST_RELATION",
+      "properties": {
+        "RST_LABEL": "contrast",
+        "marker": "however"
+      }
+    },
+    {
+      "id": "e629",
+      "outV": 137,
+      "inV": 156,
+      "label": "DISCOURSE",
+      "properties": {
+        "relation": "continuation"
+      }
+    },
+    {
+      "id": "e630",
+      "outV": 156,
+      "inV": 195,
+      "label": "RST_RELATION",
+      "properties": {
+        "RST_LABEL": "result",
+        "marker": "consequently"
+      }
+    },
+    {
+      "id": "e631",
+      "outV": 122,
+      "inV": 123,
+      "label": "ENTITY_REL",
+      "properties": {
+        "ENTITY_REL_TYPE": "introduce"
+      }
+    },
+    {
+      "id": "e632",
+      "outV": 174,
+      "inV": 175,
+      "label": "ENTITY_REL",
+      "properties": {
+        "ENTITY_REL_TYPE": "introduce"
+      }
+    },
+    {
+      "id": "e633",
+      "outV": 0,
+      "inV": 221,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e634",
+      "outV": 221,
+      "inV": 25,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e635",
+      "outV": 221,
+      "inV": 78,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e636",
+      "outV": 0,
+      "inV": 222,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e637",
+      "outV": 222,
+      "inV": 25,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e638",
+      "outV": 222,
+      "inV": 156,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e639",
+      "outV": 0,
+      "inV": 223,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e640",
+      "outV": 223,
+      "inV": 51,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e641",
+      "outV": 223,
+      "inV": 78,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e642",
+      "outV": 0,
+      "inV": 224,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e643",
+      "outV": 224,
+      "inV": 106,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e644",
+      "outV": 224,
+      "inV": 156,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e645",
+      "outV": 0,
+      "inV": 225,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e646",
+      "outV": 225,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,955 @@
+{
+  "directed": true,
+  "type": "TPG",
+  "label": "tpg",
+  "doc_id": "WHO-MVP-EMP-IAU-2019.06-eng_chunk000",
+  "metadata": {
+    "source_text": "Model List of Essential Medicines\n\nModel List of Essential Medicines",
+    "spacy_model": "en_core_web_sm",
+    "has_parser": true,
+    "passes_applied": [
+      "spacy_frontend",
+      "coreference_pass",
+      "discourse_pass",
+      "entity_relation_pass",
+      "topic_pass"
+    ]
+  },
+  "schema": {
+    "node_types": [
+      "DOCUMENT",
+      "PARAGRAPH",
+      "SENTENCE",
+      "TOKEN",
+      "ENTITY",
+      "PREDICATE",
+      "ARGUMENT",
+      "CONCEPT",
+      "NOUN_PHRASE",
+      "VERB_PHRASE",
+      "CLAUSE",
+      "MENTION",
+      "TOPIC"
+    ],
+    "edge_types": [
+      "DEP",
+      "NEXT_TOKEN",
+      "NEXT_SENT",
+      "NEXT_PARA",
+      "COREF",
+      "SRL_ARG",
+      "AMR_EDGE",
+      "RST_RELATION",
+      "DISCOURSE",
+      "CONTAINS",
+      "BELONGS_TO",
+      "ENTITY_REL",
+      "SIMILARITY"
+    ],
+    "num_node_types": 13,
+    "num_edge_types": 13
+  },
+  "stats": {
+    "doc_id": "WHO-MVP-EMP-IAU-2019.06-eng_chunk000",
+    "total_nodes": 25,
+    "total_edges": 65,
+    "node_types": {
+      "DOCUMENT": 1,
+      "PARAGRAPH": 2,
+      "SENTENCE": 2,
+      "TOKEN": 10,
+      "ENTITY": 2,
+      "NOUN_PHRASE": 4,
+      "TOPIC": 4
+    },
+    "edge_types": {
+      "DEP": 8,
+      "NEXT_TOKEN": 9,
+      "NEXT_SENT": 1,
+      "NEXT_PARA": 1,
+      "COREF": 1,
+      "DISCOURSE": 9,
+      "CONTAINS": 24,
+      "BELONGS_TO": 12
+    },
+    "passes_applied": [
+      "spacy_frontend",
+      "coreference_pass",
+      "discourse_pass",
+      "entity_relation_pass",
+      "topic_pass"
+    ]
+  },
+  "vertices": [
+    {
+      "id": 0,
+      "label": "DOCUMENT",
+      "properties": {
+        "TEXT": "Model List of Essential Medicines\n\nModel List of Essential Medicines",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 1,
+      "label": "PARAGRAPH",
+      "properties": {
+        "TEXT": "Model List of Essential Medicines",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 2,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "Model List of Essential Medicines",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 33,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 3,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Model",
+        "LEMMA": "Model",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_TYPE": "PERSON",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 5,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 4,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "List",
+        "LEMMA": "List",
+        "POS": "PROPN",
+        "DEP_REL": "ROOT",
+        "ENTITY_TYPE": "PERSON",
+        "ENTITY_IOB": "I",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 6,
+        "CHAR_END": 10,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 5,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "of",
+        "LEMMA": "of",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 11,
+        "CHAR_END": 13,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 6,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Essential",
+        "LEMMA": "Essential",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 14,
+        "CHAR_END": 23,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 7,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Medicines",
+        "LEMMA": "Medicines",
+        "POS": "PROPN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 24,
+        "CHAR_END": 33,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 8,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "Model List",
+        "ENTITY_TYPE": "PERSON",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 10,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 9,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Model List",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 10,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Essential Medicines",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 11,
+      "label": "PARAGRAPH",
+      "properties": {
+        "TEXT": "Model List of Essential Medicines",
+        "SENT_IDX": 0,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 12,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "Model List of Essential Medicines",
+        "SENT_IDX": 1,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 33,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 13,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Model",
+        "LEMMA": "Model",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_TYPE": "PERSON",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 1,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 5,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 14,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "List",
+        "LEMMA": "List",
+        "POS": "PROPN",
+        "DEP_REL": "ROOT",
+        "ENTITY_TYPE": "PERSON",
+        "ENTITY_IOB": "I",
+        "SENT_IDX": 1,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 6,
+        "CHAR_END": 10,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 15,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "of",
+        "LEMMA": "of",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 11,
+        "CHAR_END": 13,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 16,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Essential",
+        "LEMMA": "Essential",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 14,
+        "CHAR_END": 23,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 17,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Medicines",
+        "LEMMA": "Medicines",
+        "POS": "PROPN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 1,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 24,
+        "CHAR_END": 33,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 18,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "Model List",
+        "ENTITY_TYPE": "PERSON",
+        "SENT_IDX": 1,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 10,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 19,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Model List",
+        "SENT_IDX": 1,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 20,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Essential Medicines",
+        "SENT_IDX": 1,
+        "PARA_IDX": 1,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 21,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "model",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.2,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 22,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "list",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.2,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 23,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "essential",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.2,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 24,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "medicines",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.2,
+        "SOURCE": "topic_pass"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "outV": 0,
+      "inV": 1,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e1",
+      "outV": 1,
+      "inV": 2,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e2",
+      "outV": 2,
+      "inV": 3,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e3",
+      "outV": 2,
+      "inV": 4,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e4",
+      "outV": 2,
+      "inV": 5,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e5",
+      "outV": 2,
+      "inV": 6,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e6",
+      "outV": 2,
+      "inV": 7,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e7",
+      "outV": 2,
+      "inV": 8,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e8",
+      "outV": 8,
+      "inV": 3,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e9",
+      "outV": 8,
+      "inV": 4,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e10",
+      "outV": 2,
+      "inV": 9,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e11",
+      "outV": 9,
+      "inV": 3,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e12",
+      "outV": 9,
+      "inV": 4,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e13",
+      "outV": 2,
+      "inV": 10,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e14",
+      "outV": 10,
+      "inV": 6,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e15",
+      "outV": 10,
+      "inV": 7,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e16",
+      "outV": 4,
+      "inV": 3,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e17",
+      "outV": 4,
+      "inV": 5,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e18",
+      "outV": 7,
+      "inV": 6,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e19",
+      "outV": 5,
+      "inV": 7,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e20",
+      "outV": 3,
+      "inV": 4,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e21",
+      "outV": 4,
+      "inV": 5,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e22",
+      "outV": 5,
+      "inV": 6,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e23",
+      "outV": 6,
+      "inV": 7,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e24",
+      "outV": 0,
+      "inV": 11,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e25",
+      "outV": 11,
+      "inV": 12,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e26",
+      "outV": 12,
+      "inV": 13,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e27",
+      "outV": 12,
+      "inV": 14,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e28",
+      "outV": 12,
+      "inV": 15,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e29",
+      "outV": 12,
+      "inV": 16,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e30",
+      "outV": 12,
+      "inV": 17,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e31",
+      "outV": 12,
+      "inV": 18,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e32",
+      "outV": 18,
+      "inV": 13,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e33",
+      "outV": 18,
+      "inV": 14,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e34",
+      "outV": 12,
+      "inV": 19,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e35",
+      "outV": 19,
+      "inV": 13,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e36",
+      "outV": 19,
+      "inV": 14,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e37",
+      "outV": 12,
+      "inV": 20,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e38",
+      "outV": 20,
+      "inV": 16,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e39",
+      "outV": 20,
+      "inV": 17,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e40",
+      "outV": 14,
+      "inV": 13,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e41",
+      "outV": 14,
+      "inV": 15,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e42",
+      "outV": 17,
+      "inV": 16,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e43",
+      "outV": 15,
+      "inV": 17,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e44",
+      "outV": 13,
+      "inV": 14,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e45",
+      "outV": 14,
+      "inV": 15,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e46",
+      "outV": 15,
+      "inV": 16,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e47",
+      "outV": 16,
+      "inV": 17,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e48",
+      "outV": 2,
+      "inV": 12,
+      "label": "NEXT_SENT",
+      "properties": {}
+    },
+    {
+      "id": "e49",
+      "outV": 1,
+      "inV": 11,
+      "label": "NEXT_PARA",
+      "properties": {}
+    },
+    {
+      "id": "e50",
+      "outV": 7,
+      "inV": 13,
+      "label": "NEXT_TOKEN",
+      "properties": {
+        "cross_sentence": true
+      }
+    },
+    {
+      "id": "e51",
+      "outV": 8,
+      "inV": 18,
+      "label": "COREF",
+      "properties": {
+        "COREF_CLUSTER": 0
+      }
+    },
+    {
+      "id": "e52",
+      "outV": 2,
+      "inV": 12,
+      "label": "DISCOURSE",
+      "properties": {
+        "relation": "continuation"
+      }
+    },
+    {
+      "id": "e53",
+      "outV": 0,
+      "inV": 21,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e54",
+      "outV": 21,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e55",
+      "outV": 21,
+      "inV": 12,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e56",
+      "outV": 0,
+      "inV": 22,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e57",
+      "outV": 22,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e58",
+      "outV": 22,
+      "inV": 12,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e59",
+      "outV": 0,
+      "inV": 23,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e60",
+      "outV": 23,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e61",
+      "outV": 23,
+      "inV": 12,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e62",
+      "outV": 0,
+      "inV": 24,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e63",
+      "outV": 24,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e64",
+      "outV": 24,
+      "inV": 12,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    }
+  ]
+}

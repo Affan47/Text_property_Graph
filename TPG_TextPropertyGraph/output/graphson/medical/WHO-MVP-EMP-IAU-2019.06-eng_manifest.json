@@ -1,0 +1,40 @@
+{
+  "doc_id": "WHO-MVP-EMP-IAU-2019.06-eng",
+  "total_chunks": 5,
+  "total_words": 1114,
+  "total_nodes": 2151,
+  "total_edges": 6797,
+  "chunk_size": 500,
+  "chunks": [
+    {
+      "chunk_id": "WHO-MVP-EMP-IAU-2019.06-eng_chunk000",
+      "words": 10,
+      "graphson": "WHO-MVP-EMP-IAU-2019.06-eng_chunk000_tpg.json",
+      "pyg": "WHO-MVP-EMP-IAU-2019.06-eng_chunk000_pyg.json"
+    },
+    {
+      "chunk_id": "WHO-MVP-EMP-IAU-2019.06-eng_chunk001",
+      "words": 498,
+      "graphson": "WHO-MVP-EMP-IAU-2019.06-eng_chunk001_tpg.json",
+      "pyg": "WHO-MVP-EMP-IAU-2019.06-eng_chunk001_pyg.json"
+    },
+    {
+      "chunk_id": "WHO-MVP-EMP-IAU-2019.06-eng_chunk002",
+      "words": 92,
+      "graphson": "WHO-MVP-EMP-IAU-2019.06-eng_chunk002_tpg.json",
+      "pyg": "WHO-MVP-EMP-IAU-2019.06-eng_chunk002_pyg.json"
+    },
+    {
+      "chunk_id": "WHO-MVP-EMP-IAU-2019.06-eng_chunk003",
+      "words": 488,
+      "graphson": "WHO-MVP-EMP-IAU-2019.06-eng_chunk003_tpg.json",
+      "pyg": "WHO-MVP-EMP-IAU-2019.06-eng_chunk003_pyg.json"
+    },
+    {
+      "chunk_id": "WHO-MVP-EMP-IAU-2019.06-eng_chunk004",
+      "words": 26,
+      "graphson": "WHO-MVP-EMP-IAU-2019.06-eng_chunk004_tpg.json",
+      "pyg": "WHO-MVP-EMP-IAU-2019.06-eng_chunk004_pyg.json"
+    }
+  ]
+}

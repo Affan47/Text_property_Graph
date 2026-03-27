@@ -159,7 +159,18 @@ class PyGExporter:
             one_hot = [0] * T
             one_hot[schema.node_type_index(node.node_type)] = 1
             if embedding_dim > 0:
-                one_hot.extend([0.0] * embedding_dim)
+                # Use stored embedding from model frontend if available,
+                # otherwise fall back to zero vector
+                stored_emb = node.properties.extra.get("embedding", None)
+                if stored_emb and len(stored_emb) == embedding_dim:
+                    one_hot.extend(stored_emb)
+                elif stored_emb and len(stored_emb) > 0:
+                    # Truncate or pad to match requested dim
+                    emb = list(stored_emb[:embedding_dim])
+                    emb.extend([0.0] * (embedding_dim - len(emb)))
+                    one_hot.extend(emb)
+                else:
+                    one_hot.extend([0.0] * embedding_dim)
             x.append(one_hot)
             node_texts.append(node.properties.text)
             node_pos.append([

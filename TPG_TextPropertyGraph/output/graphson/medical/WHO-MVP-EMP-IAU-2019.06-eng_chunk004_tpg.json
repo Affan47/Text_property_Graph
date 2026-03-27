@@ -1,0 +1,1789 @@
+{
+  "directed": true,
+  "type": "TPG",
+  "label": "tpg",
+  "doc_id": "WHO-MVP-EMP-IAU-2019.06-eng_chunk004",
+  "metadata": {
+    "source_text": "Definitions of many of these terms and pharmaceutical quality requirements applicable to the different categories are published in the current edition of The International Pharmacopoeia http://www.who",
+    "spacy_model": "en_core_web_sm",
+    "has_parser": true,
+    "passes_applied": [
+      "spacy_frontend",
+      "coreference_pass",
+      "discourse_pass",
+      "entity_relation_pass",
+      "topic_pass"
+    ]
+  },
+  "schema": {
+    "node_types": [
+      "DOCUMENT",
+      "PARAGRAPH",
+      "SENTENCE",
+      "TOKEN",
+      "ENTITY",
+      "PREDICATE",
+      "ARGUMENT",
+      "CONCEPT",
+      "NOUN_PHRASE",
+      "VERB_PHRASE",
+      "CLAUSE",
+      "MENTION",
+      "TOPIC"
+    ],
+    "edge_types": [
+      "DEP",
+      "NEXT_TOKEN",
+      "NEXT_SENT",
+      "NEXT_PARA",
+      "COREF",
+      "SRL_ARG",
+      "AMR_EDGE",
+      "RST_RELATION",
+      "DISCOURSE",
+      "CONTAINS",
+      "BELONGS_TO",
+      "ENTITY_REL",
+      "SIMILARITY"
+    ],
+    "num_node_types": 13,
+    "num_edge_types": 13
+  },
+  "stats": {
+    "doc_id": "WHO-MVP-EMP-IAU-2019.06-eng_chunk004",
+    "total_nodes": 46,
+    "total_edges": 129,
+    "node_types": {
+      "DOCUMENT": 1,
+      "PARAGRAPH": 1,
+      "SENTENCE": 1,
+      "TOKEN": 27,
+      "ENTITY": 1,
+      "PREDICATE": 1,
+      "ARGUMENT": 2,
+      "NOUN_PHRASE": 6,
+      "VERB_PHRASE": 1,
+      "TOPIC": 5
+    },
+    "edge_types": {
+      "DEP": 26,
+      "NEXT_TOKEN": 26,
+      "SRL_ARG": 4,
+      "DISCOURSE": 5,
+      "CONTAINS": 43,
+      "BELONGS_TO": 25
+    },
+    "passes_applied": [
+      "spacy_frontend",
+      "coreference_pass",
+      "discourse_pass",
+      "entity_relation_pass",
+      "topic_pass"
+    ]
+  },
+  "vertices": [
+    {
+      "id": 0,
+      "label": "DOCUMENT",
+      "properties": {
+        "TEXT": "Definitions of many of these terms and pharmaceutical quality requirements applicable to the different categories are published in the current edition of The International Pharmacopoeia http://www.who",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 1,
+      "label": "PARAGRAPH",
+      "properties": {
+        "TEXT": "Definitions of many of these terms and pharmaceutical quality requirements applicable to the differe",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 2,
+      "label": "SENTENCE",
+      "properties": {
+        "TEXT": "Definitions of many of these terms and pharmaceutical quality requirements applicable to the different categories are published in the current edition of The International Pharmacopoeia http://www.who.int/medicines/publications/pharmacopoeia.",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 242,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 3,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Definitions",
+        "LEMMA": "definition",
+        "POS": "NOUN",
+        "DEP_REL": "nsubjpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 11,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 4,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "of",
+        "LEMMA": "of",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 1,
+        "CHAR_START": 12,
+        "CHAR_END": 14,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 5,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "many",
+        "LEMMA": "many",
+        "POS": "ADJ",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 2,
+        "CHAR_START": 15,
+        "CHAR_END": 19,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 6,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "of",
+        "LEMMA": "of",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 3,
+        "CHAR_START": 20,
+        "CHAR_END": 22,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 7,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "these",
+        "LEMMA": "these",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 4,
+        "CHAR_START": 23,
+        "CHAR_END": 28,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 8,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "terms",
+        "LEMMA": "term",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 5,
+        "CHAR_START": 29,
+        "CHAR_END": 34,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 9,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "and",
+        "LEMMA": "and",
+        "POS": "CCONJ",
+        "DEP_REL": "cc",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 6,
+        "CHAR_START": 35,
+        "CHAR_END": 38,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 10,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "pharmaceutical",
+        "LEMMA": "pharmaceutical",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 7,
+        "CHAR_START": 39,
+        "CHAR_END": 53,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 11,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "quality",
+        "LEMMA": "quality",
+        "POS": "NOUN",
+        "DEP_REL": "compound",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 8,
+        "CHAR_START": 54,
+        "CHAR_END": 61,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 12,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "requirements",
+        "LEMMA": "requirement",
+        "POS": "NOUN",
+        "DEP_REL": "conj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 9,
+        "CHAR_START": 62,
+        "CHAR_END": 74,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 13,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "applicable",
+        "LEMMA": "applicable",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 10,
+        "CHAR_START": 75,
+        "CHAR_END": 85,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 14,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "to",
+        "LEMMA": "to",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 11,
+        "CHAR_START": 86,
+        "CHAR_END": 88,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 15,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "the",
+        "LEMMA": "the",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 12,
+        "CHAR_START": 89,
+        "CHAR_END": 92,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 16,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "different",
+        "LEMMA": "different",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 13,
+        "CHAR_START": 93,
+        "CHAR_END": 102,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 17,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "categories",
+        "LEMMA": "category",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 14,
+        "CHAR_START": 103,
+        "CHAR_END": 113,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 18,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "are",
+        "LEMMA": "be",
+        "POS": "AUX",
+        "DEP_REL": "auxpass",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 15,
+        "CHAR_START": 114,
+        "CHAR_END": 117,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 19,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "published",
+        "LEMMA": "publish",
+        "POS": "VERB",
+        "DEP_REL": "ROOT",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 16,
+        "CHAR_START": 118,
+        "CHAR_END": 127,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 20,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "in",
+        "LEMMA": "in",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 17,
+        "CHAR_START": 128,
+        "CHAR_END": 130,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 21,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "the",
+        "LEMMA": "the",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 18,
+        "CHAR_START": 131,
+        "CHAR_END": 134,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 22,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "current",
+        "LEMMA": "current",
+        "POS": "ADJ",
+        "DEP_REL": "amod",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 19,
+        "CHAR_START": 135,
+        "CHAR_END": 142,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 23,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "edition",
+        "LEMMA": "edition",
+        "POS": "NOUN",
+        "DEP_REL": "pobj",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 20,
+        "CHAR_START": 143,
+        "CHAR_END": 150,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 24,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "of",
+        "LEMMA": "of",
+        "POS": "ADP",
+        "DEP_REL": "prep",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 21,
+        "CHAR_START": 151,
+        "CHAR_END": 153,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 25,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "The",
+        "LEMMA": "the",
+        "POS": "DET",
+        "DEP_REL": "det",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "B",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 22,
+        "CHAR_START": 154,
+        "CHAR_END": 157,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 26,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "International",
+        "LEMMA": "International",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "I",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 23,
+        "CHAR_START": 158,
+        "CHAR_END": 171,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 27,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "Pharmacopoeia",
+        "LEMMA": "Pharmacopoeia",
+        "POS": "PROPN",
+        "DEP_REL": "compound",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "I",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 24,
+        "CHAR_START": 172,
+        "CHAR_END": 185,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 28,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": "http://www.who.int/medicines/publications/pharmacopoeia",
+        "LEMMA": "http://www.who.int/medicines/publications/pharmacopoeia",
+        "POS": "PROPN",
+        "DEP_REL": "pobj",
+        "ENTITY_TYPE": "ORG",
+        "ENTITY_IOB": "I",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 25,
+        "CHAR_START": 186,
+        "CHAR_END": 241,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 29,
+      "label": "TOKEN",
+      "properties": {
+        "TEXT": ".",
+        "LEMMA": ".",
+        "POS": "PUNCT",
+        "DEP_REL": "punct",
+        "ENTITY_IOB": "O",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 26,
+        "CHAR_START": 241,
+        "CHAR_END": 242,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 30,
+      "label": "ENTITY",
+      "properties": {
+        "TEXT": "The International Pharmacopoeia http://www.who.int/medicines/publications/pharmacopoeia",
+        "ENTITY_TYPE": "ORG",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 154,
+        "CHAR_END": 241,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 31,
+      "label": "PREDICATE",
+      "properties": {
+        "TEXT": "published",
+        "LEMMA": "publish",
+        "POS": "VERB",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 16,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 32,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "Definitions",
+        "LEMMA": "definition",
+        "DEP_REL": "nsubjpass",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARG1",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 33,
+      "label": "ARGUMENT",
+      "properties": {
+        "TEXT": "in",
+        "LEMMA": "in",
+        "DEP_REL": "prep",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 17,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SRL_ROLE": "ARGM-LOC",
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 34,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "Definitions",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 35,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "these terms",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 36,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "pharmaceutical quality requirements",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 37,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "the different categories",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 38,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "the current edition",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 39,
+      "label": "NOUN_PHRASE",
+      "properties": {
+        "TEXT": "The International Pharmacopoeia http://www.who.int/medicines/publications/pharmacopoeia",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 40,
+      "label": "VERB_PHRASE",
+      "properties": {
+        "TEXT": "are published",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "SOURCE": "spacy_frontend"
+      }
+    },
+    {
+      "id": 41,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "definition",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.037037037037037035,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 42,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "many",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.037037037037037035,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 43,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "these",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.037037037037037035,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 44,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "term",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.037037037037037035,
+        "SOURCE": "topic_pass"
+      }
+    },
+    {
+      "id": 45,
+      "label": "TOPIC",
+      "properties": {
+        "TEXT": "pharmaceutical",
+        "SENT_IDX": 0,
+        "PARA_IDX": 0,
+        "TOKEN_IDX": 0,
+        "CHAR_START": 0,
+        "CHAR_END": 0,
+        "IMPORTANCE": 0.037037037037037035,
+        "SOURCE": "topic_pass"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "outV": 0,
+      "inV": 1,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e1",
+      "outV": 1,
+      "inV": 2,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e2",
+      "outV": 2,
+      "inV": 3,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e3",
+      "outV": 2,
+      "inV": 4,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e4",
+      "outV": 2,
+      "inV": 5,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e5",
+      "outV": 2,
+      "inV": 6,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e6",
+      "outV": 2,
+      "inV": 7,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e7",
+      "outV": 2,
+      "inV": 8,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e8",
+      "outV": 2,
+      "inV": 9,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e9",
+      "outV": 2,
+      "inV": 10,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e10",
+      "outV": 2,
+      "inV": 11,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e11",
+      "outV": 2,
+      "inV": 12,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e12",
+      "outV": 2,
+      "inV": 13,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e13",
+      "outV": 2,
+      "inV": 14,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e14",
+      "outV": 2,
+      "inV": 15,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e15",
+      "outV": 2,
+      "inV": 16,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e16",
+      "outV": 2,
+      "inV": 17,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e17",
+      "outV": 2,
+      "inV": 18,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e18",
+      "outV": 2,
+      "inV": 19,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e19",
+      "outV": 2,
+      "inV": 20,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e20",
+      "outV": 2,
+      "inV": 21,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e21",
+      "outV": 2,
+      "inV": 22,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e22",
+      "outV": 2,
+      "inV": 23,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e23",
+      "outV": 2,
+      "inV": 24,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e24",
+      "outV": 2,
+      "inV": 25,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e25",
+      "outV": 2,
+      "inV": 26,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e26",
+      "outV": 2,
+      "inV": 27,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e27",
+      "outV": 2,
+      "inV": 28,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e28",
+      "outV": 2,
+      "inV": 29,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e29",
+      "outV": 2,
+      "inV": 30,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e30",
+      "outV": 30,
+      "inV": 25,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e31",
+      "outV": 30,
+      "inV": 26,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e32",
+      "outV": 30,
+      "inV": 27,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e33",
+      "outV": 30,
+      "inV": 28,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e34",
+      "outV": 2,
+      "inV": 31,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e35",
+      "outV": 31,
+      "inV": 19,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e36",
+      "outV": 32,
+      "inV": 3,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e37",
+      "outV": 3,
+      "inV": 31,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e38",
+      "outV": 32,
+      "inV": 31,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "nsubjpass",
+        "SRL_LABEL": "ARG1"
+      }
+    },
+    {
+      "id": "e39",
+      "outV": 33,
+      "inV": 20,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e40",
+      "outV": 20,
+      "inV": 31,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e41",
+      "outV": 33,
+      "inV": 31,
+      "label": "SRL_ARG",
+      "properties": {
+        "DEP_LABEL": "prep",
+        "SRL_LABEL": "ARGM-LOC"
+      }
+    },
+    {
+      "id": "e42",
+      "outV": 2,
+      "inV": 34,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e43",
+      "outV": 34,
+      "inV": 3,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e44",
+      "outV": 2,
+      "inV": 35,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e45",
+      "outV": 35,
+      "inV": 7,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e46",
+      "outV": 35,
+      "inV": 8,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e47",
+      "outV": 2,
+      "inV": 36,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e48",
+      "outV": 36,
+      "inV": 10,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e49",
+      "outV": 36,
+      "inV": 11,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e50",
+      "outV": 36,
+      "inV": 12,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e51",
+      "outV": 2,
+      "inV": 37,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e52",
+      "outV": 37,
+      "inV": 15,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e53",
+      "outV": 37,
+      "inV": 16,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e54",
+      "outV": 37,
+      "inV": 17,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e55",
+      "outV": 2,
+      "inV": 38,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e56",
+      "outV": 38,
+      "inV": 21,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e57",
+      "outV": 38,
+      "inV": 22,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e58",
+      "outV": 38,
+      "inV": 23,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e59",
+      "outV": 2,
+      "inV": 39,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e60",
+      "outV": 39,
+      "inV": 25,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e61",
+      "outV": 39,
+      "inV": 26,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e62",
+      "outV": 39,
+      "inV": 27,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e63",
+      "outV": 39,
+      "inV": 28,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e64",
+      "outV": 2,
+      "inV": 40,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e65",
+      "outV": 40,
+      "inV": 18,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e66",
+      "outV": 40,
+      "inV": 19,
+      "label": "BELONGS_TO",
+      "properties": {}
+    },
+    {
+      "id": "e67",
+      "outV": 19,
+      "inV": 3,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "nsubjpass"
+      }
+    },
+    {
+      "id": "e68",
+      "outV": 3,
+      "inV": 4,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e69",
+      "outV": 4,
+      "inV": 5,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e70",
+      "outV": 5,
+      "inV": 6,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e71",
+      "outV": 8,
+      "inV": 7,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e72",
+      "outV": 6,
+      "inV": 8,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e73",
+      "outV": 8,
+      "inV": 9,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "cc"
+      }
+    },
+    {
+      "id": "e74",
+      "outV": 11,
+      "inV": 10,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e75",
+      "outV": 12,
+      "inV": 11,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e76",
+      "outV": 8,
+      "inV": 12,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "conj"
+      }
+    },
+    {
+      "id": "e77",
+      "outV": 12,
+      "inV": 13,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e78",
+      "outV": 13,
+      "inV": 14,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e79",
+      "outV": 17,
+      "inV": 15,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e80",
+      "outV": 17,
+      "inV": 16,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e81",
+      "outV": 14,
+      "inV": 17,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e82",
+      "outV": 19,
+      "inV": 18,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "auxpass"
+      }
+    },
+    {
+      "id": "e83",
+      "outV": 19,
+      "inV": 20,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e84",
+      "outV": 23,
+      "inV": 21,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e85",
+      "outV": 23,
+      "inV": 22,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "amod"
+      }
+    },
+    {
+      "id": "e86",
+      "outV": 20,
+      "inV": 23,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e87",
+      "outV": 23,
+      "inV": 24,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "prep"
+      }
+    },
+    {
+      "id": "e88",
+      "outV": 28,
+      "inV": 25,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "det"
+      }
+    },
+    {
+      "id": "e89",
+      "outV": 28,
+      "inV": 26,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e90",
+      "outV": 28,
+      "inV": 27,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "compound"
+      }
+    },
+    {
+      "id": "e91",
+      "outV": 24,
+      "inV": 28,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "pobj"
+      }
+    },
+    {
+      "id": "e92",
+      "outV": 19,
+      "inV": 29,
+      "label": "DEP",
+      "properties": {
+        "DEP_LABEL": "punct"
+      }
+    },
+    {
+      "id": "e93",
+      "outV": 3,
+      "inV": 4,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e94",
+      "outV": 4,
+      "inV": 5,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e95",
+      "outV": 5,
+      "inV": 6,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e96",
+      "outV": 6,
+      "inV": 7,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e97",
+      "outV": 7,
+      "inV": 8,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e98",
+      "outV": 8,
+      "inV": 9,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e99",
+      "outV": 9,
+      "inV": 10,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e100",
+      "outV": 10,
+      "inV": 11,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e101",
+      "outV": 11,
+      "inV": 12,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e102",
+      "outV": 12,
+      "inV": 13,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e103",
+      "outV": 13,
+      "inV": 14,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e104",
+      "outV": 14,
+      "inV": 15,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e105",
+      "outV": 15,
+      "inV": 16,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e106",
+      "outV": 16,
+      "inV": 17,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e107",
+      "outV": 17,
+      "inV": 18,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e108",
+      "outV": 18,
+      "inV": 19,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e109",
+      "outV": 19,
+      "inV": 20,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e110",
+      "outV": 20,
+      "inV": 21,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e111",
+      "outV": 21,
+      "inV": 22,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e112",
+      "outV": 22,
+      "inV": 23,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e113",
+      "outV": 23,
+      "inV": 24,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e114",
+      "outV": 24,
+      "inV": 25,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e115",
+      "outV": 25,
+      "inV": 26,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e116",
+      "outV": 26,
+      "inV": 27,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e117",
+      "outV": 27,
+      "inV": 28,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e118",
+      "outV": 28,
+      "inV": 29,
+      "label": "NEXT_TOKEN",
+      "properties": {}
+    },
+    {
+      "id": "e119",
+      "outV": 0,
+      "inV": 41,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e120",
+      "outV": 41,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e121",
+      "outV": 0,
+      "inV": 42,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e122",
+      "outV": 42,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e123",
+      "outV": 0,
+      "inV": 43,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e124",
+      "outV": 43,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e125",
+      "outV": 0,
+      "inV": 44,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e126",
+      "outV": 44,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    },
+    {
+      "id": "e127",
+      "outV": 0,
+      "inV": 45,
+      "label": "CONTAINS",
+      "properties": {}
+    },
+    {
+      "id": "e128",
+      "outV": 45,
+      "inV": 2,
+      "label": "DISCOURSE",
+      "properties": {
+        "topic_relevance": true
+      }
+    }
+  ]
+}
