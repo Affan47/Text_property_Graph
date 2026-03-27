@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Level 2: Security-Aware TPG — SecurityFrontend</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0c12;--bg2:#10131c;--bg3:#161a26;--surface:#1c2030;--surface2:#222638;
+  --text:#e4e6f0;--muted:#8a8faa;--dim:#4e5370;
+  --purple:#a78bfa;--purple-fill:#1e1640;--purple-stroke:#6d5cc8;
+  --coral:#f0845a;--coral-fill:#2a1510;--coral-stroke:#b05530;
+  --teal:#34d399;--teal-fill:#0c2318;--teal-stroke:#1a8a5e;
+  --blue:#60a5fa;--blue-fill:#101c32;--blue-stroke:#3070b0;
+  --amber:#fbbf24;--amber-fill:#211a08;--amber-stroke:#a07818;
+  --green:#6ee7b7;--green-fill:#0e201a;--green-stroke:#2a8060;
+  --pink:#f472b6;--pink-fill:#2a1020;--pink-stroke:#a04070;
+  --red:#f87171;--red-fill:#201212;--red-stroke:#8a2020;
+  --cyan:#22d3ee;--cyan-fill:#0a1e22;--cyan-stroke:#148a9e;
+  --radius:10px;--radius-lg:14px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.7}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,12,18,.88);backdrop-filter:blur(16px);border-bottom:1px solid rgba(78,83,112,.2);padding:0 24px}
+.nav-inner{max-width:1060px;margin:0 auto;display:flex;gap:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav a{color:var(--muted);font:500 10.5px 'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase;text-decoration:none;padding:13px 0;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
+.nav a:hover,.nav a.active{color:var(--text);border-bottom-color:var(--red)}
+
+/* LAYOUT */
+.container{max-width:1060px;margin:0 auto;padding:0 28px}
+section{padding:56px 0 0}
+
+/* HERO */
+.hero{padding:64px 0 0;text-align:center;animation:fadeUp .7s ease both}
+.hero .level-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:999px;font:700 10px 'JetBrains Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
+.hero .level-badge.l2{background:var(--red-fill);border:1px solid var(--red-stroke);color:var(--red)}
+.hero h1{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;letter-spacing:-.8px}
+.hero h1 .sec{background:linear-gradient(135deg,var(--red),var(--coral),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero .subtitle{color:var(--muted);font-size:14px;margin-top:8px;max-width:640px;margin-left:auto;margin-right:auto}
+.badges{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;background:var(--surface);font:500 10px 'JetBrains Mono',monospace;letter-spacing:.4px}
+.badge.l1{border:1px solid rgba(52,211,153,.25);color:var(--teal)}
+.badge.l2{border:1px solid rgba(248,113,113,.25);color:var(--red)}
+.badge .dot{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite}
+.badge.l1 .dot{background:var(--teal)}
+.badge.l2 .dot{background:var(--red)}
+
+/* SECTION HEADERS */
+.section-label{font:700 10px 'JetBrains Mono',monospace;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.section-title{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;margin-bottom:6px}
+.section-desc{color:var(--muted);font-size:14px;max-width:720px;margin-bottom:28px;line-height:1.7}
+.section-desc strong{color:var(--text)}
+
+/* CODE BLOCK */
+.code-wrap{animation:fadeUp .7s .1s ease both}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--surface);border:1px solid var(--dim);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.code-header span{font:600 10px 'JetBrains Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim)}
+.code-dots{display:flex;gap:6px}
+.code-dots i{width:10px;height:10px;border-radius:50%;opacity:.5}
+.code-dots i:nth-child(1){background:#f87171}.code-dots i:nth-child(2){background:#fbbf24}.code-dots i:nth-child(3){background:#34d399}
+.code-block{background:var(--bg2);border:1px solid var(--dim);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:20px 24px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+.code-block .cve{color:var(--red);font-weight:700;background:var(--red-fill);padding:1px 5px;border-radius:3px}
+.code-block .cwe{color:var(--amber);font-weight:600}
+.code-block .soft{color:var(--teal);text-decoration:underline;text-decoration-color:rgba(52,211,153,.3);text-underline-offset:3px}
+.code-block .ver{color:var(--cyan)}
+.code-block .vuln{color:var(--coral);font-weight:600}
+.code-block .code-el{color:var(--purple);font-weight:600}
+.code-block .atk{color:var(--pink);font-style:italic}
+.code-block .remed{color:var(--green);font-weight:600}
+.code-block .miss{color:var(--dim);text-decoration:line-through;text-decoration-color:var(--red)}
+.code-block .wrong{color:var(--red);font-size:10px;font-style:italic}
+.code-block .ok{color:var(--teal);font-size:10px}
+.code-block .ln{color:var(--dim);user-select:none;display:inline-block;width:12px;text-align:right;margin-right:16px;font-size:11px}
+
+/* TABLES */
+.table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid rgba(78,83,112,.25);background:var(--bg2);animation:fadeUp .6s ease both}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead{background:var(--surface)}
+thead th{font:600 9.5px 'JetBrains Mono',monospace;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);padding:12px 14px;text-align:left;border-bottom:1px solid rgba(78,83,112,.3)}
+tbody td{padding:10px 14px;border-bottom:1px solid rgba(78,83,112,.1);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.015)}
+td code{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 6px;border-radius:4px;background:var(--surface);white-space:nowrap}
+td .tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:5px;font:600 10px 'JetBrains Mono',monospace;letter-spacing:.3px;border:1px solid}
+td .tag.red{color:var(--red);border-color:var(--red-stroke);background:var(--red-fill)}
+td .tag.coral{color:var(--coral);border-color:var(--coral-stroke);background:var(--coral-fill)}
+td .tag.amber{color:var(--amber);border-color:var(--amber-stroke);background:var(--amber-fill)}
+td .tag.teal{color:var(--teal);border-color:var(--teal-stroke);background:var(--teal-fill)}
+td .tag.blue{color:var(--blue);border-color:var(--blue-stroke);background:var(--blue-fill)}
+td .tag.green{color:var(--green);border-color:var(--green-stroke);background:var(--green-fill)}
+td .tag.purple{color:var(--purple);border-color:var(--purple-stroke);background:var(--purple-fill)}
+td .tag.pink{color:var(--pink);border-color:var(--pink-stroke);background:var(--pink-fill)}
+td .tag.cyan{color:var(--cyan);border-color:var(--cyan-stroke);background:var(--cyan-fill)}
+td .tag.dim{color:var(--dim);border-color:rgba(78,83,112,.4);background:var(--surface)}
+thead th.sec-col{border-bottom:2px solid var(--red-stroke)}
+
+/* COMPARISON */
+.vs-grid{display:grid;grid-template-columns:1fr 36px 1fr;gap:0;align-items:start;margin-bottom:28px}
+@media(max-width:700px){.vs-grid{grid-template-columns:1fr;gap:16px}.vs-arrow{display:none!important}}
+.vs-arrow{display:flex;align-items:center;justify-content:center;font:700 20px 'JetBrains Mono',monospace;color:var(--dim);padding-top:40px}
+.vs-card{background:var(--bg2);border:1px solid rgba(78,83,112,.2);border-radius:var(--radius-lg);padding:20px;position:relative;overflow:hidden}
+.vs-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.vs-card.bad::before{background:var(--red)}
+.vs-card.good::before{background:var(--teal)}
+.vs-card h3{font:700 13px 'JetBrains Mono',monospace;margin-bottom:12px}
+.vs-card.bad h3{color:var(--red)}
+.vs-card.good h3{color:var(--teal)}
+.vs-item{display:flex;align-items:flex-start;gap:8px;margin:6px 0;font:400 12px 'JetBrains Mono',monospace}
+.vs-item .src{color:var(--text);min-width:140px}
+.vs-item .res{border-radius:4px;padding:1px 6px;font-size:11px}
+.vs-item .res.wrong{color:var(--red);background:var(--red-fill);border:1px solid var(--red-stroke)}
+.vs-item .res.right{color:var(--teal);background:var(--teal-fill);border:1px solid var(--teal-stroke)}
+
+/* PIPELINE */
+.pipeline-box{background:var(--bg2);border:1px solid rgba(78,83,112,.2);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:28px}
+.pipeline-header{padding:16px 22px;background:var(--surface);border-bottom:1px solid rgba(78,83,112,.2);display:flex;align-items:center;gap:10px}
+.pipeline-header h3{font:700 14px 'JetBrains Mono',monospace}
+.pipeline-body{padding:22px}
+.pipeline-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;position:relative}
+.pipeline-step::before{content:'';position:absolute;left:15px;top:32px;bottom:-16px;width:1.5px}
+.pipeline-step:last-child::before{display:none}
+.step-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 12px 'JetBrains Mono',monospace;flex-shrink:0;z-index:1}
+.step-content{flex:1}
+.step-content .step-title{font:600 13px 'JetBrains Mono',monospace;margin-bottom:3px}
+.step-content .step-desc{color:var(--muted);font-size:12.5px;line-height:1.6}
+.step-content .step-output{font:400 11px 'JetBrains Mono',monospace;color:var(--dim);margin-top:4px;padding:6px 10px;background:var(--surface);border-radius:6px;display:inline-block}
+.pipeline-box.base .pipeline-step::before{background:rgba(52,211,153,.2)}
+.pipeline-box.base .step-num{background:var(--teal-fill);border:1.5px solid var(--teal-stroke);color:var(--teal)}
+.pipeline-box.base .step-title{color:var(--teal)}
+.pipeline-box.sec .pipeline-step::before{background:rgba(248,113,113,.2)}
+.pipeline-box.sec .step-num{background:var(--red-fill);border:1.5px solid var(--red-stroke);color:var(--red)}
+.pipeline-box.sec .step-title{color:var(--red)}
+.pipeline-box.edge .pipeline-step::before{background:rgba(251,191,36,.2)}
+.pipeline-box.edge .step-num{background:var(--amber-fill);border:1.5px solid var(--amber-stroke);color:var(--amber)}
+.pipeline-box.edge .step-title{color:var(--amber)}
+
+/* PATTERN CARDS */
+.pattern-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+@media(max-width:700px){.pattern-grid{grid-template-columns:1fr}}
+.pattern-card{background:var(--bg2);border:1px solid rgba(78,83,112,.2);border-radius:var(--radius-lg);padding:18px 20px;position:relative;overflow:hidden}
+.pattern-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.pattern-card h3{font:700 12px 'JetBrains Mono',monospace;margin-bottom:4px}
+.pattern-card .pat-desc{color:var(--muted);font-size:12px;margin-bottom:10px;line-height:1.5}
+.pattern-card .pat-method{font:600 10px 'JetBrains Mono',monospace;letter-spacing:.5px;padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:8px}
+.pattern-card .examples{list-style:none;display:flex;flex-direction:column;gap:4px}
+.pattern-card .examples li{font:400 11.5px 'JetBrains Mono',monospace;color:var(--text);padding:5px 10px;border-radius:5px;background:var(--surface);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pattern-card .examples .val{opacity:.7}
+.pattern-card .examples .arrow{font-weight:700;flex-shrink:0}
+.pattern-card.cve{border-color:rgba(248,113,113,.15)}
+.pattern-card.cve::before{background:var(--red)}
+.pattern-card.cve h3{color:var(--red)}
+.pattern-card.cve .pat-method{color:var(--red);background:var(--red-fill)}
+.pattern-card.cve .arrow{color:var(--red)}
+.pattern-card.soft{border-color:rgba(52,211,153,.15)}
+.pattern-card.soft::before{background:var(--teal)}
+.pattern-card.soft h3{color:var(--teal)}
+.pattern-card.soft .pat-method{color:var(--teal);background:var(--teal-fill)}
+.pattern-card.soft .arrow{color:var(--teal)}
+.pattern-card.atk{border-color:rgba(244,114,182,.15)}
+.pattern-card.atk::before{background:var(--pink)}
+.pattern-card.atk h3{color:var(--pink)}
+.pattern-card.atk .pat-method{color:var(--pink);background:var(--pink-fill)}
+.pattern-card.atk .arrow{color:var(--pink)}
+.pattern-card.impact{border-color:rgba(96,165,250,.15)}
+.pattern-card.impact::before{background:var(--blue)}
+.pattern-card.impact h3{color:var(--blue)}
+.pattern-card.impact .pat-method{color:var(--blue);background:var(--blue-fill)}
+.pattern-card.impact .arrow{color:var(--blue)}
+.pattern-card.vulnt{border-color:rgba(240,132,90,.15)}
+.pattern-card.vulnt::before{background:var(--coral)}
+.pattern-card.vulnt h3{color:var(--coral)}
+.pattern-card.vulnt .pat-method{color:var(--coral);background:var(--coral-fill)}
+.pattern-card.vulnt .arrow{color:var(--coral)}
+.pattern-card.remed{border-color:rgba(110,231,183,.15)}
+.pattern-card.remed::before{background:var(--green)}
+.pattern-card.remed h3{color:var(--green)}
+.pattern-card.remed .pat-method{color:var(--green);background:var(--green-fill)}
+.pattern-card.remed .arrow{color:var(--green)}
+
+/* JOERN ANALOGY */
+.frontend-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+@media(max-width:700px){.frontend-grid{grid-template-columns:1fr}}
+.frontend-card{background:var(--bg2);border:1px solid rgba(78,83,112,.2);border-radius:var(--radius-lg);padding:18px 20px;position:relative;overflow:hidden}
+.frontend-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.frontend-card.joern::before{background:var(--purple)}
+.frontend-card.joern h3{color:var(--purple)}
+.frontend-card.tpg-f::before{background:var(--teal)}
+.frontend-card.tpg-f h3{color:var(--teal)}
+.frontend-card h3{font:700 13px 'JetBrains Mono',monospace;margin-bottom:10px}
+.fe-row{display:flex;align-items:center;gap:8px;margin:5px 0;font:400 12px 'JetBrains Mono',monospace}
+.fe-row .fe-name{padding:2px 8px;border-radius:4px;font-weight:600;font-size:11px}
+.fe-row .fe-arrow{color:var(--dim)}
+.fe-row .fe-desc{color:var(--muted);font-size:11px}
+.fe-note{font:400 11px 'DM Sans',sans-serif;color:var(--muted);margin-top:10px;padding-top:8px;border-top:1px solid rgba(78,83,112,.15);line-height:1.5}
+
+/* GRAPH */
+.graph-controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:8px}
+.toggle-btn{display:flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;border:1.5px solid;cursor:pointer;font:600 10px 'JetBrains Mono',monospace;letter-spacing:.5px;transition:all .3s;user-select:none;background:transparent}
+.toggle-btn:hover{opacity:.85}
+.toggle-btn .dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 6px currentColor;transition:all .3s}
+.toggle-btn.off{opacity:.25;filter:grayscale(.7)}
+.toggle-btn.off .dot{box-shadow:none;opacity:.35}
+.toggle-btn[data-e="affects"]{border-color:var(--red);color:var(--red)}
+.toggle-btn[data-e="classif"]{border-color:var(--amber);color:var(--amber)}
+.toggle-btn[data-e="hasver"]{border-color:var(--cyan);color:var(--cyan)}
+.toggle-btn[data-e="usesfn"]{border-color:var(--purple);color:var(--purple)}
+.toggle-btn[data-e="threat"]{border-color:var(--pink);color:var(--pink)}
+.toggle-btn[data-e="mitig"]{border-color:var(--green);color:var(--green)}
+.hint{font-size:11px;color:var(--dim);text-align:center;margin-bottom:20px}
+.graph-wrap{animation:fadeUp .7s ease both}
+.graph-wrap svg{width:100%;height:auto}
+.node-box{cursor:pointer;transition:filter .2s}.node-box:hover{filter:brightness(1.3)}
+.edge-group{transition:opacity .4s}.edge-group.hidden{opacity:0;pointer-events:none}
+
+/* FOOTER */
+.footer{text-align:center;padding:48px 0 36px;color:var(--dim);font:400 11px 'JetBrains Mono',monospace;letter-spacing:.8px;border-top:1px solid rgba(78,83,112,.15);margin-top:48px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+@media(max-width:600px){
+  .hero h1{font-size:22px}
+  .container{padding:0 16px}
+  section{padding:40px 0 0}
+  table{font-size:11px}
+  thead th,tbody td{padding:8px 10px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#problem" class="active">The problem</a>
+    <a href="#analogy">Frontend analogy</a>
+    <a href="#pipeline">3-step pipeline</a>
+    <a href="#patterns">Extraction patterns</a>
+    <a href="#entities">Security entities</a>
+    <a href="#sec-edges">Security edges</a>
+    <a href="#example">CVE walkthrough</a>
+    <a href="#graph">Interactive graph</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="level-badge l2">Level 2</div>
+  <h1><span class="sec">Security-Aware TPG</span></h1>
+  <p class="subtitle">The SecurityFrontend extends the generic spaCy pipeline with domain-specific entity extraction — just as Joern's Java frontend extends the base CDT frontend with Java-specific node types.</p>
+  <div class="badges">
+    <div class="badge l1"><span class="dot"></span>Level 1 · Generic NLP (spaCy)</div>
+    <div class="badge l2"><span class="dot"></span>Level 2 · Security overlay (regex + keywords)</div>
+  </div>
+</div>
+
+<!-- ═══ §1 THE PROBLEM ═══ -->
+<section id="problem">
+  <p class="section-label">Motivation</p>
+  <h2 class="section-title">Why generic NLP fails on security text</h2>
+  <p class="section-desc">
+    spaCy's NER model was trained on news and Wikipedia. It has no concept of CVEs, CWEs, vulnerability types, or dangerous functions. When processing a CVE advisory, it <strong>misclassifies or misses</strong> nearly every security-relevant entity.
+  </p>
+
+  <div class="vs-grid">
+    <div class="vs-card bad">
+      <h3>spaCy generic NER (Level 1)</h3>
+      <div class="vs-item"><span class="src">"CVE-2024-1234"</span><span class="res wrong">CARDINAL or missed</span></div>
+      <div class="vs-item"><span class="src">"Apache HTTP Server"</span><span class="res wrong">ORG (wrong)</span></div>
+      <div class="vs-item"><span class="src">"2.4.51"</span><span class="res wrong">CARDINAL (wrong)</span></div>
+      <div class="vs-item"><span class="src">"buffer overflow"</span><span class="res wrong">just two words</span></div>
+      <div class="vs-item"><span class="src">"strcpy"</span><span class="res wrong">gibberish to NER</span></div>
+      <div class="vs-item"><span class="src">"CWE-120"</span><span class="res wrong">missed entirely</span></div>
+    </div>
+    <div class="vs-arrow">→</div>
+    <div class="vs-card good">
+      <h3>SecurityFrontend (Level 2)</h3>
+      <div class="vs-item"><span class="src">"CVE-2024-1234"</span><span class="res right">CVE_ID (regex)</span></div>
+      <div class="vs-item"><span class="src">"Apache HTTP Server"</span><span class="res right">SOFTWARE (set)</span></div>
+      <div class="vs-item"><span class="src">"2.4.51"</span><span class="res right">VERSION (regex)</span></div>
+      <div class="vs-item"><span class="src">"buffer overflow"</span><span class="res right">VULN_TYPE (dict)</span></div>
+      <div class="vs-item"><span class="src">"strcpy"</span><span class="res right">CODE_ELEMENT (regex)</span></div>
+      <div class="vs-item"><span class="src">"CWE-120"</span><span class="res right">CWE_ID (regex)</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §2 FRONTEND ANALOGY ═══ -->
+<section id="analogy">
+  <p class="section-label">Architecture</p>
+  <h2 class="section-title">The Joern frontend analogy</h2>
+  <p class="section-desc">
+    Joern doesn't use one parser for every language — each language has its own frontend. All frontends output the <strong>same CPG schema</strong> with language-specific extensions. The TPG mirrors this exactly: domain-specific frontends extend the generic NLP frontend.
+  </p>
+
+  <div class="frontend-grid">
+    <div class="frontend-card joern">
+      <h3>Joern — multiple language frontends</h3>
+      <div class="fe-row"><span class="fe-name" style="color:var(--purple);background:var(--purple-fill)">C/C++ frontend</span><span class="fe-arrow">→</span><span class="fe-desc">CDT parser → C-specific AST nodes</span></div>
+      <div class="fe-row"><span class="fe-name" style="color:var(--purple);background:var(--purple-fill)">Java frontend</span><span class="fe-arrow">→</span><span class="fe-desc">Soot/JavaParser → Java-specific nodes</span></div>
+      <div class="fe-row"><span class="fe-name" style="color:var(--purple);background:var(--purple-fill)">Python frontend</span><span class="fe-arrow">→</span><span class="fe-desc">Custom parser → Python-specific nodes</span></div>
+      <div class="fe-row"><span class="fe-name" style="color:var(--purple);background:var(--purple-fill)">Binary frontend</span><span class="fe-arrow">→</span><span class="fe-desc">Ghidra → Binary-specific nodes</span></div>
+      <div class="fe-note">All output the same CPG schema (METHOD, CALL, IDENTIFIER, AST, CFG, REACHING_DEF) with language-specific properties.</div>
+    </div>
+    <div class="frontend-card tpg-f">
+      <h3>TPG — multiple domain frontends</h3>
+      <div class="fe-row"><span class="fe-name" style="color:var(--teal);background:var(--teal-fill)">SpacyFrontend</span><span class="fe-arrow">→</span><span class="fe-desc">Generic NLP → Base text nodes (Level 1)</span></div>
+      <div class="fe-row"><span class="fe-name" style="color:var(--red);background:var(--red-fill)">SecurityFrontend</span><span class="fe-arrow">→</span><span class="fe-desc">Regex + keywords → Security nodes (Level 2)</span></div>
+      <div class="fe-row"><span class="fe-name" style="color:var(--dim);background:var(--surface)">MedicalFrontend</span><span class="fe-arrow">→</span><span class="fe-desc">BioBERT NER → Medical nodes (future)</span></div>
+      <div class="fe-row"><span class="fe-name" style="color:var(--dim);background:var(--surface)">LegalFrontend</span><span class="fe-arrow">→</span><span class="fe-desc">Legal NER → Legal nodes (future)</span></div>
+      <div class="fe-note">All output the same TPG schema (DOCUMENT, SENTENCE, TOKEN, ENTITY, DEP, COREF, RST_RELATION) with domain-specific properties.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §3 THREE-STEP PIPELINE ═══ -->
+<section id="pipeline">
+  <p class="section-label">Implementation</p>
+  <h2 class="section-title">SecurityFrontend 3-step pipeline</h2>
+  <p class="section-desc">
+    <code>SecurityFrontend</code> inherits from <code>SpacyFrontend</code>. When <code>parse()</code> is called, it runs the full generic NLP first, then overlays security-specific extraction, then creates domain relationship edges.
+  </p>
+
+  <div class="pipeline-box base">
+    <div class="pipeline-header"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal)"></div><h3 style="color:var(--teal)">Step 1 — SpacyFrontend.parse() (inherited)</h3></div>
+    <div class="pipeline-body">
+      <div class="pipeline-step">
+        <div class="step-num">a</div>
+        <div class="step-content">
+          <div class="step-title">Tokenization + POS tagging</div>
+          <div class="step-desc">Break text into tokens, assign parts of speech</div>
+          <div class="step-output">→ 50+ TOKEN nodes with POS, LEMMA properties</div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">b</div>
+        <div class="step-content">
+          <div class="step-title">Dependency parse + generic NER</div>
+          <div class="step-desc">Syntax tree + named entities ("Apache" → ORG, wrong but still created)</div>
+          <div class="step-output">→ DEP edges, ENTITY nodes, SENTENCE/PARAGRAPH/DOCUMENT structure</div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">c</div>
+        <div class="step-content">
+          <div class="step-title">Sequential flow + containment</div>
+          <div class="step-desc">NEXT_TOKEN, NEXT_SENT, NEXT_PARA, CONTAINS edges</div>
+          <div class="step-output">→ Full Level 1 TPG (all base nodes + edges)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pipeline-box sec">
+    <div class="pipeline-header"><div style="width:10px;height:10px;border-radius:50%;background:var(--red)"></div><h3 style="color:var(--red)">Step 2 — Security entity extraction (10 extractors)</h3></div>
+    <div class="pipeline-body">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">_extract_cve_ids()</div>
+          <div class="step-desc">Regex <code>CVE-\d{4}-\d{4,}</code> → <span style="color:var(--red)">CVE_ID</span> entities, confidence: 1.0</div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">_extract_cwe_ids()</div>
+          <div class="step-desc">Regex <code>CWE-\d{1,4}</code> → <span style="color:var(--amber)">CWE_ID</span> entities, confidence: 1.0</div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">_extract_versions()</div>
+          <div class="step-desc">Regex <code>\d+\.\d+(?:\.\d+)*</code> → <span style="color:var(--cyan)">VERSION</span> entities, confidence: 1.0</div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">_extract_software()</div>
+          <div class="step-desc">35-item set lookup → <span style="color:var(--teal)">SOFTWARE</span> entities, confidence: 0.9</div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">_extract_code_elements()</div>
+          <div class="step-desc">Regex for dangerous C functions + <code>foo()</code> pattern → <span style="color:var(--purple)">CODE_ELEMENT</span>, confidence: 1.0</div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <div class="step-title">_extract_attack_vectors()</div>
+          <div class="step-desc">9-item dictionary → <span style="color:var(--pink)">ATTACK_VECTOR</span> entities, confidence: 0.85</div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">7</div>
+        <div class="step-content">
+          <div class="step-title">_extract_impacts()</div>
+          <div class="step-desc">18-item dictionary → <span style="color:var(--blue)">IMPACT</span> entities, normalized to canonical types (rce, dos, xss...)</div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">8</div>
+        <div class="step-content">
+          <div class="step-title">_extract_vuln_types()</div>
+          <div class="step-desc">22-item dictionary → <span style="color:var(--coral)">VULN_TYPE</span> entities, CWE-aligned categories</div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">9</div>
+        <div class="step-content">
+          <div class="step-title">_extract_severity()</div>
+          <div class="step-desc">Regex for critical/high/medium/low + CVSS scores → <span style="color:var(--amber)">SEVERITY</span></div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">10</div>
+        <div class="step-content">
+          <div class="step-title">_extract_remediation()</div>
+          <div class="step-desc">6 regex patterns for fix actions → <span style="color:var(--green)">REMEDIATION</span> entities</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pipeline-box edge">
+    <div class="pipeline-header"><div style="width:10px;height:10px;border-radius:50%;background:var(--amber)"></div><h3 style="color:var(--amber)">Step 3 — _create_security_edges()</h3></div>
+    <div class="pipeline-body">
+      <div class="pipeline-step">
+        <div class="step-num">→</div>
+        <div class="step-content">
+          <div class="step-title">Index entities by domain_type</div>
+          <div class="step-desc">Group all security entities into buckets: vulnerability_id, software_product, weakness_class, etc.</div>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">→</div>
+        <div class="step-content">
+          <div class="step-title">Create semantic edges</div>
+          <div class="step-desc">Connect entities based on domain rules: CVE→SOFTWARE (AFFECTS), CVE→CWE (CLASSIFIED_AS), SOFTWARE→VERSION (HAS_VERSION), VULN→CODE (USES_FUNCTION), ATK→SOFTWARE (THREATENS), CVE→REMED (MITIGATED_BY)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §4 EXTRACTION PATTERNS ═══ -->
+<section id="patterns">
+  <p class="section-label">Domain knowledge</p>
+  <h2 class="section-title">The 6 extraction categories</h2>
+  <p class="section-desc">
+    All security-domain knowledge is hardcoded as module-level constants — regex patterns for structured identifiers, dictionaries for normalized terminology. These are <strong>not ML models</strong> — they are deterministic rules.
+  </p>
+
+  <div class="pattern-grid">
+    <div class="pattern-card cve">
+      <h3>Regex patterns — structured IDs</h3>
+      <p class="pat-desc">CVE IDs, CWE IDs, version numbers, CVSS scores, and severity levels always follow predictable formats.</p>
+      <div class="pat-method">METHOD: re.compile()</div>
+      <ul class="examples">
+        <li><code>CVE-\d{4}-\d{4,}</code> <span class="arrow">→</span> <span class="val">CVE-2024-1234</span></li>
+        <li><code>CWE-\d{1,4}</code> <span class="arrow">→</span> <span class="val">CWE-120</span></li>
+        <li><code>\d+\.\d+(?:\.\d+)*</code> <span class="arrow">→</span> <span class="val">2.4.51</span></li>
+        <li><code>(critical|high|medium|low)</code> <span class="arrow">→</span> <span class="val">severity levels</span></li>
+        <li><code>strcpy|strcat|gets|eval|...</code> <span class="arrow">→</span> <span class="val">dangerous functions</span></li>
+      </ul>
+    </div>
+
+    <div class="pattern-card soft">
+      <h3>Software names — 35 known products</h3>
+      <p class="pat-desc">Case-insensitive substring match against a set of known product names. Extensible.</p>
+      <div class="pat-method">METHOD: set lookup</div>
+      <ul class="examples">
+        <li><span class="val">apache, nginx, iis, tomcat</span> <span style="color:var(--dim);font-size:10px">web servers</span></li>
+        <li><span class="val">openssl, openssh</span> <span style="color:var(--dim);font-size:10px">crypto/net</span></li>
+        <li><span class="val">mysql, postgresql, redis</span> <span style="color:var(--dim);font-size:10px">databases</span></li>
+        <li><span class="val">docker, kubernetes, jenkins</span> <span style="color:var(--dim);font-size:10px">devops</span></li>
+        <li><span class="val">log4j, struts, jackson</span> <span style="color:var(--dim);font-size:10px">notorious libs</span></li>
+      </ul>
+    </div>
+
+    <div class="pattern-card atk">
+      <h3>Attack vectors — 9 types</h3>
+      <p class="pat-desc">Maps attack vector phrases to CVSS-aligned normalized types. Critical for severity scoring.</p>
+      <div class="pat-method">METHOD: dictionary lookup</div>
+      <ul class="examples">
+        <li>"remote attacker" <span class="arrow">→</span> <span class="val">remote</span></li>
+        <li>"user-supplied input" <span class="arrow">→</span> <span class="val">user_input</span></li>
+        <li>"specially crafted" <span class="arrow">→</span> <span class="val">crafted_input</span></li>
+        <li>"local" <span class="arrow">→</span> <span class="val">local</span></li>
+        <li>"adjacent" <span class="arrow">→</span> <span class="val">adjacent_network</span></li>
+      </ul>
+    </div>
+
+    <div class="pattern-card impact">
+      <h3>Impact types — 18 types</h3>
+      <p class="pat-desc">Normalizes varied descriptions to canonical impact categories. "arbitrary code execution" and "remote code execution" both map to <code>rce</code>.</p>
+      <div class="pat-method">METHOD: dictionary lookup</div>
+      <ul class="examples">
+        <li>"arbitrary code execution" <span class="arrow">→</span> <span class="val">rce</span></li>
+        <li>"denial of service" <span class="arrow">→</span> <span class="val">dos</span></li>
+        <li>"privilege escalation" <span class="arrow">→</span> <span class="val">privesc</span></li>
+        <li>"use after free" <span class="arrow">→</span> <span class="val">uaf</span></li>
+        <li>"sql injection" <span class="arrow">→</span> <span class="val">sqli</span></li>
+      </ul>
+    </div>
+
+    <div class="pattern-card vulnt">
+      <h3>Vulnerability types — 22 types</h3>
+      <p class="pat-desc">OWASP/CWE-standard vulnerability classes. Maps natural language descriptions to normalized CWE-aligned categories.</p>
+      <div class="pat-method">METHOD: dictionary lookup</div>
+      <ul class="examples">
+        <li>"buffer overflow" <span class="arrow">→</span> <span class="val">buffer_overflow</span></li>
+        <li>"use-after-free" <span class="arrow">→</span> <span class="val">use_after_free</span></li>
+        <li>"cross-site scripting" <span class="arrow">→</span> <span class="val">xss</span></li>
+        <li>"insecure deserialization" <span class="arrow">→</span> <span class="val">deserialization</span></li>
+        <li>"hardcoded credentials" <span class="arrow">→</span> <span class="val">hardcoded_creds</span></li>
+      </ul>
+    </div>
+
+    <div class="pattern-card remed">
+      <h3>Remediation — 6 regex patterns</h3>
+      <p class="pat-desc">Captures fix/patch/upgrade guidance from advisories. More variation than IDs, so regex is used.</p>
+      <div class="pat-method">METHOD: regex patterns</div>
+      <ul class="examples">
+        <li><code>upgrad\w* to (\S+)</code> <span class="arrow">→</span> <span class="val">upgrade</span></li>
+        <li><code>patch\w* by applying</code> <span class="arrow">→</span> <span class="val">patch</span></li>
+        <li><code>workaround</code> <span class="arrow">→</span> <span class="val">workaround</span></li>
+        <li><code>mitigat\w*</code> <span class="arrow">→</span> <span class="val">mitigation</span></li>
+        <li><code>disabl\w* \w+</code> <span class="arrow">→</span> <span class="val">disable_feature</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §5 SECURITY ENTITY TYPES ═══ -->
+<section id="entities">
+  <p class="section-label">Node schema</p>
+  <h2 class="section-title">Security entity types</h2>
+  <p class="section-desc">
+    All security entities are <code>ENTITY</code> nodes (same TPG node type) with additional properties: <strong>ENTITY_TYPE</strong> (security category), <strong>DOMAIN_TYPE</strong> (normalized subcategory), <strong>CONFIDENCE</strong> (1.0 for regex, 0.8–0.95 for keyword), and <strong>SOURCE: "security_frontend"</strong>.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th class="sec-col">Entity type</th><th>Domain type</th><th>Method</th><th>Conf</th><th>Example</th><th>What it captures</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="tag red">CVE_ID</span></td><td><code>vulnerability_id</code></td><td>regex</td><td>1.0</td><td><code>CVE-2024-1234</code></td><td>Vulnerability identifier</td></tr>
+        <tr><td><span class="tag amber">CWE_ID</span></td><td><code>weakness_class</code></td><td>regex</td><td>1.0</td><td><code>CWE-120</code></td><td>Weakness classification</td></tr>
+        <tr><td><span class="tag cyan">VERSION</span></td><td><code>version_number</code></td><td>regex</td><td>1.0</td><td><code>2.4.51</code></td><td>Software version</td></tr>
+        <tr><td><span class="tag teal">SOFTWARE</span></td><td><code>software_product</code></td><td>set</td><td>0.9</td><td><code>Apache HTTP Server</code></td><td>Affected product</td></tr>
+        <tr><td><span class="tag purple">CODE_ELEMENT</span></td><td><code>code_construct</code></td><td>regex</td><td>1.0</td><td><code>strcpy</code></td><td>Dangerous function</td></tr>
+        <tr><td><span class="tag pink">ATTACK_VECTOR</span></td><td><code>attack_vector</code></td><td>dict</td><td>0.85</td><td><code>user-supplied input</code></td><td>How attacker reaches target</td></tr>
+        <tr><td><span class="tag blue">IMPACT</span></td><td><code>impact</code></td><td>dict</td><td>0.9</td><td><code>arbitrary code execution</code></td><td>What damage can occur</td></tr>
+        <tr><td><span class="tag coral">VULN_TYPE</span></td><td><code>vulnerability_type</code></td><td>dict</td><td>0.9</td><td><code>buffer overflow</code></td><td>What class of bug</td></tr>
+        <tr><td><span class="tag amber">SEVERITY</span></td><td><code>severity_level</code></td><td>regex</td><td>0.9</td><td><code>critical</code></td><td>CVSS-aligned severity</td></tr>
+        <tr><td><span class="tag green">REMEDIATION</span></td><td><code>remediation</code></td><td>regex</td><td>0.8</td><td><code>upgrading to 2.4.52</code></td><td>How to fix it</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ §6 SECURITY EDGE TYPES ═══ -->
+<section id="sec-edges">
+  <p class="section-label">Edge schema</p>
+  <h2 class="section-title">Security-specific edge types</h2>
+  <p class="section-desc">
+    After extracting entities, <code>_create_security_edges()</code> connects them with domain-specific <code>ENTITY_REL</code> edges — analogous to how Joern creates <code>CALL</code> edges by connecting invocation sites to method definitions.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th class="sec-col">Edge type</th><th>From → To</th><th>Example</th><th>Why it matters</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="tag red">AFFECTS</span></td><td>CVE → SOFTWARE</td><td>CVE-2024-1234 → Apache HTTP Server</td><td>Which product is vulnerable</td></tr>
+        <tr><td><span class="tag amber">CLASSIFIED_AS</span></td><td>CVE → CWE</td><td>CVE-2024-1234 → CWE-120</td><td>What class of weakness</td></tr>
+        <tr><td><span class="tag cyan">HAS_VERSION</span></td><td>SOFTWARE → VERSION</td><td>Apache → 2.4.51</td><td>Which version is affected</td></tr>
+        <tr><td><span class="tag purple">USES_FUNCTION</span></td><td>VULN_TYPE → CODE_ELEMENT</td><td>buffer overflow → strcpy</td><td>What code construct is involved</td></tr>
+        <tr><td><span class="tag pink">THREATENS</span></td><td>ATTACK_VECTOR → SOFTWARE</td><td>Remote attacker → Apache</td><td>What is at risk</td></tr>
+        <tr><td><span class="tag blue">CAUSES</span></td><td>ATTACK_VECTOR → IMPACT</td><td>user input → code execution</td><td>What damage can occur</td></tr>
+        <tr><td><span class="tag green">MITIGATED_BY</span></td><td>CVE → REMEDIATION</td><td>CVE-2024-1234 → upgrade to 2.4.52</td><td>How to fix it</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ §7 CVE WALKTHROUGH ═══ -->
+<section id="example">
+  <p class="section-label">Worked example</p>
+  <h2 class="section-title">CVE advisory walkthrough</h2>
+  <p class="section-desc">
+    The input text below is processed through the SecurityFrontend. Entities are annotated with their extraction color: <span style="color:var(--red)">CVE</span>, <span style="color:var(--amber)">CWE</span>, <span style="color:var(--teal)">SOFTWARE</span>, <span style="color:var(--cyan)">VERSION</span>, <span style="color:var(--coral)">VULN_TYPE</span>, <span style="color:var(--purple)">CODE_ELEMENT</span>, <span style="color:var(--pink)">ATTACK_VECTOR</span>.
+  </p>
+
+  <div class="code-wrap" style="margin-bottom:24px">
+    <div class="code-header"><div class="code-dots"><i></i><i></i><i></i></div><span>CVE advisory input</span></div>
+    <div class="code-block"><span class="cve">CVE-2024-1234</span>: A <span class="vuln">buffer overflow</span> vulnerability (<span class="cwe">CWE-120</span>) has been discovered in <span class="soft">Apache HTTP Server</span> version <span class="ver">2.4.51</span>. The flaw exists in the mod_ssl module where <span class="atk">user-supplied input</span> is copied to a fixed-size buffer using <span class="code-el">strcpy</span> without bounds checking. Users should upgrade to version <span class="ver">2.4.52</span>.</div>
+  </div>
+
+  <p class="section-desc" style="margin-top:0"><strong>Pipeline trace:</strong></p>
+
+  <div class="pattern-grid" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="pattern-card cve" style="padding:14px 16px">
+      <h3 style="font-size:11px;margin-bottom:6px">Step 1 output (spaCy)</h3>
+      <ul class="examples" style="gap:3px">
+        <li style="font-size:10.5px">50+ TOKEN nodes</li>
+        <li style="font-size:10.5px">DEP edges (syntax tree)</li>
+        <li style="font-size:10.5px">NEXT_TOKEN/SENT/PARA edges</li>
+        <li style="font-size:10.5px">"Apache" → <span style="color:var(--red)">ORG</span> <span style="color:var(--dim);font-size:9px">(wrong!)</span></li>
+      </ul>
+    </div>
+    <div class="pattern-card" style="padding:14px 16px;border-color:rgba(248,113,113,.15)">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--red)"></div>
+      <h3 style="font-size:11px;margin-bottom:6px;color:var(--red)">Step 2 output (security)</h3>
+      <ul class="examples" style="gap:3px">
+        <li style="font-size:10.5px"><span style="color:var(--red)">CVE-2024-1234</span> <span style="color:var(--dim);font-size:9px">conf: 1.0</span></li>
+        <li style="font-size:10.5px"><span style="color:var(--amber)">CWE-120</span> <span style="color:var(--dim);font-size:9px">conf: 1.0</span></li>
+        <li style="font-size:10.5px"><span style="color:var(--teal)">Apache HTTP Server</span> <span style="color:var(--dim);font-size:9px">conf: 0.9</span></li>
+        <li style="font-size:10.5px"><span style="color:var(--cyan)">2.4.51</span>, <span style="color:var(--cyan)">2.4.52</span> <span style="color:var(--dim);font-size:9px">conf: 1.0</span></li>
+        <li style="font-size:10.5px"><span style="color:var(--coral)">buffer overflow</span> <span style="color:var(--dim);font-size:9px">conf: 0.9</span></li>
+        <li style="font-size:10.5px"><span style="color:var(--purple)">strcpy</span> <span style="color:var(--dim);font-size:9px">conf: 1.0</span></li>
+        <li style="font-size:10.5px"><span style="color:var(--pink)">user-supplied input</span> <span style="color:var(--dim);font-size:9px">conf: 0.85</span></li>
+        <li style="font-size:10.5px"><span style="color:var(--green)">upgrade to 2.4.52</span> <span style="color:var(--dim);font-size:9px">conf: 0.8</span></li>
+      </ul>
+    </div>
+    <div class="pattern-card" style="padding:14px 16px;border-color:rgba(251,191,36,.15)">
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--amber)"></div>
+      <h3 style="font-size:11px;margin-bottom:6px;color:var(--amber)">Step 3 output (edges)</h3>
+      <ul class="examples" style="gap:3px">
+        <li style="font-size:10.5px">CVE → Apache <span style="color:var(--red);font-size:9px;font-weight:600">AFFECTS</span></li>
+        <li style="font-size:10.5px">CVE → CWE-120 <span style="color:var(--amber);font-size:9px;font-weight:600">CLASSIFIED_AS</span></li>
+        <li style="font-size:10.5px">Apache → 2.4.51 <span style="color:var(--cyan);font-size:9px;font-weight:600">HAS_VERSION</span></li>
+        <li style="font-size:10.5px">buf overflow → strcpy <span style="color:var(--purple);font-size:9px;font-weight:600">USES_FUNCTION</span></li>
+        <li style="font-size:10.5px">user input → Apache <span style="color:var(--pink);font-size:9px;font-weight:600">THREATENS</span></li>
+        <li style="font-size:10.5px">CVE → upgrade <span style="color:var(--green);font-size:9px;font-weight:600">MITIGATED_BY</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §8 INTERACTIVE GRAPH ═══ -->
+<section id="graph">
+  <p class="section-label">Visualization</p>
+  <h2 class="section-title">Interactive security TPG</h2>
+  <p class="section-desc">
+    The complete security entity-relationship graph extracted from the CVE advisory. Toggle each edge type to explore how the SecurityFrontend connects vulnerability components.
+  </p>
+
+  <div class="graph-controls">
+    <button class="toggle-btn" data-e="affects" onclick="toggle('affects',this)"><span class="dot"></span>AFFECTS</button>
+    <button class="toggle-btn" data-e="classif" onclick="toggle('classif',this)"><span class="dot"></span>CLASSIFIED_AS</button>
+    <button class="toggle-btn" data-e="hasver" onclick="toggle('hasver',this)"><span class="dot"></span>HAS_VERSION</button>
+    <button class="toggle-btn" data-e="usesfn" onclick="toggle('usesfn',this)"><span class="dot"></span>USES_FUNCTION</button>
+    <button class="toggle-btn" data-e="threat" onclick="toggle('threat',this)"><span class="dot"></span>THREATENS</button>
+    <button class="toggle-btn" data-e="mitig" onclick="toggle('mitig',this)"><span class="dot"></span>MITIGATED_BY</button>
+  </div>
+  <div class="hint">Toggle each security edge type</div>
+
+  <div class="graph-wrap">
+  <svg viewBox="0 0 740 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-amb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-cyn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-prp" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-pnk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#f472b6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-grn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#6ee7b7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <filter id="gl-red"><feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#f87171" flood-opacity=".3"/></filter>
+    <filter id="gl-amb"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#fbbf24" flood-opacity=".2"/></filter>
+    <filter id="gl-teal"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#34d399" flood-opacity=".2"/></filter>
+    <filter id="gl-cyn"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#22d3ee" flood-opacity=".2"/></filter>
+    <filter id="gl-cor"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#f0845a" flood-opacity=".2"/></filter>
+    <filter id="gl-prp"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#a78bfa" flood-opacity=".2"/></filter>
+    <filter id="gl-pnk"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#f472b6" flood-opacity=".2"/></filter>
+    <filter id="gl-grn"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#6ee7b7" flood-opacity=".2"/></filter>
+  </defs>
+
+  <!-- ═══ AFFECTS: CVE → SOFTWARE ═══ -->
+  <g id="affects" class="edge-group">
+    <path d="M370 72 C 370 120, 170 120, 170 148" fill="none" stroke="#f87171" stroke-width="2" opacity=".7" marker-end="url(#a-red)"/>
+    <text x="240" y="105" fill="#f87171" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".8">AFFECTS</text>
+  </g>
+
+  <!-- ═══ CLASSIFIED_AS: CVE → CWE ═══ -->
+  <g id="classif" class="edge-group">
+    <path d="M370 72 C 370 120, 560 120, 560 148" fill="none" stroke="#fbbf24" stroke-width="2" opacity=".7" marker-end="url(#a-amb)"/>
+    <text x="460" y="105" fill="#fbbf24" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".8">CLASSIFIED_AS</text>
+  </g>
+
+  <!-- ═══ HAS_VERSION: SOFTWARE → VERSION ═══ -->
+  <g id="hasver" class="edge-group">
+    <path d="M120 204 L120 268" fill="none" stroke="#22d3ee" stroke-width="1.8" opacity=".65" marker-end="url(#a-cyn)"/>
+    <path d="M220 204 L280 268" fill="none" stroke="#22d3ee" stroke-width="1.8" opacity=".65" marker-end="url(#a-cyn)"/>
+    <text x="80" y="244" fill="#22d3ee" font-family="JetBrains Mono" font-size="8" font-weight="500" opacity=".7">HAS_VER</text>
+    <text x="256" y="244" fill="#22d3ee" font-family="JetBrains Mono" font-size="8" font-weight="500" opacity=".7">HAS_VER</text>
+  </g>
+
+  <!-- ═══ USES_FUNCTION: VULN_TYPE → CODE_ELEMENT ═══ -->
+  <g id="usesfn" class="edge-group">
+    <path d="M170 374 C 170 410, 220 410, 260 404" fill="none" stroke="#a78bfa" stroke-width="1.8" opacity=".65" marker-end="url(#a-prp)"/>
+    <text x="195" y="418" fill="#a78bfa" font-family="JetBrains Mono" font-size="8" font-weight="600" opacity=".7">USES_FUNCTION</text>
+  </g>
+
+  <!-- ═══ THREATENS: ATTACK_VECTOR → SOFTWARE ═══ -->
+  <g id="threat" class="edge-group">
+    <path d="M505 350 C 440 300, 280 240, 230 204" fill="none" stroke="#f472b6" stroke-width="1.5" stroke-dasharray="6 3" opacity=".55" marker-end="url(#a-pnk)"/>
+    <text x="385" y="270" fill="#f472b6" font-family="JetBrains Mono" font-size="8" font-weight="500" opacity=".7">THREATENS</text>
+  </g>
+
+  <!-- ═══ MITIGATED_BY: CVE → REMEDIATION ═══ -->
+  <g id="mitig" class="edge-group">
+    <path d="M445 50 C 640 50, 680 380, 580 438" fill="none" stroke="#6ee7b7" stroke-width="1.8" stroke-dasharray="7 4" opacity=".55" marker-end="url(#a-grn)"/>
+    <text x="660" y="240" fill="#6ee7b7" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".7">MITIGATED_BY</text>
+  </g>
+
+  <!-- ═══════ NODES ═══════ -->
+
+  <!-- CVE (center top — hub) -->
+  <g class="node-box" filter="url(#gl-red)">
+    <rect x="296" y="20" width="148" height="52" rx="12" fill="#201212" stroke="#f87171" stroke-width="1.5"/>
+    <text x="370" y="40" text-anchor="middle" dominant-baseline="central" fill="#f87171" font-family="JetBrains Mono" font-size="14" font-weight="700">CVE-2024-1234</text>
+    <text x="370" y="58" text-anchor="middle" dominant-baseline="central" fill="#8a2020" font-family="JetBrains Mono" font-size="9">CVE_ID · conf:1.0</text>
+  </g>
+
+  <!-- SOFTWARE (left) -->
+  <g class="node-box" filter="url(#gl-teal)">
+    <rect x="50" y="148" width="200" height="56" rx="12" fill="#0c2318" stroke="#34d399" stroke-width="1.2"/>
+    <text x="150" y="168" text-anchor="middle" dominant-baseline="central" fill="#34d399" font-family="JetBrains Mono" font-size="13" font-weight="700">Apache HTTP Server</text>
+    <text x="150" y="188" text-anchor="middle" dominant-baseline="central" fill="#1a8a5e" font-family="JetBrains Mono" font-size="9">SOFTWARE · conf:0.9</text>
+  </g>
+
+  <!-- CWE (right) -->
+  <g class="node-box" filter="url(#gl-amb)">
+    <rect x="490" y="148" width="130" height="52" rx="12" fill="#211a08" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="555" y="168" text-anchor="middle" dominant-baseline="central" fill="#fbbf24" font-family="JetBrains Mono" font-size="14" font-weight="700">CWE-120</text>
+    <text x="555" y="186" text-anchor="middle" dominant-baseline="central" fill="#a07818" font-family="JetBrains Mono" font-size="9">CWE_ID · conf:1.0</text>
+  </g>
+
+  <!-- VERSION 2.4.51 -->
+  <g class="node-box" filter="url(#gl-cyn)">
+    <rect x="50" y="268" width="110" height="44" rx="10" fill="#0a1e22" stroke="#22d3ee" stroke-width="1"/>
+    <text x="105" y="284" text-anchor="middle" dominant-baseline="central" fill="#22d3ee" font-family="JetBrains Mono" font-size="13" font-weight="600">2.4.51</text>
+    <text x="105" y="300" text-anchor="middle" dominant-baseline="central" fill="#148a9e" font-family="JetBrains Mono" font-size="9">VERSION</text>
+  </g>
+
+  <!-- VERSION 2.4.52 (fix) -->
+  <g class="node-box" filter="url(#gl-cyn)">
+    <rect x="230" y="268" width="110" height="44" rx="10" fill="#0a1e22" stroke="#22d3ee" stroke-width="1"/>
+    <text x="285" y="284" text-anchor="middle" dominant-baseline="central" fill="#22d3ee" font-family="JetBrains Mono" font-size="13" font-weight="600">2.4.52</text>
+    <text x="285" y="300" text-anchor="middle" dominant-baseline="central" fill="#148a9e" font-family="JetBrains Mono" font-size="9">VERSION (fix)</text>
+  </g>
+
+  <!-- VULN_TYPE: buffer overflow -->
+  <g class="node-box" filter="url(#gl-cor)">
+    <rect x="50" y="348" width="170" height="52" rx="12" fill="#2a1510" stroke="#f0845a" stroke-width="1.2"/>
+    <text x="135" y="368" text-anchor="middle" dominant-baseline="central" fill="#f0845a" font-family="JetBrains Mono" font-size="13" font-weight="700">buffer overflow</text>
+    <text x="135" y="386" text-anchor="middle" dominant-baseline="central" fill="#b05530" font-family="JetBrains Mono" font-size="9">VULN_TYPE · conf:0.9</text>
+  </g>
+
+  <!-- CODE_ELEMENT: strcpy -->
+  <g class="node-box" filter="url(#gl-prp)">
+    <rect x="260" y="378" width="110" height="48" rx="10" fill="#1e1640" stroke="#a78bfa" stroke-width="1"/>
+    <text x="315" y="396" text-anchor="middle" dominant-baseline="central" fill="#a78bfa" font-family="JetBrains Mono" font-size="14" font-weight="700">strcpy</text>
+    <text x="315" y="414" text-anchor="middle" dominant-baseline="central" fill="#6d5cc8" font-family="JetBrains Mono" font-size="9">CODE_ELEMENT</text>
+  </g>
+
+  <!-- ATTACK_VECTOR: user-supplied input -->
+  <g class="node-box" filter="url(#gl-pnk)">
+    <rect x="420" y="340" width="180" height="52" rx="12" fill="#2a1020" stroke="#f472b6" stroke-width="1"/>
+    <text x="510" y="360" text-anchor="middle" dominant-baseline="central" fill="#f472b6" font-family="JetBrains Mono" font-size="12" font-weight="600">user-supplied input</text>
+    <text x="510" y="378" text-anchor="middle" dominant-baseline="central" fill="#a04070" font-family="JetBrains Mono" font-size="9">ATTACK_VECTOR · conf:0.85</text>
+  </g>
+
+  <!-- REMEDIATION: upgrade to 2.4.52 -->
+  <g class="node-box" filter="url(#gl-grn)">
+    <rect x="440" y="438" width="190" height="52" rx="12" fill="#0e201a" stroke="#6ee7b7" stroke-width="1"/>
+    <text x="535" y="458" text-anchor="middle" dominant-baseline="central" fill="#6ee7b7" font-family="JetBrains Mono" font-size="12" font-weight="600">upgrade to 2.4.52</text>
+    <text x="535" y="476" text-anchor="middle" dominant-baseline="central" fill="#2a8060" font-family="JetBrains Mono" font-size="9">REMEDIATION · conf:0.8</text>
+  </g>
+
+  <!-- Legend -->
+  <g font-family="JetBrains Mono" font-size="9">
+    <rect x="40" y="505" width="7" height="7" rx="2" fill="#f87171"/><text x="52" y="512" fill="#8a8faa">AFFECTS</text>
+    <rect x="120" y="505" width="7" height="7" rx="2" fill="#fbbf24"/><text x="132" y="512" fill="#8a8faa">CLASSIFIED_AS</text>
+    <rect x="242" y="505" width="7" height="7" rx="2" fill="#22d3ee"/><text x="254" y="512" fill="#8a8faa">HAS_VERSION</text>
+    <rect x="352" y="505" width="7" height="7" rx="2" fill="#a78bfa"/><text x="364" y="512" fill="#8a8faa">USES_FUNCTION</text>
+    <rect x="472" y="505" width="7" height="7" rx="2" fill="#f472b6"/><text x="484" y="512" fill="#8a8faa">THREATENS</text>
+    <rect x="565" y="505" width="7" height="7" rx="2" fill="#6ee7b7"/><text x="577" y="512" fill="#8a8faa">MITIGATED_BY</text>
+  </g>
+  </svg>
+  </div>
+</section>
+
+</div>
+
+<div class="footer">SemVul / TPG — Security-Aware Text Property Graph · Level 2 · Università di Cagliari · DIEE</div>
+
+<script>
+function toggle(id,btn){
+  document.getElementById(id).classList.toggle('hidden');
+  btn.classList.toggle('off');
+}
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('.nav a');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const link=document.querySelector('.nav a[href="#'+e.target.id+'"]');
+      if(link)link.classList.add('active');
+    }
+  });
+},{rootMargin:'-35% 0px -55% 0px'});
+sections.forEach(s=>obs.observe(s));
+document.querySelectorAll('.node-box').forEach((n,i)=>{
+  n.style.animation='fadeUp .5s '+(0.15+i*0.04)+'s ease both';
+});
+</script>
+</body>
+</html>

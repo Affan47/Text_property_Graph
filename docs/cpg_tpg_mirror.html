@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPG → TPG: Mirroring Code Graphs for Text</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0c12;--bg2:#10131c;--bg3:#161a26;--surface:#1c2030;--surface2:#222638;
+  --text:#e4e6f0;--muted:#8a8faa;--dim:#4e5370;
+  --purple:#a78bfa;--purple-fill:#1e1640;--purple-stroke:#6d5cc8;
+  --coral:#f0845a;--coral-fill:#2a1510;--coral-stroke:#b05530;
+  --teal:#34d399;--teal-fill:#0c2318;--teal-stroke:#1a8a5e;
+  --blue:#60a5fa;--blue-fill:#101c32;--blue-stroke:#3070b0;
+  --amber:#fbbf24;--amber-fill:#211a08;--amber-stroke:#a07818;
+  --green:#6ee7b7;--green-fill:#0e201a;--green-stroke:#2a8060;
+  --pink:#f472b6;--pink-fill:#2a1020;--pink-stroke:#a04070;
+  --red:#f87171;--red-fill:#201212;--red-stroke:#8a2020;
+  --cyan:#22d3ee;--cyan-fill:#0a1e22;--cyan-stroke:#148a9e;
+  --radius:10px;--radius-lg:14px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.7}
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,12,18,.88);backdrop-filter:blur(16px);border-bottom:1px solid rgba(78,83,112,.2);padding:0 24px}
+.nav-inner{max-width:1060px;margin:0 auto;display:flex;gap:14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav a{color:var(--muted);font:500 10px 'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase;text-decoration:none;padding:13px 0;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
+.nav a:hover,.nav a.active{color:var(--text);border-bottom-color:var(--purple)}
+.container{max-width:1060px;margin:0 auto;padding:0 28px}
+section{padding:56px 0 0}
+.hero{padding:64px 0 0;text-align:center;animation:fadeUp .7s ease both}
+.hero h1{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;letter-spacing:-.8px}
+.hero h1 .cpg{background:linear-gradient(135deg,var(--purple),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero h1 .arrow{color:var(--dim);margin:0 4px}
+.hero h1 .tpg{background:linear-gradient(135deg,var(--teal),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero .subtitle{color:var(--muted);font-size:15px;margin-top:8px;max-width:620px;margin-left:auto;margin-right:auto}
+.badges{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;background:var(--surface);font:500 11px 'JetBrains Mono',monospace;letter-spacing:.4px}
+.badge.cpg-b{border:1px solid rgba(167,139,250,.25);color:var(--purple)}
+.badge.tpg-b{border:1px solid rgba(52,211,153,.25);color:var(--teal)}
+.badge .dot{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite}
+.badge.cpg-b .dot{background:var(--purple)}
+.badge.tpg-b .dot{background:var(--teal)}
+.section-label{font:700 10px 'JetBrains Mono',monospace;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.section-title{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;margin-bottom:6px}
+.section-desc{color:var(--muted);font-size:14px;max-width:720px;margin-bottom:28px;line-height:1.7}
+.section-desc strong{color:var(--text)}
+.code-wrap{animation:fadeUp .7s .1s ease both}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--surface);border:1px solid var(--dim);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.code-header span{font:600 10px 'JetBrains Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim)}
+.code-dots{display:flex;gap:6px}
+.code-dots i{width:10px;height:10px;border-radius:50%;opacity:.5}
+.code-dots i:nth-child(1){background:#f87171}.code-dots i:nth-child(2){background:#fbbf24}.code-dots i:nth-child(3){background:#34d399}
+.code-block{background:var(--bg2);border:1px solid var(--dim);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:20px 24px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2;overflow-x:auto}
+.code-block .kw{color:var(--purple)}.code-block .fn{color:var(--coral)}.code-block .tp{color:var(--teal)}
+.code-block .str{color:var(--green)}.code-block .cm{color:var(--dim);font-style:italic}.code-block .num{color:var(--amber)}
+.code-block .ln{color:var(--dim);user-select:none;display:inline-block;width:20px;text-align:right;margin-right:20px;font-size:12px}
+.code-block .ent{color:var(--teal);text-decoration:underline;text-decoration-color:rgba(52,211,153,.3);text-underline-offset:3px}
+.code-block .verb{color:var(--coral);font-weight:600}
+.code-block .pron{color:var(--pink);font-style:italic}
+.code-block .disc{color:var(--amber);font-weight:600}
+.table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid rgba(78,83,112,.25);background:var(--bg2);animation:fadeUp .6s ease both}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead{background:var(--surface)}
+thead th{font:600 9.5px 'JetBrains Mono',monospace;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);padding:12px 14px;text-align:left;border-bottom:1px solid rgba(78,83,112,.3)}
+tbody td{padding:10px 14px;border-bottom:1px solid rgba(78,83,112,.1);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.015)}
+td code{font-family:'JetBrains Mono',monospace;font-size:11.5px;padding:2px 6px;border-radius:4px;background:var(--surface);white-space:nowrap}
+td .tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:5px;font:600 10px 'JetBrains Mono',monospace;letter-spacing:.3px;border:1px solid}
+td .tag.cpg-tag{color:var(--purple);border-color:var(--purple-stroke);background:var(--purple-fill)}
+td .tag.tpg-tag{color:var(--teal);border-color:var(--teal-stroke);background:var(--teal-fill)}
+td .tag.cfg-tag{color:var(--coral);border-color:var(--coral-stroke);background:var(--coral-fill)}
+td .tag.dfg-tag{color:var(--green);border-color:var(--green-stroke);background:var(--green-fill)}
+td .tag.cdg-tag{color:var(--blue);border-color:var(--blue-stroke);background:var(--blue-fill)}
+td .tag.amb-tag{color:var(--amber);border-color:var(--amber-stroke);background:var(--amber-fill)}
+td .tag.pnk-tag{color:var(--pink);border-color:var(--pink-stroke);background:var(--pink-fill)}
+td .line-ref{color:var(--dim);font-size:10px;font-style:italic}
+thead th.cpg-col{border-bottom:2px solid var(--purple-stroke)}
+thead th.tpg-col{border-bottom:2px solid var(--teal-stroke)}
+thead th.map-col{border-bottom:2px solid var(--dim)}
+thead th.dep-col{border-bottom:2px solid var(--purple-stroke)}
+.dual-code{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+@media(max-width:750px){.dual-code{grid-template-columns:1fr}}
+.analogy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:28px}
+.analogy-card{background:var(--bg2);border:1px solid rgba(78,83,112,.2);border-radius:var(--radius-lg);padding:18px 20px;position:relative;overflow:hidden}
+.analogy-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.analogy-card.ast-card::before{background:linear-gradient(90deg,var(--purple),var(--teal))}
+.analogy-card.cfg-card::before{background:var(--coral)}
+.analogy-card.dfg-card::before{background:var(--green)}
+.analogy-card.cdg-card::before{background:var(--blue)}
+.analogy-card h3{font:700 13px 'JetBrains Mono',monospace;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.analogy-card h3 .dim{color:var(--dim);font-weight:400}
+.analogy-card .row{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:13px}
+.analogy-card .row .lbl{color:var(--muted);min-width:45px;font-size:11px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.5px}
+.analogy-card .row .val{font-family:'JetBrains Mono',monospace;font-size:12px}
+.analogy-card .row .val.cpg-v{color:var(--purple)}
+.analogy-card .row .val.tpg-v{color:var(--teal)}
+.pipeline-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:var(--radius-lg);overflow:hidden;border:1px solid rgba(78,83,112,.25);margin-bottom:28px}
+@media(max-width:700px){.pipeline-grid{grid-template-columns:1fr}}
+.pipeline-col{padding:24px 22px}
+.pipeline-col.cpg-col-bg{background:rgba(167,139,250,.04);border-right:1px solid rgba(78,83,112,.2)}
+.pipeline-col.tpg-col-bg{background:rgba(52,211,153,.04)}
+.pipeline-col h3{font:700 13px 'JetBrains Mono',monospace;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.pipeline-col.cpg-col-bg h3{color:var(--purple)}
+.pipeline-col.tpg-col-bg h3{color:var(--teal)}
+.pipeline-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;position:relative}
+.pipeline-step::before{content:'';position:absolute;left:11px;top:22px;bottom:-12px;width:1px}
+.pipeline-step:last-child::before{display:none}
+.cpg-col-bg .pipeline-step::before{background:rgba(167,139,250,.2)}
+.tpg-col-bg .pipeline-step::before{background:rgba(52,211,153,.2)}
+.step-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 10px 'JetBrains Mono',monospace;flex-shrink:0;position:relative;z-index:1}
+.cpg-col-bg .step-dot{background:var(--purple-fill);border:1.5px solid var(--purple-stroke);color:var(--purple)}
+.tpg-col-bg .step-dot{background:var(--teal-fill);border:1.5px solid var(--teal-stroke);color:var(--teal)}
+.step-content{flex:1;min-width:0}
+.step-content .step-title{font:600 12px 'JetBrains Mono',monospace;margin-bottom:2px}
+.cpg-col-bg .step-title{color:var(--purple)}
+.tpg-col-bg .step-title{color:var(--teal)}
+.step-content .step-desc{color:var(--muted);font-size:12px;line-height:1.5}
+.step-content .step-output{font:400 11px 'JetBrains Mono',monospace;color:var(--dim);margin-top:3px}
+.vs-grid{display:grid;grid-template-columns:1fr 30px 1fr;gap:0;margin-bottom:28px;align-items:start}
+@media(max-width:700px){.vs-grid{grid-template-columns:1fr;gap:14px}.vs-arrow-c{display:none!important}}
+.vs-arrow-c{display:flex;align-items:center;justify-content:center;font:700 16px 'JetBrains Mono',monospace;color:var(--dim);padding-top:36px}
+.vs-card{background:var(--bg2);border:1px solid rgba(78,83,112,.2);border-radius:var(--radius-lg);padding:18px 20px;position:relative;overflow:hidden}
+.vs-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.vs-card.cpg-side::before{background:var(--purple)}
+.vs-card.tpg-side::before{background:var(--teal)}
+.vs-card h4{font:700 12px 'JetBrains Mono',monospace;margin-bottom:10px}
+.vs-card.cpg-side h4{color:var(--purple)}
+.vs-card.tpg-side h4{color:var(--teal)}
+.vs-row{display:flex;align-items:flex-start;gap:8px;margin:5px 0;font:400 12px 'JetBrains Mono',monospace}
+.vs-row .vs-lbl{font-weight:600;min-width:60px;flex-shrink:0;font-size:11px}
+.vs-row .vs-val{color:var(--muted);font-size:11.5px}
+.dep-cat{display:flex;align-items:center;gap:8px;margin:20px 0 10px;font:700 11px 'JetBrains Mono',monospace;letter-spacing:1.5px;text-transform:uppercase}
+.dep-cat-dot{width:8px;height:8px;border-radius:50%}
+/* GRAPH CONTROLS */
+.graph-controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:8px}
+.toggle-btn{display:flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;border:1.5px solid;cursor:pointer;font:600 10px 'JetBrains Mono',monospace;letter-spacing:.5px;transition:all .3s;user-select:none;background:transparent}
+.toggle-btn:hover{opacity:.85}
+.toggle-btn .dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 6px currentColor;transition:all .3s}
+.toggle-btn.off{opacity:.25;filter:grayscale(.7)}
+.toggle-btn.off .dot{box-shadow:none;opacity:.35}
+.toggle-btn[data-e="dep"]{border-color:var(--purple);color:var(--purple)}
+.toggle-btn[data-e="seq"]{border-color:var(--coral);color:var(--coral)}
+.toggle-btn[data-e="coref"]{border-color:var(--teal);color:var(--teal)}
+.toggle-btn[data-e="rst"]{border-color:var(--blue);color:var(--blue)}
+.toggle-btn[data-e="entrel"]{border-color:var(--amber);color:var(--amber)}
+/* DEP TREE FILTER BUTTONS */
+.toggle-btn[data-e="subj"]{border-color:var(--coral);color:var(--coral)}
+.toggle-btn[data-e="obj"]{border-color:var(--teal);color:var(--teal)}
+.toggle-btn[data-e="mod"]{border-color:var(--purple);color:var(--purple)}
+.toggle-btn[data-e="comp"]{border-color:var(--amber);color:var(--amber)}
+.toggle-btn[data-e="clause"]{border-color:var(--blue);color:var(--blue)}
+.toggle-btn[data-e="func"]{border-color:var(--green);color:var(--green)}
+.hint{font-size:11px;color:var(--dim);text-align:center;margin-bottom:20px}
+.graph-wrap{animation:fadeUp .7s ease both}
+.graph-wrap svg{width:100%;height:auto}
+.node-box{cursor:pointer;transition:filter .2s}.node-box:hover{filter:brightness(1.3)}
+.edge-group{transition:opacity .4s}.edge-group.hidden{opacity:0;pointer-events:none}
+/* ANNOTATION BOX */
+.annot-box{background:var(--surface);border:1px solid rgba(78,83,112,.25);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:20px;border-left:3px solid}
+.annot-box p{margin:0}
+.annot-box .annot-title{font:600 13px 'JetBrains Mono',monospace;margin-bottom:6px}
+.annot-box .annot-body{color:var(--muted);font-size:13px;line-height:1.7}
+.footer{text-align:center;padding:48px 0 36px;color:var(--dim);font:400 11px 'JetBrains Mono',monospace;letter-spacing:.8px;border-top:1px solid rgba(78,83,112,.15);margin-top:48px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+@media(max-width:600px){
+  .hero h1{font-size:22px}
+  .container{padding:0 16px}
+  section{padding:40px 0 0}
+  .code-block{font-size:11px;padding:14px 14px}
+  table{font-size:11px}
+  thead th,tbody td{padding:8px 10px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="nav-inner">
+  <a href="#analogy" class="active">Analogy</a>
+  <a href="#pipeline">Pipeline</a>
+  <a href="#nodes">Nodes</a>
+  <a href="#edges">Edges</a>
+  <a href="#dep-tree">DEP tree graph</a>
+  <a href="#dep-arc">Arc diagram</a>
+  <a href="#dep-labels">DEP reference</a>
+  <a href="#example">Medical text</a>
+  <a href="#tpg-graph">TPG graph</a>
+</div></nav>
+
+<div class="container">
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <h1><span class="cpg">CPG</span><span class="arrow"> → </span><span class="tpg">TPG</span></h1>
+  <p class="subtitle">Text has the same four structural dimensions as code. The TPG mirrors Joern's CPG architecture to represent natural language as a multi-layered graph.</p>
+  <div class="badges">
+    <div class="badge cpg-b"><span class="dot"></span>Code Property Graph · Joern</div>
+    <div class="badge tpg-b"><span class="dot"></span>Text Property Graph · spaCy + NLP</div>
+  </div>
+</div>
+
+<!-- ═══ §1 ANALOGY ═══ -->
+<section id="analogy">
+  <p class="section-label">The big idea</p>
+  <h2 class="section-title">Four dimensions, same structure</h2>
+  <p class="section-desc">A CPG encodes code across four layers: <strong>syntax tree</strong> (AST), <strong>execution order</strong> (CFG), <strong>data flow</strong> (DFG), and <strong>control dependence</strong> (CDG). Natural language text has exact analogs for each.</p>
+  <div class="analogy-grid">
+    <div class="analogy-card ast-card"><h3 style="color:var(--purple)">Syntactic structure <span class="dim">— layer 1</span></h3><div class="row"><span class="lbl">Code</span><span class="val cpg-v">AST — parse tree (parent → child)</span></div><div class="row"><span class="lbl">Text</span><span class="val tpg-v">DEP — dependency tree (head → dependent)</span></div><div class="row"><span class="lbl">Why</span><span class="val" style="color:var(--muted)">Both decompose structure into typed parent-child relationships</span></div></div>
+    <div class="analogy-card cfg-card"><h3 style="color:var(--coral)">Sequential flow <span class="dim">— layer 2</span></h3><div class="row"><span class="lbl">Code</span><span class="val cpg-v">CFG — statement execution order</span></div><div class="row"><span class="lbl">Text</span><span class="val tpg-v">NEXT_TOKEN / NEXT_SENT / NEXT_PARA</span></div><div class="row"><span class="lbl">Why</span><span class="val" style="color:var(--muted)">Both define temporal/sequential flow through the content</span></div></div>
+    <div class="analogy-card dfg-card"><h3 style="color:var(--green)">Data / entity flow <span class="dim">— layer 3</span></h3><div class="row"><span class="lbl">Code</span><span class="val cpg-v">REACHING_DEF — variable propagation</span></div><div class="row"><span class="lbl">Text</span><span class="val tpg-v">COREF — entity coreference chains</span></div><div class="row"><span class="lbl">Why</span><span class="val" style="color:var(--muted)">Both track "this thing" from definition to later uses</span></div></div>
+    <div class="analogy-card cdg-card"><h3 style="color:var(--blue)">Discourse / control <span class="dim">— layer 4</span></h3><div class="row"><span class="lbl">Code</span><span class="val cpg-v">CDG — control dependence</span></div><div class="row"><span class="lbl">Text</span><span class="val tpg-v">RST_RELATION — discourse dependence</span></div><div class="row"><span class="lbl">Why</span><span class="val" style="color:var(--muted)">Both capture "because of X, then Y" relationships</span></div></div>
+  </div>
+  <div class="table-wrap"><table><thead><tr><th class="cpg-col">Code concept</th><th class="tpg-col">Text concept</th><th class="map-col">Why it's the same</th></tr></thead><tbody>
+    <tr><td><code>function</code> — scope/container</td><td><code>document</code> — scope/container</td><td>Both are the root entry point</td></tr>
+    <tr><td><code>block { }</code> — groups statements</td><td><code>paragraph</code> — groups sentences</td><td>Both are structural containers</td></tr>
+    <tr><td><code>statement</code> — one instruction</td><td><code>sentence</code> — one assertion</td><td>Both are the unit of meaning</td></tr>
+    <tr><td><code>function call</code> — performs action</td><td><code>verb / predicate</code> — performs action</td><td>Both represent "doing something"</td></tr>
+    <tr><td><code>variable</code> — stores a value</td><td><code>entity</code> — carries identity</td><td>Both are named references</td></tr>
+    <tr><td><code>literal</code> — atomic value</td><td><code>token / word</code> — atomic unit</td><td>Both are indivisible elements</td></tr>
+    <tr><td><code>parameter</code> — role-bearing input</td><td><code>argument</code> — predicate argument</td><td>Both are role-bearing inputs</td></tr>
+    <tr><td>Execution order (CFG)</td><td>Reading order (sequential)</td><td>Both define temporal flow</td></tr>
+    <tr><td>Variable propagation (DFG)</td><td>Entity coreference (COREF)</td><td>Both track "this thing" across scope</td></tr>
+    <tr><td>Control dependence (CDG)</td><td>Discourse dependence (RST)</td><td>Both capture conditional/causal structure</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- ═══ §2 PIPELINE ═══ -->
+<section id="pipeline">
+  <p class="section-label">Architecture</p>
+  <h2 class="section-title">Pipeline comparison: Joern vs TPG</h2>
+  <p class="section-desc">Both systems follow the same multi-pass architecture. The TPG produces <strong>identical GraphSON JSON and PyG output formats</strong> as Joern.</p>
+  <div class="pipeline-grid">
+    <div class="pipeline-col cpg-col-bg">
+      <h3><span style="background:var(--purple);width:8px;height:8px;border-radius:50%;display:inline-block"></span> Joern (Code → CPG)</h3>
+      <div class="pipeline-step"><div class="step-dot">1</div><div class="step-content"><div class="step-title">Language frontend</div><div class="step-desc">CDT parser (C/C++), Soot (Java)</div><div class="step-output">→ METHOD, CALL, IDENTIFIER nodes + AST edges</div></div></div>
+      <div class="pipeline-step"><div class="step-dot">2</div><div class="step-content"><div class="step-title">CFG pass</div><div class="step-desc">Basic block analysis</div><div class="step-output">→ CFG edges (execution order)</div></div></div>
+      <div class="pipeline-step"><div class="step-dot">3</div><div class="step-content"><div class="step-title">DFG pass</div><div class="step-desc">Iterative data-flow analysis</div><div class="step-output">→ REACHING_DEF edges</div></div></div>
+      <div class="pipeline-step"><div class="step-dot">4</div><div class="step-content"><div class="step-title">CDG / PDG pass</div><div class="step-desc">Dominance frontier computation</div><div class="step-output">→ CDG edges</div></div></div>
+      <div class="pipeline-step"><div class="step-dot">5</div><div class="step-content"><div class="step-title">Export</div><div class="step-desc">GraphSON JSON / PyG Data</div><div class="step-output">→ data.x, data.edge_index, data.edge_type</div></div></div>
+    </div>
+    <div class="pipeline-col tpg-col-bg">
+      <h3><span style="background:var(--teal);width:8px;height:8px;border-radius:50%;display:inline-block"></span> TPG (Text → TPG)</h3>
+      <div class="pipeline-step"><div class="step-dot">1</div><div class="step-content"><div class="step-title">spaCy frontend</div><div class="step-desc">Tokenizer, POS, dependency parser, NER</div><div class="step-output">→ DOCUMENT, SENTENCE, TOKEN, ENTITY + DEP + NEXT_*</div></div></div>
+      <div class="pipeline-step"><div class="step-dot">2</div><div class="step-content"><div class="step-title">Coreference pass (= DFG)</div><div class="step-desc">Pronoun → entity matching</div><div class="step-output">→ COREF edges (entity propagation)</div></div></div>
+      <div class="pipeline-step"><div class="step-dot">3</div><div class="step-content"><div class="step-title">Discourse pass (= CDG)</div><div class="step-desc">Discourse marker detection</div><div class="step-output">→ RST_RELATION + DISCOURSE edges</div></div></div>
+      <div class="pipeline-step"><div class="step-dot">4</div><div class="step-content"><div class="step-title">Entity relation pass</div><div class="step-desc">Co-occurrence + predicate linking</div><div class="step-output">→ ENTITY_REL edges</div></div></div>
+      <div class="pipeline-step"><div class="step-dot">5</div><div class="step-content"><div class="step-title">Export (identical format!)</div><div class="step-desc">GraphSON JSON / PyG Data</div><div class="step-output">→ data.x, data.edge_index, data.edge_type</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §3 NODE MAPPING ═══ -->
+<section id="nodes">
+  <p class="section-label">Node types</p>
+  <h2 class="section-title">Node mapping: CPG → TPG</h2>
+  <p class="section-desc">Every Joern CPG node type has a direct analog in the TPG.</p>
+  <div class="table-wrap"><table><thead><tr><th>#</th><th class="cpg-col">Joern CPG</th><th class="tpg-col">TPG</th><th class="map-col">Role</th><th>Code example</th><th>Text example</th></tr></thead><tbody>
+    <tr><td>0</td><td><span class="tag cpg-tag">METHOD</span></td><td><span class="tag tpg-tag">DOCUMENT</span></td><td>Root scope</td><td><code>void example()</code></td><td>The entire document</td></tr>
+    <tr><td>1</td><td><span class="tag cpg-tag">BLOCK</span></td><td><span class="tag tpg-tag">PARAGRAPH</span></td><td>Container</td><td><code>{ ... }</code></td><td>A paragraph</td></tr>
+    <tr><td>2</td><td><span class="tag cpg-tag">METHOD_BLOCK</span></td><td><span class="tag tpg-tag">SENTENCE</span></td><td>Execution unit</td><td><code>strcpy(buf,in);</code></td><td>"He was prescribed aspirin."</td></tr>
+    <tr><td>3</td><td><span class="tag cpg-tag">LITERAL</span></td><td><span class="tag tpg-tag">TOKEN</span></td><td>Atomic value</td><td><code>"%s\n"</code></td><td>"The", "patient"</td></tr>
+    <tr><td>4</td><td><span class="tag cpg-tag">IDENTIFIER</span></td><td><span class="tag tpg-tag">ENTITY</span></td><td>Named ref</td><td><code>buffer</code></td><td>"John Smith"</td></tr>
+    <tr><td>5</td><td><span class="tag cpg-tag">CALL</span></td><td><span class="tag tpg-tag">PREDICATE</span></td><td>Action</td><td><code>strcpy(...)</code></td><td>"admitted"</td></tr>
+    <tr><td>6</td><td><span class="tag cpg-tag">PARAM</span></td><td><span class="tag tpg-tag">ARGUMENT</span></td><td>Role input</td><td><code>char *input</code></td><td>"Smith" (ARG1)</td></tr>
+    <tr><td>7</td><td><span class="tag cpg-tag">CONTROL_STRUCTURE</span></td><td><span class="tag tpg-tag">CLAUSE</span></td><td>Branching</td><td><code>if(x>0)</code></td><td>"after taking..."</td></tr>
+    <tr><td>8</td><td><span class="tag cpg-tag">UNKNOWN</span></td><td><span class="tag tpg-tag">MENTION</span></td><td>Indirect ref</td><td>Unresolved var</td><td>"He", "his"</td></tr>
+    <tr><td>9</td><td><span class="tag cpg-tag">META_DATA</span></td><td><span class="tag tpg-tag">TOPIC</span></td><td>Metadata</td><td>File info</td><td>"patient" theme</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- ═══ §4 EDGE MAPPING ═══ -->
+<section id="edges">
+  <p class="section-label">Edge types</p>
+  <h2 class="section-title">Edge mapping: CPG → TPG</h2>
+  <p class="section-desc">The four CPG edge layers map directly to TPG edges.</p>
+  <div class="table-wrap"><table><thead><tr><th>#</th><th class="cpg-col">Joern CPG</th><th class="tpg-col">TPG</th><th class="map-col">What it captures</th><th>Code</th><th>Text</th></tr></thead><tbody>
+    <tr><td>0</td><td><span class="tag cpg-tag">AST</span></td><td><span class="tag tpg-tag">DEP</span></td><td>Syntax parent → child</td><td>METHOD → CALL</td><td>head → dependent</td></tr>
+    <tr><td>1</td><td><span class="tag cfg-tag">CFG</span></td><td><span class="tag cfg-tag">NEXT_TOKEN</span></td><td>Sequential (intra)</td><td>stmt1 → stmt2</td><td>"The" → "patient"</td></tr>
+    <tr><td>2</td><td><span class="tag cfg-tag">CFG</span></td><td><span class="tag cfg-tag">NEXT_SENT</span></td><td>Sequential (cross)</td><td>block1 → block2</td><td>sent1 → sent2</td></tr>
+    <tr><td>3</td><td><span class="tag dfg-tag">REACHING_DEF</span></td><td><span class="tag dfg-tag">COREF</span></td><td>Entity propagation</td><td>def(x) → use(x)</td><td>"John" → "He"</td></tr>
+    <tr><td>4</td><td><span class="tag cdg-tag">CDG</span></td><td><span class="tag cdg-tag">RST_RELATION</span></td><td>Discourse dependence</td><td>if → stmt</td><td>contrast, temporal</td></tr>
+    <tr><td>5</td><td><span class="tag amb-tag">CONTAINS</span></td><td><span class="tag amb-tag">CONTAINS</span></td><td>Containment</td><td>METHOD → BLOCK</td><td>DOC → PARA</td></tr>
+    <tr><td>6</td><td><span class="tag pnk-tag">CALL</span></td><td><span class="tag pnk-tag">ENTITY_REL</span></td><td>Cross-entity relation</td><td>caller → callee</td><td>"John" →admit→ "Hospital"</td></tr>
+  </tbody></table></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ═══ §5 INTERACTIVE DEPENDENCY TREE GRAPH — NEW! ═══ -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="dep-tree">
+  <p class="section-label">Deep dive — view 1</p>
+  <h2 class="section-title">Interactive dependency tree graph</h2>
+  <p class="section-desc">
+    Every <code>DEP</code> edge in the TPG carries a <strong>DEP_LABEL</strong> — a tag describing the syntactic role of the dependent word relative to its head. This is the text equivalent of <strong>AST child types</strong> in Joern. Toggle each category below to see how different syntactic roles are color-coded through the tree.
+  </p>
+
+  <div class="code-wrap" style="margin-bottom:20px">
+    <div class="code-header"><div class="code-dots"><i></i><i></i><i></i></div><span>Input sentence</span></div>
+    <div class="code-block" style="font-size:14px;line-height:1.8"><span class="cm">Sentence 1:</span> <span class="tp">The</span> <span class="fn">patient</span> <span class="ent">John Smith</span> was <span class="verb">admitted</span> to <span class="ent">City Hospital</span> on <span class="ent">Monday</span>.</div>
+  </div>
+
+  <div class="graph-controls">
+    <button class="toggle-btn" data-e="subj" onclick="dtoggle('subj',this)"><span class="dot"></span>Subjects</button>
+    <button class="toggle-btn" data-e="obj" onclick="dtoggle('obj',this)"><span class="dot"></span>Objects</button>
+    <button class="toggle-btn" data-e="mod" onclick="dtoggle('mod',this)"><span class="dot"></span>Modifiers</button>
+    <button class="toggle-btn" data-e="comp" onclick="dtoggle('comp',this)"><span class="dot"></span>Compounds</button>
+    <button class="toggle-btn" data-e="clause" onclick="dtoggle('clause',this)"><span class="dot"></span>Clausal</button>
+    <button class="toggle-btn" data-e="func" onclick="dtoggle('func',this)"><span class="dot"></span>Function words</button>
+  </div>
+  <div class="hint">Toggle each DEP category — edges dim when hidden, nodes stay visible</div>
+
+  <div class="graph-wrap">
+  <svg id="dep-tree-svg" viewBox="0 0 760 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="da-s" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#f0845a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="da-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="da-m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="da-c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="da-l" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="da-f" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#6ee7b7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <filter id="gp"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#f0845a" flood-opacity=".25"/></filter>
+    <filter id="gn"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#a78bfa" flood-opacity=".2"/></filter>
+  </defs>
+
+  <!-- ═══ EDGES BY CATEGORY ═══ -->
+
+  <!-- SUBJECTS (coral) — nsubjpass -->
+  <g id="subj" class="edge-group">
+    <path d="M510 210 L370 272" fill="none" stroke="#f0845a" stroke-width="2.2" opacity=".75" marker-end="url(#da-s)"/>
+    <text x="420" y="234" fill="#f0845a" font-family="JetBrains Mono" font-size="10" font-weight="700">nsubjpass</text>
+    <!-- annotation: positioned LEFT of Smith node with leader line -->
+    <line x1="310" y1="290" x2="250" y2="290" stroke="#f0845a" stroke-width=".5" stroke-dasharray="3 2" opacity=".5"/>
+    <rect x="108" y="280" width="140" height="20" rx="4" fill="#2a1510" stroke="#f0845a" stroke-width=".5" opacity=".85"/>
+    <text x="178" y="294" text-anchor="middle" fill="#f0845a" font-family="JetBrains Mono" font-size="9" opacity=".9">who was admitted?</text>
+  </g>
+
+  <!-- OBJECTS (teal) — pobj -->
+  <g id="obj" class="edge-group">
+    <path d="M505 350 L490 398" fill="none" stroke="#34d399" stroke-width="2" opacity=".7" marker-end="url(#da-o)"/>
+    <path d="M625 350 L630 398" fill="none" stroke="#34d399" stroke-width="2" opacity=".7" marker-end="url(#da-o)"/>
+    <text x="525" y="380" fill="#34d399" font-family="JetBrains Mono" font-size="9" font-weight="600">pobj</text>
+    <text x="648" y="380" fill="#34d399" font-family="JetBrains Mono" font-size="9" font-weight="600">pobj</text>
+    <!-- "where?" annotation: BELOW Hospital node with leader line -->
+    <line x1="484" y1="450" x2="484" y2="462" stroke="#34d399" stroke-width=".5" stroke-dasharray="3 2" opacity=".5"/>
+    <rect x="448" y="464" width="72" height="18" rx="3" fill="#0c2318" stroke="#34d399" stroke-width=".5" opacity=".8"/>
+    <text x="484" y="477" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9" opacity=".9">where?</text>
+    <!-- "when?" annotation: BELOW Monday node with leader line -->
+    <line x1="640" y1="450" x2="640" y2="462" stroke="#34d399" stroke-width=".5" stroke-dasharray="3 2" opacity=".5"/>
+    <rect x="608" y="464" width="64" height="18" rx="3" fill="#0c2318" stroke="#34d399" stroke-width=".5" opacity=".8"/>
+    <text x="640" y="477" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="9" opacity=".9">when?</text>
+  </g>
+
+  <!-- MODIFIERS (purple) — det, prep -->
+  <g id="mod" class="edge-group">
+    <!-- patient → The (det) -->
+    <path d="M340 96 L88 158" fill="none" stroke="#a78bfa" stroke-width="1.8" opacity=".65" marker-end="url(#da-m)"/>
+    <text x="180" y="116" fill="#a78bfa" font-family="JetBrains Mono" font-size="10" font-weight="600">det</text>
+    <!-- admitted → to (prep) -->
+    <path d="M520 210 L510 272" fill="none" stroke="#a78bfa" stroke-width="1.8" opacity=".65" marker-end="url(#da-m)"/>
+    <text x="530" y="246" fill="#a78bfa" font-family="JetBrains Mono" font-size="10" font-weight="600">prep</text>
+    <!-- admitted → on (prep) -->
+    <path d="M560 210 L620 272" fill="none" stroke="#a78bfa" stroke-width="1.8" opacity=".65" marker-end="url(#da-m)"/>
+    <text x="606" y="246" fill="#a78bfa" font-family="JetBrains Mono" font-size="10" font-weight="600">prep</text>
+    <!-- "which patient?" annotation: BELOW "The" node with leader line -->
+    <line x1="72" y1="200" x2="72" y2="212" stroke="#a78bfa" stroke-width=".5" stroke-dasharray="3 2" opacity=".5"/>
+    <rect x="10" y="214" width="124" height="18" rx="3" fill="#1e1640" stroke="#a78bfa" stroke-width=".5" opacity=".8"/>
+    <text x="72" y="227" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono" font-size="8" opacity=".9">which patient? The</text>
+  </g>
+
+  <!-- COMPOUNDS (amber) — compound, appos -->
+  <g id="comp" class="edge-group">
+    <!-- patient → John (compound) -->
+    <path d="M355 96 L208 158" fill="none" stroke="#fbbf24" stroke-width="1.8" opacity=".65" marker-end="url(#da-c)"/>
+    <text x="250" y="120" fill="#fbbf24" font-family="JetBrains Mono" font-size="10" font-weight="600">compound</text>
+    <!-- patient → Smith (appos) -->
+    <path d="M370 96 L318 158" fill="none" stroke="#fbbf24" stroke-width="1.8" opacity=".65" marker-end="url(#da-c)"/>
+    <text x="330" y="120" fill="#fbbf24" font-family="JetBrains Mono" font-size="10" font-weight="600">appos</text>
+    <!-- Hospital → City (compound) -->
+    <path d="M475 450 L475 498" fill="none" stroke="#fbbf24" stroke-width="1.8" opacity=".65" marker-end="url(#da-c)"/>
+    <text x="500" y="484" fill="#fbbf24" font-family="JetBrains Mono" font-size="9" font-weight="600">compound</text>
+  </g>
+
+  <!-- CLAUSAL (blue) — relcl -->
+  <g id="clause" class="edge-group">
+    <path d="M405 96 L510 158" fill="none" stroke="#60a5fa" stroke-width="2.2" opacity=".7" marker-end="url(#da-l)"/>
+    <text x="468" y="116" fill="#60a5fa" font-family="JetBrains Mono" font-size="10" font-weight="700">relcl</text>
+    <!-- annotation: positioned to the RIGHT of admitted node -->
+    <line x1="600" y1="170" x2="620" y2="170" stroke="#60a5fa" stroke-width=".5" stroke-dasharray="3 2" opacity=".5"/>
+    <rect x="622" y="160" width="130" height="20" rx="3" fill="#101c32" stroke="#60a5fa" stroke-width=".5" opacity=".8"/>
+    <text x="687" y="174" text-anchor="middle" fill="#60a5fa" font-family="JetBrains Mono" font-size="8" opacity=".9">clause → "was admitted"</text>
+  </g>
+
+  <!-- FUNCTION WORDS (green) — auxpass, punct -->
+  <g id="func" class="edge-group">
+    <path d="M530 210 L440 272" fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity=".55" marker-end="url(#da-f)"/>
+    <path d="M560 210 L700 272" fill="none" stroke="#6ee7b7" stroke-width="1.5" opacity=".55" marker-end="url(#da-f)"/>
+    <text x="462" y="248" fill="#6ee7b7" font-family="JetBrains Mono" font-size="9" font-weight="500">auxpass</text>
+    <text x="650" y="232" fill="#6ee7b7" font-family="JetBrains Mono" font-size="9" font-weight="500">punct</text>
+  </g>
+
+  <!-- ═══ NODES (always visible) ═══ -->
+
+  <!-- LEVEL 0: ROOT -->
+  <g class="node-box" filter="url(#gp)">
+    <rect x="320" y="48" width="120" height="48" rx="12" fill="#2a1510" stroke="#f0845a" stroke-width="1.5"/>
+    <text x="380" y="66" text-anchor="middle" dominant-baseline="central" fill="#f0845a" font-family="JetBrains Mono" font-size="16" font-weight="700">patient</text>
+    <text x="380" y="84" text-anchor="middle" dominant-baseline="central" fill="#b05530" font-family="JetBrains Mono" font-size="9">ROOT · NOUN</text>
+  </g>
+
+  <!-- LEVEL 1: patient's children -->
+  <g class="node-box" filter="url(#gn)">
+    <rect x="32" y="158" width="80" height="40" rx="10" fill="#1e1640" stroke="#a78bfa" stroke-width="1"/>
+    <text x="72" y="172" text-anchor="middle" dominant-baseline="central" fill="#a78bfa" font-family="JetBrains Mono" font-size="14" font-weight="600">The</text>
+    <text x="72" y="188" text-anchor="middle" dominant-baseline="central" fill="#6d5cc8" font-family="JetBrains Mono" font-size="8">DET</text>
+  </g>
+  <g class="node-box">
+    <rect x="156" y="158" width="80" height="40" rx="10" fill="#211a08" stroke="#fbbf24" stroke-width="1"/>
+    <text x="196" y="172" text-anchor="middle" dominant-baseline="central" fill="#fbbf24" font-family="JetBrains Mono" font-size="14" font-weight="600">John</text>
+    <text x="196" y="188" text-anchor="middle" dominant-baseline="central" fill="#a07818" font-family="JetBrains Mono" font-size="8">PROPN</text>
+  </g>
+  <g class="node-box">
+    <rect x="270" y="158" width="80" height="40" rx="10" fill="#211a08" stroke="#fbbf24" stroke-width="1"/>
+    <text x="310" y="172" text-anchor="middle" dominant-baseline="central" fill="#fbbf24" font-family="JetBrains Mono" font-size="14" font-weight="600">Smith</text>
+    <text x="310" y="188" text-anchor="middle" dominant-baseline="central" fill="#a07818" font-family="JetBrains Mono" font-size="8">PROPN</text>
+  </g>
+  <g class="node-box">
+    <rect x="460" y="158" width="140" height="52" rx="12" fill="#101c32" stroke="#60a5fa" stroke-width="1.2"/>
+    <text x="530" y="176" text-anchor="middle" dominant-baseline="central" fill="#60a5fa" font-family="JetBrains Mono" font-size="15" font-weight="700">admitted</text>
+    <text x="530" y="196" text-anchor="middle" dominant-baseline="central" fill="#3070b0" font-family="JetBrains Mono" font-size="9">VERB · relcl head</text>
+  </g>
+
+  <!-- LEVEL 2: admitted's children -->
+  <g class="node-box">
+    <rect x="310" y="278" width="90" height="40" rx="10" fill="#2a1510" stroke="#f0845a" stroke-width="1"/>
+    <text x="355" y="292" text-anchor="middle" dominant-baseline="central" fill="#f0845a" font-family="JetBrains Mono" font-size="13" font-weight="600">Smith</text>
+    <text x="355" y="308" text-anchor="middle" dominant-baseline="central" fill="#b05530" font-family="JetBrains Mono" font-size="8">nsubjpass</text>
+  </g>
+  <g class="node-box">
+    <rect x="412" y="278" width="60" height="40" rx="10" fill="#0e201a" stroke="#6ee7b7" stroke-width=".8"/>
+    <text x="442" y="292" text-anchor="middle" dominant-baseline="central" fill="#6ee7b7" font-family="JetBrains Mono" font-size="13" font-weight="600">was</text>
+    <text x="442" y="308" text-anchor="middle" dominant-baseline="central" fill="#2a8060" font-family="JetBrains Mono" font-size="8">auxpass</text>
+  </g>
+  <g class="node-box">
+    <rect x="484" y="278" width="50" height="40" rx="10" fill="#1e1640" stroke="#a78bfa" stroke-width="1"/>
+    <text x="509" y="292" text-anchor="middle" dominant-baseline="central" fill="#a78bfa" font-family="JetBrains Mono" font-size="13" font-weight="600">to</text>
+    <text x="509" y="308" text-anchor="middle" dominant-baseline="central" fill="#6d5cc8" font-family="JetBrains Mono" font-size="8">prep</text>
+  </g>
+  <g class="node-box">
+    <rect x="598" y="278" width="50" height="40" rx="10" fill="#1e1640" stroke="#a78bfa" stroke-width="1"/>
+    <text x="623" y="292" text-anchor="middle" dominant-baseline="central" fill="#a78bfa" font-family="JetBrains Mono" font-size="13" font-weight="600">on</text>
+    <text x="623" y="308" text-anchor="middle" dominant-baseline="central" fill="#6d5cc8" font-family="JetBrains Mono" font-size="8">prep</text>
+  </g>
+  <g class="node-box" opacity=".5">
+    <rect x="680" y="278" width="40" height="40" rx="10" fill="#0e201a" stroke="#6ee7b7" stroke-width=".6"/>
+    <text x="700" y="292" text-anchor="middle" dominant-baseline="central" fill="#6ee7b7" font-family="JetBrains Mono" font-size="16" font-weight="700">.</text>
+    <text x="700" y="308" text-anchor="middle" dominant-baseline="central" fill="#2a8060" font-family="JetBrains Mono" font-size="8">punct</text>
+  </g>
+
+  <!-- LEVEL 3: prep objects -->
+  <g class="node-box">
+    <rect x="430" y="402" width="108" height="44" rx="10" fill="#0c2318" stroke="#34d399" stroke-width="1"/>
+    <text x="484" y="418" text-anchor="middle" dominant-baseline="central" fill="#34d399" font-family="JetBrains Mono" font-size="13" font-weight="600">Hospital</text>
+    <text x="484" y="434" text-anchor="middle" dominant-baseline="central" fill="#1a8a5e" font-family="JetBrains Mono" font-size="8">PROPN · pobj</text>
+  </g>
+  <g class="node-box">
+    <rect x="590" y="402" width="100" height="44" rx="10" fill="#0c2318" stroke="#34d399" stroke-width="1"/>
+    <text x="640" y="418" text-anchor="middle" dominant-baseline="central" fill="#34d399" font-family="JetBrains Mono" font-size="13" font-weight="600">Monday</text>
+    <text x="640" y="434" text-anchor="middle" dominant-baseline="central" fill="#1a8a5e" font-family="JetBrains Mono" font-size="8">PROPN · pobj</text>
+  </g>
+
+  <!-- LEVEL 4: compound in Hospital -->
+  <g class="node-box">
+    <rect x="440" y="500" width="80" height="40" rx="10" fill="#211a08" stroke="#fbbf24" stroke-width=".8"/>
+    <text x="480" y="514" text-anchor="middle" dominant-baseline="central" fill="#fbbf24" font-family="JetBrains Mono" font-size="13" font-weight="600">City</text>
+    <text x="480" y="530" text-anchor="middle" dominant-baseline="central" fill="#a07818" font-family="JetBrains Mono" font-size="8">compound</text>
+  </g>
+
+  <!-- LEGEND -->
+  <g font-family="JetBrains Mono" font-size="9">
+    <rect x="30" y="572" width="7" height="7" rx="2" fill="#f0845a"/><text x="42" y="579" fill="#8a8faa">Subjects</text>
+    <rect x="110" y="572" width="7" height="7" rx="2" fill="#34d399"/><text x="122" y="579" fill="#8a8faa">Objects</text>
+    <rect x="185" y="572" width="7" height="7" rx="2" fill="#a78bfa"/><text x="197" y="579" fill="#8a8faa">Modifiers</text>
+    <rect x="275" y="572" width="7" height="7" rx="2" fill="#fbbf24"/><text x="287" y="579" fill="#8a8faa">Compounds</text>
+    <rect x="375" y="572" width="7" height="7" rx="2" fill="#60a5fa"/><text x="387" y="579" fill="#8a8faa">Clausal</text>
+    <rect x="445" y="572" width="7" height="7" rx="2" fill="#6ee7b7"/><text x="457" y="579" fill="#8a8faa">Function words</text>
+  </g>
+  </svg>
+  </div>
+</section>
+
+<!-- ═══ §6 ARC DIAGRAM — NEW! ═══ -->
+<section id="dep-arc">
+  <p class="section-label">Deep dive — view 2</p>
+  <h2 class="section-title">Arc diagram (NLP standard view)</h2>
+  <p class="section-desc">
+    The same dependency information shown as <strong>arcs above a linear sentence</strong> — the standard NLP visualization. Each arc connects a head word to its dependent. Arc height indicates depth of nesting. This is exactly how spaCy's <code>displacy</code> renders dependency parses.
+  </p>
+
+  <div class="graph-wrap">
+  <svg viewBox="0 0 760 310" xmlns="http://www.w3.org/2000/svg">
+  <!-- Word tokens along the bottom -->
+  <g font-family="JetBrains Mono">
+    <text x="30" y="250" fill="#a78bfa" font-size="13" font-weight="600">The</text>
+    <text x="30" y="266" fill="#6d5cc8" font-size="8">DET</text>
+    <text x="90" y="250" fill="#f0845a" font-size="14" font-weight="700">patient</text>
+    <text x="90" y="266" fill="#b05530" font-size="8">ROOT</text>
+    <text x="180" y="250" fill="#fbbf24" font-size="13" font-weight="600">John</text>
+    <text x="180" y="266" fill="#a07818" font-size="8">PROPN</text>
+    <text x="240" y="250" fill="#fbbf24" font-size="13" font-weight="600">Smith</text>
+    <text x="240" y="266" fill="#a07818" font-size="8">PROPN</text>
+    <text x="310" y="250" fill="#6ee7b7" font-size="13" font-weight="500">was</text>
+    <text x="310" y="266" fill="#2a8060" font-size="8">AUX</text>
+    <text x="360" y="250" fill="#60a5fa" font-size="14" font-weight="700">admitted</text>
+    <text x="360" y="266" fill="#3070b0" font-size="8">VERB</text>
+    <text x="450" y="250" fill="#a78bfa" font-size="13" font-weight="500">to</text>
+    <text x="450" y="266" fill="#6d5cc8" font-size="8">ADP</text>
+    <text x="490" y="250" fill="#fbbf24" font-size="13" font-weight="600">City</text>
+    <text x="490" y="266" fill="#a07818" font-size="8">PROPN</text>
+    <text x="545" y="250" fill="#34d399" font-size="13" font-weight="600">Hospital</text>
+    <text x="545" y="266" fill="#1a8a5e" font-size="8">PROPN</text>
+    <text x="635" y="250" fill="#a78bfa" font-size="13" font-weight="500">on</text>
+    <text x="635" y="266" fill="#6d5cc8" font-size="8">ADP</text>
+    <text x="675" y="250" fill="#34d399" font-size="13" font-weight="600">Monday</text>
+    <text x="675" y="266" fill="#1a8a5e" font-size="8">PROPN</text>
+  </g>
+
+  <!-- ARCS (head → dependent, drawn as curves above) -->
+  <!-- patient(105) → The(40): det — short low arc -->
+  <path d="M105 240 C 105 222, 40 222, 40 240" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#da-m)"/>
+  <text x="72" y="218" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono" font-size="8" font-weight="600">det</text>
+
+  <!-- patient(105) → John(195): compound — short arc -->
+  <path d="M105 240 C 105 210, 195 210, 195 240" fill="none" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#da-c)"/>
+  <text x="150" y="206" text-anchor="middle" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" font-weight="600">compound</text>
+
+  <!-- patient(105) → Smith(255): appos — medium arc -->
+  <path d="M105 240 C 105 190, 255 190, 255 240" fill="none" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#da-c)"/>
+  <text x="180" y="186" text-anchor="middle" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" font-weight="600">appos</text>
+
+  <!-- patient(105) → admitted(385): relcl — TALL arc (spans most of sentence) -->
+  <path d="M115 240 C 115 80, 385 80, 385 240" fill="none" stroke="#60a5fa" stroke-width="2.2" marker-end="url(#da-l)"/>
+  <text x="250" y="78" text-anchor="middle" fill="#60a5fa" font-family="JetBrains Mono" font-size="10" font-weight="700">relcl</text>
+
+  <!-- admitted(385) → Smith(255): nsubjpass — medium arc -->
+  <path d="M380 240 C 380 170, 255 170, 255 240" fill="none" stroke="#f0845a" stroke-width="2" marker-end="url(#da-s)"/>
+  <text x="318" y="165" text-anchor="middle" fill="#f0845a" font-family="JetBrains Mono" font-size="9" font-weight="700">nsubjpass</text>
+
+  <!-- admitted(385) → was(325): auxpass — short arc -->
+  <path d="M380 240 C 380 218, 325 218, 325 240" fill="none" stroke="#6ee7b7" stroke-width="1.2" marker-end="url(#da-f)"/>
+  <text x="352" y="214" text-anchor="middle" fill="#6ee7b7" font-family="JetBrains Mono" font-size="8">auxpass</text>
+
+  <!-- admitted(385) → to(460): prep — short arc -->
+  <path d="M395 240 C 395 218, 460 218, 460 240" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#da-m)"/>
+  <text x="428" y="214" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono" font-size="8" font-weight="600">prep</text>
+
+  <!-- to(460) → Hospital(570): pobj — short arc -->
+  <path d="M460 240 C 460 206, 570 206, 570 240" fill="none" stroke="#34d399" stroke-width="1.5" marker-end="url(#da-o)"/>
+  <text x="515" y="200" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="8" font-weight="600">pobj</text>
+
+  <!-- Hospital(570) → City(505): compound — short arc -->
+  <path d="M560 240 C 560 226, 505 226, 505 240" fill="none" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#da-c)"/>
+  <text x="532" y="224" text-anchor="middle" fill="#fbbf24" font-family="JetBrains Mono" font-size="7" font-weight="600">compound</text>
+
+  <!-- admitted(395) → on(645): prep — tall arc -->
+  <path d="M400 240 C 400 140, 645 140, 645 240" fill="none" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#da-m)"/>
+  <text x="522" y="134" text-anchor="middle" fill="#a78bfa" font-family="JetBrains Mono" font-size="8" font-weight="600">prep</text>
+
+  <!-- on(645) → Monday(695): pobj — short arc -->
+  <path d="M648 240 C 648 224, 695 224, 695 240" fill="none" stroke="#34d399" stroke-width="1.5" marker-end="url(#da-o)"/>
+  <text x="672" y="220" text-anchor="middle" fill="#34d399" font-family="JetBrains Mono" font-size="8" font-weight="600">pobj</text>
+
+  <!-- Legend -->
+  <g font-family="JetBrains Mono" font-size="8">
+    <text x="30" y="296" fill="#8a8faa">Arc height = nesting depth. Taller arcs span more tokens. Each arc = one DEP edge in the TPG.</text>
+  </g>
+  </svg>
+  </div>
+
+  <!-- CPG vs TPG side-by-side -->
+  <p style="color:var(--text);font:600 13px 'JetBrains Mono',monospace;margin:24px 0 10px">How DEP labels map to Joern's AST child types</p>
+  <div class="vs-grid" style="margin-bottom:28px">
+    <div class="vs-card cpg-side">
+      <h4>Joern AST edge types</h4>
+      <div class="vs-row"><span class="vs-lbl" style="color:var(--purple)">AST</span><span class="vs-val">CALL(strcpy) → IDENTIFIER(buffer)</span></div>
+      <div class="vs-row"><span class="vs-lbl" style="color:var(--dim)">tells you</span><span class="vs-val">"buffer is an argument of strcpy"</span></div>
+      <div class="vs-row"><span class="vs-lbl" style="color:var(--purple)">AST</span><span class="vs-val">METHOD → PARAM(char *input)</span></div>
+      <div class="vs-row"><span class="vs-lbl" style="color:var(--dim)">tells you</span><span class="vs-val">"input is a parameter of the method"</span></div>
+    </div>
+    <div class="vs-arrow-c">≡</div>
+    <div class="vs-card tpg-side">
+      <h4>TPG DEP edge labels</h4>
+      <div class="vs-row"><span class="vs-lbl" style="color:var(--teal)">nsubjpass</span><span class="vs-val">"admitted" → "Smith"</span></div>
+      <div class="vs-row"><span class="vs-lbl" style="color:var(--dim)">tells you</span><span class="vs-val">"Smith is the passive subject of admitted"</span></div>
+      <div class="vs-row"><span class="vs-lbl" style="color:var(--teal)">prep</span><span class="vs-val">"admitted" → "to" → "Hospital"</span></div>
+      <div class="vs-row"><span class="vs-lbl" style="color:var(--dim)">tells you</span><span class="vs-val">"to introduces a location for admitted"</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ §7 DEP LABEL REFERENCE ═══ -->
+<section id="dep-labels">
+  <p class="section-label">Complete reference</p>
+  <h2 class="section-title">All DEP labels explained</h2>
+  <p class="section-desc">The labels follow the <strong>Universal Dependencies</strong> / <strong>ClearNLP</strong> scheme used by spaCy. Grouped by function, each with its Joern analog.</p>
+
+  <div class="dep-cat"><div class="dep-cat-dot" style="background:var(--coral)"></div><span style="color:var(--coral)">Core arguments — subjects</span></div>
+  <div class="table-wrap" style="margin-bottom:20px"><table><thead><tr><th class="dep-col">Label</th><th>Full name</th><th>What it means</th><th>Example</th><th>Joern analog</th></tr></thead><tbody>
+    <tr><td><code>nsubj</code></td><td>Nominal subject</td><td>The noun doing the action (active voice)</td><td>"doctor" in "The doctor ordered tests"</td><td>First argument of a CALL</td></tr>
+    <tr><td><code>nsubjpass</code></td><td>Nominal subject (passive)</td><td>The noun receiving the action (passive voice)</td><td><strong>"Smith"</strong> in "Smith was <strong>admitted</strong>"</td><td>Return value recipient of CALL</td></tr>
+    <tr><td><code>csubj</code></td><td>Clausal subject</td><td>Entire clause acting as subject</td><td>"Running daily" in "Running daily improves health"</td><td>Expression as method argument</td></tr>
+  </tbody></table></div>
+
+  <div class="dep-cat"><div class="dep-cat-dot" style="background:var(--teal)"></div><span style="color:var(--teal)">Core arguments — objects</span></div>
+  <div class="table-wrap" style="margin-bottom:20px"><table><thead><tr><th class="dep-col">Label</th><th>Full name</th><th>What it means</th><th>Example</th><th>Joern analog</th></tr></thead><tbody>
+    <tr><td><code>dobj</code></td><td>Direct object</td><td>Noun directly receiving the action</td><td>"tests" in "ordered <strong>tests</strong>"</td><td>IDENTIFIER argument to CALL</td></tr>
+    <tr><td><code>iobj</code></td><td>Indirect object</td><td>Secondary recipient</td><td>"him" in "gave <strong>him</strong> the report"</td><td>Second parameter to function</td></tr>
+    <tr><td><code>pobj</code></td><td>Object of preposition</td><td>Noun that a preposition points to</td><td><strong>"Hospital"</strong> in "to <strong>Hospital</strong>"</td><td>Target of accessor/qualifier</td></tr>
+    <tr><td><code>attr</code></td><td>Attribute</td><td>Predicate nominal in copular sentence</td><td>"doctor" in "He is a <strong>doctor</strong>"</td><td>Type assigned to variable</td></tr>
+  </tbody></table></div>
+
+  <div class="dep-cat"><div class="dep-cat-dot" style="background:var(--purple)"></div><span style="color:var(--purple)">Modifiers — describe or qualify</span></div>
+  <div class="table-wrap" style="margin-bottom:20px"><table><thead><tr><th class="dep-col">Label</th><th>Full name</th><th>What it means</th><th>Example</th><th>Joern analog</th></tr></thead><tbody>
+    <tr><td><code>det</code></td><td>Determiner</td><td>Article specifying a noun ("the", "a", "this")</td><td><strong>"The"</strong> in "<strong>The</strong> patient"</td><td>No direct analog — code has no articles</td></tr>
+    <tr><td><code>amod</code></td><td>Adjective modifier</td><td>Adjective describing a noun</td><td>"additional" in "<strong>additional</strong> tests"</td><td>Type qualifier (<code>const</code>, <code>static</code>)</td></tr>
+    <tr><td><code>advmod</code></td><td>Adverb modifier</td><td>Adverb modifying a verb or adjective</td><td>"immediately" in "<strong>immediately</strong> ordered"</td><td>No direct analog</td></tr>
+    <tr><td><code>nummod</code></td><td>Numeric modifier</td><td>Number modifying a noun</td><td>"three" in "<strong>three</strong> patients"</td><td>LITERAL value (<code>64</code>)</td></tr>
+    <tr><td><code>poss</code></td><td>Possessive modifier</td><td>Possessive pronoun/noun</td><td>"his" in "<strong>his</strong> chest pain"</td><td>Object qualifier (<code>obj.field</code>)</td></tr>
+    <tr><td><code>prep</code></td><td>Prepositional modifier</td><td>Preposition adding location, time, manner</td><td><strong>"to"</strong> in "admitted <strong>to</strong> Hospital"</td><td>Qualifier/accessor on CALL</td></tr>
+    <tr><td><code>neg</code></td><td>Negation modifier</td><td>Negation word</td><td>"not" in "was <strong>not</strong> discharged"</td><td>Negation operator (<code>!</code>)</td></tr>
+  </tbody></table></div>
+
+  <div class="dep-cat"><div class="dep-cat-dot" style="background:var(--amber)"></div><span style="color:var(--amber)">Compounds and names</span></div>
+  <div class="table-wrap" style="margin-bottom:20px"><table><thead><tr><th class="dep-col">Label</th><th>Full name</th><th>What it means</th><th>Example</th><th>Joern analog</th></tr></thead><tbody>
+    <tr><td><code>compound</code></td><td>Compound modifier</td><td>Part of a multi-word name or compound noun</td><td><strong>"City"</strong> in "<strong>City</strong> Hospital", <strong>"John"</strong> in "<strong>John</strong> Smith"</td><td>Namespace prefix (<code>std::vector</code>)</td></tr>
+    <tr><td><code>appos</code></td><td>Appositional modifier</td><td>Renaming or clarification beside a noun</td><td>"Smith" in "patient <strong>Smith</strong>"</td><td>Type alias or typedef</td></tr>
+    <tr><td><code>flat</code></td><td>Flat multiword</td><td>Multi-word expression as flat name</td><td>"New York" as one unit</td><td>Qualified name (<code>java.util.List</code>)</td></tr>
+  </tbody></table></div>
+
+  <div class="dep-cat"><div class="dep-cat-dot" style="background:var(--blue)"></div><span style="color:var(--blue)">Clausal relations</span></div>
+  <div class="table-wrap" style="margin-bottom:20px"><table><thead><tr><th class="dep-col">Label</th><th>Full name</th><th>What it means</th><th>Example</th><th>Joern analog</th></tr></thead><tbody>
+    <tr><td><code>relcl</code></td><td>Relative clause</td><td>Clause modifying a noun via relative pronoun</td><td>"who was <strong>admitted</strong>" modifying "patient"</td><td>Inline function or lambda</td></tr>
+    <tr><td><code>advcl</code></td><td>Adverbial clause</td><td>Subordinate clause modifying a verb</td><td>"after taking the medication"</td><td>CONTROL_STRUCTURE body</td></tr>
+    <tr><td><code>xcomp</code></td><td>Open clausal complement</td><td>Clause with no subject, controlled by head</td><td>"to leave" in "asked him <strong>to leave</strong>"</td><td>Callback function</td></tr>
+    <tr><td><code>ccomp</code></td><td>Clausal complement</td><td>Clause acting as object of a verb</td><td>"that he was sick" in "said <strong>that...</strong>"</td><td>Expression argument</td></tr>
+    <tr><td><code>mark</code></td><td>Marker</td><td>Subordinating conjunction introducing clause</td><td>"after" in "<strong>after</strong> taking..."</td><td>Control keyword (<code>if</code>, <code>while</code>)</td></tr>
+  </tbody></table></div>
+
+  <div class="dep-cat"><div class="dep-cat-dot" style="background:var(--green)"></div><span style="color:var(--green)">Function words and auxiliaries</span></div>
+  <div class="table-wrap" style="margin-bottom:20px"><table><thead><tr><th class="dep-col">Label</th><th>Full name</th><th>What it means</th><th>Example</th><th>Joern analog</th></tr></thead><tbody>
+    <tr><td><code>aux</code></td><td>Auxiliary</td><td>Helper verb adding tense/mood</td><td>"was" in "was prescribed" (active)</td><td>No direct analog</td></tr>
+    <tr><td><code>auxpass</code></td><td>Passive auxiliary</td><td>Auxiliary in passive construction</td><td><strong>"was"</strong> in "Smith <strong>was</strong> admitted"</td><td>No direct analog</td></tr>
+    <tr><td><code>cc</code></td><td>Coordinating conjunction</td><td>Conjunction joining equal elements</td><td>"and" in "tests <strong>and</strong> treatment"</td><td>Logical operator (<code>&&</code>, <code>||</code>)</td></tr>
+    <tr><td><code>conj</code></td><td>Conjunct</td><td>Second element in coordination</td><td>"treatment" in "tests and <strong>treatment</strong>"</td><td>Second operand of binary expr</td></tr>
+    <tr><td><code>punct</code></td><td>Punctuation</td><td>Any punctuation mark</td><td><strong>"."</strong> at end of sentence</td><td>Statement terminator (<code>;</code>)</td></tr>
+    <tr><td><code>case</code></td><td>Case marker</td><td>Preposition attached to noun</td><td>"of" in "treatment <strong>of</strong> patient"</td><td>Accessor (<code>.</code>, <code>-></code>)</td></tr>
+  </tbody></table></div>
+
+  <!-- KEY INSIGHT BOXES -->
+  <div class="annot-box" style="border-left-color:var(--purple)">
+    <p class="annot-title" style="color:var(--purple)">Key insight: DEP_LABEL = the edge type within the syntax layer</p>
+    <p class="annot-body">In Joern's CPG, <strong>all</strong> syntax edges share the type <code>AST</code> — the specific relationship is inferred from the child's node type. In the TPG, all syntax edges share the type <code>DEP</code> — but each edge carries an explicit <code>DEP_LABEL</code> (<code>nsubj</code>, <code>det</code>, <code>prep</code>, etc.) encoding the exact syntactic role. The <strong>TPG's syntax layer is richer per-edge</strong> than Joern's.</p>
+  </div>
+  <div class="annot-box" style="border-left-color:var(--teal)">
+    <p class="annot-title" style="color:var(--teal)">Practical impact for GNNs</p>
+    <p class="annot-body">When exported to PyG format, each unique <code>DEP_LABEL</code> becomes a distinct <strong>edge type</strong> in <code>data.edge_type</code>. A relation-aware GNN (RGAT/RGCN — same as SemVul) can learn separate message-passing weights for <code>nsubj</code> vs <code>dobj</code> vs <code>prep</code>, just as it learns different weights for <code>AST</code> vs <code>CFG</code> vs <code>REACHING_DEF</code> in the CPG.</p>
+  </div>
+</section>
+
+<!-- ═══ §8 MEDICAL TEXT ═══ -->
+<section id="example">
+  <p class="section-label">Worked example</p>
+  <h2 class="section-title">The medical text</h2>
+  <p class="section-desc">Pipeline output: <strong>151 nodes · 430 edges · 5 passes</strong></p>
+  <div class="dual-code">
+    <div><div class="code-wrap"><div class="code-header"><div class="code-dots"><i></i><i></i><i></i></div><span>paragraph 1</span></div><div class="code-block">
+<div><span class="ln">1</span>The patient <span class="ent">John Smith</span> was <span class="verb">admitted</span></div>
+<div><span class="ln"> </span>to <span class="ent">City Hospital</span> on <span class="ent">Monday</span>.</div>
+<div><span class="ln">2</span><span class="pron">He</span> was <span class="verb">prescribed</span> aspirin for</div>
+<div><span class="ln"> </span><span class="pron">his</span> chest pain.</div>
+    </div></div></div>
+    <div><div class="code-wrap"><div class="code-header"><div class="code-dots"><i></i><i></i><i></i></div><span>paragraphs 2–3</span></div><div class="code-block">
+<div><span class="ln">3</span><span class="disc">However</span>, <span class="pron">his</span> condition <span class="verb">worsened</span></div>
+<div><span class="ln"> </span>after taking the medication.</div>
+<div><span class="ln">4</span>The doctor immediately <span class="verb">ordered</span> tests.</div>
+<div><span class="ln">5</span><span class="disc">Subsequently</span>, the plan was <span class="verb">revised</span></div>
+<div><span class="ln"> </span>by <span class="ent">Dr. Williams</span>.</div>
+<div style="height:6px"></div>
+<div><span class="ln">6</span><span class="disc">In conclusion</span>, the patient <span class="verb">responded</span></div>
+<div><span class="ln"> </span>well. <span class="pron">He</span> was <span class="verb">discharged</span> on <span class="ent">Friday</span>.</div>
+    </div></div></div>
+  </div>
+  <div class="analogy-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+    <div class="analogy-card ast-card"><h3 style="color:var(--purple);font-size:12px">DEP edges (= AST)</h3><div class="row" style="flex-direction:column;gap:2px;align-items:flex-start"><span class="val" style="color:var(--text);font-size:11px">"patient" ─<span style="color:var(--purple)">det</span>→ "The"</span><span class="val" style="color:var(--text);font-size:11px">"admitted" ─<span style="color:var(--purple)">nsubjpass</span>→ "Smith"</span><span class="val" style="color:var(--text);font-size:11px">"admitted" ─<span style="color:var(--purple)">prep</span>→ "to" → "Hospital"</span></div></div>
+    <div class="analogy-card cfg-card"><h3 style="color:var(--coral);font-size:12px">NEXT_* edges (= CFG)</h3><div class="row" style="flex-direction:column;gap:2px;align-items:flex-start"><span class="val" style="color:var(--text);font-size:11px">"The" → "patient" → "John" → ...</span><span class="val" style="color:var(--text);font-size:11px">Sent 0 → Sent 1 → Sent 2 → ...</span><span class="val" style="color:var(--dim);font-size:10px">70 NEXT_TOKEN + 6 NEXT_SENT + 2 NEXT_PARA</span></div></div>
+    <div class="analogy-card dfg-card"><h3 style="color:var(--green);font-size:12px">COREF edges (= REACHING_DEF)</h3><div class="row" style="flex-direction:column;gap:2px;align-items:flex-start"><span class="val" style="color:var(--text);font-size:11px">"He" (s1) ──<span style="color:var(--teal)">cluster:0</span>──▸ "John Smith"</span><span class="val" style="color:var(--text);font-size:11px">"his" (s2) ──<span style="color:var(--teal)">cluster:0</span>──▸ "John Smith"</span><span class="val" style="color:var(--text);font-size:11px">"He" (s6) ──<span style="color:var(--teal)">cluster:3</span>──▸ "Williams"</span></div></div>
+    <div class="analogy-card cdg-card"><h3 style="color:var(--blue);font-size:12px">RST edges (= CDG)</h3><div class="row" style="flex-direction:column;gap:2px;align-items:flex-start"><span class="val" style="color:var(--text);font-size:11px">Sent 1 ──<span style="color:var(--blue)">contrast</span>──▸ Sent 2 <span style="color:var(--amber)">"however"</span></span><span class="val" style="color:var(--text);font-size:11px">Sent 3 ──<span style="color:var(--blue)">temporal</span>──▸ Sent 4 <span style="color:var(--amber)">"subsequently"</span></span><span class="val" style="color:var(--text);font-size:11px">Sent 4 ──<span style="color:var(--blue)">summary</span>──▸ Sent 5 <span style="color:var(--amber)">"in conclusion"</span></span></div></div>
+  </div>
+</section>
+
+<!-- ═══ §9 INTERACTIVE TPG GRAPH ═══ -->
+<section id="tpg-graph">
+  <p class="section-label">Full TPG</p>
+  <h2 class="section-title">Interactive TPG graph</h2>
+  <p class="section-desc">Sentences 1–2 of the medical text. Toggle each edge layer.</p>
+  <div class="graph-controls">
+    <button class="toggle-btn" data-e="dep" onclick="toggle('dep',this)"><span class="dot"></span>DEP (=AST)</button>
+    <button class="toggle-btn" data-e="seq" onclick="toggle('seq',this)"><span class="dot"></span>NEXT_* (=CFG)</button>
+    <button class="toggle-btn" data-e="coref" onclick="toggle('coref',this)"><span class="dot"></span>COREF (=RDEF)</button>
+    <button class="toggle-btn" data-e="rst" onclick="toggle('rst',this)"><span class="dot"></span>RST (=CDG)</button>
+    <button class="toggle-btn" data-e="entrel" onclick="toggle('entrel',this)"><span class="dot"></span>ENTITY_REL</button>
+  </div>
+  <div class="hint">Toggle each layer — same four dimensions as the CPG</div>
+  <div class="graph-wrap">
+  <svg viewBox="0 0 740 580" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a-dep" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-seq" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#f0845a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-coref" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-rst" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="a-er" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <filter id="g1"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#a78bfa" flood-opacity=".2"/></filter>
+    <filter id="g2"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#f0845a" flood-opacity=".2"/></filter>
+    <filter id="g3"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#34d399" flood-opacity=".2"/></filter>
+    <filter id="g4"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#60a5fa" flood-opacity=".2"/></filter>
+    <filter id="g5"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#f472b6" flood-opacity=".18"/></filter>
+  </defs>
+  <g id="dep" class="edge-group">
+    <path d="M370 52 L200 88" fill="none" stroke="#a78bfa" stroke-width="1.3" opacity=".5" marker-end="url(#a-dep)"/>
+    <path d="M160 128 L160 168" fill="none" stroke="#a78bfa" stroke-width="1.3" opacity=".5" marker-end="url(#a-dep)"/>
+    <path d="M230 128 L500 168" fill="none" stroke="#a78bfa" stroke-width="1.3" opacity=".5" marker-end="url(#a-dep)"/>
+    <path d="M120 218 L120 258" fill="none" stroke="#a78bfa" stroke-width="1.3" opacity=".5" marker-end="url(#a-dep)"/>
+    <path d="M500 218 L500 258" fill="none" stroke="#a78bfa" stroke-width="1.3" opacity=".5" marker-end="url(#a-dep)"/>
+    <path d="M85 308 L72 358" fill="none" stroke="#a78bfa" stroke-width="1.3" opacity=".5" marker-end="url(#a-dep)"/>
+    <path d="M155 308 L200 358" fill="none" stroke="#a78bfa" stroke-width="1.3" opacity=".5" marker-end="url(#a-dep)"/>
+    <path d="M175 308 L335 358" fill="none" stroke="#a78bfa" stroke-width="1.3" opacity=".5" marker-end="url(#a-dep)"/>
+    <path d="M475 308 L445 358" fill="none" stroke="#a78bfa" stroke-width="1.3" opacity=".5" marker-end="url(#a-dep)"/>
+    <text x="268" y="60" fill="#a78bfa" font-family="JetBrains Mono" font-size="8" opacity=".6">CONTAINS</text>
+    <text x="60" y="240" fill="#a78bfa" font-family="JetBrains Mono" font-size="8" opacity=".6">relcl</text>
+    <text x="42" y="340" fill="#a78bfa" font-family="JetBrains Mono" font-size="8" opacity=".6">nsubjpass</text>
+    <text x="180" y="340" fill="#a78bfa" font-family="JetBrains Mono" font-size="8" opacity=".6">prep→pobj</text>
+  </g>
+  <g id="seq" class="edge-group">
+    <path d="M215 198 L430 198" fill="none" stroke="#f0845a" stroke-width="2" opacity=".6" marker-end="url(#a-seq)"/>
+    <text x="300" y="192" fill="#f0845a" font-family="JetBrains Mono" font-size="9" font-weight="600" opacity=".75">NEXT_SENT</text>
+  </g>
+  <g id="coref" class="edge-group">
+    <path d="M420 388 C 350 420, 130 420, 72 410" fill="none" stroke="#34d399" stroke-width="1.8" stroke-dasharray="7 4" opacity=".6" marker-end="url(#a-coref)"/>
+    <path d="M560 388 C 500 450, 130 450, 72 410" fill="none" stroke="#34d399" stroke-width="1.8" stroke-dasharray="7 4" opacity=".45" marker-end="url(#a-coref)"/>
+    <text x="250" y="434" fill="#34d399" font-family="JetBrains Mono" font-size="9" font-style="italic" opacity=".7">COREF cluster:0</text>
+  </g>
+  <g id="rst" class="edge-group">
+    <path d="M560 218 C 680 240, 700 460, 610 482" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="4 4" opacity=".5" marker-end="url(#a-rst)"/>
+    <text x="690" y="360" fill="#60a5fa" font-family="JetBrains Mono" font-size="9" font-weight="500" opacity=".65" text-anchor="end">RST: contrast</text>
+  </g>
+  <g id="entrel" class="edge-group">
+    <path d="M102 430 L200 430" fill="none" stroke="#fbbf24" stroke-width="1.5" opacity=".5" marker-end="url(#a-er)"/>
+    <path d="M102 438 C 130 480, 290 480, 335 438" fill="none" stroke="#fbbf24" stroke-width="1.5" opacity=".4" marker-end="url(#a-er)"/>
+    <text x="142" y="426" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" opacity=".7">admit</text>
+  </g>
+  <!-- NODES -->
+  <g class="node-box" filter="url(#g1)"><rect x="290" y="16" width="160" height="40" rx="10" fill="#1e1640" stroke="#a78bfa" stroke-width="1.2"/><text x="370" y="30" text-anchor="middle" dominant-baseline="central" fill="#a78bfa" font-family="JetBrains Mono" font-size="12" font-weight="700">medical_001</text><text x="370" y="46" text-anchor="middle" dominant-baseline="central" fill="#6d5cc8" font-family="JetBrains Mono" font-size="9">DOCUMENT</text></g>
+  <g class="node-box" filter="url(#g4)"><rect x="100" y="84" width="170" height="40" rx="10" fill="#101c32" stroke="#60a5fa" stroke-width="1"/><text x="185" y="98" text-anchor="middle" dominant-baseline="central" fill="#60a5fa" font-family="JetBrains Mono" font-size="12" font-weight="600">Paragraph 0</text><text x="185" y="114" text-anchor="middle" dominant-baseline="central" fill="#3070b0" font-family="JetBrains Mono" font-size="9">PARAGRAPH</text></g>
+  <g class="node-box" filter="url(#g2)"><rect x="40" y="168" width="175" height="44" rx="10" fill="#2a1510" stroke="#f0845a" stroke-width="1"/><text x="127" y="184" text-anchor="middle" dominant-baseline="central" fill="#f0845a" font-family="JetBrains Mono" font-size="11" font-weight="600">Sentence 0</text><text x="127" y="200" text-anchor="middle" dominant-baseline="central" fill="#b05530" font-family="JetBrains Mono" font-size="8">"John Smith was admitted..."</text></g>
+  <g class="node-box" filter="url(#g2)"><rect x="430" y="168" width="175" height="44" rx="10" fill="#2a1510" stroke="#f0845a" stroke-width="1"/><text x="517" y="184" text-anchor="middle" dominant-baseline="central" fill="#f0845a" font-family="JetBrains Mono" font-size="11" font-weight="600">Sentence 1</text><text x="517" y="200" text-anchor="middle" dominant-baseline="central" fill="#b05530" font-family="JetBrains Mono" font-size="8">"He was prescribed aspirin..."</text></g>
+  <g class="node-box" filter="url(#g2)"><rect x="55" y="262" width="165" height="44" rx="10" fill="#2a1510" stroke="#f0845a" stroke-width="1.2"/><text x="137" y="278" text-anchor="middle" dominant-baseline="central" fill="#f0845a" font-family="JetBrains Mono" font-size="13" font-weight="700">admitted</text><text x="137" y="294" text-anchor="middle" dominant-baseline="central" fill="#b05530" font-family="JetBrains Mono" font-size="9">PREDICATE</text></g>
+  <g class="node-box" filter="url(#g2)"><rect x="435" y="262" width="165" height="44" rx="10" fill="#2a1510" stroke="#f0845a" stroke-width="1.2"/><text x="517" y="278" text-anchor="middle" dominant-baseline="central" fill="#f0845a" font-family="JetBrains Mono" font-size="13" font-weight="700">prescribed</text><text x="517" y="294" text-anchor="middle" dominant-baseline="central" fill="#b05530" font-family="JetBrains Mono" font-size="9">PREDICATE</text></g>
+  <g class="node-box" filter="url(#g3)"><rect x="14" y="368" width="130" height="44" rx="10" fill="#0c2318" stroke="#34d399" stroke-width="1"/><text x="79" y="384" text-anchor="middle" dominant-baseline="central" fill="#34d399" font-family="JetBrains Mono" font-size="12" font-weight="600">John Smith</text><text x="79" y="400" text-anchor="middle" dominant-baseline="central" fill="#1a8a5e" font-family="JetBrains Mono" font-size="9">ENTITY:PERSON</text></g>
+  <g class="node-box" filter="url(#g3)"><rect x="168" y="368" width="130" height="44" rx="10" fill="#0c2318" stroke="#34d399" stroke-width="1"/><text x="233" y="384" text-anchor="middle" dominant-baseline="central" fill="#34d399" font-family="JetBrains Mono" font-size="11" font-weight="600">City Hospital</text><text x="233" y="400" text-anchor="middle" dominant-baseline="central" fill="#1a8a5e" font-family="JetBrains Mono" font-size="9">ENTITY:ORG</text></g>
+  <g class="node-box" filter="url(#g3)"><rect x="320" y="368" width="80" height="44" rx="10" fill="#0c2318" stroke="#34d399" stroke-width="1"/><text x="360" y="384" text-anchor="middle" dominant-baseline="central" fill="#34d399" font-family="JetBrains Mono" font-size="12" font-weight="600">Monday</text><text x="360" y="400" text-anchor="middle" dominant-baseline="central" fill="#1a8a5e" font-family="JetBrains Mono" font-size="9">ENTITY:DATE</text></g>
+  <g class="node-box" filter="url(#g5)"><rect x="420" y="368" width="55" height="44" rx="10" fill="#2a1020" stroke="#f472b6" stroke-width=".8"/><text x="447" y="384" text-anchor="middle" dominant-baseline="central" fill="#f472b6" font-family="JetBrains Mono" font-size="13" font-weight="600">He</text><text x="447" y="400" text-anchor="middle" dominant-baseline="central" fill="#a04070" font-family="JetBrains Mono" font-size="9">MENTION</text></g>
+  <g class="node-box" filter="url(#g5)"><rect x="490" y="368" width="55" height="44" rx="10" fill="#2a1020" stroke="#f472b6" stroke-width=".8"/><text x="517" y="384" text-anchor="middle" dominant-baseline="central" fill="#f472b6" font-family="JetBrains Mono" font-size="13" font-weight="600">his</text><text x="517" y="400" text-anchor="middle" dominant-baseline="central" fill="#a04070" font-family="JetBrains Mono" font-size="9">MENTION</text></g>
+  <g class="node-box" filter="url(#g2)"><rect x="430" y="466" width="195" height="44" rx="10" fill="#2a1510" stroke="#f0845a" stroke-width="1"/><text x="527" y="482" text-anchor="middle" dominant-baseline="central" fill="#f0845a" font-family="JetBrains Mono" font-size="11" font-weight="600">Sentence 2</text><text x="527" y="498" text-anchor="middle" dominant-baseline="central" fill="#b05530" font-family="JetBrains Mono" font-size="8">"However, his condition..."</text></g>
+  <!-- Legend -->
+  <g font-family="JetBrains Mono" font-size="9">
+    <rect x="40" y="560" width="7" height="7" rx="2" fill="#a78bfa"/><text x="52" y="567" fill="#8a8faa">DEP</text>
+    <rect x="100" y="560" width="7" height="7" rx="2" fill="#f0845a"/><text x="112" y="567" fill="#8a8faa">NEXT_*</text>
+    <rect x="180" y="560" width="7" height="7" rx="2" fill="#34d399"/><text x="192" y="567" fill="#8a8faa">COREF</text>
+    <rect x="250" y="560" width="7" height="7" rx="2" fill="#60a5fa"/><text x="262" y="567" fill="#8a8faa">RST</text>
+    <rect x="310" y="560" width="7" height="7" rx="2" fill="#fbbf24"/><text x="322" y="567" fill="#8a8faa">ENTITY_REL</text>
+    <rect x="410" y="560" width="7" height="7" rx="2" fill="#f472b6"/><text x="422" y="567" fill="#8a8faa">MENTION</text>
+  </g>
+  </svg>
+  </div>
+</section>
+
+</div>
+
+<div class="footer">SemVul / TPG — GNN + Property Graph-based analysis · Università di Cagliari · DIEE</div>
+
+<script>
+function toggle(id,btn){document.getElementById(id).classList.toggle('hidden');btn.classList.toggle('off')}
+function dtoggle(id,btn){document.getElementById(id).classList.toggle('hidden');btn.classList.toggle('off')}
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('.nav a');
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){navLinks.forEach(l=>l.classList.remove('active'));const link=document.querySelector('.nav a[href="#'+e.target.id+'"]');if(link)link.classList.add('active')}})},{rootMargin:'-35% 0px -55% 0px'});
+sections.forEach(s=>obs.observe(s));
+document.querySelectorAll('.node-box').forEach((n,i)=>{n.style.animation='fadeUp .5s '+(0.15+i*0.03)+'s ease both'});
+</script>
+</body>
+</html>
