@@ -3,3 +3,9 @@ __pycache__/
 *.pyo
 .DS_Store
 *.egg-info/
+
+# EPSS data caches (large JSON files fetched from APIs)
+data/epss/
+data/epss_test/
+output/epss/
+output/epss_test/

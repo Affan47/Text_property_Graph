@@ -1,0 +1,256 @@
+"""
+CVE Graph Dataset — PyG InMemoryDataset for GNN Training
+==========================================================
+Converts CVE descriptions → TPG (via HybridSecurityPipeline) → PyG Data objects.
+
+Each CVE becomes a single graph:
+    - Nodes: tokens, entities, predicates, CVE-IDs, software, etc. (13+ types)
+    - Edges: dependency, coreference, discourse, security relations (13+ types)
+    - Node features: one-hot type encoding + SecBERT embeddings (768-dim)
+    - Label: binary (1 = exploited via CISA KEV, 0 = not exploited)
+
+Usage:
+    dataset = CVEGraphDataset(root="data/epss", labeled_cves_path="data/epss/labeled_cves.json")
+    loader = DataLoader(dataset, batch_size=32, shuffle=True)
+"""
+
+import json
+import logging
+import os
+import sys
+from pathlib import Path
+from typing import Dict, List, Optional, Callable
+
+from tqdm import tqdm
+
+import torch
+from torch_geometric.data import Data, InMemoryDataset
+
+# Add TPG project root to path
+_project_root = str(Path(__file__).resolve().parent.parent)
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
+
+logger = logging.getLogger(__name__)
+
+
+class CVEGraphDataset(InMemoryDataset):
+    """PyG InMemoryDataset that converts CVE descriptions to TPG graphs.
+
+    Args:
+        root: Root directory for dataset storage (raw/ and processed/ subdirs).
+        labeled_cves_path: Path to labeled_cves.json from DataCollector.
+        label_mode: 'binary' (KEV-based) or 'soft' (EPSS score as regression target).
+        embedding_dim: Dimension of SecBERT embeddings (768). Set 0 to skip.
+        use_hybrid: If True, use HybridSecurityPipeline (rule + SecBERT model).
+                    If False, use SecurityPipeline (rule-only, faster).
+        max_cves: Limit number of CVEs to process (for development/debugging).
+        transform: PyG transform to apply to each Data object.
+        pre_transform: PyG pre-transform to apply before saving.
+    """
+
+    def __init__(
+        self,
+        root: str,
+        labeled_cves_path: str = "data/epss/labeled_cves.json",
+        label_mode: str = "binary",
+        embedding_dim: int = 768,
+        use_hybrid: bool = True,
+        max_cves: Optional[int] = None,
+        transform: Optional[Callable] = None,
+        pre_transform: Optional[Callable] = None,
+    ):
+        self.labeled_cves_path = labeled_cves_path
+        self.label_mode = label_mode
+        self.embedding_dim = embedding_dim
+        self.use_hybrid = use_hybrid
+        self.max_cves = max_cves
+        super().__init__(root, transform, pre_transform)
+        self.load(self.processed_paths[0])
+
+    @property
+    def raw_file_names(self) -> List[str]:
+        return ["labeled_cves.json"]
+
+    @property
+    def processed_file_names(self) -> List[str]:
+        suffix = f"_{self.label_mode}_emb{self.embedding_dim}"
+        if self.max_cves:
+            suffix += f"_n{self.max_cves}"
+        return [f"cve_graphs{suffix}.pt"]
+
+    def download(self):
+        """Copy labeled_cves.json to raw directory if not present."""
+        dst = Path(self.raw_dir) / "labeled_cves.json"
+        if dst.exists():
+            return
+        src = Path(self.labeled_cves_path)
+        if not src.exists():
+            raise FileNotFoundError(
+                f"labeled_cves.json not found at {src}. "
+                "Run DataCollector.fetch_all() first."
+            )
+        import shutil
+        shutil.copy2(src, dst)
+
+    def process(self):
+        """Convert each CVE description → TPG → PyG Data object."""
+        raw_path = Path(self.raw_dir) / "labeled_cves.json"
+        with open(raw_path) as f:
+            labeled_cves = json.load(f)
+
+        logger.info("Processing %d CVE records into TPG graphs...", len(labeled_cves))
+
+        # Initialize TPG pipeline
+        pipeline = self._init_pipeline()
+
+        data_list = []
+        cve_ids = list(labeled_cves.keys())
+        if self.max_cves:
+            cve_ids = cve_ids[: self.max_cves]
+
+        failed = 0
+        for cve_id in tqdm(cve_ids, desc="CVE → TPG → PyG", unit="graph"):
+            record = labeled_cves[cve_id]
+            description = record["description"]
+
+            try:
+                data = self._cve_to_pyg(pipeline, cve_id, description, record)
+                if data is not None:
+                    if self.pre_transform is not None:
+                        data = self.pre_transform(data)
+                    data_list.append(data)
+            except Exception as e:
+                logger.warning("Failed to process %s: %s", cve_id, e)
+                failed += 1
+
+        logger.info(
+            "Processed %d graphs (%d failed) from %d CVEs",
+            len(data_list), failed, len(cve_ids),
+        )
+
+        self.save(data_list, self.processed_paths[0])
+
+    def _init_pipeline(self):
+        """Initialize the TPG pipeline."""
+        if self.use_hybrid:
+            try:
+                from tpg.pipeline import HybridSecurityPipeline
+                logger.info("Using HybridSecurityPipeline (rule + SecBERT)")
+                return HybridSecurityPipeline()
+            except ImportError:
+                logger.warning("HybridSecurityPipeline unavailable, falling back to rule-only")
+
+        from tpg.pipeline import SecurityPipeline
+        logger.info("Using SecurityPipeline (rule-only)")
+        return SecurityPipeline()
+
+    def _cve_to_pyg(self, pipeline, cve_id: str, description: str, record: dict) -> Optional[Data]:
+        """Convert a single CVE description to a PyG Data object.
+
+        Pipeline: CVE text → HybridSecurityPipeline → TextPropertyGraph → PyGExporter → Data
+        """
+        if not description or len(description.strip()) < 10:
+            return None
+
+        # Run TPG pipeline
+        graph = pipeline.run(description, doc_id=cve_id)
+
+        # Skip trivially small graphs (likely rejected/empty CVEs)
+        if graph.num_nodes < 3:
+            return None
+
+        # Export to PyG dict format using existing exporter
+        pyg_dict = pipeline.export_pyg(graph, embedding_dim=self.embedding_dim)
+
+        # Build label
+        if self.label_mode == "binary":
+            label = record.get("binary_label", 0)
+        elif self.label_mode == "soft":
+            label = record.get("epss_score", 0.0)
+        else:
+            label = record.get("binary_label", 0)
+
+        # Convert to PyG Data object
+        x = torch.tensor(pyg_dict["x"], dtype=torch.float)
+        edge_index = torch.tensor(pyg_dict["edge_index"], dtype=torch.long)
+        edge_type = torch.tensor(pyg_dict["edge_type"], dtype=torch.long)
+        edge_attr = torch.tensor(pyg_dict["edge_attr"], dtype=torch.float)
+
+        if self.label_mode == "soft":
+            y = torch.tensor([label], dtype=torch.float)
+        else:
+            y = torch.tensor([label], dtype=torch.long)
+
+        data = Data(
+            x=x,
+            edge_index=edge_index,
+            edge_type=edge_type,
+            edge_attr=edge_attr,
+            y=y,
+            num_nodes=pyg_dict["num_nodes"],
+        )
+
+        # Store metadata (not used in training but useful for analysis)
+        data.cve_id = cve_id
+        data.num_node_types = pyg_dict["num_node_types"]
+        data.num_edge_types = pyg_dict["num_edge_types"]
+
+        return data
+
+    def get_class_weights(self) -> torch.Tensor:
+        """Compute inverse-frequency class weights for imbalanced binary classification.
+
+        EPSS-style datasets have ~5% positive rate (exploited).
+        """
+        labels = []
+        for data in self:
+            labels.append(data.y.item())
+        labels = torch.tensor(labels)
+        n_pos = labels.sum().item()
+        n_neg = len(labels) - n_pos
+        if n_pos == 0 or n_neg == 0:
+            return torch.tensor([1.0, 1.0])
+        weight_neg = len(labels) / (2.0 * n_neg)
+        weight_pos = len(labels) / (2.0 * n_pos)
+        return torch.tensor([weight_neg, weight_pos])
+
+    def get_split_indices(
+        self, train_ratio: float = 0.7, val_ratio: float = 0.15, seed: int = 42
+    ) -> Dict[str, List[int]]:
+        """Split dataset indices into train/val/test with stratification.
+
+        Maintains the same positive/negative ratio in each split.
+        """
+        import numpy as np
+        rng = np.random.RandomState(seed)
+
+        pos_indices = []
+        neg_indices = []
+        for i in range(len(self)):
+            if self[i].y.item() == 1:
+                pos_indices.append(i)
+            else:
+                neg_indices.append(i)
+
+        rng.shuffle(pos_indices)
+        rng.shuffle(neg_indices)
+
+        def split_list(indices):
+            n = len(indices)
+            n_train = int(n * train_ratio)
+            n_val = int(n * val_ratio)
+            return {
+                "train": indices[:n_train],
+                "val": indices[n_train : n_train + n_val],
+                "test": indices[n_train + n_val :],
+            }
+
+        pos_split = split_list(pos_indices)
+        neg_split = split_list(neg_indices)
+
+        return {
+            "train": pos_split["train"] + neg_split["train"],
+            "val": pos_split["val"] + neg_split["val"],
+            "test": pos_split["test"] + neg_split["test"],
+        }
