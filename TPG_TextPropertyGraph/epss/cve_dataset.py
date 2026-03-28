@@ -44,6 +44,8 @@ class CVEGraphDataset(InMemoryDataset):
         embedding_dim: Dimension of SecBERT embeddings (768). Set 0 to skip.
         use_hybrid: If True, use HybridSecurityPipeline (rule + SecBERT model).
                     If False, use SecurityPipeline (rule-only, faster).
+        include_tabular: If True, encode tabular features (CVSS, CWE, age, refs)
+                        and store as data.tabular for hybrid GNN model.
         max_cves: Limit number of CVEs to process (for development/debugging).
         transform: PyG transform to apply to each Data object.
         pre_transform: PyG pre-transform to apply before saving.
@@ -56,6 +58,7 @@ class CVEGraphDataset(InMemoryDataset):
         label_mode: str = "binary",
         embedding_dim: int = 768,
         use_hybrid: bool = True,
+        include_tabular: bool = False,
         max_cves: Optional[int] = None,
         transform: Optional[Callable] = None,
         pre_transform: Optional[Callable] = None,
@@ -64,6 +67,7 @@ class CVEGraphDataset(InMemoryDataset):
         self.label_mode = label_mode
         self.embedding_dim = embedding_dim
         self.use_hybrid = use_hybrid
+        self.include_tabular = include_tabular
         self.max_cves = max_cves
         super().__init__(root, transform, pre_transform)
         self.load(self.processed_paths[0])
@@ -75,6 +79,8 @@ class CVEGraphDataset(InMemoryDataset):
     @property
     def processed_file_names(self) -> List[str]:
         suffix = f"_{self.label_mode}_emb{self.embedding_dim}"
+        if self.include_tabular:
+            suffix += "_tab"
         if self.max_cves:
             suffix += f"_n{self.max_cves}"
         return [f"cve_graphs{suffix}.pt"]
@@ -104,6 +110,14 @@ class CVEGraphDataset(InMemoryDataset):
         # Initialize TPG pipeline
         pipeline = self._init_pipeline()
 
+        # Initialize tabular feature extractor if needed
+        tab_extractor = None
+        if self.include_tabular:
+            from epss.tabular_features import TabularFeatureExtractor
+            tab_extractor = TabularFeatureExtractor(top_k_cwes=25)
+            tab_extractor.fit(labeled_cves)
+            logger.info("Tabular features enabled: %d dimensions", tab_extractor.feature_dim)
+
         data_list = []
         cve_ids = list(labeled_cves.keys())
         if self.max_cves:
@@ -115,7 +129,8 @@ class CVEGraphDataset(InMemoryDataset):
             description = record["description"]
 
             try:
-                data = self._cve_to_pyg(pipeline, cve_id, description, record)
+                data = self._cve_to_pyg(pipeline, cve_id, description, record,
+                                         tab_extractor=tab_extractor)
                 if data is not None:
                     if self.pre_transform is not None:
                         data = self.pre_transform(data)
@@ -145,7 +160,8 @@ class CVEGraphDataset(InMemoryDataset):
         logger.info("Using SecurityPipeline (rule-only)")
         return SecurityPipeline()
 
-    def _cve_to_pyg(self, pipeline, cve_id: str, description: str, record: dict) -> Optional[Data]:
+    def _cve_to_pyg(self, pipeline, cve_id: str, description: str, record: dict,
+                    tab_extractor=None) -> Optional[Data]:
         """Convert a single CVE description to a PyG Data object.
 
         Pipeline: CVE text → HybridSecurityPipeline → TextPropertyGraph → PyGExporter → Data
@@ -190,6 +206,11 @@ class CVEGraphDataset(InMemoryDataset):
             y=y,
             num_nodes=pyg_dict["num_nodes"],
         )
+
+        # Tabular features for hybrid model
+        if tab_extractor is not None:
+            tab_vec = tab_extractor.encode(record)
+            data.tabular = torch.tensor(tab_vec, dtype=torch.float).unsqueeze(0)  # [1, tab_dim]
 
         # Store metadata (not used in training but useful for analysis)
         data.cve_id = cve_id
@@ -236,18 +257,43 @@ class CVEGraphDataset(InMemoryDataset):
         rng.shuffle(pos_indices)
         rng.shuffle(neg_indices)
 
-        def split_list(indices):
-            n = len(indices)
-            n_train = int(n * train_ratio)
-            n_val = int(n * val_ratio)
-            return {
-                "train": indices[:n_train],
-                "val": indices[n_train : n_train + n_val],
-                "test": indices[n_train + n_val :],
+        n_pos = len(pos_indices)
+        n_neg = len(neg_indices)
+
+        if n_pos < 3:
+            logger.warning(
+                "Only %d positive samples — forcing at least 1 per split", n_pos
+            )
+            # Guarantee at least 1 positive in each split
+            pos_split = {
+                "train": pos_indices[:max(1, n_pos - 2)],
+                "val": pos_indices[max(1, n_pos - 2) : max(1, n_pos - 2) + min(1, n_pos)],
+                "test": pos_indices[-min(1, max(0, n_pos - 1)):] if n_pos > 1 else [],
+            }
+        else:
+            n_pos_train = max(1, int(n_pos * train_ratio))
+            n_pos_val = max(1, int(n_pos * val_ratio))
+            n_pos_test = max(1, n_pos - n_pos_train - n_pos_val)
+            pos_split = {
+                "train": pos_indices[:n_pos_train],
+                "val": pos_indices[n_pos_train : n_pos_train + n_pos_val],
+                "test": pos_indices[n_pos_train + n_pos_val :],
             }
 
-        pos_split = split_list(pos_indices)
-        neg_split = split_list(neg_indices)
+        n_neg_train = int(n_neg * train_ratio)
+        n_neg_val = int(n_neg * val_ratio)
+        neg_split = {
+            "train": neg_indices[:n_neg_train],
+            "val": neg_indices[n_neg_train : n_neg_train + n_neg_val],
+            "test": neg_indices[n_neg_train + n_neg_val :],
+        }
+
+        logger.info(
+            "Split: train=%d (%d+), val=%d (%d+), test=%d (%d+)",
+            len(pos_split["train"]) + len(neg_split["train"]), len(pos_split["train"]),
+            len(pos_split["val"]) + len(neg_split["val"]), len(pos_split["val"]),
+            len(pos_split["test"]) + len(neg_split["test"]), len(pos_split["test"]),
+        )
 
         return {
             "train": pos_split["train"] + neg_split["train"],

@@ -25,7 +25,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch_geometric.loader import DataLoader
 
-from epss.gnn_model import EPSSGraphClassifier
+from epss.gnn_model import EPSSGraphClassifier, HybridEPSSClassifier
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ class Trainer:
     def __init__(
         self,
         dataset,
-        model: EPSSGraphClassifier,
+        model: nn.Module,
         device: str = "cpu",
         output_dir: str = "output/epss",
         lr: float = 1e-3,
@@ -175,7 +175,12 @@ class Trainer:
         return total_loss / max(n_batches, 1)
 
     def _evaluate(self, loader: DataLoader) -> Dict[str, float]:
-        """Evaluate model on a data loader."""
+        """Evaluate model on a data loader.
+
+        Works for both EPSSGraphClassifier and HybridEPSSClassifier.
+        The tabular tensor is automatically batched by PyG's DataLoader
+        when present on Data objects (concatenated along dim=0).
+        """
         self.model.eval()
         all_probs = []
         all_labels = []

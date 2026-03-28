@@ -21,6 +21,10 @@ Usage:
     python -m epss.run_pipeline --backbone gat --skip-collect
     python -m epss.run_pipeline --backbone gcn --skip-collect
     python -m epss.run_pipeline --backbone sage --skip-collect
+
+    # Phase 3: Hybrid GNN + tabular features (CVSS, CWE, age, refs)
+    python -m epss.run_pipeline --hybrid --skip-collect
+    python -m epss.run_pipeline --hybrid --labeled-file data/epss/labeled_cves_balanced.json --skip-collect
 """
 
 import argparse
@@ -54,6 +58,8 @@ def main():
     parser.add_argument("--skip-collect", action="store_true",
                         help="Skip data collection, use existing labeled_cves.json")
     parser.add_argument("--data-dir", default="data/epss")
+    parser.add_argument("--labeled-file", default=None,
+                        help="Path to labeled_cves JSON (default: <data-dir>/labeled_cves.json)")
 
     # Dataset
     parser.add_argument("--max-cves", type=int, default=None,
@@ -63,6 +69,12 @@ def main():
     parser.add_argument("--no-hybrid", action="store_true",
                         help="Use rule-only SecurityPipeline instead of Hybrid")
     parser.add_argument("--label-mode", choices=["binary", "soft"], default="binary")
+
+    # Hybrid model (Phase 3)
+    parser.add_argument("--hybrid", action="store_true",
+                        help="Use hybrid GNN+tabular model (CVSS, CWE, age, refs)")
+    parser.add_argument("--top-k-cwes", type=int, default=25,
+                        help="Number of top CWEs to one-hot encode (hybrid mode)")
 
     # Model
     parser.add_argument("--backbone", choices=["gcn", "gat", "sage"], default="gat")
@@ -101,7 +113,7 @@ def main():
 
     data_dir = Path(args.data_dir)
     output_dir = Path(args.output_dir)
-    labeled_path = data_dir / "labeled_cves.json"
+    labeled_path = Path(args.labeled_file) if args.labeled_file else data_dir / "labeled_cves.json"
 
     # ─── Phase 1: Data Collection ─────────────────────────────────
 
@@ -141,6 +153,7 @@ def main():
         label_mode=args.label_mode,
         embedding_dim=args.embedding_dim,
         use_hybrid=not args.no_hybrid,
+        include_tabular=args.hybrid,
         max_cves=args.max_cves,
     )
     logger.info("Dataset: %d graphs", len(dataset))
@@ -155,10 +168,17 @@ def main():
     logger.info("Input features: %d (node types + embeddings)", in_channels)
     logger.info("Sample graph: %d nodes, %d edges", sample.num_nodes, sample.edge_index.shape[1])
 
+    # Detect tabular features
+    tabular_dim = 0
+    if args.hybrid and hasattr(sample, "tabular") and sample.tabular is not None:
+        tabular_dim = sample.tabular.shape[-1]
+        logger.info("Tabular features: %d dimensions (CVSS + CWE + age + refs)", tabular_dim)
+
     # ─── Phase 3: GNN Training ───────────────────────────────────
 
+    mode_str = "Hybrid GNN+Tabular" if tabular_dim > 0 else "GNN"
     logger.info("=" * 60)
-    logger.info("PHASE 3: GNN Training (%s backbone)", args.backbone.upper())
+    logger.info("PHASE 3: %s Training (%s backbone)", mode_str, args.backbone.upper())
     logger.info("=" * 60)
 
     model = build_model(
@@ -168,6 +188,7 @@ def main():
         num_layers=args.layers,
         dropout=args.dropout,
         num_heads=args.heads,
+        tabular_dim=tabular_dim,
     )
 
     n_params = sum(p.numel() for p in model.parameters())
@@ -198,8 +219,10 @@ def main():
     config = {
         "args": vars(args),
         "model_params": n_params,
+        "model_type": "HybridEPSSClassifier" if tabular_dim > 0 else "EPSSGraphClassifier",
         "dataset_size": len(dataset),
         "in_channels": in_channels,
+        "tabular_dim": tabular_dim,
         "device": device,
         "test_results": test_results,
     }

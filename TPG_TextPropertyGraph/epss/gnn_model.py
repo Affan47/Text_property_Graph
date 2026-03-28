@@ -1,23 +1,25 @@
 """
 GNN Model — Graph-Level Binary Classifier for CVE Exploitation Prediction
 ==========================================================================
-Three GNN backbones for graph-level classification:
+Two model architectures:
+
+1. EPSSGraphClassifier (Phase 2 — text-only baseline):
+    Input: CVE TPG graph → GNN → Global Pooling → MLP → P(exploitation)
+
+2. HybridEPSSClassifier (Phase 3 — graph + tabular):
+    Input: CVE TPG graph + tabular features (CVSS, CWE, age, refs)
+      ↓
+    [GNN Backbone] → graph embedding (256-dim)
+    [Tabular MLP]  → tabular embedding (64-dim)
+      ↓
+    [Concat] → fusion embedding (320-dim)
+      ↓
+    [Classifier MLP] → P(exploitation in 30 days)
+
+Three GNN backbones:
     1. GCN  (Graph Convolutional Network)  — Kipf & Welling 2017
     2. GAT  (Graph Attention Network)      — Veličković et al. 2018
     3. SAGE (GraphSAGE)                    — Hamilton et al. 2017
-
-Architecture:
-    Input: CVE TPG graph (nodes with SecBERT embeddings + type encoding)
-      ↓
-    [GNN Backbone] × L layers (message passing on graph structure)
-      ↓
-    [Global Pooling] (mean + max concatenation → graph-level embedding)
-      ↓
-    [MLP Classifier] (graph embedding → P(exploitation in 30 days))
-
-This is the core research contribution: using graph structure from TPG
-(coreference chains, discourse relations, entity relationships) instead of
-EPSS's flat 147 binary keyword features.
 """
 
 import torch
@@ -178,6 +180,111 @@ class EPSSGraphClassifier(nn.Module):
             return global_mean_pool(x, batch)
 
 
+class HybridEPSSClassifier(nn.Module):
+    """Phase 3: Hybrid GNN + Tabular classifier.
+
+    Combines graph-level embeddings from TPG (structural text understanding)
+    with tabular features (CVSS, CWE, references, vulnerability age) that
+    EPSS v3 uses but the text-only GNN misses.
+
+    Architecture:
+        GNN branch:     TPG graph → EPSSGraphClassifier backbone → 256-dim
+        Tabular branch: [53-dim] → Linear(128) → ReLU → Dropout → 64-dim
+        Fusion:         concat(256, 64) = 320-dim → MLP → 1 (logit)
+
+    Args:
+        in_channels: Node feature dimension for GNN (781 for SecBERT + types).
+        tabular_dim: Dimension of tabular feature vector (53 by default).
+        hidden_channels: GNN hidden dimension.
+        num_layers: Number of GNN message-passing layers.
+        backbone: GNN backbone ('gcn', 'gat', 'sage').
+        dropout: Dropout rate.
+        num_heads: GAT attention heads.
+        tabular_hidden: Hidden dim for tabular encoder.
+    """
+
+    def __init__(
+        self,
+        in_channels: int,
+        tabular_dim: int,
+        hidden_channels: int = 128,
+        num_layers: int = 3,
+        backbone: str = "gat",
+        dropout: float = 0.3,
+        num_heads: int = 4,
+        tabular_hidden: int = 64,
+    ):
+        super().__init__()
+        self.dropout = dropout
+
+        # GNN branch (reuse existing backbone, without its classifier head)
+        self.gnn = EPSSGraphClassifier(
+            in_channels=in_channels,
+            hidden_channels=hidden_channels,
+            num_layers=num_layers,
+            backbone=backbone,
+            dropout=dropout,
+            num_heads=num_heads,
+            pool="mean_max",
+            num_classes=1,  # won't use its classifier
+        )
+
+        # Graph embedding dimension from GNN pooling
+        gnn_emb_dim = hidden_channels * 2  # mean_max pooling
+
+        # Tabular branch
+        self.tabular_encoder = nn.Sequential(
+            nn.Linear(tabular_dim, tabular_hidden * 2),
+            nn.BatchNorm1d(tabular_hidden * 2),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(tabular_hidden * 2, tabular_hidden),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+        )
+
+        # Fusion classifier
+        fusion_dim = gnn_emb_dim + tabular_hidden
+        self.classifier = nn.Sequential(
+            nn.Linear(fusion_dim, hidden_channels),
+            nn.BatchNorm1d(hidden_channels),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_channels, hidden_channels // 2),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_channels // 2, 1),
+        )
+
+    def forward(self, data) -> torch.Tensor:
+        """Forward pass: graph + tabular → exploitation logit.
+
+        Args:
+            data: PyG Data/Batch with x, edge_index, batch, tabular.
+
+        Returns:
+            logits: [batch_size, 1] predictions.
+        """
+        # GNN branch: graph → embedding
+        graph_emb = self.gnn.get_graph_embedding(data)
+
+        # Tabular branch
+        tabular_emb = self.tabular_encoder(data.tabular)
+
+        # Fusion
+        fused = torch.cat([graph_emb, tabular_emb], dim=-1)
+        logits = self.classifier(fused)
+        return logits
+
+    def predict_proba(self, data) -> torch.Tensor:
+        logits = self.forward(data)
+        return torch.sigmoid(logits).squeeze(-1)
+
+    def get_graph_embedding(self, data) -> torch.Tensor:
+        """Get the GNN branch embedding only."""
+        return self.gnn.get_graph_embedding(data)
+
+
 def build_model(
     in_channels: int,
     backbone: str = "gat",
@@ -185,16 +292,32 @@ def build_model(
     num_layers: int = 3,
     dropout: float = 0.3,
     num_heads: int = 4,
-) -> EPSSGraphClassifier:
-    """Factory function to create the GNN model.
+    tabular_dim: int = 0,
+) -> nn.Module:
+    """Factory function to create GNN or Hybrid model.
 
-    Default configuration designed for CVE TPG graphs:
-        - in_channels: 781 (13 node types + 768 SecBERT embedding)
-        - GAT backbone with 4 attention heads
-        - 3 message-passing layers
-        - mean+max global pooling
-        - Binary classification (sigmoid output)
+    Args:
+        in_channels: Node feature dimension (781 for SecBERT + 13 types).
+        backbone: GNN backbone ('gcn', 'gat', 'sage').
+        hidden_channels: GNN hidden dimension.
+        num_layers: Number of GNN layers.
+        dropout: Dropout rate.
+        num_heads: GAT attention heads.
+        tabular_dim: If > 0, build HybridEPSSClassifier. If 0, text-only.
+
+    Returns:
+        EPSSGraphClassifier (text-only) or HybridEPSSClassifier (hybrid).
     """
+    if tabular_dim > 0:
+        return HybridEPSSClassifier(
+            in_channels=in_channels,
+            tabular_dim=tabular_dim,
+            hidden_channels=hidden_channels,
+            num_layers=num_layers,
+            backbone=backbone,
+            dropout=dropout,
+            num_heads=num_heads,
+        )
     return EPSSGraphClassifier(
         in_channels=in_channels,
         hidden_channels=hidden_channels,
