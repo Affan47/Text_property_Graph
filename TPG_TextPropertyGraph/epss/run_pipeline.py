@@ -25,6 +25,14 @@ Usage:
     # Phase 3: Hybrid GNN + tabular features (CVSS, CWE, age, refs)
     python -m epss.run_pipeline --hybrid --skip-collect
     python -m epss.run_pipeline --hybrid --labeled-file data/epss/labeled_cves_balanced.json --skip-collect
+
+    # Edge-type-aware backbones (from SemVul)
+    python -m epss.run_pipeline --backbone edge_type --skip-collect
+    python -m epss.run_pipeline --backbone rgat --skip-collect
+    python -m epss.run_pipeline --backbone multiview --skip-collect
+
+    # Full hybrid + edge-aware
+    python -m epss.run_pipeline --hybrid --backbone rgat --skip-collect
 """
 
 import argparse
@@ -77,11 +85,16 @@ def main():
                         help="Number of top CWEs to one-hot encode (hybrid mode)")
 
     # Model
-    parser.add_argument("--backbone", choices=["gcn", "gat", "sage"], default="gat")
+    parser.add_argument("--backbone",
+                        choices=["gcn", "gat", "sage", "edge_type", "rgat", "multiview"],
+                        default="gat",
+                        help="GNN backbone. edge_type/rgat/multiview are edge-aware (from SemVul)")
     parser.add_argument("--hidden", type=int, default=128)
     parser.add_argument("--layers", type=int, default=3)
-    parser.add_argument("--heads", type=int, default=4, help="GAT attention heads")
+    parser.add_argument("--heads", type=int, default=4, help="GAT/RGAT attention heads")
     parser.add_argument("--dropout", type=float, default=0.3)
+    parser.add_argument("--num-edge-types", type=int, default=None,
+                        help="Number of TPG edge types (auto-detect from data if not set)")
 
     # Training
     parser.add_argument("--epochs", type=int, default=100)
@@ -174,9 +187,42 @@ def main():
         tabular_dim = sample.tabular.shape[-1]
         logger.info("Tabular features: %d dimensions (CVSS + CWE + age + refs)", tabular_dim)
 
+    # Load edge/node type vocab (saved during dataset processing)
+    edge_type_vocab = None
+    vocab_path = Path(dataset.processed_dir) / "edge_type_vocab.json"
+    if vocab_path.exists():
+        with open(vocab_path) as f:
+            edge_type_vocab = json.load(f)
+        logger.info("Loaded edge_type_vocab.json: %d types", len(edge_type_vocab))
+
+    node_vocab_path = Path(dataset.processed_dir) / "node_type_vocab.json"
+    if node_vocab_path.exists():
+        with open(node_vocab_path) as f:
+            node_type_vocab = json.load(f)
+        logger.info("Loaded node_type_vocab.json: %d types", len(node_type_vocab))
+
+    # Detect number of edge types from vocab or data
+    num_edge_types = args.num_edge_types
+    if num_edge_types is None:
+        if edge_type_vocab is not None:
+            num_edge_types = len(edge_type_vocab)
+        elif hasattr(sample, "num_edge_types") and sample.num_edge_types is not None:
+            num_edge_types = int(sample.num_edge_types)
+        elif hasattr(sample, "edge_type") and sample.edge_type is not None:
+            num_edge_types = int(sample.edge_type.max().item()) + 1
+        else:
+            num_edge_types = 13  # TPG Level 1 default
+    logger.info("Edge types: %d (for edge-aware backbones)", num_edge_types)
+
     # ─── Phase 3: GNN Training ───────────────────────────────────
 
-    mode_str = "Hybrid GNN+Tabular" if tabular_dim > 0 else "GNN"
+    edge_aware = args.backbone in ("edge_type", "rgat", "multiview")
+    mode_parts = []
+    if edge_aware:
+        mode_parts.append("Edge-Aware")
+    if tabular_dim > 0:
+        mode_parts.append("Hybrid")
+    mode_str = " ".join(mode_parts) if mode_parts else "GNN"
     logger.info("=" * 60)
     logger.info("PHASE 3: %s Training (%s backbone)", mode_str, args.backbone.upper())
     logger.info("=" * 60)
@@ -189,6 +235,8 @@ def main():
         dropout=args.dropout,
         num_heads=args.heads,
         tabular_dim=tabular_dim,
+        num_edge_types=num_edge_types,
+        edge_type_vocab=edge_type_vocab,
     )
 
     n_params = sum(p.numel() for p in model.parameters())
@@ -219,10 +267,12 @@ def main():
     config = {
         "args": vars(args),
         "model_params": n_params,
-        "model_type": "HybridEPSSClassifier" if tabular_dim > 0 else "EPSSGraphClassifier",
+        "model_type": model.__class__.__name__,
         "dataset_size": len(dataset),
         "in_channels": in_channels,
         "tabular_dim": tabular_dim,
+        "num_edge_types": num_edge_types,
+        "edge_aware": edge_aware,
         "device": device,
         "test_results": test_results,
     }

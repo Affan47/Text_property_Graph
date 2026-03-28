@@ -110,6 +110,9 @@ class CVEGraphDataset(InMemoryDataset):
         # Initialize TPG pipeline
         pipeline = self._init_pipeline()
 
+        # Export and save vocab files (like SemVul's vocab_builder)
+        self._export_vocab(pipeline)
+
         # Initialize tabular feature extractor if needed
         tab_extractor = None
         if self.include_tabular:
@@ -145,6 +148,39 @@ class CVEGraphDataset(InMemoryDataset):
         )
 
         self.save(data_list, self.processed_paths[0])
+
+    def _export_vocab(self, pipeline):
+        """Export edge_type_vocab.json and node_type_vocab.json (like SemVul's vocab_builder).
+
+        These files document the integer mapping from type names to indices,
+        ensuring the GNN's edge-type-aware layers match the data encoding.
+        """
+        from tpg.exporters.exporters import PyGExporter
+
+        schema = pipeline.schema
+        exporter = PyGExporter()
+        vocab = exporter.export_vocab(schema)
+
+        # Save edge type vocab
+        edge_vocab_path = Path(self.processed_dir) / "edge_type_vocab.json"
+        with open(edge_vocab_path, "w") as f:
+            json.dump(vocab["edge_types"], f, indent=2)
+
+        # Save node type vocab
+        node_vocab_path = Path(self.processed_dir) / "node_type_vocab.json"
+        with open(node_vocab_path, "w") as f:
+            json.dump(vocab["node_types"], f, indent=2)
+
+        logger.info(
+            "Saved vocab: %d node types → %s, %d edge types → %s",
+            vocab["num_node_types"], node_vocab_path.name,
+            vocab["num_edge_types"], edge_vocab_path.name,
+        )
+
+        # Log the full mapping for transparency
+        logger.info("Edge type vocab (name → index):")
+        for name, idx in sorted(vocab["edge_types"].items(), key=lambda x: x[1]):
+            logger.info("  [%2d] %s", idx, name)
 
     def _init_pipeline(self):
         """Initialize the TPG pipeline."""

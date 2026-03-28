@@ -1,25 +1,17 @@
 """
 GNN Model — Graph-Level Binary Classifier for CVE Exploitation Prediction
 ==========================================================================
-Two model architectures:
+Model architectures:
 
-1. EPSSGraphClassifier (Phase 2 — text-only baseline):
-    Input: CVE TPG graph → GNN → Global Pooling → MLP → P(exploitation)
+1. EPSSGraphClassifier — edge-agnostic baselines (GCN, GAT, SAGE)
+2. EdgeTypeEPSSClassifier — edge-type embedding + MLP messages (from SemVul)
+3. RGATEPSSClassifier — relation-specific attention (from SemVul RGAT)
+4. MultiViewEPSSClassifier — separate GNN per edge group (from SemVul MultiView)
+5. HybridEPSSClassifier — any GNN backbone + tabular features
 
-2. HybridEPSSClassifier (Phase 3 — graph + tabular):
-    Input: CVE TPG graph + tabular features (CVSS, CWE, age, refs)
-      ↓
-    [GNN Backbone] → graph embedding (256-dim)
-    [Tabular MLP]  → tabular embedding (64-dim)
-      ↓
-    [Concat] → fusion embedding (320-dim)
-      ↓
-    [Classifier MLP] → P(exploitation in 30 days)
-
-Three GNN backbones:
-    1. GCN  (Graph Convolutional Network)  — Kipf & Welling 2017
-    2. GAT  (Graph Attention Network)      — Veličković et al. 2018
-    3. SAGE (GraphSAGE)                    — Hamilton et al. 2017
+Six GNN backbones:
+    Edge-agnostic:   gcn, gat, sage
+    Edge-type-aware: edge_type, rgat, multiview  (ported from SemVul)
 """
 
 import torch
@@ -32,6 +24,13 @@ from torch_geometric.nn import (
 )
 from torch_geometric.data import Data
 from typing import Optional
+
+from epss.edge_aware_layers import (
+    EdgeTypeEPSSClassifier,
+    RGATEPSSClassifier,
+    MultiViewEPSSClassifier,
+    build_view_config_from_vocab,
+)
 
 
 class EPSSGraphClassifier(nn.Module):
@@ -181,25 +180,20 @@ class EPSSGraphClassifier(nn.Module):
 
 
 class HybridEPSSClassifier(nn.Module):
-    """Phase 3: Hybrid GNN + Tabular classifier.
+    """Hybrid GNN + Tabular classifier.
 
-    Combines graph-level embeddings from TPG (structural text understanding)
-    with tabular features (CVSS, CWE, references, vulnerability age) that
-    EPSS v3 uses but the text-only GNN misses.
-
-    Architecture:
-        GNN branch:     TPG graph → EPSSGraphClassifier backbone → 256-dim
-        Tabular branch: [53-dim] → Linear(128) → ReLU → Dropout → 64-dim
-        Fusion:         concat(256, 64) = 320-dim → MLP → 1 (logit)
+    Combines graph-level embeddings from any GNN backbone (including
+    edge-type-aware models from SemVul) with tabular features.
 
     Args:
-        in_channels: Node feature dimension for GNN (781 for SecBERT + types).
-        tabular_dim: Dimension of tabular feature vector (53 by default).
+        in_channels: Node feature dimension for GNN.
+        tabular_dim: Dimension of tabular feature vector.
         hidden_channels: GNN hidden dimension.
         num_layers: Number of GNN message-passing layers.
-        backbone: GNN backbone ('gcn', 'gat', 'sage').
+        backbone: GNN backbone ('gcn','gat','sage','edge_type','rgat','multiview').
         dropout: Dropout rate.
-        num_heads: GAT attention heads.
+        num_heads: GAT/RGAT attention heads.
+        num_edge_types: Number of edge relation types (for edge-aware backbones).
         tabular_hidden: Hidden dim for tabular encoder.
     """
 
@@ -212,25 +206,25 @@ class HybridEPSSClassifier(nn.Module):
         backbone: str = "gat",
         dropout: float = 0.3,
         num_heads: int = 4,
+        num_edge_types: int = 13,
         tabular_hidden: int = 64,
     ):
         super().__init__()
         self.dropout = dropout
 
-        # GNN branch (reuse existing backbone, without its classifier head)
-        self.gnn = EPSSGraphClassifier(
+        # GNN branch — supports both edge-agnostic and edge-aware backbones
+        self.gnn = _build_gnn_backbone(
             in_channels=in_channels,
             hidden_channels=hidden_channels,
             num_layers=num_layers,
             backbone=backbone,
             dropout=dropout,
             num_heads=num_heads,
-            pool="mean_max",
-            num_classes=1,  # won't use its classifier
+            num_edge_types=num_edge_types,
         )
 
-        # Graph embedding dimension from GNN pooling
-        gnn_emb_dim = hidden_channels * 2  # mean_max pooling
+        # Graph embedding dimension from mean+max pooling
+        gnn_emb_dim = hidden_channels * 2
 
         # Tabular branch
         self.tabular_encoder = nn.Sequential(
@@ -257,32 +251,70 @@ class HybridEPSSClassifier(nn.Module):
         )
 
     def forward(self, data) -> torch.Tensor:
-        """Forward pass: graph + tabular → exploitation logit.
-
-        Args:
-            data: PyG Data/Batch with x, edge_index, batch, tabular.
-
-        Returns:
-            logits: [batch_size, 1] predictions.
-        """
-        # GNN branch: graph → embedding
         graph_emb = self.gnn.get_graph_embedding(data)
-
-        # Tabular branch
         tabular_emb = self.tabular_encoder(data.tabular)
-
-        # Fusion
         fused = torch.cat([graph_emb, tabular_emb], dim=-1)
-        logits = self.classifier(fused)
-        return logits
+        return self.classifier(fused)
 
     def predict_proba(self, data) -> torch.Tensor:
-        logits = self.forward(data)
-        return torch.sigmoid(logits).squeeze(-1)
+        return torch.sigmoid(self.forward(data)).squeeze(-1)
 
     def get_graph_embedding(self, data) -> torch.Tensor:
-        """Get the GNN branch embedding only."""
         return self.gnn.get_graph_embedding(data)
+
+
+def _build_gnn_backbone(
+    in_channels: int,
+    hidden_channels: int,
+    num_layers: int,
+    backbone: str,
+    dropout: float,
+    num_heads: int,
+    num_edge_types: int,
+    edge_type_vocab: Optional[dict] = None,
+) -> nn.Module:
+    """Internal: build a GNN backbone (with get_graph_embedding method)."""
+    if backbone == "edge_type":
+        return EdgeTypeEPSSClassifier(
+            in_channels=in_channels,
+            hidden_channels=hidden_channels,
+            num_layers=num_layers,
+            num_edge_types=num_edge_types,
+            dropout=dropout,
+        )
+    elif backbone == "rgat":
+        return RGATEPSSClassifier(
+            in_channels=in_channels,
+            hidden_channels=hidden_channels,
+            num_layers=num_layers,
+            num_edge_types=num_edge_types,
+            num_heads=num_heads,
+            dropout=dropout,
+        )
+    elif backbone == "multiview":
+        # Resolve view config from vocab (name→index), not hardcoded indices
+        view_config = None
+        if edge_type_vocab is not None:
+            view_config = build_view_config_from_vocab(edge_type_vocab)
+        return MultiViewEPSSClassifier(
+            in_channels=in_channels,
+            hidden_channels=hidden_channels,
+            num_layers=num_layers,
+            dropout=dropout,
+            edge_view_config=view_config,
+        )
+    else:
+        # Edge-agnostic: gcn, gat, sage
+        return EPSSGraphClassifier(
+            in_channels=in_channels,
+            hidden_channels=hidden_channels,
+            num_layers=num_layers,
+            backbone=backbone,
+            dropout=dropout,
+            num_heads=num_heads,
+            pool="mean_max",
+            num_classes=1,
+        )
 
 
 def build_model(
@@ -293,20 +325,26 @@ def build_model(
     dropout: float = 0.3,
     num_heads: int = 4,
     tabular_dim: int = 0,
+    num_edge_types: int = 13,
+    edge_type_vocab: Optional[dict] = None,
 ) -> nn.Module:
     """Factory function to create GNN or Hybrid model.
 
     Args:
         in_channels: Node feature dimension (781 for SecBERT + 13 types).
-        backbone: GNN backbone ('gcn', 'gat', 'sage').
+        backbone: GNN backbone. Edge-agnostic: 'gcn','gat','sage'.
+                  Edge-aware (from SemVul): 'edge_type','rgat','multiview'.
         hidden_channels: GNN hidden dimension.
         num_layers: Number of GNN layers.
         dropout: Dropout rate.
-        num_heads: GAT attention heads.
-        tabular_dim: If > 0, build HybridEPSSClassifier. If 0, text-only.
+        num_heads: GAT/RGAT attention heads.
+        tabular_dim: If > 0, build HybridEPSSClassifier. If 0, GNN-only.
+        num_edge_types: Number of TPG edge relation types (13 base, 23 with security).
+        edge_type_vocab: Dict mapping edge type name → index (from edge_type_vocab.json).
+                        Used by multiview backbone to resolve view config by name.
 
     Returns:
-        EPSSGraphClassifier (text-only) or HybridEPSSClassifier (hybrid).
+        GNN classifier (text-only) or HybridEPSSClassifier (hybrid).
     """
     if tabular_dim > 0:
         return HybridEPSSClassifier(
@@ -317,14 +355,15 @@ def build_model(
             backbone=backbone,
             dropout=dropout,
             num_heads=num_heads,
+            num_edge_types=num_edge_types,
         )
-    return EPSSGraphClassifier(
+    return _build_gnn_backbone(
         in_channels=in_channels,
         hidden_channels=hidden_channels,
         num_layers=num_layers,
         backbone=backbone,
         dropout=dropout,
         num_heads=num_heads,
-        pool="mean_max",
-        num_classes=1,
+        num_edge_types=num_edge_types,
+        edge_type_vocab=edge_type_vocab,
     )
