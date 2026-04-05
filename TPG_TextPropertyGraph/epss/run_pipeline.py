@@ -68,6 +68,11 @@ def main():
     parser.add_argument("--data-dir", default="data/epss")
     parser.add_argument("--labeled-file", default=None,
                         help="Path to labeled_cves JSON (default: <data-dir>/labeled_cves.json)")
+    parser.add_argument("--epss-csv", default=None,
+                        help="Path to pre-downloaded EPSS CSV (e.g. data/epss/epss_scores-2026-03-28.csv). "
+                             "Faster than API and includes percentile ranks.")
+    parser.add_argument("--no-exploitdb", action="store_true",
+                        help="Skip ExploitDB download during data collection")
 
     # Dataset
     parser.add_argument("--max-cves", type=int, default=None,
@@ -139,6 +144,8 @@ def main():
         labeled = collector.fetch_all(
             start_year=args.start_year,
             end_year=args.end_year,
+            epss_csv=args.epss_csv,
+            include_exploitdb=not args.no_exploitdb,
         )
         logger.info("Collected %d labeled CVEs", len(labeled))
     else:
@@ -261,7 +268,11 @@ def main():
     logger.info("PHASE 4: Test Evaluation")
     logger.info("=" * 60)
 
-    test_results = trainer.evaluate_test()
+    test_results = trainer.evaluate_test(
+        backbone=args.backbone,
+        history=history,
+        results_root=Path(args.output_dir).parent,
+    )
 
     # Save full config
     config = {

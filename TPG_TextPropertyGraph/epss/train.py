@@ -112,7 +112,7 @@ class Trainer:
             train_loss = self._train_epoch()
 
             # Validate
-            val_metrics = self._evaluate(self.val_loader)
+            val_metrics, _, _, _ = self._evaluate(self.val_loader)
 
             # LR scheduling
             self.scheduler.step(val_metrics["pr_auc"])
@@ -174,16 +174,18 @@ class Trainer:
 
         return total_loss / max(n_batches, 1)
 
-    def _evaluate(self, loader: DataLoader) -> Dict[str, float]:
+    def _evaluate(
+        self, loader: DataLoader, collect_ids: bool = False
+    ) -> Tuple[Dict[str, float], Optional[List[str]], Optional[np.ndarray], Optional[np.ndarray]]:
         """Evaluate model on a data loader.
 
-        Works for both EPSSGraphClassifier and HybridEPSSClassifier.
-        The tabular tensor is automatically batched by PyG's DataLoader
-        when present on Data objects (concatenated along dim=0).
+        Returns:
+            metrics dict, and optionally (cve_ids, y_prob, y_true) if collect_ids=True.
         """
         self.model.eval()
         all_probs = []
         all_labels = []
+        all_ids = []
         total_loss = 0.0
         n_batches = 0
 
@@ -201,23 +203,46 @@ class Trainer:
                 all_probs.extend(probs.tolist())
                 all_labels.extend(labels.cpu().numpy().tolist())
 
+                if collect_ids and hasattr(batch, "cve_id"):
+                    ids = batch.cve_id
+                    if isinstance(ids, (list, tuple)):
+                        all_ids.extend(ids)
+                    else:
+                        all_ids.append(str(ids))
+
         all_probs = np.array(all_probs)
         all_labels = np.array(all_labels, dtype=int)
 
         metrics = compute_metrics(all_labels, all_probs)
         metrics["loss"] = total_loss / max(n_batches, 1)
-        return metrics
 
-    def evaluate_test(self) -> Dict[str, float]:
+        if collect_ids:
+            return metrics, all_ids, all_probs, all_labels
+        return metrics, None, None, None
+
+    def evaluate_test(
+        self,
+        backbone: str = "",
+        history: Optional[Dict[str, list]] = None,
+        results_root: Optional[Path] = None,
+    ) -> Dict[str, float]:
         """Final evaluation on the held-out test set.
 
-        Loads the best checkpoint and evaluates.
+        Loads the best checkpoint, runs evaluation, saves predictions.csv
+        and generates all visualization plots.
+
+        Args:
+            backbone:     Backbone name for plot titles.
+            history:      Training history dict (for training curves plot).
+            results_root: Parent of all experiment output dirs (for comparison heatmap).
         """
         ckpt_path = self.output_dir / "best_model.pt"
         if ckpt_path.exists():
             self._load_checkpoint(ckpt_path)
 
-        metrics = self._evaluate(self.test_loader)
+        metrics, cve_ids, y_prob, y_true = self._evaluate(
+            self.test_loader, collect_ids=True
+        )
 
         logger.info("=" * 60)
         logger.info("TEST RESULTS")
@@ -232,6 +257,23 @@ class Trainer:
 
         with open(self.output_dir / "test_results.json", "w") as f:
             json.dump(metrics, f, indent=2)
+
+        # ── Visualizations & Predictions ────────────────────────────────────
+        try:
+            from epss.visualize import generate_all
+            generate_all(
+                cve_ids=cve_ids or [],
+                y_true=y_true,
+                y_prob=y_prob,
+                history=history or {},
+                metrics=metrics,
+                output_dir=self.output_dir,
+                backbone=backbone,
+                threshold=metrics.get("threshold", 0.5),
+                results_root=results_root,
+            )
+        except Exception as e:
+            logger.warning("Visualization failed (non-fatal): %s", e)
 
         return metrics
 

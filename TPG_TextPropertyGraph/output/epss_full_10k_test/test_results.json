@@ -1,0 +1,13 @@
+{
+  "pr_auc": 0.5,
+  "roc_auc": NaN,
+  "f1": 0.0,
+  "precision": 0.0,
+  "recall": 0.0,
+  "brier": 8.351326620737487e-06,
+  "threshold": 0.5,
+  "n_samples": 1501,
+  "n_positive": 0,
+  "prevalence": 0.0,
+  "loss": 0.001665341085754335
+}

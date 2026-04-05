@@ -1,17 +1,26 @@
 """
-Tabular Feature Extractor — Encode structured NVD fields for hybrid GNN model
-===============================================================================
+Tabular Feature Extractor — Encode structured NVD + EPSS + ExploitDB fields
+=============================================================================
 Extracts and encodes non-text features from CVE records:
-    - CVSS v3 base score (continuous, normalized 0-1)
-    - CVSS v3 vector components (8 categorical → 22 one-hot)
-    - Top-K CWE IDs (multi-hot + "other")
-    - Number of references (log-normalized)
-    - Vulnerability age (log-normalized days since publication)
-    - Has-CVSS indicator (binary)
-    - Number of CWE IDs (count)
 
-These features complement the GNN's structural text understanding with
-the structured metadata that EPSS v3 uses (CVSS, CWE, vendor/product info).
+    NVD features (53 dims):
+        - CVSS v3 base score (continuous, normalized 0-1)
+        - Has-CVSS indicator (binary)
+        - CVSS v3 vector components (8 categorical → 22 one-hot)
+        - Top-K CWE IDs (multi-hot + "other") = 26 dims
+        - Number of CWE IDs (count, normalized)
+        - Number of references (log-normalized)
+        - Vulnerability age (log-normalized days since publication)
+
+    EPSS features (2 dims):
+        - EPSS score (probability 0-1, from bulk CSV)
+        - EPSS percentile (rank 0-1, from bulk CSV)
+
+    ExploitDB features (2 dims):
+        - has_public_exploit (binary: is there a public PoC?)
+        - num_exploits (log-normalized count of public exploits)
+
+    TOTAL: 57 dimensions
 """
 
 import logging
@@ -102,8 +111,12 @@ class TabularFeatureExtractor:
             + 1                         # num_cwes (count)
             + 1                         # num_references (log-normalized)
             + 1                         # vulnerability_age (log-normalized days)
+            + 1                         # epss_score (0-1 probability)
+            + 1                         # epss_percentile (0-1 rank)
+            + 1                         # has_public_exploit (binary)
+            + 1                         # num_exploits (log-normalized)
         )
-        # = 1 + 1 + 22 + 26 + 1 + 1 + 1 = 53
+        # = 1+1+22+26+1+1+1+1+1+1+1 = 57
 
     def encode(self, record: dict) -> np.ndarray:
         """Encode a single CVE record into a tabular feature vector.
@@ -146,6 +159,19 @@ class TabularFeatureExtractor:
         published = record.get("published", "")
         age_days = self._compute_age_days(published)
         features.append(math.log1p(age_days) / math.log1p(3650))  # normalize by ~10 years
+
+        # 7. EPSS score (0-1, from FIRST bulk CSV or API)
+        features.append(float(record.get("epss_score", 0.0)))
+
+        # 8. EPSS percentile (0-1 rank among all CVEs)
+        features.append(float(record.get("epss_percentile", 0.0)))
+
+        # 9. Has public exploit in ExploitDB (binary)
+        features.append(1.0 if record.get("has_public_exploit", False) else 0.0)
+
+        # 10. Number of public exploits (log-normalized, cap at 20)
+        num_exp = int(record.get("num_exploits", 0))
+        features.append(math.log1p(num_exp) / math.log1p(20))
 
         return np.array(features, dtype=np.float32)
 
@@ -212,5 +238,13 @@ class TabularFeatureExtractor:
             names.append(f"cwe_{cwe}")
         names.append("cwe_other")
 
-        names.extend(["num_cwes", "num_references", "vulnerability_age_days"])
+        names.extend([
+            "num_cwes",
+            "num_references",
+            "vulnerability_age_days",
+            "epss_score",
+            "epss_percentile",
+            "has_public_exploit",
+            "num_exploits",
+        ])
         return names
