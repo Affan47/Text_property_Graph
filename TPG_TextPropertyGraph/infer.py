@@ -275,20 +275,54 @@ def _parse_nvd_record(cve: dict) -> dict:
     }
 
 
-def enrich_with_epss(records: Dict[str, dict], api_key: Optional[str] = None):
-    """Fetch current EPSS scores for CVEs and add to records in-place."""
-    import requests
-    cve_ids = list(records.keys())
-    logger.info("Fetching EPSS scores for %d CVEs ...", len(cve_ids))
+def enrich_with_epss(
+    records: Dict[str, dict],
+    local_epss_file: Optional[str] = None,
+    api_key: Optional[str] = None,
+):
+    """Enrich CVE records with EPSS scores.
 
-    # EPSS API accepts up to 100 CVEs per request
-    for i in range(0, len(cve_ids), 100):
-        batch = cve_ids[i:i+100]
+    Priority:
+      1. Local epss_scores_full.json (instant, covers 323K+ CVEs)
+      2. FIRST.org API (live, covers new CVEs not in local file)
+    """
+    import requests
+
+    # ── 1. Load from local file first ────────────────────────────────────────
+    local_epss: Dict[str, dict] = {}
+    candidates = [
+        local_epss_file,
+        "data/epss_full/epss_scores_full.json",
+        "data/epss/epss_scores_full.json",
+    ]
+    for path in candidates:
+        if path and Path(path).exists():
+            logger.info("Loading EPSS scores from %s ...", path)
+            local_epss = json.loads(Path(path).read_text())
+            break
+
+    hits = 0
+    for cve_id, rec in records.items():
+        if cve_id in local_epss:
+            rec["epss_score"] = float(local_epss[cve_id].get("epss", 0.0))
+            rec["epss_percentile"] = float(local_epss[cve_id].get("percentile", 0.0))
+            hits += 1
+
+    logger.info("Local EPSS: enriched %d / %d CVEs", hits, len(records))
+
+    # ── 2. For CVEs not in local file, fall back to FIRST.org API ────────────
+    missing = [cid for cid in records if records[cid].get("epss_score", 0.0) == 0.0]
+    if not missing:
+        return
+
+    logger.info("Fetching EPSS from FIRST.org API for %d remaining CVEs ...", len(missing))
+    for i in range(0, len(missing), 100):
+        batch = missing[i:i+100]
         params = [("cve", cid) for cid in batch]
         try:
             r = requests.get(
                 "https://api.first.org/data/v1/epss",
-                params=params, timeout=30
+                params=params, timeout=30,
             )
             r.raise_for_status()
             for item in r.json().get("data", []):
@@ -546,12 +580,14 @@ def parse_args():
                    help="cuda / cpu (default: auto-detect)")
     p.add_argument("--nvd-api-key", default=None,
                    help="NVD API key (10× faster rate limit)")
+    p.add_argument("--epss-file", default=None,
+                   help="Local epss_scores_full.json path (default: auto-detect)")
 
     # Output
     p.add_argument("--output", default="predictions.csv",
                    help="Output CSV path (default: predictions.csv)")
     p.add_argument("--no-epss", action="store_true",
-                   help="Skip EPSS score enrichment from FIRST API")
+                   help="Skip EPSS score enrichment entirely")
     p.add_argument("--eval", action="store_true",
                    help="Compute PR-AUC / F1 metrics (requires KEV labels)")
 
@@ -646,7 +682,7 @@ def main():
     # ── Enrich with EPSS scores ───────────────────────────────────────────────
 
     if not args.no_epss and tab_extractor is not None:
-        enrich_with_epss(records, args.nvd_api_key)
+        enrich_with_epss(records, local_epss_file=args.epss_file, api_key=args.nvd_api_key)
 
     # ── Build TPG graphs ──────────────────────────────────────────────────────
 
