@@ -1,0 +1,15 @@
+{
+  "DOCUMENT": 0,
+  "PARAGRAPH": 1,
+  "SENTENCE": 2,
+  "TOKEN": 3,
+  "ENTITY": 4,
+  "PREDICATE": 5,
+  "ARGUMENT": 6,
+  "CONCEPT": 7,
+  "NOUN_PHRASE": 8,
+  "VERB_PHRASE": 9,
+  "CLAUSE": 10,
+  "MENTION": 11,
+  "TOPIC": 12
+}

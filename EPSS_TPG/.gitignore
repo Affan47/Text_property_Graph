@@ -1,0 +1,54 @@
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+
+# ─── Environments ─────────────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+
+# ─── Large Binary Graph Caches ────────────────────────────────────────────────
+# PyG serialized tensors (.pt) — regenerate with:
+#   python -m epss.run_pipeline --backbone multiview --hybrid ...
+# (takes ~2 h for 10K graphs on RTX 5000 Ada; stored in data/*/pyg_dataset/processed/)
+*.pt
+
+# ─── Large Raw / Derived Data Files ───────────────────────────────────────────
+# These files exceed GitHub's 100 MB limit or are derived/regeneratable.
+# Full rebuild instructions: docs/EPSS_GNN_Technical_Report.md (Section 4)
+
+# Raw NVD full fetch (~120 MB each) — rebuild: python -m epss.data_collector
+data/epss_full/nvd_cves.json
+data/epss/nvd_cves.json
+
+# Master merged labeled dataset (>85 MB) — derived from NVD + KEV + EPSS + ExploitDB
+data/epss_full/labeled_cves.json
+data/epss/labeled_cves.json
+
+# 150 MB copy used by epss_full_train/ PyG pipeline
+data/epss_full_train/pyg_dataset/raw/labeled_cves.json
+
+# ─── Compressed EPSS Bulk Downloads ───────────────────────────────────────────
+# Download from: https://epss.cyentia.com/epss_scores-YYYY-MM-DD.csv.gz
+# Then: python -c "from epss.data_collector import load_epss_csv; load_epss_csv(...)"
+*.gz
+
+# ─── Model Checkpoints ────────────────────────────────────────────────────────
+# Retrain with: python -m epss.run_pipeline ... (see docs/ for full commands)
+output/**/best_model.pt
+output/epss/best_model.pt
+
+# ─── Run Logs ─────────────────────────────────────────────────────────────────
+output/*.log
+*.log
+
+# ─── IDE & OS ─────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store

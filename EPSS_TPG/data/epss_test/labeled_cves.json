@@ -1,0 +1,434 @@
+{
+  "CVE-2023-23952": {
+    "cve_id": "CVE-2023-23952",
+    "description": "Advanced Secure Gateway and Content Analysis, prior to 7.3.13.1 / 3.1.6.0, may be susceptible to a Command Injection vulnerability.",
+    "published": "2023-06-01T01:15:17.687",
+    "cvss3_score": 9.8,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-77",
+      "CWE-77"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00657,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-23953": {
+    "cve_id": "CVE-2023-23953",
+    "description": "Advanced Secure Gateway and Content Analysis, prior to 7.3.13.1 / 3.1.6.0, may be susceptible to an Elevation of Privilege vulnerability.",
+    "published": "2023-06-01T01:15:17.747",
+    "cvss3_score": 7.8,
+    "cvss3_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+    "cwe_ids": [],
+    "binary_label": 0,
+    "epss_score": 0.00059,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-23954": {
+    "cve_id": "CVE-2023-23954",
+    "description": "Advanced Secure Gateway and Content Analysis, prior to 7.3.13.1 / 3.1.6.0, may be susceptible to a Stored Cross-Site Scripting vulnerability.",
+    "published": "2023-06-01T01:15:17.783",
+    "cvss3_score": 5.4,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N",
+    "cwe_ids": [
+      "CWE-79",
+      "CWE-79"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00414,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-23955": {
+    "cve_id": "CVE-2023-23955",
+    "description": "Advanced Secure Gateway and Content Analysis, prior to 7.3.13.1 / 3.1.6.0, may be susceptible to a Server-Side Request Forgery vulnerability.",
+    "published": "2023-06-01T01:15:17.820",
+    "cvss3_score": 8.1,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+    "cwe_ids": [
+      "CWE-918",
+      "CWE-918"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00131,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-2598": {
+    "cve_id": "CVE-2023-2598",
+    "description": "A flaw was found in the fixed buffer registration code for io_uring (io_sqe_buffer_register in io_uring/rsrc.c) in the Linux kernel that allows out-of-bounds access to physical memory beyond the end of the buffer. This flaw enables full local privilege escalation.",
+    "published": "2023-06-01T01:15:17.867",
+    "cvss3_score": 7.8,
+    "cvss3_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-416",
+      "CWE-787"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00658,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-2977": {
+    "cve_id": "CVE-2023-2977",
+    "description": "A vulnerbility was found in OpenSC. This security flaw cause a buffer overrun vulnerability in pkcs15 cardos_have_verifyrc_package. The attacker can supply a smart card package with malformed ASN1 context. The cardos_have_verifyrc_package function scans the ASN1 buffer for 2 tags, where remaining length is wrongly caculated due to moved starting pointer. This leads to possible heap-based buffer oob read. In cases where ASAN is enabled while compiling this causes a crash. Further info leak or more damage is possible.",
+    "published": "2023-06-01T01:15:17.917",
+    "cvss3_score": 7.1,
+    "cvss3_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H",
+    "cwe_ids": [
+      "CWE-119",
+      "CWE-125"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00021,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-2985": {
+    "cve_id": "CVE-2023-2985",
+    "description": "A use after free flaw was found in hfsplus_put_super in fs/hfsplus/super.c in the Linux Kernel. This flaw could allow a local user to cause a denial of service problem.",
+    "published": "2023-06-01T01:15:17.970",
+    "cvss3_score": 5.5,
+    "cvss3_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+    "cwe_ids": [
+      "CWE-416",
+      "CWE-416"
+    ],
+    "binary_label": 0,
+    "epss_score": 8e-05,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-3026": {
+    "cve_id": "CVE-2023-3026",
+    "description": "Cross-site Scripting (XSS) - Stored in GitHub repository jgraph/drawio prior to 21.2.8.",
+    "published": "2023-06-01T01:15:18.213",
+    "cvss3_score": 6.1,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00222,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2022-35742": {
+    "cve_id": "CVE-2022-35742",
+    "description": "Microsoft Outlook Denial of Service Vulnerability",
+    "published": "2023-06-01T02:15:09.420",
+    "cvss3_score": 7.5,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+    "cwe_ids": [],
+    "binary_label": 0,
+    "epss_score": 0.06553,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-28399": {
+    "cve_id": "CVE-2023-28399",
+    "description": "Incorrect permission assignment for critical resource exists in CONPROSYS HMI System (CHS) versions prior to 3.5.3. ACL (Access Control List) is not appropriately set to the local folder where the affected product is installed, therefore a wide range of privileges is permitted to a user of the PC where the affected product is installed. As a result, the user may be able to destroy the system and/or execute a malicious program.",
+    "published": "2023-06-01T02:15:09.497",
+    "cvss3_score": 7.8,
+    "cvss3_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-732",
+      "CWE-732"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00057,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-28651": {
+    "cve_id": "CVE-2023-28651",
+    "description": "Cross-site scripting vulnerability exists in CONPROSYS HMI System (CHS) versions prior to 3.5.3. If a user who can access the affected product with an administrative privilege configures specially crafted settings, an arbitrary script may be executed on the web browser of the other user who is accessing the affected product with an administrative privilege.",
+    "published": "2023-06-01T02:15:09.550",
+    "cvss3_score": 4.8,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:R/S:C/C:L/I:L/A:N",
+    "cwe_ids": [
+      "CWE-79",
+      "CWE-79"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.16126,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-28657": {
+    "cve_id": "CVE-2023-28657",
+    "description": "Improper access control vulnerability exists in CONPROSYS HMI System (CHS) versions prior to 3.5.3. A user of the PC where the affected product is installed may gain an administrative privilege. As a result, information regarding the product may be obtained and/or altered by the user.",
+    "published": "2023-06-01T02:15:09.597",
+    "cvss3_score": 8.8,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00211,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-28713": {
+    "cve_id": "CVE-2023-28713",
+    "description": "Plaintext storage of a password exists in CONPROSYS HMI System (CHS) versions prior to 3.5.3. Because account information of the database is saved in a local file in plaintext, a user who can access the PC where the affected product is installed can obtain the information. As a result, information in the database may be obtained and/or altered by the user.",
+    "published": "2023-06-01T02:15:09.637",
+    "cvss3_score": 8.1,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+    "cwe_ids": [
+      "CWE-312",
+      "CWE-312"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00115,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-28824": {
+    "cve_id": "CVE-2023-28824",
+    "description": "Server-side request forgery vulnerability exists in CONPROSYS HMI System (CHS) versions prior to 3.5.3. A user who can access the affected product with an administrative privilege may bypass the database restriction set on the query setting page, and connect to a user unintended database.",
+    "published": "2023-06-01T02:15:09.673",
+    "cvss3_score": 4.9,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N",
+    "cwe_ids": [
+      "CWE-918",
+      "CWE-918"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00156,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-28937": {
+    "cve_id": "CVE-2023-28937",
+    "description": "DataSpider Servista version 4.4 and earlier uses a hard-coded cryptographic key. DataSpider Servista is data integration software. ScriptRunner and ScriptRunner for Amazon SQS are used to start the configured processes on DataSpider Servista. The cryptographic key is embedded in ScriptRunner and ScriptRunner for Amazon SQS, which is common to all users. If an attacker who can gain access to a target DataSpider Servista instance and obtain a Launch Settings file of ScriptRunner and/or ScriptRunner for Amazon SQS, the attacker may perform operations with the user privilege encrypted in the file. Note that DataSpider Servista and some of the OEM products are affected by this vulnerability. For the details of affected products and versions, refer to the information listed in [References].",
+    "published": "2023-06-01T02:15:09.717",
+    "cvss3_score": 8.8,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-798",
+      "CWE-798"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00166,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-29154": {
+    "cve_id": "CVE-2023-29154",
+    "description": "SQL injection vulnerability exists in the CONPROSYS HMI System (CHS) versions prior to 3.5.3. A user who can access the affected product with an administrative privilege may execute an arbitrary SQL command via specially crafted input to the query setting page.",
+    "published": "2023-06-01T02:15:09.760",
+    "cvss3_score": 7.2,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-89",
+      "CWE-89"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.12914,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-29159": {
+    "cve_id": "CVE-2023-29159",
+    "description": "Directory traversal vulnerability in Starlette versions 0.13.5 and later and prior to 0.27.0 allows a remote unauthenticated attacker to view files in a web service which was built using Starlette.",
+    "published": "2023-06-01T02:15:09.803",
+    "cvss3_score": 7.5,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+    "cwe_ids": [
+      "CWE-22",
+      "CWE-22"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.01515,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-30758": {
+    "cve_id": "CVE-2023-30758",
+    "description": "Cross-site scripting vulnerability in Pleasanter 1.3.38.1 and earlier allows a remote authenticated attacker to inject an arbitrary script.",
+    "published": "2023-06-01T02:15:09.847",
+    "cvss3_score": 5.4,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N",
+    "cwe_ids": [
+      "CWE-79",
+      "CWE-79"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00295,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-29748": {
+    "cve_id": "CVE-2023-29748",
+    "description": "Story Saver for Instragram - Video Downloader 1.0.6 for Android has an exposed component that provides a method to modify the SharedPreference file. An attacker can leverage this method to inject a large amount of data into any SharedPreference file, which will be loaded into memory when the application is opened. When an attacker injects too much data, the application will trigger an OOM error and crash at startup, resulting in a persistent denial of service.",
+    "published": "2023-06-01T03:15:20.500",
+    "cvss3_score": 7.5,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+    "cwe_ids": [],
+    "binary_label": 0,
+    "epss_score": 0.00216,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2023-33461": {
+    "cve_id": "CVE-2023-33461",
+    "description": "iniparser v4.1 is vulnerable to NULL Pointer Dereference in function iniparser_getlongint which misses check NULL for function iniparser_getstring's return.",
+    "published": "2023-06-01T03:15:20.547",
+    "cvss3_score": 5.5,
+    "cvss3_vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+    "cwe_ids": [
+      "CWE-476",
+      "CWE-476"
+    ],
+    "binary_label": 0,
+    "epss_score": 0.00054,
+    "high_epss": 0,
+    "in_kev": false
+  },
+  "CVE-2025-53521": {
+    "cve_id": "CVE-2025-53521",
+    "description": "When a BIG-IP APM access policy is configured on a virtual server, specific malicious traffic can lead to Remote Code Execution (RCE).\u00a0\u00a0\n\nNote: Software versions which have reached End of Technical Support (EoTS) are not evaluated.",
+    "published": "2025-10-15T14:15:48.377",
+    "cvss3_score": 9.8,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-770"
+    ],
+    "binary_label": 1,
+    "epss_score": 0.00085,
+    "high_epss": 0,
+    "in_kev": true
+  },
+  "CVE-2026-33634": {
+    "cve_id": "CVE-2026-33634",
+    "description": "Trivy is a security scanner. On March 19, 2026, a threat actor used compromised credentials to publish a malicious Trivy v0.69.4 release, force-push 76 of 77 version tags in `aquasecurity/trivy-action` to credential-stealing malware, and replace all 7 tags in `aquasecurity/setup-trivy` with malicious commits. This incident is a continuation of the supply chain attack that began in late February 2026. Following the initial disclosure on March 1, credential rotation was performed but was not atomic (not all credentials were revoked simultaneously). The attacker could have use a valid token to exfiltrate newly rotated secrets during the rotation window (which lasted a few days). This could have allowed the attacker to retain access and execute the March 19 attack. Affected components include the `aquasecurity/trivy` Go / Container image version 0.69.4, the `aquasecurity/trivy-action` GitHub Action versions 0.0.1 \u2013 0.34.2 (76/77), and the`aquasecurity/setup-trivy` GitHub Action versions 0.2.0 \u2013 0.2.6, prior to the recreation of 0.2.6 with a safe commit. Known safe versions include versions 0.69.2 and 0.69.3 of the Trivy binary, version 0.35.0 of trivy-action, and version 0.2.6 of setup-trivy. Additionally, take other mitigations to ensure the safety of secrets. If there is any possibility that a compromised version ran in one's environment, all secrets accessible to affected pipelines must be treated as exposed and rotated immediately. Check whether one's organization pulled or executed Trivy v0.69.4 from any source. Remove any affected artifacts immediately. Review all workflows using `aquasecurity/trivy-action` or `aquasecurity/setup-trivy`. Those who referenced a version tag rather than a full commit SHA should check workflow run logs from March 19\u201320, 2026 for signs of compromise. Look for repositories named `tpcp-docs` in one's GitHub organization. The presence of such a repository may indicate that the fallback exfiltration mechanism was triggered and secrets were successfully stolen. Pin GitHub Actions to full, immutable commit SHA hashes, don't use mutable version tags.",
+    "published": "2026-03-23T22:16:31.290",
+    "cvss3_score": 8.8,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-506"
+    ],
+    "binary_label": 1,
+    "epss_score": 0.26606,
+    "high_epss": 0,
+    "in_kev": true
+  },
+  "CVE-2026-33017": {
+    "cve_id": "CVE-2026-33017",
+    "description": "Langflow is a tool for building and deploying AI-powered agents and workflows. In versions prior to 1.9.0, the POST /api/v1/build_public_tmp/{flow_id}/flow endpoint allows building public flows without requiring authentication. When the optional data parameter is supplied, the endpoint uses attacker-controlled flow data (containing arbitrary Python code in node definitions) instead of the stored flow data from the database. This code is passed to exec() with zero sandboxing, resulting in unauthenticated remote code execution. This is distinct from CVE-2025-3248, which fixed /api/v1/validate/code by adding authentication. The build_public_tmp endpoint is designed to be unauthenticated (for public flows) but incorrectly accepts attacker-supplied flow data containing arbitrary executable code. This issue has been fixed in version 1.9.0.",
+    "published": "2026-03-20T05:16:15.550",
+    "cvss3_score": 9.8,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-94",
+      "CWE-95",
+      "CWE-306"
+    ],
+    "binary_label": 1,
+    "epss_score": 0.05654,
+    "high_epss": 0,
+    "in_kev": true
+  },
+  "CVE-2025-32432": {
+    "cve_id": "CVE-2025-32432",
+    "description": "Craft is a flexible, user-friendly CMS for creating custom digital experiences on the web and beyond. Starting from version 3.0.0-RC1 to before 3.9.15, 4.0.0-RC1 to before 4.14.15, and 5.0.0-RC1 to before 5.6.17, Craft is vulnerable to remote code execution. This is a high-impact, low-complexity attack vector. This issue has been patched in versions 3.9.15, 4.14.15, and 5.6.17, and is an additional fix for CVE-2023-41892.",
+    "published": "2025-04-25T15:15:36.440",
+    "cvss3_score": 10.0,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:L",
+    "cwe_ids": [
+      "CWE-94"
+    ],
+    "binary_label": 1,
+    "epss_score": 0.87671,
+    "high_epss": 1,
+    "in_kev": true
+  },
+  "CVE-2025-54068": {
+    "cve_id": "CVE-2025-54068",
+    "description": "Livewire is a full-stack framework for Laravel. In Livewire v3 up to and including v3.6.3, a vulnerability allows unauthenticated attackers to achieve remote command execution in specific scenarios. The issue stems from how certain component property updates are hydrated. This vulnerability is unique to Livewire v3 and does not affect prior major versions. Exploitation requires a component to be mounted and configured in a particular way, but does not require authentication or user interaction. This issue has been patched in Livewire v3.6.4. All users are strongly encouraged to upgrade to this version or later as soon as possible. No known workarounds are available.",
+    "published": "2025-07-17T19:15:25.470",
+    "cvss3_score": 9.8,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-94"
+    ],
+    "binary_label": 1,
+    "epss_score": 0.51618,
+    "high_epss": 1,
+    "in_kev": true
+  },
+  "CVE-2025-43510": {
+    "cve_id": "CVE-2025-43510",
+    "description": "A memory corruption issue was addressed with improved lock state checking. This issue is fixed in watchOS 26.1, iOS 18.7.2 and iPadOS 18.7.2, macOS Tahoe 26.1, visionOS 26.1, tvOS 26.1, macOS Sonoma 14.8.2, macOS Sequoia 15.7.2, iOS 26.1 and iPadOS 26.1. A malicious application may cause unexpected changes in memory shared between processes.",
+    "published": "2025-12-12T21:15:55.843",
+    "cvss3_score": 7.8,
+    "cvss3_vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-667"
+    ],
+    "binary_label": 1,
+    "epss_score": 0.00462,
+    "high_epss": 0,
+    "in_kev": true
+  },
+  "CVE-2025-43520": {
+    "cve_id": "CVE-2025-43520",
+    "description": "A memory corruption issue was addressed with improved memory handling. This issue is fixed in watchOS 26.1, iOS 18.7.2 and iPadOS 18.7.2, macOS Tahoe 26.1, visionOS 26.1, tvOS 26.1, macOS Sonoma 14.8.2, macOS Sequoia 15.7.2, iOS 26.1 and iPadOS 26.1. A malicious application may be able to cause unexpected system termination or write kernel memory.",
+    "published": "2025-12-12T21:15:56.830",
+    "cvss3_score": 7.1,
+    "cvss3_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H",
+    "cwe_ids": [
+      "CWE-787",
+      "CWE-120"
+    ],
+    "binary_label": 1,
+    "epss_score": 0.00475,
+    "high_epss": 0,
+    "in_kev": true
+  },
+  "CVE-2025-31277": {
+    "cve_id": "CVE-2025-31277",
+    "description": "The issue was addressed with improved memory handling. This issue is fixed in Safari 18.6, watchOS 11.6, visionOS 2.6, iOS 18.6 and iPadOS 18.6, macOS Sequoia 15.6, tvOS 18.6. Processing maliciously crafted web content may lead to memory corruption.",
+    "published": "2025-07-30T00:15:30.830",
+    "cvss3_score": 8.8,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-119"
+    ],
+    "binary_label": 1,
+    "epss_score": 0.00267,
+    "high_epss": 0,
+    "in_kev": true
+  },
+  "CVE-2026-20131": {
+    "cve_id": "CVE-2026-20131",
+    "description": "A vulnerability in the web-based management interface of Cisco Secure Firewall Management Center (FMC) Software could allow an unauthenticated, remote attacker to execute arbitrary Java code as root&nbsp;on an affected device.\r\n\r\nThis vulnerability is due to insecure deserialization of a user-supplied Java byte stream. An attacker could exploit this vulnerability by sending a crafted serialized Java object to the web-based management interface of an affected device. A successful exploit could allow the attacker to execute arbitrary code on the device and elevate privileges to root.\r\nNote: If the FMC management interface does not have public internet access, the attack surface that is associated with this vulnerability is reduced.",
+    "published": "2026-03-04T18:16:27.153",
+    "cvss3_score": 10.0,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+    "cwe_ids": [
+      "CWE-502"
+    ],
+    "binary_label": 1,
+    "epss_score": 0.0065,
+    "high_epss": 0,
+    "in_kev": true
+  },
+  "CVE-2025-66376": {
+    "cve_id": "CVE-2025-66376",
+    "description": "Zimbra Collaboration (ZCS) 10 before 10.0.18 and 10.1 before 10.1.13 allows Classic UI stored XSS via Cascading Style Sheets (CSS) @import directives in an HTML e-mail message.",
+    "published": "2026-01-05T15:15:44.903",
+    "cvss3_score": 7.2,
+    "cvss3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "binary_label": 1,
+    "epss_score": 0.10014,
+    "high_epss": 0,
+    "in_kev": true
+  }
+}

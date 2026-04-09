@@ -1,0 +1,15 @@
+{
+  "DEP": 0,
+  "NEXT_TOKEN": 1,
+  "NEXT_SENT": 2,
+  "NEXT_PARA": 3,
+  "COREF": 4,
+  "SRL_ARG": 5,
+  "AMR_EDGE": 6,
+  "RST_RELATION": 7,
+  "DISCOURSE": 8,
+  "CONTAINS": 9,
+  "BELONGS_TO": 10,
+  "ENTITY_REL": 11,
+  "SIMILARITY": 12
+}
