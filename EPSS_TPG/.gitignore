@@ -17,6 +17,11 @@ env/
 # (takes ~2 h for 10K graphs on RTX 5000 Ada; stored in data/*/pyg_dataset/processed/)
 *.pt
 
+# ─── External Dataset (from Sec4AI4Aec-EPSS-Enhanced repo, tracked via LFS there) ──
+data/epss/final_dataset_with_delta_days.csv
+# Derived labeled JSON from the adapter (regenerate with: python -m epss.csv_adapter)
+data/epss_sec4ai/labeled_cves.json
+
 # ─── Large Raw / Derived Data Files ───────────────────────────────────────────
 # These files exceed GitHub's 100 MB limit or are derived/regeneratable.
 # Full rebuild instructions: docs/EPSS_GNN_Technical_Report.md (Section 4)

@@ -1,0 +1,48 @@
+======================================================================
+EPSS-GNN Inference — Verification Summary
+Run at: 2026-04-09 17:09:01
+======================================================================
+
+Total CVEs scored:      300
+Predicted positive:     0 (0.0%)
+Actually in KEV:        0 (0.0%)
+
+── Ground Truth: CISA KEV ─────────────────────────────────
+  TP (predicted+, KEV+): 0
+  FP (predicted+, KEV-): 0
+  FN (predicted-, KEV+): 0
+  TN (predicted-, KEV-): 300
+  Precision vs KEV:      0.0000
+  Recall    vs KEV:      0.0000
+  F1        vs KEV:      0.0000
+
+── Risk Tier Distribution ──────────────────────────────────
+  CRITICAL  :    0 (  0.0%)   KEV: 0
+  HIGH      :    0 (  0.0%)   KEV: 0
+  MEDIUM    :    0 (  0.0%)   KEV: 0
+  LOW       :    0 (  0.0%)   KEV: 0
+  MINIMAL   :  300 (100.0%)   KEV: 0
+
+── Top-20 Highest Risk (sorted by predicted probability) ───
+  CVE-ID                   Prob  Tier        KEV  KEV_date       Curr_EPSS
+  ---------------------- ------  ---------- ----  ------------  ----------
+  CVE-2025-61622         0.1819  MINIMAL      no                  0.004330
+  CVE-2023-53486         0.1400  MINIMAL      no                  0.000160
+  CVE-2025-39903         0.1041  MINIMAL      no                  0.000120
+  CVE-2025-61588         0.1037  MINIMAL      no                  0.000780
+  CVE-2025-39914         0.1035  MINIMAL      no                  0.000180
+  CVE-2023-53452         0.1001  MINIMAL      no                  0.000120
+  CVE-2025-39901         0.0950  MINIMAL      no                  0.000120
+  CVE-2023-53503         0.0928  MINIMAL      no                  0.000260
+  CVE-2025-34182         0.0921  MINIMAL      no                  0.000540
+  CVE-2025-56588         0.0859  MINIMAL      no                  0.001420
+  CVE-2022-50428         0.0848  MINIMAL      no                  0.000150
+  CVE-2023-53489         0.0838  MINIMAL      no                  0.000140
+  CVE-2023-53485         0.0837  MINIMAL      no                  0.000150
+  CVE-2025-39923         0.0819  MINIMAL      no                  0.000250
+  CVE-2022-50432         0.0805  MINIMAL      no                  0.000150
+  CVE-2025-39895         0.0805  MINIMAL      no                  0.000150
+  CVE-2023-53468         0.0788  MINIMAL      no                  0.000150
+  CVE-2023-53478         0.0787  MINIMAL      no                  0.000100
+  CVE-2023-53532         0.0785  MINIMAL      no                  0.000150
+  CVE-2023-53456         0.0765  MINIMAL      no                  0.000140

@@ -1,0 +1,33 @@
+======================================================================
+EPSS-GNN Inference — Verification Summary
+Run at: 2026-04-09 17:21:46
+======================================================================
+
+Total CVEs scored:      5
+Predicted positive:     3 (60.0%)
+Actually in KEV:        4 (80.0%)
+
+── Ground Truth: CISA KEV ─────────────────────────────────
+  TP (predicted+, KEV+): 3
+  FP (predicted+, KEV-): 0
+  FN (predicted-, KEV+): 1
+  TN (predicted-, KEV-): 1
+  Precision vs KEV:      1.0000
+  Recall    vs KEV:      0.7500
+  F1        vs KEV:      0.8571
+
+── Risk Tier Distribution ──────────────────────────────────
+  CRITICAL  :    3 ( 60.0%)   KEV: 3
+  HIGH      :    0 (  0.0%)   KEV: 0
+  MEDIUM    :    0 (  0.0%)   KEV: 0
+  LOW       :    0 (  0.0%)   KEV: 0
+  MINIMAL   :    2 ( 40.0%)   KEV: 1
+
+── Top-20 Highest Risk (sorted by predicted probability) ───
+  CVE-ID                   Prob  Tier        KEV  KEV_date       Curr_EPSS
+  ---------------------- ------  ---------- ----  ------------  ----------
+  CVE-2025-0282          0.9839  CRITICAL    YES  2025-01-08      0.941290
+  CVE-2024-38094         0.9498  CRITICAL    YES  2024-10-22      0.642950
+  CVE-2025-21333         0.9207  CRITICAL    YES  2025-01-14      0.821130
+  CVE-2025-31200         0.2070  MINIMAL     YES  2025-04-17      0.021050
+  CVE-2025-30065         0.0520  MINIMAL      no                  0.005120

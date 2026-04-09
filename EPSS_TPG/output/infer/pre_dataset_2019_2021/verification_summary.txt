@@ -1,0 +1,48 @@
+======================================================================
+EPSS-GNN Inference — Verification Summary
+Run at: 2026-04-09 17:12:38
+======================================================================
+
+Total CVEs scored:      500
+Predicted positive:     34 (6.8%)
+Actually in KEV:        2 (0.4%)
+
+── Ground Truth: CISA KEV ─────────────────────────────────
+  TP (predicted+, KEV+): 2
+  FP (predicted+, KEV-): 32
+  FN (predicted-, KEV+): 0
+  TN (predicted-, KEV-): 466
+  Precision vs KEV:      0.0588
+  Recall    vs KEV:      1.0000
+  F1        vs KEV:      0.1111
+
+── Risk Tier Distribution ──────────────────────────────────
+  CRITICAL  :    8 (  1.6%)   KEV: 1
+  HIGH      :   15 (  3.0%)   KEV: 0
+  MEDIUM    :   11 (  2.2%)   KEV: 1
+  LOW       :    8 (  1.6%)   KEV: 0
+  MINIMAL   :  458 ( 91.6%)   KEV: 0
+
+── Top-20 Highest Risk (sorted by predicted probability) ───
+  CVE-ID                   Prob  Tier        KEV  KEV_date       Curr_EPSS
+  ---------------------- ------  ---------- ----  ------------  ----------
+  CVE-2018-16167         0.9723  CRITICAL     no                  0.870060
+  CVE-2019-0541          0.9720  CRITICAL    YES  2021-11-03      0.833940
+  CVE-2018-18264         0.9579  CRITICAL     no                  0.908420
+  CVE-2019-0539          0.9275  CRITICAL     no                  0.909500
+  CVE-2019-0567          0.9250  CRITICAL     no                  0.896160
+  CVE-2019-0568          0.9144  CRITICAL     no                  0.814780
+  CVE-2019-0566          0.9136  CRITICAL     no                  0.471880
+  CVE-2019-0547          0.9083  CRITICAL     no                  0.731190
+  CVE-2018-6126          0.8759  HIGH         no                  0.456080
+  CVE-2018-11788         0.8596  HIGH         no                  0.247470
+  CVE-2016-9651          0.8589  HIGH         no                  0.527390
+  CVE-2019-0538          0.8165  HIGH         no                  0.418820
+  CVE-2019-0576          0.8076  HIGH         no                  0.406650
+  CVE-2019-0585          0.8051  HIGH         no                  0.281560
+  CVE-2019-0577          0.7813  HIGH         no                  0.364810
+  CVE-2019-0580          0.7749  HIGH         no                  0.364810
+  CVE-2019-0579          0.7746  HIGH         no                  0.364810
+  CVE-2018-19862         0.7589  HIGH         no                  0.284580
+  CVE-2018-19861         0.7551  HIGH         no                  0.284580
+  CVE-2019-0559          0.7342  HIGH         no                  0.257510

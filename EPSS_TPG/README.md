@@ -12,133 +12,105 @@ Each CVE description is converted into a **Text Property Graph (TPG)** — a str
 
 A **MultiView GNN** processes the graph through four semantic views (syntactic, sequential, semantic, discourse) and produces a 256-dim graph embedding. This is fused with a 57-dim tabular feature vector encoding CVSS, CWE, EPSS, and ExploitDB signals, then passed through a classifier to produce P(exploitation).
 
-Best result: **PR-AUC = 0.865** on a 5% stratified test split, **0.887** on a strict temporal split (trained on 2002–2016, tested on 2017–2019). Both exceed EPSS v3's self-reported PR-AUC of ~0.779.
+---
+
+## Results Summary
+
+| Evaluation | Dataset | PR-AUC | ROC-AUC | F1 | Precision | Recall |
+|---|---|---|---|---|---|---|
+| 4K balanced (random split) | 4,015 CVEs, 20% KEV | 0.759 | 0.892 | 0.692 | — | 0.686 |
+| 127K full (unbalanced) | 127,735 CVEs, 0.42% KEV | 0.729 | 0.981 | 0.392 | — | 0.247 |
+| **5% stratified (random split)** | **10,532 CVEs, 5.1% KEV** | **0.865** | **0.986** | **0.790** | — | **0.815** |
+| **Temporal (2002–16 → 2017–19)** | **1,087 CVEs test set** | **0.887** | **0.988** | **0.810** | — | **0.865** |
+| **Sec4AI4Aec-EPSS (9,218 CVEs)** | **9,218 CVEs, 15.5% pos** | **0.998** | **0.9996** | **0.9786** | **1.000** | **0.958** |
+| EPSS v3 (reference baseline) | — | ~0.779 | — | — | — | — |
+
+The **Sec4AI4Aec model** (PR-AUC=0.998, Precision=1.000) was trained on the `Sec4AI4Aec-EPSS-Enhanced` social media dataset with soft EPSS labels (threshold ≥ 0.1 = positive). The temporal split (PR-AUC=0.887) remains the most rigorous for deployment evaluation.
+
+---
+
+## Inference on Unseen CVEs — Post-Training Verification
+
+After training on CVEs up to **2025-06-01**, the model was evaluated on 300 CVEs published **Jul–Sep 2025** (completely unseen) and verified against CISA KEV + FIRST EPSS:
+
+| Metric | Value | Notes |
+|---|---|---|
+| CVEs scored | 300 | Published Jul–Sep 2025 |
+| Predicted positive | 6 (2.0%) | prob ≥ 0.5 |
+| EPSS agreement | **100%** | All 6 predicted positives had current EPSS ≥ 0.1 |
+| In CISA KEV | 0 | Expected — KEV is highly selective (1,559/1M+ CVEs) |
+| Pearson corr(model, EPSS) | 0.30 | Moderate; graph adds signal beyond EPSS |
+
+**Top unseen CVEs correctly flagged as CRITICAL:**
+
+| CVE | Prob | Current EPSS | Description |
+|---|---|---|---|
+| CVE-2025-34074 | 0.956 | 0.573 | Lucee admin RCE |
+| CVE-2025-34079 | 0.941 | 0.560 | NSClient++ RCE |
+| CVE-2025-34073 | 0.923 | 0.553 | maltrail unauthenticated command injection |
+| CVE-2025-34076 | 0.869 | 0.246 | Microweber CMS LFI |
+| CVE-2025-6934  | 0.849 | 0.236 | WordPress plugin unauthenticated RCE |
+
+The 0 KEV matches is not a failure — CISA only adds CVEs under active exploitation by threat actors; most high-EPSS CVEs are never formally KEV-listed. Ground truth for freshly published CVEs requires 6–12 months of observation.
 
 ---
 
 ## Repository Structure
 
 ```
-TPG_TextPropertyGraph/
+EPSS_TPG/
 │
-├── docs/                              ← All documentation
-│   ├── EPSS_GNN_Technical_Report.md  ← Full technical report (19 sections, ~3400 lines)
-│   ├── TPG_COMPLETE_GUIDE.md         ← From CPG to TPG: beginner-to-advanced guide
-│   ├── Security_TPG_Complete_Reference.md  ← Security frontend API reference
-│   └── WHO_analysis_summary.md       ← Domain-agnostic TPG test (WHO document)
+├── docs/
+│   ├── EPSS_GNN_Technical_Report.md     ← Full technical report (19 sections)
+│   ├── TPG_COMPLETE_GUIDE.md            ← From CPG to TPG: beginner-to-advanced
+│   ├── Security_TPG_Complete_Reference.md ← Security frontend API reference
+│   └── WHO_analysis_summary.md          ← Domain-agnostic TPG test
 │
-├── epss/                              ← GNN training package
-│   ├── data_collector.py             ← Fetch NVD + KEV + EPSS + ExploitDB → labeled JSON
-│   ├── tabular_features.py           ← 57-dim tabular encoder (CVSS+CWE+EPSS+PoC)
-│   ├── cve_dataset.py                ← PyG InMemoryDataset: CVE records → TPG graphs
-│   ├── gnn_model.py                  ← HybridEPSSClassifier (6 GNN backbones)
-│   ├── edge_aware_layers.py          ← EdgeTypeGNN, RGAT, MultiView (ported from SemVul)
-│   ├── train.py                      ← Training loop, metrics, checkpointing
-│   ├── run_pipeline.py               ← CLI: collect → build graphs → train → evaluate
-│   └── visualize.py                  ← Plots: PR curve, ROC, calibration, training curves
+├── epss/                                ← GNN training package
+│   ├── data_collector.py               ← Fetch NVD + KEV + EPSS + ExploitDB
+│   ├── csv_adapter.py                  ← Convert Sec4AI4Aec CSV → labeled_cves.json
+│   ├── tabular_features.py             ← 57-dim tabular encoder (CVSS+CWE+EPSS+PoC)
+│   ├── cve_dataset.py                  ← PyG InMemoryDataset: CVE records → TPG graphs
+│   ├── gnn_model.py                    ← HybridEPSSClassifier (6 GNN backbones)
+│   ├── edge_aware_layers.py            ← EdgeTypeGNN, RGAT, MultiView (from SemVul)
+│   ├── train.py                        ← Training loop, metrics, checkpointing
+│   ├── run_pipeline.py                 ← CLI: collect → build → train → evaluate
+│   ├── infer.py                        ← Temporal inference + KEV/EPSS verification
+│   └── visualize.py                    ← PR curve, ROC, calibration, training curves
 │
-├── tpg/                               ← Text Property Graph library
-│   ├── schema/
-│   │   ├── types.py                  ← NodeType / EdgeType enums (13 + 13)
-│   │   └── graph.py                  ← TextPropertyGraph core class
-│   ├── frontends/
-│   │   ├── spacy_frontend.py         ← spaCy → TPG translation (deps, NER, SRL, coref)
-│   │   ├── security_frontend.py      ← Rule-based security entity extractor
-│   │   ├── model_security_frontend.py ← SecBERT-based entity extractor
-│   │   └── hybrid_security_frontend.py ← Combined rule + model frontend
-│   ├── passes/
-│   │   ├── enrichment.py             ← AMR-style framing, RST discourse relations
-│   │   └── cross_modal.py            ← TPG ↔ CPG cross-modal linking
-│   ├── exporters/
-│   │   └── exporters.py              ← PyGExporter + GraphSON exporter
-│   └── pipeline.py                   ← HybridSecurityPipeline (main entry point)
+├── tpg/                                ← Text Property Graph library
+│   ├── schema/types.py                 ← NodeType / EdgeType enums (13 + 13)
+│   ├── schema/graph.py                 ← TextPropertyGraph core class
+│   ├── frontends/                      ← spaCy, security rule, SecBERT, hybrid frontends
+│   ├── passes/                         ← AMR framing, RST discourse, cross-modal linking
+│   ├── exporters/exporters.py          ← PyGExporter + GraphSON exporter
+│   └── pipeline.py                     ← HybridSecurityPipeline (main entry point)
 │
-├── examples/
-│   ├── demo.py                       ← End-to-end TPG pipeline demo
-│   ├── compare_frontends.py          ← Compare rule vs model vs hybrid frontends
-│   ├── experiment.py                 ← Single-CVE graph construction experiment
-│   └── TPG_sample_output.json        ← Sample GraphSON output for a CVE description
+├── data/
+│   ├── epss_sec4ai/                    ← Sec4AI4Aec training data
+│   │   ├── labeled_cves.json           ← [gitignored] 9,218 CVEs converted from CSV
+│   │   └── pyg_dataset/processed/     ← [gitignored] .pt graph cache
+│   ├── epss_full/                      ← NVD pipeline (best temporal model)
+│   │   ├── labeled_cves_5pct.json      ← 10,532 CVEs, 5.1% KEV
+│   │   ├── labeled_cves_temporal_train.json
+│   │   └── labeled_cves_temporal_test.json
+│   └── epss/                           ← Source CSV + raw data
+│       └── final_dataset_with_delta_days copy.csv  ← [gitignored] Sec4AI4Aec CSV
 │
-├── tests/
-│   └── __init__.py
+├── output/
+│   ├── epss_sec4ai/                    ← Sec4AI4Aec trained model (PR-AUC=0.998)
+│   │   ├── best_model.pt               ← [gitignored] 834K-param checkpoint
+│   │   ├── experiment_config.json      ← Full hyperparameter record
+│   │   ├── predictions_test.csv        ← 1,385 test-set CVE scores
+│   │   └── *.png                       ← PR curve, ROC, calibration, training curves
+│   └── infer/                          ← Inference run outputs
+│       └── post_dataset_q3_2025/       ← Jul–Sep 2025 unseen CVE run
+│           ├── predictions_infer.csv   ← 300 CVEs with KEV + EPSS ground truth
+│           └── verification_summary.txt
 │
-├── data/                              ← All datasets (large files gitignored — see below)
-│   ├── epss_full/                    ← Authoritative source: raw + labeled files
-│   │   ├── cisa_kev.json             ← CISA KEV catalog (1,554 entries, 2002–2026)
-│   │   ├── exploitdb.json            ← ExploitDB PoC database (24,936 entries)
-│   │   ├── epss_scores_full.json     ← EPSS bulk scores (323,611 CVEs)
-│   │   ├── labeled_cves_5pct.json    ← PRIMARY training file (10,532 CVEs, 5.1% KEV)
-│   │   ├── labeled_cves_5pct_noepss.json  ← Cold-start variant (EPSS fields zeroed)
-│   │   ├── labeled_cves_temporal_train.json ← Temporal train (2002–2016 KEV)
-│   │   ├── labeled_cves_temporal_test.json  ← Temporal test (2017–2019 KEV)
-│   │   ├── nvd_cves.json             ← [gitignored] Raw NVD fetch, 135K records, 120 MB
-│   │   └── labeled_cves.json         ← [gitignored] Master merged dataset, 127K CVEs, 149 MB
-│   │
-│   ├── epss/                         ← 4K balanced experiment (12 backbone runs)
-│   │   ├── labeled_cves_balanced_v2.json ← 4,015 CVEs, 20% KEV positive rate
-│   │   ├── epss_scores.json          ← EPSS snapshot (132K entries)
-│   │   ├── epss_scores_full.json     ← EPSS bulk (323K entries, copy)
-│   │   ├── epss_scores-2026-03-28.csv ← Raw EPSS CSV download
-│   │   ├── cisa_kev.json             ← KEV catalog (copy)
-│   │   ├── exploitdb.json            ← ExploitDB (copy)
-│   │   └── pyg_dataset/
-│   │       ├── raw/                  ← Input JSON for PyG pipeline
-│   │       └── processed/            ← Vocab JSONs tracked; .pt files gitignored
-│   │
-│   ├── epss_5pct_train/              ← 5% stratified graphs (best model)
-│   │   └── pyg_dataset/
-│   │       ├── raw/labeled_cves.json ← Copy of labeled_cves_5pct.json
-│   │       └── processed/            ← edge/node vocab JSONs + [gitignored] 3.3 GB .pt
-│   │
-│   ├── epss_temporal_train/          ← Temporal split graphs (strictest eval)
-│   │   └── pyg_dataset/
-│   │       ├── raw/labeled_cves.json ← Copy of labeled_cves_temporal_train.json
-│   │       └── processed/            ← Vocab JSONs + [gitignored] 2.3 GB .pt
-│   │
-│   ├── epss_full_train/              ← Full 127K unbalanced graphs
-│   │   └── pyg_dataset/
-│   │       ├── raw/                  ← [gitignored] 150 MB JSON copy
-│   │       └── processed/            ← Vocab JSONs + [gitignored] 39.5 GB + 2.5 GB .pt
-│   │
-│   ├── epss_balanced/                ← Legacy (superseded by epss/)
-│   │   └── pyg_dataset/raw/          ← 2.7 MB balanced JSON; no processed/ graphs
-│   │
-│   ├── epss_test/                    ← 30-CVE smoke test dataset
-│   │   ├── labeled_cves.json         ← 30 CVEs for pipeline sanity checking
-│   │   ├── cisa_kev.json / epss_scores.json
-│   │   └── pyg_dataset/processed/    ← [gitignored] tiny .pt cache
-│   │
-│   ├── epss_qtest/                   ← Empty scratch directory
-│   ├── text/                         ← Plain text samples for TPG pipeline testing
-│   └── pdfs/                         ← PDF frontend test files
-│
-├── output/                            ← All experiment results
-│   ├── epss_<backbone>_{text,hybrid}/ ← One dir per experiment (12 runs on 4K dataset)
-│   │   ├── experiment_config.json    ← All hyperparameters
-│   │   ├── test_results.json         ← PR-AUC, ROC-AUC, F1, Precision, Recall
-│   │   ├── training_history.json     ← Per-epoch train/val metrics
-│   │   ├── predictions_test.csv      ← Per-CVE scores on test set
-│   │   ├── *.png                     ← PR curve, ROC, calibration, training curves
-│   │   └── best_model.pt             ← [gitignored] Saved weights
-│   │
-│   ├── epss_full_5pct_multiview_hybrid/  ← Best model (PR-AUC=0.865)
-│   │   ├── cwe_vocab.json            ← Fitted CWE vocabulary (top-25 CWEs)
-│   │   └── ...                       ← Same structure as above
-│   │
-│   ├── epss_temporal_multiview_hybrid/   ← Temporal model (PR-AUC=0.887)
-│   ├── epss_full_multiview_hybrid/       ← Full 127K unbalanced run
-│   ├── epss_full_10k_test/               ← 10K subset fast-iteration run
-│   ├── comparison/                       ← Cross-backbone comparison JSONs
-│   ├── graphson/                         ← GraphSON-format TPG samples (general/medical/security)
-│   ├── pyg/                              ← PyG-format TPG samples (same domains)
-│   ├── analysis/                         ← (legacy, docs moved to docs/)
-│   └── inference/                        ← Inference run outputs
-│       ├── predictions_20260406.csv      ← April 2026 run: 6,109 CVEs scored
-│       ├── temporal_eval_jan2024.csv     ← Jan 2024 eval (broken EPSS — historical)
-│       └── temporal_eval_jan2024_fixed.csv ← Jan 2024 eval (fixed local EPSS)
-│
-├── infer.py                           ← Operational inference script (score new CVEs)
-└── generate_visualizations.py         ← Re-generate all plots from any checkpoint
+├── analyze_dataset.py                  ← Profile any labeled_cves CSV/JSON dataset
+├── verify_features.py                  ← Compare feature dtypes between datasets
+└── README.md
 ```
 
 ---
@@ -148,78 +120,307 @@ TPG_TextPropertyGraph/
 ### 1. Install dependencies
 
 ```bash
-conda create -n tpg python=3.12
+conda create -n tpg python=3.10
 conda activate tpg
 pip install torch==2.3.0 torch_geometric==2.7.0
-pip install spacy transformers networkx numpy scikit-learn matplotlib
+pip install spacy transformers networkx numpy scikit-learn matplotlib pandas tqdm requests
 python -m spacy download en_core_web_sm
 ```
 
-### 2. Fetch data and build the training dataset
+---
+
+## Training Commands
+
+### A. Train on Sec4AI4Aec-EPSS-Enhanced CSV (recommended — social media + EPSS soft labels)
 
 ```bash
-python -m epss.run_pipeline --backbone multiview --hybrid \
-    --output-dir output/my_run
+# Full training (9,218 CVEs, ~100 epochs, ~30–40s/epoch on RTX 5000)
+python -m epss.run_pipeline \
+    --source-csv "data/epss/final_dataset_with_delta_days copy.csv" \
+    --data-dir data/epss_sec4ai \
+    --output-dir output/epss_sec4ai \
+    --backbone multiview --hybrid --label-mode soft \
+    --epochs 100 --patience 15 --batch-size 32 --lr 1e-3
+
+# Quick smoke test (50 CVEs, 10 epochs)
+python -m epss.run_pipeline \
+    --source-csv "data/epss/final_dataset_with_delta_days copy.csv" \
+    --data-dir data/epss_sec4ai \
+    --output-dir output/epss_sec4ai \
+    --backbone multiview --hybrid --label-mode soft \
+    --max-cves 50 --epochs 10
 ```
 
-Or use the pre-built 5% stratified dataset (already in `data/epss_full/`):
+### B. Train on Sec4AI4Aec WITHOUT EPSS feature (leakage-free, deployment-ready)
+
+> **Use this for production.** The default training uses EPSS as both label and input feature (data leakage). This variant removes EPSS from the 57-dim tabular features, forcing the model to learn from CVE text + CVSS + CWE only. Tabular dim drops to 55. Inference on truly new CVEs works without needing pre-existing EPSS data.
 
 ```bash
-python -m epss.run_pipeline --backbone multiview --hybrid \
+python -m epss.run_pipeline \
+    --source-csv "data/epss/final_dataset_with_delta_days copy.csv" \
+    --data-dir data/epss_sec4ai_noleak \
+    --output-dir output/epss_sec4ai_noleak \
+    --backbone multiview --hybrid --label-mode soft \
+    --no-epss-feature \
+    --epochs 100 --patience 15
+```
+
+### C. Train on NVD pipeline (binary KEV labels, 2020–2024)
+
+```bash
+# Fetch data from NVD API + CISA KEV + FIRST EPSS, then train
+python -m epss.run_pipeline \
+    --start-year 2020 --end-year 2024 \
+    --backbone multiview --hybrid \
+    --output-dir output/nvd_2020_2024
+
+# Skip fetch, use existing labeled_cves.json
+python -m epss.run_pipeline \
     --skip-collect \
     --labeled-file data/epss_full/labeled_cves_5pct.json \
     --data-dir data/epss_5pct_train \
+    --backbone multiview --hybrid \
     --hidden 256 --layers 3 --heads 4 \
     --batch-size 64 --epochs 200 --patience 20 \
     --lr 5e-4 --output-dir output/my_run --device cuda
 ```
 
-### 3. Score new CVEs with the trained model
+### D. Compare GNN backbones
 
 ```bash
-# Score all CVEs published in the last 30 days
-python infer.py --recent-days 30 \
-    --epss-file data/epss_full/epss_scores_full.json \
-    --output output/inference/predictions_$(date +%Y%m%d).csv
-
-# Score specific CVEs
-python infer.py --cve-ids CVE-2024-1234 CVE-2024-5678
-
-# Temporal evaluation (train cutoff → score next N days)
-python infer.py --temporal-eval \
-    --train-cutoff 2024-01-01 --eval-days 30 \
-    --epss-file data/epss_full/epss_scores_full.json
+for BACKBONE in gcn gat sage edge_type rgat multiview; do
+    python -m epss.run_pipeline \
+        --skip-collect --backbone $BACKBONE --hybrid \
+        --labeled-file data/epss_full/labeled_cves_5pct.json \
+        --data-dir data/epss_5pct_train \
+        --output-dir output/compare_$BACKBONE
+done
 ```
 
 ---
 
-## Results Summary
+## Inference Commands — Score Unseen CVEs
 
-| Evaluation | Dataset | PR-AUC | ROC-AUC | F1 | Recall |
-|---|---|---|---|---|---|
-| 4K balanced (random split) | 4,015 CVEs, 20% KEV | 0.759 | 0.892 | 0.692 | 0.686 |
-| 127K full (unbalanced) | 127,735 CVEs, 0.42% KEV | 0.729 | 0.981 | 0.392 | 0.247 |
-| **5% stratified (random split)** | **10,532 CVEs, 5.1% KEV** | **0.865** | **0.986** | **0.790** | **0.815** |
-| **Temporal (2002–16 → 2017–19)** | **1,087 CVEs test set** | **0.887** | **0.988** | **0.810** | **0.865** |
-| Inference Jan 2024 (fixed EPSS) | 2,647 CVEs, 15 KEV | 0.328 | 0.901 | 0.378 | 0.467 |
-| EPSS v3 (reference baseline) | — | ~0.779 | — | — | — |
+All inference commands fetch CVE descriptions from NVD, pre-populate current EPSS scores from the FIRST API, build TPG graphs with the same pipeline as training, and verify predictions against CISA KEV.
 
-The temporal split result (PR-AUC=0.887) is the most rigorous: the model is trained on CVEs from 2002–2016 and evaluated on 2017–2019 CVEs it has never seen. It correctly identifies Shellshock, Heartbleed, PHPMailer RCE, and Jenkins CLI RCE purely from text structure and tabular metadata patterns learned in an earlier era.
+Output files per run:
+- `predictions_infer.csv` — one row per CVE: `predicted_prob`, `risk_tier`, `is_in_kev`, `kev_date_added`, `current_epss_score`, `correct_vs_kev`, `correct_vs_epss`
+- `verification_summary.txt` — TP/FP/FN/TN breakdown, precision/recall vs CISA KEV, tier distribution, top-20 highest-risk CVEs
+
+> **Rate limit note:** Without an NVD API key, NVD fetches at 1 CVE per 6 seconds (~30 min for 300 CVEs). Get a free key at https://nvd.nist.gov/developers/request-an-api-key and pass `--nvd-api-key YOUR_KEY` to reduce this to ~30 seconds.
 
 ---
 
-## What Cannot Be Included in This Repo
+### Mode 1 — Post-Dataset (Jul–Sep 2025, completely unseen by the model)
 
-The following are gitignored due to size but can be rebuilt:
+CVEs published after the training set cutoff (2025-06-01). Ground truth is current CISA KEV status.
 
-| File | Size | How to Rebuild |
-|---|---|---|
-| `data/*/pyg_dataset/processed/*.pt` | 1.4 GB – 39.5 GB | `python -m epss.run_pipeline --skip-collect` |
-| `data/epss_full/nvd_cves.json` | 120 MB | `python -m epss.data_collector` (fetches NVD API) |
-| `data/epss_full/labeled_cves.json` | 149 MB | Same as above (merges NVD + KEV + EPSS) |
-| `output/**/best_model.pt` | ~34 MB each | `python -m epss.run_pipeline ...` |
+```bash
+python -m epss.infer \
+    --mode post-dataset \
+    --after-date 2025-07-01 \
+    --before-date 2025-09-30 \
+    --checkpoint output/epss_sec4ai/best_model.pt \
+    --config    output/epss_sec4ai/experiment_config.json \
+    --max-cves 300 \
+    --output-dir output/infer/post_dataset_q3_2025
+```
 
-The 5% stratified labeled file (`data/epss_full/labeled_cves_5pct.json`, 12 MB) and all temporal split files are tracked and sufficient to reproduce the best results without re-fetching NVD.
+```bash
+# Q4 2025 (Oct–Dec)
+python -m epss.infer \
+    --mode post-dataset \
+    --after-date 2025-10-01 \
+    --before-date 2025-12-31 \
+    --checkpoint output/epss_sec4ai/best_model.pt \
+    --config    output/epss_sec4ai/experiment_config.json \
+    --max-cves 300 \
+    --output-dir output/infer/post_dataset_q4_2025
+```
+
+```bash
+# Q1 2026 (Jan–Mar) — 10 months after training cutoff
+python -m epss.infer \
+    --mode post-dataset \
+    --after-date 2026-01-01 \
+    --before-date 2026-03-31 \
+    --checkpoint output/epss_sec4ai/best_model.pt \
+    --config    output/epss_sec4ai/experiment_config.json \
+    --max-cves 300 \
+    --output-dir output/infer/post_dataset_q1_2026
+```
+
+---
+
+### Mode 2 — Pre-Dataset (2019–2021, before the earliest training record)
+
+CVEs published before 2021-11-23 (earliest in training data). KEV status is fully settled for these historical CVEs, providing the most reliable ground truth.
+
+```bash
+python -m epss.infer \
+    --mode pre-dataset \
+    --after-date 2019-01-01 \
+    --before-date 2021-10-31 \
+    --checkpoint output/epss_sec4ai/best_model.pt \
+    --config    output/epss_sec4ai/experiment_config.json \
+    --max-cves 500 \
+    --output-dir output/infer/pre_dataset_2019_2021
+```
+
+```bash
+# Deeper historical — 2017–2018 (Log4Shell era predecessors)
+python -m epss.infer \
+    --mode pre-dataset \
+    --after-date 2017-01-01 \
+    --before-date 2018-12-31 \
+    --checkpoint output/epss_sec4ai/best_model.pt \
+    --config    output/epss_sec4ai/experiment_config.json \
+    --max-cves 500 \
+    --output-dir output/infer/pre_dataset_2017_2018
+```
+
+---
+
+### Mode 3 — Custom CVE List
+
+```bash
+# Score specific CVEs by ID
+python -m epss.infer \
+    --mode custom \
+    --cve-ids CVE-2025-31200,CVE-2025-30065,CVE-2025-21333,CVE-2025-0282,CVE-2024-38094 \
+    --checkpoint output/epss_sec4ai/best_model.pt \
+    --config    output/epss_sec4ai/experiment_config.json \
+    --output-dir output/infer/custom_list
+
+# Score CVEs from a text file (one CVE-ID per line)
+python -m epss.infer \
+    --mode custom \
+    --cve-file my_cves.txt \
+    --checkpoint output/epss_sec4ai/best_model.pt \
+    --config    output/epss_sec4ai/experiment_config.json \
+    --output-dir output/infer/custom_from_file
+```
+
+---
+
+### Mode 4 — Graph-Only (no EPSS signal, pure text/CVSS/CWE)
+
+Use `--no-epss-prefetch` to disable EPSS injection into tabular features. This tests what the model learned from graph structure alone. Predictions will be lower overall but represent true text-derived signal.
+
+```bash
+python -m epss.infer \
+    --mode post-dataset \
+    --after-date 2025-07-01 \
+    --before-date 2025-09-30 \
+    --checkpoint output/epss_sec4ai/best_model.pt \
+    --config    output/epss_sec4ai/experiment_config.json \
+    --no-epss-prefetch \
+    --max-cves 300 \
+    --output-dir output/infer/post_dataset_graph_only
+```
+
+---
+
+### Mode 5 — Leakage-Free Model Inference (after retraining with --no-epss-feature)
+
+If you retrained with `--no-epss-feature`, this model does not need EPSS pre-fetching at all:
+
+```bash
+python -m epss.infer \
+    --mode post-dataset \
+    --after-date 2025-07-01 \
+    --before-date 2025-09-30 \
+    --checkpoint output/epss_sec4ai_noleak/best_model.pt \
+    --config    output/epss_sec4ai_noleak/experiment_config.json \
+    --no-epss-prefetch \
+    --max-cves 300 \
+    --output-dir output/infer/noleak_q3_2025
+```
+
+---
+
+### Inference with NVD API Key (10× faster)
+
+```bash
+export NVD_API_KEY="your-key-here"
+
+python -m epss.infer \
+    --mode post-dataset \
+    --after-date 2025-07-01 \
+    --before-date 2025-09-30 \
+    --checkpoint output/epss_sec4ai/best_model.pt \
+    --config    output/epss_sec4ai/experiment_config.json \
+    --nvd-api-key $NVD_API_KEY \
+    --max-cves 1000 \
+    --keep-work-dir \
+    --output-dir output/infer/post_dataset_large
+```
+
+### Keep Graph Cache (avoid rebuilding SecBERT embeddings on re-runs)
+
+```bash
+python -m epss.infer \
+    --mode post-dataset \
+    --after-date 2025-07-01 \
+    --before-date 2025-09-30 \
+    --checkpoint output/epss_sec4ai/best_model.pt \
+    --config    output/epss_sec4ai/experiment_config.json \
+    --keep-work-dir \
+    --work-dir  /tmp/epss_infer_cache \
+    --output-dir output/infer/post_dataset_q3_2025
+```
+
+---
+
+## Dataset Analysis & Feature Verification
+
+```bash
+# Profile the Sec4AI4Aec dataset (rows, dtypes, EPSS distribution, CVSS coverage)
+python analyze_dataset.py \
+    "data/epss/final_dataset_with_delta_days copy.csv"
+
+# Compare feature dtypes + value ranges between NVD and Sec4AI4Aec datasets
+python verify_features.py \
+    --nvd data/epss/labeled_cves.json \
+    --csv data/epss_sec4ai/labeled_cves.json \
+    --max-sample 500
+
+# Fast field-only check (skip 57-dim tabular encoding)
+python verify_features.py --skip-tabular \
+    --nvd data/epss/labeled_cves.json \
+    --csv data/epss_sec4ai/labeled_cves.json
+```
+
+---
+
+## Understanding Data Leakage in Soft-Label Mode
+
+When training with `--label-mode soft`, the `epss_score` is used as both:
+- The regression **target** (label `y` = EPSS probability)
+- A tabular **input feature** (feature dim 7 in the 57-dim vector)
+
+This creates data leakage: the model learns "output high probability when epss_score input is high" rather than learning genuine exploitation signals from CVE text structure. The graph becomes secondary.
+
+**Evidence:** Disabling EPSS pre-fetch at inference time (setting `epss_score=0.0`) collapses all 300 predictions to MINIMAL — confirming the model relied on EPSS input to discriminate.
+
+**Two solutions:**
+
+| Approach | Command flag | Tabular dim | Inference requirement | When to use |
+|---|---|---|---|---|
+| EPSS pre-fetch (current default) | *(default)* | 57 | Needs FIRST API call | When EPSS is always available |
+| No-leakage retrain | `--no-epss-feature` | 55 | No EPSS needed | Production / cold-start |
+
+---
+
+## Ground Truth for Inference Verification
+
+| Source | Coverage | Reliability | Lag |
+|---|---|---|---|
+| **CISA KEV** | ~1,559 CVEs (very selective) | Highest — active exploitation confirmed | 0–90 days after exploitation |
+| **FIRST EPSS API** | ~230,000+ CVEs | High — ML model using many signals | Daily updates |
+| **EPSS ≥ 0.1** | ~15% of all CVEs | Moderate threshold for "high risk" | Same day |
+
+CISA KEV is the most authoritative ground truth but will show 0 matches for very recent CVEs (< 3 months old) simply because the KEV review process takes time. Use EPSS as a proxy for recent CVEs and KEV for historical validation.
 
 ---
 
@@ -231,3 +432,17 @@ The 5% stratified labeled file (`data/epss_full/labeled_cves_5pct.json`, 12 MB) 
 | [docs/TPG_COMPLETE_GUIDE.md](docs/TPG_COMPLETE_GUIDE.md) | CPG → TPG deep dive: from Joern to text graphs, node/edge schema, complete examples |
 | [docs/Security_TPG_Complete_Reference.md](docs/Security_TPG_Complete_Reference.md) | Security frontend API reference: entity types, edge types, pipeline stages, configuration |
 | [docs/WHO_analysis_summary.md](docs/WHO_analysis_summary.md) | Domain-agnostic TPG validation on WHO medical document |
+
+---
+
+## What Cannot Be Included in This Repo
+
+| File | Size | How to Rebuild |
+|---|---|---|
+| `data/*/pyg_dataset/processed/*.pt` | 1.4 GB – 39.5 GB | `python -m epss.run_pipeline --skip-collect` |
+| `data/epss_full/nvd_cves.json` | 120 MB | `python -m epss.data_collector` |
+| `data/epss_full/labeled_cves.json` | 149 MB | Same as above |
+| `data/epss_sec4ai/labeled_cves.json` | ~10 MB | `python -m epss.csv_adapter --input data/epss/final_dataset_with_delta_days\ copy.csv` |
+| `output/**/best_model.pt` | ~34 MB each | `python -m epss.run_pipeline ...` |
+
+The 5% stratified labeled file (`data/epss_full/labeled_cves_5pct.json`, 12 MB) and all temporal split files are tracked and sufficient to reproduce the NVD-pipeline results without re-fetching.

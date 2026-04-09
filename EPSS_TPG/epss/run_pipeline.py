@@ -14,6 +14,23 @@ Usage:
     # Skip data collection (use existing labeled_cves.json)
     python -m epss.run_pipeline --skip-collect
 
+    # ── NEW DATASET (Sec4AI4Aec-EPSS-Enhanced CSV) ──────────────────────────
+    # Train on the new CSV dataset (runs adapter automatically, then trains):
+    python -m epss.run_pipeline \\
+        --source-csv "data/epss/final_dataset_with_delta_days copy.csv" \\
+        --data-dir data/epss_sec4ai \\
+        --output-dir output/epss_sec4ai \\
+        --backbone multiview --hybrid --label-mode soft --epochs 100
+
+    # Quick test on new dataset (50 CVEs, 10 epochs):
+    python -m epss.run_pipeline \\
+        --source-csv "data/epss/final_dataset_with_delta_days copy.csv" \\
+        --data-dir data/epss_sec4ai \\
+        --output-dir output/epss_sec4ai \\
+        --backbone multiview --hybrid --label-mode soft \\
+        --max-cves 50 --epochs 10
+    # ────────────────────────────────────────────────────────────────────────
+
     # Quick test with 100 CVEs
     python -m epss.run_pipeline --max-cves 100 --epochs 10
 
@@ -73,6 +90,11 @@ def main():
                              "Faster than API and includes percentile ranks.")
     parser.add_argument("--no-exploitdb", action="store_true",
                         help="Skip ExploitDB download during data collection")
+    # New dataset (Sec4AI4Aec-EPSS-Enhanced CSV)
+    parser.add_argument("--source-csv", default=None,
+                        help="Path to Sec4AI4Aec-style CSV. Automatically converts to "
+                             "labeled_cves.json via csv_adapter and skips NVD collection. "
+                             "Example: --source-csv \"data/epss/final_dataset_with_delta_days copy.csv\"")
 
     # Dataset
     parser.add_argument("--max-cves", type=int, default=None,
@@ -81,13 +103,23 @@ def main():
                         help="SecBERT embedding dimension (0 to skip)")
     parser.add_argument("--no-hybrid", action="store_true",
                         help="Use rule-only SecurityPipeline instead of Hybrid")
-    parser.add_argument("--label-mode", choices=["binary", "soft"], default="binary")
+    parser.add_argument("--label-mode", choices=["binary", "soft"], default="binary",
+                        help="'binary' = KEV-based 0/1 label; 'soft' = EPSS score as "
+                             "regression target. Use 'soft' with --source-csv.")
 
     # Hybrid model (Phase 3)
     parser.add_argument("--hybrid", action="store_true",
                         help="Use hybrid GNN+tabular model (CVSS, CWE, age, refs)")
     parser.add_argument("--top-k-cwes", type=int, default=25,
                         help="Number of top CWEs to one-hot encode (hybrid mode)")
+    parser.add_argument("--no-epss-feature", action="store_true",
+                        help=(
+                            "Exclude EPSS score/percentile from tabular features (55-dim). "
+                            "Eliminates data leakage when label-mode=soft: the model "
+                            "learns from CVE text + CVSS + CWE only, making it a true "
+                            "predictor rather than an EPSS echo. Use this for a "
+                            "deployment-ready model that works on CVEs without EPSS data."
+                        ))
 
     # Model
     parser.add_argument("--backbone",
@@ -133,6 +165,15 @@ def main():
     output_dir = Path(args.output_dir)
     labeled_path = Path(args.labeled_file) if args.labeled_file else data_dir / "labeled_cves.json"
 
+    # ─── CSV Adapter (Sec4AI4Aec dataset) ────────────────────────
+    if args.source_csv:
+        logger.info("=" * 60)
+        logger.info("SOURCE CSV MODE: converting %s → %s", args.source_csv, labeled_path)
+        logger.info("=" * 60)
+        from epss.csv_adapter import convert as csv_convert
+        csv_convert(args.source_csv, str(labeled_path))
+        args.skip_collect = True   # never fetch from NVD when using external CSV
+
     # ─── Phase 1: Data Collection ─────────────────────────────────
 
     if not args.skip_collect:
@@ -174,6 +215,7 @@ def main():
         embedding_dim=args.embedding_dim,
         use_hybrid=not args.no_hybrid,
         include_tabular=args.hybrid,
+        include_epss_feature=not args.no_epss_feature,
         max_cves=args.max_cves,
     )
     logger.info("Dataset: %d graphs", len(dataset))

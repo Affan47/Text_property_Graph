@@ -1,0 +1,6 @@
+cve_id,published,cvss3_score,description,predicted_prob,predicted_label,risk_tier,is_in_kev,kev_date_added,kev_vendor,kev_product,kev_ransomware,correct_vs_kev,current_epss_score,current_epss_pct,correct_vs_epss
+CVE-2025-31200,2025-04-16T19:15:54.540,9.8,A memory corruption issue was addressed with improved bounds checking. This issue is fixed in iOS 18.4.1 and iPadOS 18.4,0.207018,0,MINIMAL,1,2025-04-17,Apple,Multiple Products,Unknown,0,0.021050,0.8408,1
+CVE-2025-30065,2025-04-01T08:15:15.283,9.8,Schema parsing in the parquet-avro module of Apache Parquet 1.15.0 and previous versions allows bad actors to execute ar,0.052025,0,MINIMAL,0,,,,,1,0.005120,0.6649,1
+CVE-2025-21333,2025-01-14T18:15:58.530,7.8,Windows Hyper-V NT Kernel Integration VSP Elevation of Privilege Vulnerability,0.920687,1,CRITICAL,1,2025-01-14,Microsoft,Windows,Unknown,1,0.821130,0.9921,1
+CVE-2025-0282,2025-01-08T23:15:09.763,9.0,"A stack-based buffer overflow in Ivanti Connect Secure before version 22.7R2.5, Ivanti Policy Secure before version 22.7",0.983875,1,CRITICAL,1,2025-01-08,Ivanti,"Connect Secure, Policy Secure, and ZTA Gateways",Known,1,0.941290,0.9991,1
+CVE-2024-38094,2024-07-09T17:15:46.090,7.2,Microsoft SharePoint Remote Code Execution Vulnerability,0.949816,1,CRITICAL,1,2024-10-22,Microsoft,SharePoint,Known,1,0.642950,0.9844,1

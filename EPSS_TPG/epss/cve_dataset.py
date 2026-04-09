@@ -59,6 +59,7 @@ class CVEGraphDataset(InMemoryDataset):
         embedding_dim: int = 768,
         use_hybrid: bool = True,
         include_tabular: bool = False,
+        include_epss_feature: bool = True,
         max_cves: Optional[int] = None,
         transform: Optional[Callable] = None,
         pre_transform: Optional[Callable] = None,
@@ -68,6 +69,7 @@ class CVEGraphDataset(InMemoryDataset):
         self.embedding_dim = embedding_dim
         self.use_hybrid = use_hybrid
         self.include_tabular = include_tabular
+        self.include_epss_feature = include_epss_feature
         self.max_cves = max_cves
         super().__init__(root, transform, pre_transform)
         self.load(self.processed_paths[0])
@@ -81,23 +83,56 @@ class CVEGraphDataset(InMemoryDataset):
         suffix = f"_{self.label_mode}_emb{self.embedding_dim}"
         if self.include_tabular:
             suffix += "_tab"
+            if not self.include_epss_feature:
+                suffix += "_noepss"
         if self.max_cves:
             suffix += f"_n{self.max_cves}"
         return [f"cve_graphs{suffix}.pt"]
 
     def download(self):
-        """Copy labeled_cves.json to raw directory if not present."""
-        dst = Path(self.raw_dir) / "labeled_cves.json"
-        if dst.exists():
-            return
+        """Copy labeled_cves.json to raw directory, updating if source has changed.
+
+        Uses a SHA-256 hash to detect when the source file has been regenerated
+        (e.g. after running csv_adapter with a shuffled dataset). When the hash
+        differs the raw file is overwritten and processed caches are deleted so
+        graphs are rebuilt from the fresh data.
+        """
+        import hashlib
+        import shutil
+
         src = Path(self.labeled_cves_path)
         if not src.exists():
             raise FileNotFoundError(
                 f"labeled_cves.json not found at {src}. "
-                "Run DataCollector.fetch_all() first."
+                "Run DataCollector.fetch_all() or epss.csv_adapter first."
             )
-        import shutil
+
+        dst = Path(self.raw_dir) / "labeled_cves.json"
+
+        # Compute hash of source file
+        hasher = hashlib.sha256()
+        with open(src, "rb") as f:
+            for chunk in iter(lambda: f.read(65536), b""):
+                hasher.update(chunk)
+        src_hash = hasher.hexdigest()
+
+        hash_file = Path(self.raw_dir) / "labeled_cves.sha256"
+
+        if dst.exists() and hash_file.exists():
+            stored_hash = hash_file.read_text().strip()
+            if stored_hash == src_hash:
+                return  # raw file is up-to-date, nothing to do
+
+        logger.info("labeled_cves.json changed (or first run) — syncing raw file")
         shutil.copy2(src, dst)
+        hash_file.write_text(src_hash)
+
+        # Invalidate processed graph caches so they rebuild from fresh raw data
+        processed_dir = Path(self.processed_dir)
+        if processed_dir.exists():
+            for pt_file in processed_dir.glob("cve_graphs_*.pt"):
+                logger.info("Invalidating stale graph cache: %s", pt_file.name)
+                pt_file.unlink()
 
     def process(self):
         """Convert each CVE description → TPG → PyG Data object."""
@@ -117,9 +152,20 @@ class CVEGraphDataset(InMemoryDataset):
         tab_extractor = None
         if self.include_tabular:
             from epss.tabular_features import TabularFeatureExtractor
-            tab_extractor = TabularFeatureExtractor(top_k_cwes=25)
+            tab_extractor = TabularFeatureExtractor(
+                top_k_cwes=25,
+                include_epss_feature=self.include_epss_feature,
+            )
             tab_extractor.fit(labeled_cves)
-            logger.info("Tabular features enabled: %d dimensions", tab_extractor.feature_dim)
+            logger.info(
+                "Tabular features enabled: %d dimensions (include_epss=%s)",
+                tab_extractor.feature_dim, self.include_epss_feature,
+            )
+            # Save CWE vocab so inference can reuse the exact same feature mapping
+            tab_vocab_path = Path(self.processed_dir) / "tabular_vocab.json"
+            with open(tab_vocab_path, "w") as _f:
+                json.dump({"cwe_to_idx": tab_extractor.cwe_to_idx}, _f, indent=2)
+            logger.info("Saved tabular vocab → %s", tab_vocab_path.name)
 
         data_list = []
         cve_ids = list(labeled_cves.keys())
@@ -255,16 +301,28 @@ class CVEGraphDataset(InMemoryDataset):
 
         return data
 
-    def get_class_weights(self) -> torch.Tensor:
-        """Compute inverse-frequency class weights for imbalanced binary classification.
+    # Threshold used when label_mode='soft' to decide what counts as "positive"
+    # for stratified splitting and class-weight computation.
+    SOFT_POS_THRESHOLD = 0.1  # EPSS >= 0.1 → positive class
 
-        EPSS-style datasets have ~5% positive rate (exploited).
+    def _is_positive(self, y_value: float) -> bool:
+        """Return True if this sample is 'positive' for stratification purposes.
+
+        binary mode: y == 1 (KEV label)
+        soft   mode: EPSS score >= SOFT_POS_THRESHOLD (top ~15% of dataset)
         """
-        labels = []
-        for data in self:
-            labels.append(data.y.item())
-        labels = torch.tensor(labels)
-        n_pos = labels.sum().item()
+        if self.label_mode == "soft":
+            return y_value >= self.SOFT_POS_THRESHOLD
+        return y_value == 1
+
+    def get_class_weights(self) -> torch.Tensor:
+        """Compute inverse-frequency class weights for imbalanced classification.
+
+        Works for both binary (KEV) and soft (EPSS regression) label modes.
+        In soft mode, 'positive' = EPSS >= SOFT_POS_THRESHOLD.
+        """
+        labels = [data.y.item() for data in self]
+        n_pos = sum(1 for y in labels if self._is_positive(y))
         n_neg = len(labels) - n_pos
         if n_pos == 0 or n_neg == 0:
             return torch.tensor([1.0, 1.0])
@@ -278,6 +336,7 @@ class CVEGraphDataset(InMemoryDataset):
         """Split dataset indices into train/val/test with stratification.
 
         Maintains the same positive/negative ratio in each split.
+        Works for both binary and soft label modes.
         """
         import numpy as np
         rng = np.random.RandomState(seed)
@@ -285,7 +344,7 @@ class CVEGraphDataset(InMemoryDataset):
         pos_indices = []
         neg_indices = []
         for i in range(len(self)):
-            if self[i].y.item() == 1:
+            if self._is_positive(self[i].y.item()):
                 pos_indices.append(i)
             else:
                 neg_indices.append(i)

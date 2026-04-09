@@ -65,11 +65,13 @@ class TabularFeatureExtractor:
         self,
         top_k_cwes: int = 25,
         reference_date: Optional[str] = None,
+        include_epss_feature: bool = True,
     ):
         self.top_k_cwes = top_k_cwes
         self.ref_date = datetime.fromisoformat(
             reference_date or "2025-01-01T00:00:00"
         )
+        self.include_epss_feature = include_epss_feature
         self.cwe_to_idx: Dict[str, int] = {}
         self._fitted = False
 
@@ -102,8 +104,12 @@ class TabularFeatureExtractor:
 
     @property
     def feature_dim(self) -> int:
-        """Total dimension of the encoded feature vector."""
-        return (
+        """Total dimension of the encoded feature vector.
+
+        With include_epss_feature=True  (default): 57 dims
+        With include_epss_feature=False (no-leakage): 55 dims
+        """
+        base = (
             1                           # cvss3_score (normalized)
             + 1                         # has_cvss (binary)
             + CVSS_ONEHOT_DIM           # CVSS vector components (22)
@@ -111,28 +117,49 @@ class TabularFeatureExtractor:
             + 1                         # num_cwes (count)
             + 1                         # num_references (log-normalized)
             + 1                         # vulnerability_age (log-normalized days)
-            + 1                         # epss_score (0-1 probability)
-            + 1                         # epss_percentile (0-1 rank)
             + 1                         # has_public_exploit (binary)
             + 1                         # num_exploits (log-normalized)
         )
-        # = 1+1+22+26+1+1+1+1+1+1+1 = 57
+        if self.include_epss_feature:
+            base += 2                   # epss_score + epss_percentile
+        return base
+        # include_epss_feature=True  → 1+1+22+26+1+1+1+1+1+2 = 57
+        # include_epss_feature=False → 1+1+22+26+1+1+1+1+1   = 55
 
     def encode(self, record: dict) -> np.ndarray:
         """Encode a single CVE record into a tabular feature vector.
 
+        Handles two dataset formats transparently (same 57-dim output):
+
+        Format A — NVD pipeline (labeled_cves.json from DataCollector):
+            cvss3_score, cvss3_vector, cwe_ids, references,
+            published, epss_score, epss_percentile,
+            has_public_exploit, num_exploits
+
+        Format B — Sec4AI4Aec CSV (via csv_adapter.py):
+            cvss3_score  (mapped from cvss_score)
+            cvss3_vector (reconstructed from CVSS component columns)
+            cwe_ids = []          → zero-filled (not in dataset)
+            references = []       → falls back to social_source_count
+            published  (mapped from social media date)
+            epss_score            ✓
+            epss_percentile = 0   → zero (not in dataset)
+            has_public_exploit    (mapped from code_available)
+            num_exploits          (mapped from social_source_count as proxy)
+
         Args:
-            record: CVE record dict with fields from labeled_cves.json.
+            record: CVE record dict from labeled_cves.json.
 
         Returns:
-            numpy array of shape (feature_dim,).
+            numpy array of shape (feature_dim,) = (57,).
         """
         features = []
 
         # 1. CVSS v3 base score (normalized 0-10 → 0-1)
-        cvss_score = record.get("cvss3_score")
+        #    Format A: "cvss3_score" | Format B: also "cvss3_score" (adapter maps it)
+        cvss_score = record.get("cvss3_score") or record.get("cvss_score")
         if cvss_score is not None:
-            features.append(cvss_score / 10.0)
+            features.append(float(cvss_score) / 10.0)
             features.append(1.0)  # has_cvss = True
         else:
             features.append(0.0)
@@ -144,33 +171,51 @@ class TabularFeatureExtractor:
         features.extend(cvss_onehot)
 
         # 3. CWE IDs (multi-hot for top-K + "other" bucket)
+        #    Format B: always empty → all zeros, which is handled gracefully
         cwe_ids = record.get("cwe_ids", [])
         cwe_encoded = self._encode_cwes(cwe_ids)
         features.extend(cwe_encoded)
 
-        # 4. Number of CWE IDs
-        features.append(min(len(cwe_ids), 10) / 10.0)  # normalized, cap at 10
+        # 4. Number of CWE IDs (normalized, cap at 10)
+        features.append(min(len(cwe_ids), 10) / 10.0)
 
-        # 5. Number of references (log-normalized)
+        # 5. Signal richness: NVD references count OR social media source count
+        #    Format A: number of NVD reference links
+        #    Format B: social_source_count (platforms mentioning this CVE)
         num_refs = len(record.get("references", []))
-        features.append(math.log1p(num_refs) / math.log1p(20))  # log(1+x), normalized by log(21)
+        if num_refs == 0:
+            # Fall back to social source count for Format B records
+            num_refs = int(record.get("social_source_count", 0))
+        features.append(math.log1p(num_refs) / math.log1p(20))
 
         # 6. Vulnerability age (log-normalized days since publication)
         published = record.get("published", "")
         age_days = self._compute_age_days(published)
-        features.append(math.log1p(age_days) / math.log1p(3650))  # normalize by ~10 years
+        features.append(math.log1p(age_days) / math.log1p(3650))  # ~10 years
 
-        # 7. EPSS score (0-1, from FIRST bulk CSV or API)
-        features.append(float(record.get("epss_score", 0.0)))
+        # 7 & 8. EPSS score and percentile (only if include_epss_feature=True)
+        # WARNING: Including EPSS as a feature when EPSS is also the training label
+        # creates data leakage — the model learns "predict EPSS from EPSS" rather
+        # than learning genuine exploitation signals from CVE characteristics.
+        # Set include_epss_feature=False and retrain for a leakage-free model.
+        if self.include_epss_feature:
+            features.append(float(record.get("epss_score", 0.0)))
+            features.append(float(record.get("epss_percentile", 0.0)))
 
-        # 8. EPSS percentile (0-1 rank among all CVEs)
-        features.append(float(record.get("epss_percentile", 0.0)))
+        # 9. Has public exploit / PoC code
+        #    Format A: ExploitDB flag | Format B: code_available flag
+        has_exploit = (
+            record.get("has_public_exploit", False)
+            or record.get("code_available", False)
+        )
+        features.append(1.0 if has_exploit else 0.0)
 
-        # 9. Has public exploit in ExploitDB (binary)
-        features.append(1.0 if record.get("has_public_exploit", False) else 0.0)
-
-        # 10. Number of public exploits (log-normalized, cap at 20)
+        # 10. Exploit/mention count (log-normalized, cap at 20)
+        #     Format A: ExploitDB num_exploits
+        #     Format B: social_source_count as a proxy for exploitation interest
         num_exp = int(record.get("num_exploits", 0))
+        if num_exp == 0:
+            num_exp = int(record.get("social_source_count", 0))
         features.append(math.log1p(num_exp) / math.log1p(20))
 
         return np.array(features, dtype=np.float32)
@@ -238,13 +283,8 @@ class TabularFeatureExtractor:
             names.append(f"cwe_{cwe}")
         names.append("cwe_other")
 
-        names.extend([
-            "num_cwes",
-            "num_references",
-            "vulnerability_age_days",
-            "epss_score",
-            "epss_percentile",
-            "has_public_exploit",
-            "num_exploits",
-        ])
+        names.extend(["num_cwes", "num_references", "vulnerability_age_days"])
+        if self.include_epss_feature:
+            names.extend(["epss_score", "epss_percentile"])
+        names.extend(["has_public_exploit", "num_exploits"])
         return names

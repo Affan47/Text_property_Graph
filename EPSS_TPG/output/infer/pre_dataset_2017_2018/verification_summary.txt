@@ -1,0 +1,48 @@
+======================================================================
+EPSS-GNN Inference — Verification Summary
+Run at: 2026-04-09 17:20:07
+======================================================================
+
+Total CVEs scored:      500
+Predicted positive:     27 (5.4%)
+Actually in KEV:        1 (0.2%)
+
+── Ground Truth: CISA KEV ─────────────────────────────────
+  TP (predicted+, KEV+): 1
+  FP (predicted+, KEV-): 26
+  FN (predicted-, KEV+): 0
+  TN (predicted-, KEV-): 473
+  Precision vs KEV:      0.0370
+  Recall    vs KEV:      1.0000
+  F1        vs KEV:      0.0714
+
+── Risk Tier Distribution ──────────────────────────────────
+  CRITICAL  :   18 (  3.6%)   KEV: 1
+  HIGH      :    8 (  1.6%)   KEV: 0
+  MEDIUM    :    1 (  0.2%)   KEV: 0
+  LOW       :   12 (  2.4%)   KEV: 0
+  MINIMAL   :  461 ( 92.2%)   KEV: 0
+
+── Top-20 Highest Risk (sorted by predicted probability) ───
+  CVE-ID                   Prob  Tier        KEV  KEV_date       Curr_EPSS
+  ---------------------- ------  ---------- ----  ------------  ----------
+  CVE-2016-10108         0.9816  CRITICAL     no                  0.917590
+  CVE-2016-8204          0.9733  CRITICAL     no                  0.713390
+  CVE-2017-5521          0.9689  CRITICAL    YES  2022-09-08      0.938040
+  CVE-2016-9131          0.9680  CRITICAL     no                  0.728300
+  CVE-2016-9299          0.9547  CRITICAL     no                  0.892500
+  CVE-2016-9444          0.9505  CRITICAL     no                  0.504600
+  CVE-2016-9147          0.9497  CRITICAL     no                  0.561650
+  CVE-2017-2930          0.9401  CRITICAL     no                  0.819710
+  CVE-2016-7434          0.9370  CRITICAL     no                  0.623780
+  CVE-2017-5487          0.9356  CRITICAL     no                  0.924970
+  CVE-2017-2932          0.9309  CRITICAL     no                  0.643510
+  CVE-2016-8706          0.9264  CRITICAL     no                  0.517930
+  CVE-2017-2935          0.9217  CRITICAL     no                  0.690870
+  CVE-2017-2933          0.9209  CRITICAL     no                  0.690870
+  CVE-2017-2934          0.9205  CRITICAL     no                  0.690870
+  CVE-2017-0004          0.9200  CRITICAL     no                  0.534670
+  CVE-2017-2931          0.9069  CRITICAL     no                  0.679440
+  CVE-2016-7981          0.9032  CRITICAL     no                  0.434990
+  CVE-2016-10140         0.8928  HIGH         no                  0.342420
+  CVE-2016-6896          0.8721  HIGH         no                  0.351820

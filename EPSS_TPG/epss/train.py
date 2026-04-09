@@ -63,6 +63,10 @@ class Trainer:
         self.batch_size = batch_size
         self.patience = patience
 
+        # Inherit label mode from dataset so compute_metrics knows how to binarize
+        self.label_mode = getattr(dataset, "label_mode", "binary")
+        logger.info("Label mode: %s", self.label_mode)
+
         # Class weights for imbalanced data
         class_weights = dataset.get_class_weights()
         self.pos_weight = torch.tensor(
@@ -90,6 +94,9 @@ class Trainer:
         self.test_loader = DataLoader(
             dataset[splits["test"]], batch_size=batch_size
         )
+
+        # Debug: log split label distributions
+        self._log_split_stats(splits, dataset)
 
         logger.info(
             "Splits: train=%d, val=%d, test=%d",
@@ -174,6 +181,30 @@ class Trainer:
 
         return total_loss / max(n_batches, 1)
 
+    def _log_split_stats(self, splits: dict, dataset) -> None:
+        """Log label distribution for each split — essential debug info."""
+        threshold = getattr(dataset, "SOFT_POS_THRESHOLD", 0.1)
+        for split_name, indices in splits.items():
+            if not indices:
+                logger.warning("Split '%s' is empty!", split_name)
+                continue
+            ys = [dataset[i].y.item() for i in indices]
+            arr = np.array(ys)
+            n_pos = sum(1 for v in ys if dataset._is_positive(v))
+            logger.info(
+                "Split %-5s | n=%4d | n_pos=%4d (%.1f%%) | "
+                "y_min=%.4f | y_max=%.4f | y_mean=%.4f",
+                split_name, len(ys), n_pos, 100 * n_pos / max(len(ys), 1),
+                arr.min(), arr.max(), arr.mean(),
+            )
+            if n_pos == 0:
+                logger.warning(
+                    "Split '%s' has 0 positives! label_mode='%s', threshold=%.2f. "
+                    "y values sample: %s",
+                    split_name, self.label_mode, threshold,
+                    [f"{v:.4f}" for v in ys[:10]],
+                )
+
     def _evaluate(
         self, loader: DataLoader, collect_ids: bool = False
     ) -> Tuple[Dict[str, float], Optional[List[str]], Optional[np.ndarray], Optional[np.ndarray]]:
@@ -201,6 +232,8 @@ class Trainer:
 
                 probs = torch.sigmoid(logits).cpu().numpy()
                 all_probs.extend(probs.tolist())
+                # Keep as float — soft mode labels are EPSS scores (0.0–1.0)
+                # Do NOT cast to int here; compute_metrics handles binarization
                 all_labels.extend(labels.cpu().numpy().tolist())
 
                 if collect_ids and hasattr(batch, "cve_id"):
@@ -211,9 +244,16 @@ class Trainer:
                         all_ids.append(str(ids))
 
         all_probs = np.array(all_probs)
-        all_labels = np.array(all_labels, dtype=int)
+        all_labels = np.array(all_labels, dtype=np.float32)
 
-        metrics = compute_metrics(all_labels, all_probs)
+        # Debug: log what we're about to score
+        n_pos_raw = int((all_labels >= 0.1).sum()) if self.label_mode == "soft" else int(all_labels.sum())
+        logger.debug(
+            "_evaluate | n=%d | label_mode=%s | y_min=%.4f | y_max=%.4f | n_pos=%d",
+            len(all_labels), self.label_mode, all_labels.min(), all_labels.max(), n_pos_raw,
+        )
+
+        metrics = compute_metrics(all_labels, all_probs, label_mode=self.label_mode)
         metrics["loss"] = total_loss / max(n_batches, 1)
 
         if collect_ids:
@@ -293,9 +333,16 @@ class Trainer:
 
 
 def compute_metrics(
-    y_true: np.ndarray, y_prob: np.ndarray, threshold: float = 0.5
+    y_true: np.ndarray, y_prob: np.ndarray, threshold: float = 0.5,
+    soft_pos_threshold: float = 0.1,
+    label_mode: str = "binary",
 ) -> Dict[str, float]:
     """Compute all evaluation metrics consistent with EPSS papers.
+
+    Handles both label modes:
+      - binary mode: y_true is 0/1 (KEV labels)
+      - soft mode:   y_true is raw EPSS float (0.0–1.0); binarized at
+                     soft_pos_threshold before computing classification metrics.
 
     Metrics:
         - PR-AUC (primary metric — used by EPSS v1/v2/v3)
@@ -306,9 +353,12 @@ def compute_metrics(
         - Brier score (calibration quality)
 
     Args:
-        y_true: Ground truth binary labels (0 or 1).
-        y_prob: Predicted probabilities (0.0 to 1.0).
-        threshold: Decision threshold for binary predictions.
+        y_true:             Ground truth labels (binary 0/1 or soft EPSS float).
+        y_prob:             Predicted probabilities (0.0 to 1.0).
+        threshold:          Decision threshold for binary predictions.
+        soft_pos_threshold: EPSS score cutoff used to binarize soft labels.
+        label_mode:         'soft' or 'binary'. When 'soft', always binarize
+                            at soft_pos_threshold regardless of value range.
 
     Returns:
         dict of metric name -> value.
@@ -320,13 +370,22 @@ def compute_metrics(
         brier_score_loss,
     )
 
+    # Binarize based on explicit label_mode — do NOT rely on value range alone.
+    # When label_mode='soft', y_true holds raw EPSS floats; casting to int
+    # would zero out everything below 1.0 (i.e., all of them).
+    if label_mode == "soft":
+        y_true_binary = (y_true >= soft_pos_threshold).astype(int)
+    else:
+        # binary mode: also accept any float representation of {0, 1}
+        y_true_binary = (y_true >= 0.5).astype(int)
+
     # PR-AUC (primary metric)
-    precision_curve, recall_curve, _ = precision_recall_curve(y_true, y_prob)
+    precision_curve, recall_curve, _ = precision_recall_curve(y_true_binary, y_prob)
     pr_auc = auc(recall_curve, precision_curve)
 
     # ROC-AUC
     try:
-        roc_auc = roc_auc_score(y_true, y_prob)
+        roc_auc = roc_auc_score(y_true_binary, y_prob)
     except ValueError:
         roc_auc = 0.0
 
@@ -336,12 +395,12 @@ def compute_metrics(
     return {
         "pr_auc": float(pr_auc),
         "roc_auc": float(roc_auc),
-        "f1": float(f1_score(y_true, y_pred, zero_division=0)),
-        "precision": float(precision_score(y_true, y_pred, zero_division=0)),
-        "recall": float(recall_score(y_true, y_pred, zero_division=0)),
-        "brier": float(brier_score_loss(y_true, y_prob)),
+        "f1": float(f1_score(y_true_binary, y_pred, zero_division=0)),
+        "precision": float(precision_score(y_true_binary, y_pred, zero_division=0)),
+        "recall": float(recall_score(y_true_binary, y_pred, zero_division=0)),
+        "brier": float(brier_score_loss(y_true_binary, y_prob)),
         "threshold": threshold,
-        "n_samples": len(y_true),
-        "n_positive": int(y_true.sum()),
-        "prevalence": float(y_true.mean()),
+        "n_samples": len(y_true_binary),
+        "n_positive": int(y_true_binary.sum()),
+        "prevalence": float(y_true_binary.mean()),
     }
