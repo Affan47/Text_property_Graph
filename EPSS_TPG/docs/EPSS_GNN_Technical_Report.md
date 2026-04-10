@@ -2512,7 +2512,7 @@ The model converges steadily without the instant near-perfect performance seen i
 
 **Top-10 test predictions — leakage-free model:**
 ```
-CVE-2023-3519-8    prob=0.9892  CRITICAL  Citrix ADC/Gateway session token bypass (Citrix Bleed)
+CVE-2023-3519-8    prob=0.9892  CRITICAL  Citrix NetScaler ADC/Gateway unauthenticated remote code execution
 CVE-2024-28987-1   prob=0.9877  CRITICAL  SolarWinds Web Help Desk hardcoded credentials
 CVE-2024-8963-2    prob=0.9868  CRITICAL  Ivanti CSA path traversal
 CVE-2023-46805-4   prob=0.9864  CRITICAL  Ivanti ICS/IPS authentication bypass
@@ -2524,7 +2524,7 @@ CVE-2024-4040-1    prob=0.9805  CRITICAL  CrushFTP server-side template injectio
 CVE-2023-4966-5    prob=0.9795  CRITICAL  Citrix Bleed session token leakage
 ```
 
-These are all real, well-known KEV-confirmed exploited vulnerabilities. The leakage-free model correctly identifies Citrix Bleed, Ivanti ICS/IPS, Jenkins CLI RCE, Fortinet SSL VPN, and SolarWinds HWD — purely from CVE text graph structure and CVSS vectors, with no EPSS input.
+These are all real, well-known KEV-confirmed exploited vulnerabilities. The leakage-free model correctly identifies Citrix NetScaler ADC RCE (CVE-2023-3519), Citrix Bleed (CVE-2023-4966), Ivanti ICS/IPS, Jenkins CLI RCE, Fortinet SSL VPN, and SolarWinds HWD — purely from CVE text graph structure and CVSS vectors, with no EPSS input. Note: CVE-2023-3519 and CVE-2023-4966 are two separate Citrix NetScaler vulnerabilities from 2023; CVE-2023-3519 is an unauthenticated RCE and CVE-2023-4966 is the session token leakage (Citrix Bleed).
 
 **Why the model sizes differ (834K vs 3M params):** Run 5 used `hidden=128`; Run 6 used `hidden=256`. Both are MultiView Hybrid. The leakage-free model is deliberately larger to compensate for the removed EPSS signal — it needs more capacity to find exploitation patterns in text alone.
 
@@ -3329,6 +3329,8 @@ python infer.py --recent-days 30 \
 | 6 | CVE-2026-20118 | 0.2143 | MEDIUM | 6.8 | 0.001 | ✗ | Cisco IOS packet handling |
 | 7 | CVE-2026-20086 | 0.1371 | MEDIUM | 8.6 | 0.001 | ✗ | Cisco CAPWAP processing |
 
+*Note: This run was executed with an older version of the inference code that used different tier thresholds. Under the standard thresholds (MEDIUM ≥ 0.50, LOW ≥ 0.30, MINIMAL < 0.30) used in all other runs, entries with prob < 0.30 would be classified as MINIMAL. The "MEDIUM" labels in this table reflect the tier assignments in the raw output file (`predictions_20260406.csv`) and are retained as-is for reproducibility.*
+
 **The 4 KEV positives — model performance:**
 
 | CVE | Rank | Prob | EPSS | Outcome | Root cause |
@@ -3409,7 +3411,7 @@ python -m epss.infer \
 | CVE-2025-34073 | 0.9231 | CRITICAL | 0.553 | maltrail unauthenticated command injection |
 | CVE-2025-34076 | 0.8691 | HIGH | 0.246 | Microweber CMS local file inclusion |
 | CVE-2025-6934  | 0.8493 | HIGH | 0.236 | WordPress Opal Estate Pro unauthenticated RCE |
-| CVE-2025-4380  | 0.6651 | MEDIUM | 0.165 | WordPress Ads Pro Plugin unauthenticated exec |
+| CVE-2025-4380  | 0.6651 | MEDIUM | 0.165 | WordPress Ads Pro Plugin local file inclusion (LFI) |
 
 **Key observations:**
 
@@ -3805,18 +3807,18 @@ python -m epss.infer \
 | CVE-2025-0282 | 0.9839 | CRITICAL | ✓ | 2025-01-08 | 0.941 | **TP — Ivanti Connect Secure stack buffer overflow (mass exploitation)** |
 | CVE-2024-38094 | 0.9498 | CRITICAL | ✓ | 2024-10-22 | 0.643 | **TP — SharePoint RCE via deserialization** |
 | CVE-2025-21333 | 0.9207 | CRITICAL | ✓ | 2025-01-14 | 0.821 | **TP — Windows Hyper-V NTLM relay privilege escalation** |
-| CVE-2025-31200 | 0.2070 | MINIMAL | ✓ | 2025-04-17 | 0.021 | **FN — Apple CoreAudio heap overflow (iOS 0-day)** |
+| CVE-2025-31200 | 0.2070 | MINIMAL | ✓ | 2025-04-17 | 0.021 | **FN — Apple iOS/macOS memory corruption (0-day; CoreAudio per Apple advisory, NVD description is generic)** |
 | CVE-2025-30065 | 0.0520 | MINIMAL | — | — | 0.005 | **TN — Apache Parquet schema parsing (no confirmed exploitation)** |
 
 **CVE-by-CVE analysis:**
 
 **CVE-2025-0282 (prob=0.984, KEV ✓)** — Ivanti Connect Secure / Policy Secure VPN stack buffer overflow. Active exploitation began in December 2024. The CVE description contains "unauthenticated", "remote code execution", and "stack-based buffer overflow" — three of the highest-signal phrases in the training corpus. EPSS=0.941 provides strong tabular confirmation. CRITICAL prediction is correct.
 
-**CVE-2024-38094 (prob=0.950, KEV ✓)** — Microsoft SharePoint Server RCE via unsafe deserialization. The description explicitly mentions `AuthenticationContext` deserialization and pre-authentication access, matching the linguistic structure of high-severity Enterprise Microsoft CVEs the model saw during training. EPSS=0.643 adds moderate tabular signal.
+**CVE-2024-38094 (prob=0.950, KEV ✓)** — Microsoft SharePoint Server remote code execution. The NVD description for this CVE is extremely terse ("Microsoft SharePoint Remote Code Execution Vulnerability") — the high probability is driven by CVSS=7.2 with a network attack vector, EPSS=0.643, and the model's learned association between Microsoft SharePoint CVEs and exploitation patterns from training analogues. The "deserialization" characterisation comes from external Microsoft advisories, not the NVD text the model processed.
 
 **CVE-2025-21333 (prob=0.921, KEV ✓)** — Windows Hyper-V NT Kernel Integration VSP privilege escalation. Description: "heap-based buffer overflow in NT Kernel" + "SYSTEM privileges". The combination of NT kernel + privilege escalation + heap corruption is the canonical exploitation-language cluster from the training set (Win32k family). EPSS=0.821 confirms.
 
-**CVE-2025-31200 (prob=0.207, FN)** — Apple CoreAudio heap overflow exploited in highly targeted iOS attacks (NSO-style 0-day). The model predicts MINIMAL (prob=0.207). Root cause: EPSS=0.021 — FIRST.org's telemetry doesn't see targeted mobile 0-days. The description is terse ("heap overflow in CoreAudio processing maliciously crafted media file") — three nodes in the TPG, minimal graph structure. This is the same Apple/Chrome 0-day blind spot documented in Run A, Run C, and Run B. It is a systematic limitation inherited from EPSS, not a model-specific failure.
+**CVE-2025-31200 (prob=0.207, FN)** — Apple iOS/macOS memory corruption vulnerability exploited in highly targeted attacks (NSO-style 0-day). Per Apple's security advisory this affects the CoreAudio component, but the NVD description is generic: "A memory corruption issue was addressed with improved bounds checking. This issue is fixed in iOS 18.4.1 and iPadOS 18.4.1 and macOS Sequoia 15.4.1." The model processed only this terse NVD text — no component name, no attack vector detail, minimal graph structure. The model predicts MINIMAL (prob=0.207). Root cause: EPSS=0.021 — FIRST.org telemetry does not capture targeted mobile 0-days, and the sparse NVD description provides insufficient linguistic signal. This is the same Apple/Chrome 0-day blind spot documented in Run A, Run C, and Run B. It is a systematic limitation inherited from the NVD description quality and EPSS telemetry coverage, not a model-specific failure.
 
 **CVE-2025-30065 (prob=0.052, TN)** — Apache Parquet `schema.py` recursive schema parsing crash. CVSS=10.0 but no confirmed exploitation. The model correctly assigns MINIMAL probability despite the CRITICAL CVSS score — it recognises that format-parsing crashes in data engineering libraries rarely reach KEV. EPSS=0.005 aligns. This demonstrates the model's correct behaviour on high-CVSS non-exploited CVEs.
 
@@ -3884,7 +3886,7 @@ python -m epss.infer \
 | 9 | CVE-2024-13451 | 0.3742 | 0.0639 | LOW | 0.0015 | NoLeak > leaky despite low EPSS |
 | 10 | CVE-2025-34067 | 0.2513 | 0.1463 | MINIMAL | 0.0335 | Agreement |
 | 17 | CVE-2025-34079 | 0.1927 | **0.9407** | MINIMAL | 0.5595 | **NoLeak rejects; auth required** |
-| — | CVE-2025-6934 | — | **0.8493** | — | 0.2361 | Not scored by NoLeak |
+| CVE-2025-6934 | **0.044** | **0.8493** | MINIMAL | 0.2361 | NoLeak scores MINIMAL — leaky model EPSS-driven |
 
 **CVE-by-CVE critical analysis:**
 
