@@ -30,6 +30,7 @@
 18. [Inference Results — Temporal Validation](#18-inference-results)
 19. [Data Leakage Warning — EPSS as Feature and Label](#19-data-leakage)
 20. [File Structure](#20-file-structure)
+21. [Model Architecture Diagram](#21-model-architecture-diagram)
 
 ---
 
@@ -4382,7 +4383,252 @@ EPSS_TPG/
 
 ---
 
-## Summary
+## 21. Model Architecture Diagram
+
+This section provides a complete visual breakdown of the EPSS-GNN architecture — answering the key questions: what features are used, which pipeline processes which data, and how everything is fused into a final exploitation probability.
+
+---
+
+### Q1 — Total Features Used
+
+**57 dimensions** in full mode (or 55 without EPSS leakage). They come from four external sources, all completely independent of the CVE description text:
+
+| Dim Range | Count | Source          | Feature Group              |
+|-----------|-------|-----------------|----------------------------|
+| [0–1]     | 2     | NVD CVSS        | Score + presence indicator |
+| [2–23]    | 22    | NVD CVSS vector | AV, AC, PR, UI, S, C, I, A one-hot |
+| [24–48]   | 25    | NVD CWE         | Top-25 CWE multi-hot       |
+| [49]      | 1     | NVD CWE         | "Other CWE" bucket         |
+| [50]      | 1     | NVD CWE         | num_cwes (normalized)      |
+| [51]      | 1     | NVD             | num_references (log-scaled)|
+| [52]      | 1     | NVD             | vulnerability_age_days (log-scaled) |
+| [53–54]   | 2     | ExploitDB       | has_public_exploit, num_exploits |
+| [55–56]   | 2     | FIRST EPSS      | epss_score, epss_percentile (**leakage — disabled in NoLeak model**) |
+
+**Total: 57 dims** (full) / **55 dims** (NoLeak, `--no-epss-feature`)
+
+---
+
+### Q2 — What Does the TPG Work On?
+
+**Only the CVE description text.** No CVSS, no CWE IDs, no dates, no EPSS score.
+
+```
+pipeline.run(description, doc_id=cve_id)   # cve_dataset.py line 255
+```
+
+The entire TextPropertyGraph — all nodes, edges, and structure — is derived purely from parsing the natural-language description string. All other CVE fields go to the tabular branch only.
+
+---
+
+### Q3 & Q6 — What Does SecBERT Process?
+
+**SecBERT processes the raw CVE description text** (same text the TPG was built from), but independently and in parallel — not the pre-built TPG structure.
+
+- Model: `jackaduma/SecBERT` (BERT-Base, 12L × 12H × 768-dim hidden)
+- Input: tokenized description string
+- Output: **768-dim embedding per token** stored in each TPG node's `extra["embedding"]`
+- SecBERT weights are **frozen** (used as feature extractor, not fine-tuned)
+- Covers: CVE IDs, CWE IDs, software names, attack vectors, impact terms, severity words, remediation keywords — anything present in the description text
+
+---
+
+### Q4 — How Are Tabular Features Combined with the GNN?
+
+**Late fusion via concatenation.** The two branches are computed independently then concatenated before the final classifier MLP:
+
+```
+graph_emb  = GNN(data.x, data.edge_index)  → [batch, 256]  (mean+max pool)
+tabular_emb = MLP_encoder(data.tabular)     → [batch,  64]
+fused        = concat([graph_emb, tabular_emb])  → [batch, 320]
+logit        = classifier_MLP(fused)         → [batch,   1]
+```
+
+There is no cross-attention or early fusion — the branches are completely independent until the concatenation step.
+
+---
+
+### Q5 — Does TPG Produce Structural Views, Then SecBERT Encodes Them?
+
+**No — the order is reversed and parallel, not sequential:**
+
+1. **SpaCy** parses the text → builds TPG structure (nodes, edges, types)
+2. **SecBERT** encodes the raw text independently → generates 768-dim token embeddings
+3. **Overlay**: SecBERT embeddings are attached to the already-built TPG nodes
+
+SecBERT does **not** read the TPG structure. The TPG structure does **not** depend on SecBERT. They operate on the same input text independently, then the embeddings are stored into the TPG nodes before PyG export.
+
+---
+
+### Full End-to-End Architecture Diagram
+
+```
+╔═════════════════════════════════════════════════════════════════════════════════╗
+║                        EPSS-GNN FULL PIPELINE                                  ║
+╚═════════════════════════════════════════════════════════════════════════════════╝
+
+ INPUT: CVE Record  ──────────────────────────────────────────────────────────────
+ ┌───────────────────────────────────────────────────────────────────────────────┐
+ │  description:    "Apache 2.4.51 allows remote attackers..."                   │
+ │  published:      "2021-06-01T00:00:00Z"                                       │
+ │  cvss3_score:    9.8                                                           │
+ │  cvss3_vector:   "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H"             │
+ │  cwe_ids:        ["CWE-119"]                                                  │
+ │  references:     ["https://..."]       ← 5 URLs                               │
+ │  binary_label:   1                     ← CISA KEV: confirmed exploited         │
+ │  epss_score:     0.975                 ← FIRST EPSS probability               │
+ │  has_public_exploit: true              ← ExploitDB                            │
+ │  num_exploits:   3                     ← ExploitDB                            │
+ └───────────────────────────────────────────────────────────────────────────────┘
+          │                                                  │
+          │  description (text only)      all other fields   │
+          ▼                                                  ▼
+ ╔═══════════════════════════╗               ╔══════════════════════════════════╗
+ ║   BRANCH A: TEXT → GRAPH  ║               ║   BRANCH B: METADATA → TABULAR  ║
+ ╚═══════════════════════════╝               ╚══════════════════════════════════╝
+          │                                                  │
+          ├─ STEP A1: SpaCy NLP                              │
+          │   • Tokenization, POS tagging                    │
+          │   • Dependency parsing                           │
+          │   • Named entity recognition                     │
+          │   • Coreference resolution                       │
+          │                                                  │
+          ├─ STEP A2: SecurityFrontend (rule-based)          │
+          │   Regex patterns extract:                        │
+          │   • CVE-YYYY-NNNNN identifiers                   │
+          │   • CWE-NNN identifiers                          │
+          │   • Software names + versions                    │
+          │   • Attack vectors (remote, network, local)      │
+          │   • Impact types (RCE, DoS, privesc, SQLi)       │
+          │   • Vulnerability types (buffer overflow, UAF)   │
+          │   Output: TextPropertyGraph skeleton             │
+          │            ├─ 13 node types (DOCUMENT, SENTENCE, │
+          │            │   TOKEN, ENTITY, PREDICATE,         │
+          │            │   ARGUMENT, CONCEPT, NOUN_PHRASE,   │
+          │            │   VERB_PHRASE, CLAUSE, MENTION,     │
+          │            │   TOPIC, PARAGRAPH)                 │
+          │            └─ 13 edge types (DEP, NEXT_TOKEN,    │
+          │                NEXT_SENT, COREF, SRL_ARG,        │
+          │                CONTAINS, ENTITY_REL, ...)        │
+          │                                                  │
+          ├─ STEP A3: SecBERT (frozen, 768-dim)              │
+          │   Input: raw description text (same as A1)       │
+          │   • Tokenize with BERT tokenizer                 │
+          │   • Forward pass: 12 transformer layers          │
+          │   • Mean-pool last 4 layers per token            │
+          │   • Output: 768-dim embedding per token/node     │
+          │   • Attach embeddings to TPG nodes:              │
+          │     node.extra["embedding"] = [768-dim vector]   │
+          │                                                  │
+          ├─ STEP A4: Enrichment Passes                      │
+          │   • CoreferencePass: resolve "it", "the flaw"    │
+          │   • DiscoursePass: RST/causal relations          │
+          │   • EntityRelationPass: entity-entity links      │
+          │   • TopicPass: document-level metadata nodes     │
+          │                                                  │
+          └─ STEP A5: PyG Export                             ├─ dim [0]:  cvss3_score (÷10)
+              Per node:                                      ├─ dim [1]:  has_cvss
+              [node_type one-hot (13)]                       ├─ dim [2-5]: AV one-hot N,A,L,P
+              + [SecBERT embedding (768)]                    ├─ dim [6-7]: AC one-hot L,H
+              = node feature vector [781-dim]                ├─ dim [8-10]: PR one-hot N,L,H
+                                                             ├─ dim [11-12]: UI one-hot N,R
+              data.x:          [N nodes, 781]                ├─ dim [13-14]: S one-hot U,C
+              data.edge_index: [2, E edges]                  ├─ dim [15-17]: C one-hot N,L,H
+              data.edge_type:  [E] (integer)                 ├─ dim [18-20]: I one-hot N,L,H
+              data.edge_attr:  [E, 13] (one-hot)             ├─ dim [21-23]: A one-hot N,L,H
+              data.y:          label                         ├─ dim [24-48]: top-25 CWE multi-hot
+                    │                                        ├─ dim [49]: cwe_other bucket
+                    │                                        ├─ dim [50]: num_cwes (log-norm)
+                    │                                        ├─ dim [51]: num_references (log)
+                    │                                        ├─ dim [52]: age_days (log-norm)
+                    │                                        ├─ dim [53]: has_public_exploit
+                    │                                        ├─ dim [54]: num_exploits (log)
+                    │                                        ├─ dim [55]: epss_score ⚠️ LEAKY
+                    │                                        └─ dim [56]: epss_percentile ⚠️
+                    │                                                   │
+                    ▼                                                  ▼
+ ╔══════════════════════════════════╗       ╔═══════════════════════════════════╗
+ ║         GNN BRANCH               ║       ║        TABULAR BRANCH             ║
+ ║                                  ║       ║                                   ║
+ ║  Input: data.x [N, 781]          ║       ║  Input: data.tabular [B, 57]      ║
+ ║                                  ║       ║                                   ║
+ ║  GNN Backbone (choose 1 of 6):   ║       ║  Linear(57 → 128)                 ║
+ ║  ┌─ GAT  (4-head attention)      ║       ║  BatchNorm1d(128)                 ║
+ ║  ├─ GCN  (spectral convolution)  ║       ║  ReLU                             ║
+ ║  ├─ SAGE (neighborhood sample)   ║       ║  Dropout(0.3)                     ║
+ ║  ├─ EdgeTypeGNN (edge embeddings)║       ║  Linear(128 → 64)                 ║
+ ║  ├─ RGAT (relation-specific attn)║       ║  ReLU                             ║
+ ║  └─ MultiView (4 edge-type views)║       ║  Dropout(0.3)                     ║
+ ║                                  ║       ║                                   ║
+ ║  3 × GNN layers                  ║       ║  Output: [B, 64]                  ║
+ ║  [N, 781] → [N, 128]             ║       ╚═════════════════╤═════════════════╝
+ ║                                  ║                         │
+ ║  Global Pooling (mean + max):    ║                         │
+ ║  graph_emb = [B, 256]            ║                         │
+ ╚══════════════════╤═══════════════╝                         │
+                    │                                         │
+                    └──────────────┬──────────────────────────┘
+                                   │
+                                   ▼
+                     ╔═════════════════════════════╗
+                     ║    FUSION + CLASSIFIER       ║
+                     ║                             ║
+                     ║  concat([B,256], [B,64])    ║
+                     ║        = [B, 320]           ║
+                     ║                             ║
+                     ║  Linear(320 → 128)          ║
+                     ║  BatchNorm1d(128)           ║
+                     ║  ReLU → Dropout(0.3)        ║
+                     ║  Linear(128 → 64)           ║
+                     ║  ReLU → Dropout(0.3)        ║
+                     ║  Linear(64 → 1) → logit     ║
+                     ║  sigmoid(logit) → prob [0,1]║
+                     ╚══════════════╤══════════════╝
+                                    │
+                                    ▼
+              ┌────────────────────────────────────────┐
+              │           RISK TIER OUTPUT              │
+              │  prob ≥ 0.90  →  CRITICAL              │
+              │  prob ≥ 0.70  →  HIGH                  │
+              │  prob ≥ 0.50  →  MEDIUM                │
+              │  prob ≥ 0.30  →  LOW                   │
+              │  prob <  0.30  →  MINIMAL              │
+              └────────────────────────────────────────┘
+```
+
+---
+
+### Dimension Summary Table
+
+| Stage | Tensor | Shape | What it encodes |
+|-------|--------|-------|-----------------|
+| Node features | `data.x` | `[N, 781]` | 13-dim type one-hot + 768-dim SecBERT embedding |
+| Edge connectivity | `data.edge_index` | `[2, E]` | Source and destination node indices |
+| Edge types | `data.edge_type` | `[E]` | Integer index (0–12) for each of 13 edge types |
+| Edge attributes | `data.edge_attr` | `[E, 13]` | One-hot edge type for edge-aware backbones |
+| Tabular features | `data.tabular` | `[B, 57]` | Structured CVE metadata (55 without EPSS) |
+| After GNN pool | `graph_emb` | `[B, 256]` | Mean+max pooled graph representation |
+| After tabular MLP | `tabular_emb` | `[B, 64]` | Encoded structured features |
+| After fusion | `fused` | `[B, 320]` | Concatenated graph + tabular |
+| Output | `logit → prob` | `[B, 1]` | Exploitation probability in [0, 1] |
+
+*N = number of nodes in the graph (varies per CVE), E = number of edges, B = batch size*
+
+---
+
+### Key Architectural Decisions
+
+| Decision | Why |
+|----------|-----|
+| TPG uses description text only | Keeps graph branch semantically pure — structural patterns in language, not metadata |
+| SecBERT frozen | 3M-param GNN can't meaningfully fine-tune a 110M-param BERT; frozen embeddings are better initializers |
+| SecBERT encodes raw text (not TPG) | TPG structure is built by SpaCy independently; SecBERT provides the per-node semantic content |
+| Late fusion (concatenation) | Simpler, more interpretable, avoids leakage between branches during training |
+| Mean + Max pooling | Mean captures average node semantics; max captures the most salient node |
+| 57-dim tabular | Covers all structured risk signals: exploitability (CVSS), weakness (CWE), age, public PoCs, EPSS |
+| `--no-epss-feature` flag | Removes dims [55–56] → 55-dim, breaks circular dependency for deployment-safe scoring |
+
+---
 
 EPSS-GNN is a **graph-based vulnerability exploitation prediction system** that represents CVE text descriptions as Text Property Graphs and applies Graph Neural Networks to learn exploitation likelihood — using only public data (NVD, CISA KEV, FIRST EPSS, ExploitDB).
 
