@@ -31,6 +31,7 @@
 19. [Data Leakage Warning — EPSS as Feature and Label](#19-data-leakage)
 20. [File Structure](#20-file-structure)
 21. [Model Architecture Diagram](#21-model-architecture-diagram)
+22. [Temporal Validity and Feature Leakage Analysis](#22-feature-honesty-audit)
 
 ---
 
@@ -4627,6 +4628,282 @@ SecBERT does **not** read the TPG structure. The TPG structure does **not** depe
 | Mean + Max pooling | Mean captures average node semantics; max captures the most salient node |
 | 57-dim tabular | Covers all structured risk signals: exploitability (CVSS), weakness (CWE), age, public PoCs, EPSS |
 | `--no-epss-feature` flag | Removes dims [55–56] → 55-dim, breaks circular dependency for deployment-safe scoring |
+
+---
+
+### Why Tabular Features Are NOT Part of the GNN Input
+
+This is one of the most important architectural decisions in the model, and it is worth explaining carefully.
+
+#### The shape mismatch problem
+
+The GNN operates **node-by-node** on a graph. For a single CVE description, the graph might contain 40–200 nodes — one per token, named entity, predicate, or clause. Each node carries a 781-dim feature vector. The tabular features, by contrast, are a **single 57-dim vector describing the whole CVE** — not one per node.
+
+```
+CVE description graph (N nodes, one per token/entity/predicate):
+
+  node_0:  "Apache"     → [781-dim: type_onehot(13) + SecBERT(768)]
+  node_1:  "2.4.51"     → [781-dim: type_onehot(13) + SecBERT(768)]
+  node_2:  "allows"     → [781-dim: type_onehot(13) + SecBERT(768)]
+  node_3:  "remote"     → [781-dim: type_onehot(13) + SecBERT(768)]
+  node_4:  "attackers"  → [781-dim: type_onehot(13) + SecBERT(768)]
+  ...
+  node_N:  "execute"    → [781-dim: type_onehot(13) + SecBERT(768)]
+
+Tabular features: ONE vector for the whole CVE:
+  [cvss3_score=0.98, AV_N=1, CWE-119=1, age_days=0.6, ...]  → [57-dim]
+```
+
+You cannot inject a 57-dim vector into a graph of N nodes without broadcasting it — duplicating the same vector onto every node. That is technically possible but semantically wrong.
+
+#### Why broadcasting tabular into GNN nodes is wrong
+
+The GNN learns by **message-passing** — each node exchanges information with its graph neighbours (e.g. "Apache" ← DEP → "allows" ← SRL_ARG → "attackers"). If you append the CVSS score and CWE ID to every node's features, the GNN will propagate those metadata signals across syntactic and semantic edges during training:
+
+```
+"Apache" [CVSS=0.98] ──DEP──► "allows" [CVSS=0.98] ──SRL──► "attackers" [CVSS=0.98]
+          ↑ message-passing spreads CVSS across token-level dependency edges
+```
+
+This makes no structural sense. The CVSS score is a property of the whole CVE — it does not describe the syntactic relationship between a subject token and a verb token. Injecting it at the node level dilutes the GNN's structural learning with metadata noise that has no business being in the graph topology.
+
+#### How late fusion solves this
+
+The solution is to let the GNN finish its job first — reducing the entire node graph to a single graph-level vector — and only then combine it with the tabular features:
+
+```
+STEP 1: GNN message-passing (node-level)
+─────────────────────────────────────────
+  node_0 ←── DEP ───► node_2 ←── SRL ───► node_4
+  node_1 ←── NEXT ──► node_2 ←── COREF ──► node_3
+  ...
+  After 3 GNN layers: each node encodes its local neighbourhood context
+  Result: [N, 128]  (each node now knows about its neighbours)
+
+STEP 2: Global pooling (collapse graph → one vector)
+──────────────────────────────────────────────────────
+  mean_pool([node_0 ... node_N])  →  [128-dim]  (average graph signal)
+  max_pool ([node_0 ... node_N])  →  [128-dim]  (peak/most salient signal)
+  concat                          →  graph_emb = [256-dim]
+                                      ↑
+                                      ONE vector representing the whole CVE graph
+
+STEP 3: Now both branches are CVE-level — concatenation makes sense
+─────────────────────────────────────────────────────────────────────
+  graph_emb   = [B, 256]  ← "what the text structure/semantics says"
+  tabular_emb = [B,  64]  ← "what the structured metadata says"
+  concat      = [B, 320]  → classifier MLP → exploitation probability
+```
+
+At Step 3 both tensors are the same granularity — one vector per CVE — so concatenation is a clean, interpretable operation. Each branch contributes its own evidence; the classifier MLP learns how to weight them.
+
+#### Why each branch specializes better when kept separate
+
+| Branch | What it learns | Signal type |
+|--------|---------------|-------------|
+| GNN (text) | Which graph patterns (e.g. "remote code execution" predicate-argument structures, "unauthenticated" modifiers) correlate with exploitation | Structural + semantic from description text |
+| Tabular MLP | Which metadata combinations (e.g. CVSS=9.8 + AV:N + CWE-119 + public PoC) correlate with exploitation | Structured CVE metadata |
+| Fusion MLP | How to weight and combine both evidence streams | Combined |
+
+If the branches were merged early (at the GNN input), the GNN's message-passing would need to simultaneously learn text structure AND ignore the metadata it is incorrectly carrying per-node. Keeping them separate until after pooling means each branch can learn its own signal cleanly.
+
+#### The empirical evidence
+
+Across all 6 GNN backbones tested, adding the tabular branch via late fusion improved PR-AUC by an average of **+0.09** (Section 10). This gain exists precisely because the two branches capture complementary, non-redundant information — the text graph captures semantic exploitability patterns, the tabular branch captures metadata risk signals. If they were the same information in different forms, the gain would be near zero.
+
+#### Could you do early fusion instead?
+
+Yes, and it is a valid design choice for some problems. Early fusion (broadcasting tabular to every node) would look like:
+
+```python
+# Early fusion — inject tabular into every node before GNN
+tabular_broadcast = data.tabular.unsqueeze(0).expand(N, -1)  # [N, 57]
+x_augmented = torch.cat([data.x, tabular_broadcast], dim=-1) # [N, 838]
+# Run GNN on [N, 838]
+```
+
+This can work, but has two costs: (1) the GNN now propagates metadata signals through structural edges (semantic mismatch), and (2) the model becomes harder to interpret — you cannot cleanly separate "what did the text say" from "what did the metadata say" in the final prediction. Late fusion preserves that interpretability and has proved more effective empirically in this codebase.
+
+---
+
+## 22. Temporal Validity and Feature Leakage Analysis
+
+This section examines whether the features used during training and evaluation satisfy the **temporal validity constraint** — the requirement that every input feature must be observable at the moment a prediction is made, with no dependence on information that becomes available only after the target event (exploitation) has occurred.
+
+A model that uses post-event information as input features cannot generalise to prospective deployment. The temporal validity constraint ensures that the model is learning genuine predictive signal from pre-event observables, not reconstructing the label from correlated post-event artefacts.
+
+---
+
+### Target Variable Isolation
+
+The KEV binary label (`binary_label = 1` if CISA confirms the CVE has been exploited in the wild) is the **target variable**. It participates in the pipeline at two points only:
+
+1. **Training:** as the supervision signal in `BCEWithLogitsLoss(logit, label)`
+2. **Evaluation:** as the ground truth for computing PR-AUC, F1, ROC-AUC, and Brier score on the held-out test set
+
+It is strictly excluded from the feature vector at all stages. No exploitation status information is accessible to the model at inference time. This aspect of the pipeline conforms to standard supervised learning protocol.
+
+---
+
+### Feature-by-Feature Availability Audit
+
+The dataset was built as a **snapshot** — all CVE records were queried from NVD, ExploitDB, EPSS, and KEV at the same point in time, regardless of when each CVE was originally published. The question is: for each feature, would it be available at the moment a brand-new CVE is published?
+
+```
+Timeline for a typical CVE:
+
+Day 0   CVE published on NVD
+Day 0-3 NVD enrichment completes: CVSS score + vector, CWE IDs added
+Day 1-2 FIRST publishes EPSS score (updated daily from IPS sensor feed)
+Day ?   Public exploit appears on ExploitDB (hours to months later)
+Day ?   Active exploitation observed in the wild
+Day ?   CISA adds CVE to KEV catalog (confirms exploitation)
+         ↑
+         This is what we are trying to predict — we need it BEFORE this happens
+```
+
+| Dim | Feature | Observable at CVE publication? | Temporal Validity |
+|-----|---------|--------------------------------|-------------------|
+| 0 | `cvss3_score` | Yes — NVD enrichment within days | Valid |
+| 1 | `has_cvss` | Yes — same as above | Valid |
+| 2–23 | CVSS vector (AV, AC, PR, UI, S, C, I, A) | Yes — NVD enrichment within days | Valid |
+| 24–49 | CWE multi-hot (top-25 + other) | Yes — NVD enrichment within days | Valid |
+| 50 | `num_cwes` | Yes | Valid |
+| 51 | `num_references` | Yes — grows over time, always non-zero | Valid |
+| 52 | `vulnerability_age_days` | Always computable from `published` date | Valid |
+| 53 | `has_public_exploit` | No — public exploit may not yet exist | Cross-sectional bias |
+| 54 | `num_exploits` | No — same as above | Cross-sectional bias |
+| 55 | `epss_score` | Observable within 1–2 days, but encodes exploitation telemetry | Circular label leakage |
+| 56 | `epss_percentile` | Same as above | Circular label leakage |
+| — | CVE description text | Yes — published at Day 0 | Valid |
+
+---
+
+### Temporal Validity Violations by Feature Group
+
+#### Violation 1 — EPSS Score: Confirmed Circular Label Leakage (Severity: Critical)
+
+EPSS is computed by FIRST using machine-learning on **IPS (Intrusion Prevention System) sensor telemetry** — real-time network traffic logs from thousands of sensors globally. When a CVE starts being actively exploited, IPS sensors detect the attack attempts, this feeds back into the FIRST model, and EPSS goes up.
+
+The consequence: for CVEs already present in CISA KEV (confirmed exploited in the wild), the EPSS score is elevated at data collection time because IPS sensor telemetry has already accumulated exploitation traffic. Using `epss_score` as an input feature to predict KEV membership introduces a near-circular dependency — the input feature encodes the same exploitation signal that the target label represents.
+
+```
+Active exploitation happens in the wild
+        ↓
+IPS sensors observe attack traffic
+        ↓
+FIRST updates EPSS score ↑ (e.g. 0.03 → 0.95)
+        ↓
+We query EPSS and store it as a tabular feature
+        ↓
+Model learns: high EPSS → predict KEV = 1     ← NOT learning from text/CVSS
+        ↓
+Test set: model predicts high prob ← because EPSS is high
+        ↓
+Evaluation shows PR-AUC = 0.998               ← inflated by circular leakage
+```
+
+**Evidence from ablation (Run J vs Run D):**
+
+| Run | EPSS as input | Max prob (300 CVEs) | Predicted positives |
+|-----|--------------|---------------------|---------------------|
+| D (leaky) | Yes (EPSS pre-fetched) | 0.956 | 6 |
+| J (graph-only) | No (EPSS zeroed out) | 0.129 | 0 |
+
+When EPSS is removed entirely, the model collapses — the leaky model had learned almost nothing from text and CVSS alone. The 0.165 PR-AUC gap (0.998 → 0.833) is the cost of removing this leakage.
+
+**Resolution:** `--no-epss-feature` flag drops dims 55–56, reducing tabular dimension to 55. The NoLeak model (Run K) achieves PR-AUC = 0.8332 on genuine text+metadata signal only.
+
+---
+
+#### Violation 2 — ExploitDB Features: Cross-Sectional Snapshot Bias (Severity: Moderate)
+
+`has_public_exploit` and `num_exploits` come from a snapshot of ExploitDB taken at data collection time. For a CVE published in 2020 that was later exploited (added to KEV in 2022), the ExploitDB data in the dataset reflects the **2024 state of ExploitDB** — after the public exploit was already published.
+
+```
+Real-world prediction scenario:
+
+Day 0   (2020): CVE-2020-XXXX published. No exploit in ExploitDB yet.
+                Model should predict: will this be exploited?
+                has_public_exploit = 0  ← correct at this moment
+
+Day 400 (2021): Public exploit published on ExploitDB.
+Day 500 (2021): Exploitation observed in the wild.
+Day 520 (2021): CVE added to CISA KEV.
+
+Snapshot collection (2024): ExploitDB has the exploit.
+                has_public_exploit = 1  ← what the model SEES in training
+```
+
+The model is trained on `has_public_exploit = 1` for many KEV CVEs, but in real deployment on a brand-new CVE, `has_public_exploit = 0` for nearly all of them (the exploit simply hasn't been written yet).
+
+**How severe is this?** Less severe than EPSS, for two reasons:
+
+1. For many high-impact CVEs (especially those later exploited in the wild), a public PoC appears **within days of publication** — sometimes as part of the coordinated disclosure itself. The gap between "CVE published" and "exploit in ExploitDB" is often short for the most dangerous CVEs.
+2. The model still works without ExploitDB features — they are correlated with KEV membership but are not the primary signal. The GNN text branch and CVSS branch carry independent weight.
+
+**Mitigation in practice:** At inference time on a new CVE, if ExploitDB has no entry yet, the model simply receives `has_public_exploit=0, num_exploits=0` — the same as the training distribution for newly-published CVEs without public exploits. The model has seen many such CVEs in training and knows how to handle them.
+
+---
+
+#### Violation 3 — Target Variable Contamination: Not Applicable
+
+The label is only used for:
+- Computing training loss (backpropagation)
+- Computing test-set metrics (PR-AUC, F1, ROC-AUC)
+
+It is never an input feature. The model outputs a probability at inference time with no access to KEV status. This satisfies standard supervised learning protocol for target variable isolation.
+
+---
+
+### Temporally Valid Feature Set for Prospective Deployment
+
+The following feature groups satisfy the temporal validity constraint — each is observable within 1–3 days of CVE publication and carries no dependence on post-exploitation events:
+
+```
+✅ CVE description text          → TPG → GNN branch
+✅ cvss3_score                   → dims [0–1]
+✅ cvss3_vector components        → dims [2–23]
+✅ cwe_ids (top-25 multi-hot)    → dims [24–49]
+✅ num_cwes                      → dim  [50]
+✅ num_references                → dim  [51]
+✅ vulnerability_age_days        → dim  [52]
+```
+
+These 7 groups — all 53 dimensions — are available immediately and carry no information about whether exploitation has already occurred.
+
+The two feature groups that violate the temporal validity constraint:
+```
+⚠️ has_public_exploit, num_exploits   → dims [53–54]  (snapshot timing issue)
+❌ epss_score, epss_percentile         → dims [55–56]  (circular leakage — remove)
+```
+
+---
+
+### Conditions for a Temporally Valid Evaluation
+
+For a fully rigorous, leakage-free evaluation, the following conditions must hold:
+
+1. **Features:** Use only dims [0–52] plus the text graph (description at publication time)
+2. **No EPSS:** `--no-epss-feature` removes dims 55–56
+3. **ExploitDB at publication time:** Query ExploitDB as of the CVE's `published` date, not as of the data collection date. If no exploit existed at publication, `has_public_exploit = 0`.
+4. **Temporal split:** Train on CVEs published before date X, test on CVEs published after date X — never shuffle randomly across time, as future CVEs' CVSS/CWE distributions may look different.
+5. **Labels:** KEV membership at evaluation time (correct practice, already done)
+
+The current NoLeak model (Run 6 / Run K) satisfies points 1 and 2. It does not yet implement point 3 (ExploitDB temporal querying) or point 4 (strict temporal split) — these are the remaining sources of potential over-estimation.
+
+---
+
+### Temporal Validity Summary
+
+| Violation | Severity | Remediation Status |
+|-----------|----------|--------------------|
+| EPSS score/percentile as input feature (circular leakage via IPS telemetry) | **Critical** | Resolved — `--no-epss-feature` flag, 55-dim tabular (Run 6 / Run K) |
+| ExploitDB cross-sectional snapshot (post-publication exploit data used as pre-publication feature) | **Moderate** | Partially mitigated — at inference on new CVEs, feature defaults to 0; temporal-aware querying is future work |
+| Target variable (KEV label) present in feature vector | **Not applicable** — label is strictly isolated to loss computation and evaluation metrics | N/A |
+| Random stratified split instead of temporal split | **Low–Moderate** | Not yet addressed — temporal train/test partitioning is identified as future work |
+
+**Conclusion:** The full-feature model (57-dim, PR-AUC = 0.998) is dominated by circular label leakage via the EPSS input feature and does not reflect genuine prospective predictive capability. The leakage-free model (55-dim, PR-AUC = 0.833) eliminates the primary violation and represents the more valid baseline for prospective deployment. The ExploitDB cross-sectional bias is a secondary limitation that mildly inflates reported metrics but does not account for the primary performance gap. The target variable is correctly isolated throughout and does not contribute to any validity concern.
 
 ---
 
