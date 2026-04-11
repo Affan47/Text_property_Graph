@@ -161,7 +161,7 @@ def parse_chunk(text: str, doc_id: str = "") -> Tuple[List[str], List[str]]:
 
 # ── Paragraph splitting ───────────────────────────────────────────────────────
 
-def split_into_paragraphs(text: str, max_chars: int = 1500) -> List[str]:
+def split_into_paragraphs(text: str, max_chars: int = 800) -> List[str]:
     """
     Split a long page/section of text into passage-sized chunks.
 
@@ -209,7 +209,7 @@ def ingest_file(path: Path, store: GraphStore) -> int:
     for chunk_text, page_num in raw_chunks:
         paragraphs = split_into_paragraphs(chunk_text)
         for para in paragraphs:
-            if len(para) < 30:  # Skip trivially short chunks
+            if len(para) < 15:  # Skip trivially short chunks
                 continue
 
             passage_id = f"{path.stem}::p{page_num}_{global_idx}"

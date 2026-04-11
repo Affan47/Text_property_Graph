@@ -209,7 +209,7 @@ def ask(
 BANNER = """
 ╔══════════════════════════════════════════════════════════════╗
 ║            TPG Document Intelligence Chatbot                 ║
-║  Powered by Text Property Graph + Claude claude-sonnet-4-6           ║
+║  Powered by Text Property Graph + Claude claude-sonnet-4-6   ║
 ╚══════════════════════════════════════════════════════════════╝
 Commands:
   /quit      — exit
@@ -217,7 +217,46 @@ Commands:
   /clear     — clear conversation history
   /sources   — list indexed documents
   /reload    — reload the graph store from disk
+
+Input:
+  Single-line  — type your question and press Enter
+  Multi-line   — press Enter after each line; blank Enter to submit
 """
+
+
+def read_input() -> str:
+    """
+    Multi-line input reader.
+
+    Behaviour:
+      - Commands (/quit, /stats, etc.) submit on the first Enter.
+      - Any other input: press Enter after each line to continue typing.
+        Press Enter on a blank line to submit the full question.
+
+    This lets the user paste multi-paragraph questions without the
+    chatbot treating each line as a separate query.
+    """
+    try:
+        first_line = input("You: ").strip()
+    except (KeyboardInterrupt, EOFError):
+        raise
+
+    # Commands and empty input submit immediately
+    if not first_line or first_line.startswith("/"):
+        return first_line
+
+    # Collect continuation lines until a blank Enter
+    lines = [first_line]
+    while True:
+        try:
+            line = input("... ").strip()
+        except (KeyboardInterrupt, EOFError):
+            raise
+        if not line:
+            break
+        lines.append(line)
+
+    return " ".join(lines)
 
 
 def run_cli(store: GraphStore, store_path: str, one_shot_query: Optional[str] = None) -> None:
@@ -239,7 +278,7 @@ def run_cli(store: GraphStore, store_path: str, one_shot_query: Optional[str] = 
 
     while True:
         try:
-            question = input("You: ").strip()
+            question = read_input()
         except (KeyboardInterrupt, EOFError):
             print("\n[Exiting]")
             break
