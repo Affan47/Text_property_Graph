@@ -1,0 +1,1533 @@
+{
+  "passages": {
+    "cve_exploit_report::p0_0": {
+      "id": "cve_exploit_report::p0_0",
+      "doc_id": "cve_exploit_report.txt",
+      "text": "CVE-2024-7890: A critical remote code execution vulnerability (CWE-78) has been actively exploited in the wild against Apache Tomcat version 9.0.65. The flaw was discovered in the request parsing module where unsanitized user input is passed directly to the system() function call without proper validation.",
+      "entities": [
+        "Apache Tomcat",
+        "A critical remote code execution vulnerability",
+        "CWE-78",
+        "the wild",
+        "Apache Tomcat version",
+        "The flaw",
+        "the request",
+        "module",
+        "unsanitized user input",
+        "the system",
+        "proper validation",
+        "CVE-2024-7890",
+        "CWE-78",
+        "9.0.65",
+        "Apache",
+        "Tomcat",
+        "system",
+        "user input",
+        "remote",
+        "remote code execution",
+        "code execution",
+        "critical"
+      ],
+      "predicates": [
+        "exploited",
+        "has been actively exploited",
+        "discovered",
+        "parsing",
+        "passed",
+        "call",
+        "was discovered",
+        "where is passed directly"
+      ],
+      "page": 0
+    },
+    "cve_exploit_report::p0_1": {
+      "id": "cve_exploit_report::p0_1",
+      "doc_id": "cve_exploit_report.txt",
+      "text": "A remote attacker can exploit this vulnerability by sending a specially crafted HTTP POST request containing shell metacharacters in the Content-Type header. The malicious input is processed by the handleRequest() method in RequestParser.java, which calls sprintf to construct a command string before passing it to system() for execution. This results in arbitrary code execution with the privileges of the Tomcat service account.",
+      "entities": [
+        "Content-Type",
+        "A remote attacker",
+        "this vulnerability",
+        "a specially crafted HTTP POST request",
+        "shell metacharacters",
+        "the Content-Type header",
+        "The malicious input",
+        "the handleRequest() method",
+        "RequestParser.java",
+        "which",
+        "a command string",
+        "it",
+        "system",
+        "execution",
+        "Tomcat",
+        "This results",
+        "arbitrary code execution",
+        "the privileges",
+        "the Tomcat service account",
+        "Tomcat",
+        "java",
+        "sprintf",
+        "system",
+        "specially crafted",
+        "remote attacker",
+        "malicious input",
+        "remote",
+        "arbitrary code execution",
+        "code execution"
+      ],
+      "predicates": [
+        "exploit",
+        "sending",
+        "crafted",
+        "containing",
+        "can exploit",
+        "specially crafted",
+        "processed",
+        "calls",
+        "sprintf",
+        "construct",
+        "passing",
+        "is processed",
+        "to construct"
+      ],
+      "page": 0
+    },
+    "cve_exploit_report::p0_2": {
+      "id": "cve_exploit_report::p0_2",
+      "doc_id": "cve_exploit_report.txt",
+      "text": "The vulnerability was initially reported by researchers at CrowdStrike on January 15, 2024. Analysis of server logs from compromised systems revealed that threat actors had been exploiting this flaw since December 2023 to deploy cryptocurrency mining malware. The attack vector requires no authentication, making internet-facing Tomcat servers particularly vulnerable.",
+      "entities": [
+        "CrowdStrike",
+        "January 15, 2024",
+        "The vulnerability",
+        "researchers",
+        "CrowdStrike",
+        "January",
+        "December 2023",
+        "Analysis",
+        "server logs",
+        "compromised systems",
+        "threat actors",
+        "this flaw",
+        "December",
+        "cryptocurrency mining malware",
+        "Tomcat",
+        "The attack vector",
+        "no authentication",
+        "internet-facing Tomcat servers",
+        "Tomcat"
+      ],
+      "predicates": [
+        "reported",
+        "was initially reported",
+        "compromised",
+        "revealed",
+        "exploiting",
+        "deploy",
+        "had been exploiting",
+        "to deploy",
+        "requires",
+        "making",
+        "facing"
+      ],
+      "page": 0
+    },
+    "cve_exploit_report::p0_3": {
+      "id": "cve_exploit_report::p0_3",
+      "doc_id": "cve_exploit_report.txt",
+      "text": "Organizations running affected versions should immediately upgrade to Apache Tomcat version 9.0.66, which includes input sanitization for the request parsing module. As a temporary workaround, administrators can configure a web application firewall to block requests containing shell metacharacters in HTTP headers. The vulnerability has been assigned a CVSS score of 9.8/10 due to its remote exploitability and critical impact.",
+      "entities": [
+        "Apache Tomcat",
+        "Organizations",
+        "affected versions",
+        "Apache Tomcat version 9.0.66",
+        "which",
+        "input sanitization",
+        "the request",
+        "module",
+        "a temporary workaround",
+        "administrators",
+        "a web application firewall",
+        "requests",
+        "shell metacharacters",
+        "HTTP headers",
+        "CVSS",
+        "9.8/10",
+        "The vulnerability",
+        "a CVSS score",
+        "its remote exploitability",
+        "critical impact",
+        "9.0.66",
+        "9.8",
+        "Apache",
+        "Tomcat",
+        "remote",
+        "critical impact",
+        "upgrade to Apache",
+        "workaround"
+      ],
+      "predicates": [
+        "running",
+        "upgrade",
+        "includes",
+        "parsing",
+        "should immediately upgrade",
+        "configure",
+        "block",
+        "containing",
+        "can configure",
+        "to block",
+        "assigned",
+        "has been assigned"
+      ],
+      "page": 0
+    },
+    "general_paragraph::p0_0": {
+      "id": "general_paragraph::p0_0",
+      "doc_id": "general_paragraph.txt",
+      "text": "Cloud computing has revolutionized the software industry over the past decade. Companies like Amazon, Microsoft, and Google now provide scalable infrastructure to millions of developers worldwide.",
+      "entities": [
+        "the past decade",
+        "Cloud computing",
+        "the software industry",
+        "the past decade",
+        "Amazon",
+        "Microsoft",
+        "Google",
+        "millions",
+        "Companies",
+        "Amazon",
+        "Microsoft",
+        "Google",
+        "scalable infrastructure",
+        "millions",
+        "developers"
+      ],
+      "predicates": [
+        "revolutionized",
+        "has revolutionized",
+        "provide",
+        "now provide worldwide"
+      ],
+      "page": 0
+    },
+    "general_paragraph::p0_1": {
+      "id": "general_paragraph::p0_1",
+      "doc_id": "general_paragraph.txt",
+      "text": "However, migrating legacy systems to the cloud introduces significant challenges. Database configurations must be carefully reviewed, and network security policies need to be updated. Many organizations have experienced downtime during migration because their teams underestimated the complexity of the process.",
+      "entities": [
+        "legacy systems",
+        "the cloud",
+        "significant challenges",
+        "Database configurations",
+        "network security policies",
+        "Many organizations",
+        "downtime",
+        "migration",
+        "their teams",
+        "the complexity",
+        "the process",
+        "network"
+      ],
+      "predicates": [
+        "migrating",
+        "introduces",
+        "However introduces",
+        "reviewed",
+        "need",
+        "updated",
+        "must be carefully reviewed",
+        "to be updated",
+        "experienced",
+        "underestimated",
+        "have experienced"
+      ],
+      "page": 0
+    },
+    "general_paragraph::p0_2": {
+      "id": "general_paragraph::p0_2",
+      "doc_id": "general_paragraph.txt",
+      "text": "In response, DevOps engineers have adopted containerization tools such as Docker and Kubernetes. These tools allow teams to package applications with their dependencies, ensuring consistent behavior across development, staging, and production environments. Consequently, deployment failures have decreased by nearly forty percent in organizations that embraced this approach.",
+      "entities": [
+        "DevOps",
+        "Docker",
+        "Kubernetes",
+        "response",
+        "DevOps engineers",
+        "containerization tools",
+        "Docker",
+        "Kubernetes",
+        "These tools",
+        "teams",
+        "applications",
+        "their dependencies",
+        "consistent behavior",
+        "development",
+        "staging",
+        "production environments",
+        "nearly forty percent",
+        "deployment failures",
+        "nearly forty percent",
+        "organizations",
+        "that",
+        "this approach",
+        "Kubernetes",
+        "Docker"
+      ],
+      "predicates": [
+        "adopted",
+        "have adopted",
+        "allow",
+        "package",
+        "ensuring",
+        "to package",
+        "decreased",
+        "embraced",
+        "Consequently have decreased"
+      ],
+      "page": 0
+    },
+    "sample_medical::p0_0": {
+      "id": "sample_medical::p0_0",
+      "doc_id": "sample_medical.txt",
+      "text": "The patient John Smith was admitted to City Hospital on Monday.\nHe was prescribed aspirin for his chest pain.",
+      "entities": [
+        "John Smith",
+        "City Hospital",
+        "Monday",
+        "The patient",
+        "John Smith",
+        "City Hospital",
+        "Monday",
+        "He",
+        "his chest pain"
+      ],
+      "predicates": [
+        "admitted",
+        "was admitted",
+        "prescribed",
+        "was prescribed aspirin"
+      ],
+      "page": 0
+    },
+    "sample_medical::p0_1": {
+      "id": "sample_medical::p0_1",
+      "doc_id": "sample_medical.txt",
+      "text": "However, his condition worsened after taking the medication.\nThe doctor immediately ordered additional tests.\nSubsequently, the treatment plan was revised by Dr. Williams.",
+      "entities": [
+        "his condition",
+        "the medication",
+        "The doctor",
+        "additional tests",
+        "Williams",
+        "the treatment plan",
+        "Dr. Williams"
+      ],
+      "predicates": [
+        "worsened",
+        "taking",
+        "However worsened",
+        "ordered",
+        "immediately ordered",
+        "revised",
+        "Subsequently was revised"
+      ],
+      "page": 0
+    },
+    "sample_medical::p0_2": {
+      "id": "sample_medical::p0_2",
+      "doc_id": "sample_medical.txt",
+      "text": "In conclusion, the patient responded well to the new treatment.\nHe was discharged on Friday.",
+      "entities": [
+        "conclusion",
+        "the patient",
+        "the new treatment",
+        "Friday",
+        "He",
+        "Friday"
+      ],
+      "predicates": [
+        "responded",
+        "responded well",
+        "discharged",
+        "was discharged"
+      ],
+      "page": 0
+    },
+    "sample_general::p0_0": {
+      "id": "sample_general::p0_0",
+      "doc_id": "sample_general.txt",
+      "text": "Artificial intelligence has transformed the way companies process information. Machine learning models can now analyze vast amounts of data in seconds.",
+      "entities": [
+        "Artificial intelligence",
+        "the way",
+        "companies",
+        "information",
+        "seconds",
+        "Machine learning models",
+        "vast amounts",
+        "data",
+        "seconds"
+      ],
+      "predicates": [
+        "transformed",
+        "process",
+        "has transformed",
+        "analyze",
+        "can now analyze"
+      ],
+      "page": 0
+    },
+    "sample_general::p0_1": {
+      "id": "sample_general::p0_1",
+      "doc_id": "sample_general.txt",
+      "text": "For example, natural language processing enables computers to understand human text. Google and OpenAI have developed large language models that generate coherent responses. These systems rely on transformer architectures introduced by Vaswani et al. in 2017.",
+      "entities": [
+        "example",
+        "natural language processing",
+        "computers",
+        "human text",
+        "OpenAI",
+        "Google",
+        "OpenAI",
+        "large language models",
+        "that",
+        "coherent responses",
+        "Vaswani et al.",
+        "2017",
+        "These systems",
+        "transformer architectures",
+        "Vaswani"
+      ],
+      "predicates": [
+        "enables",
+        "understand",
+        "to understand",
+        "developed",
+        "generate",
+        "have developed",
+        "rely",
+        "introduced"
+      ],
+      "page": 0
+    },
+    "sample_general::p0_2": {
+      "id": "sample_general::p0_2",
+      "doc_id": "sample_general.txt",
+      "text": "However, concerns about bias and safety remain significant. Researchers at Stanford and MIT have published studies showing that training data can introduce harmful stereotypes. Consequently, responsible AI development requires careful dataset curation and continuous evaluation.",
+      "entities": [
+        "concerns",
+        "bias",
+        "safety",
+        "Stanford",
+        "MIT",
+        "Researchers",
+        "Stanford",
+        "MIT",
+        "studies",
+        "training data",
+        "harmful stereotypes",
+        "AI",
+        "responsible AI development",
+        "careful dataset curation",
+        "continuous evaluation"
+      ],
+      "predicates": [
+        "remain",
+        "However remain",
+        "published",
+        "showing",
+        "introduce",
+        "have published",
+        "can introduce",
+        "requires",
+        "Consequently requires"
+      ],
+      "page": 0
+    },
+    "sample_security::p0_0": {
+      "id": "sample_security::p0_0",
+      "doc_id": "sample_security.txt",
+      "text": "CVE-2024-1234: A buffer overflow vulnerability (CWE-120) has been discovered in Apache HTTP Server version 2.4.51. The flaw exists in the mod_ssl module where user-supplied input is copied to a fixed-size buffer using strcpy without bounds checking.",
+      "entities": [
+        "Apache",
+        "A buffer overflow vulnerability",
+        "CWE-120",
+        "Apache HTTP Server version",
+        "2.4.51",
+        "The flaw",
+        "the mod_ssl module",
+        "user-supplied input",
+        "a fixed-size buffer",
+        "strcpy",
+        "bounds",
+        "CVE-2024-1234",
+        "CWE-120",
+        "2.4.51",
+        "Apache HTTP Server",
+        "Apache",
+        "strcpy",
+        "user-supplied input",
+        "buffer overflow"
+      ],
+      "predicates": [
+        "discovered",
+        "has been discovered",
+        "exists",
+        "supplied",
+        "copied",
+        "fixed",
+        "using",
+        "checking",
+        "where is copied"
+      ],
+      "page": 0
+    },
+    "sample_security::p0_1": {
+      "id": "sample_security::p0_1",
+      "doc_id": "sample_security.txt",
+      "text": "A remote attacker can exploit this vulnerability by sending a specially crafted HTTP request, potentially achieving arbitrary code execution on the target system. The vulnerability has been rated as critical with a CVSS score of 9.8/10.",
+      "entities": [
+        "A remote attacker",
+        "this vulnerability",
+        "a specially crafted HTTP request",
+        "arbitrary code execution",
+        "the target system",
+        "CVSS",
+        "9.8/10",
+        "The vulnerability",
+        "a CVSS score",
+        "9.8",
+        "system",
+        "specially crafted",
+        "remote attacker",
+        "remote",
+        "arbitrary code execution",
+        "code execution",
+        "critical"
+      ],
+      "predicates": [
+        "exploit",
+        "sending",
+        "crafted",
+        "achieving",
+        "can exploit",
+        "specially crafted",
+        "potentially achieving",
+        "rated",
+        "has been rated"
+      ],
+      "page": 0
+    },
+    "sample_security::p0_2": {
+      "id": "sample_security::p0_2",
+      "doc_id": "sample_security.txt",
+      "text": "Users are strongly recommended to upgrade to version 2.4.52, which includes a fix for this issue. As a temporary workaround, administrators can disable the mod_ssl module until the patch is applied.",
+      "entities": [
+        "Users",
+        "version",
+        "which",
+        "a fix",
+        "this issue",
+        "a temporary workaround",
+        "administrators",
+        "the mod_ssl module",
+        "the patch",
+        "2.4.52",
+        "upgrade to version 2.4.52,",
+        "workaround",
+        "disable the"
+      ],
+      "predicates": [
+        "recommended",
+        "upgrade",
+        "includes",
+        "are strongly recommended",
+        "to upgrade",
+        "disable",
+        "applied",
+        "can disable",
+        "is applied"
+      ],
+      "page": 0
+    }
+  },
+  "entity_index": {
+    "apache tomcat": [
+      "cve_exploit_report::p0_0",
+      "cve_exploit_report::p0_3"
+    ],
+    "a critical remote code execution vulnerability": [
+      "cve_exploit_report::p0_0"
+    ],
+    "cwe-78": [
+      "cve_exploit_report::p0_0"
+    ],
+    "the wild": [
+      "cve_exploit_report::p0_0"
+    ],
+    "apache tomcat version": [
+      "cve_exploit_report::p0_0"
+    ],
+    "the flaw": [
+      "cve_exploit_report::p0_0",
+      "sample_security::p0_0"
+    ],
+    "the request": [
+      "cve_exploit_report::p0_0",
+      "cve_exploit_report::p0_3"
+    ],
+    "module": [
+      "cve_exploit_report::p0_0",
+      "cve_exploit_report::p0_3"
+    ],
+    "unsanitized user input": [
+      "cve_exploit_report::p0_0"
+    ],
+    "the system": [
+      "cve_exploit_report::p0_0"
+    ],
+    "proper validation": [
+      "cve_exploit_report::p0_0"
+    ],
+    "cve-2024-7890": [
+      "cve_exploit_report::p0_0"
+    ],
+    "9.0.65": [
+      "cve_exploit_report::p0_0"
+    ],
+    "apache": [
+      "cve_exploit_report::p0_0",
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_0"
+    ],
+    "tomcat": [
+      "cve_exploit_report::p0_0",
+      "cve_exploit_report::p0_1",
+      "cve_exploit_report::p0_2",
+      "cve_exploit_report::p0_3"
+    ],
+    "system": [
+      "cve_exploit_report::p0_0",
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "user input": [
+      "cve_exploit_report::p0_0"
+    ],
+    "remote": [
+      "cve_exploit_report::p0_0",
+      "cve_exploit_report::p0_1",
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_1"
+    ],
+    "remote code execution": [
+      "cve_exploit_report::p0_0"
+    ],
+    "code execution": [
+      "cve_exploit_report::p0_0",
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "critical": [
+      "cve_exploit_report::p0_0",
+      "sample_security::p0_1"
+    ],
+    "content-type": [
+      "cve_exploit_report::p0_1"
+    ],
+    "a remote attacker": [
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "this vulnerability": [
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "a specially crafted http post request": [
+      "cve_exploit_report::p0_1"
+    ],
+    "shell metacharacters": [
+      "cve_exploit_report::p0_1",
+      "cve_exploit_report::p0_3"
+    ],
+    "the content-type header": [
+      "cve_exploit_report::p0_1"
+    ],
+    "the malicious input": [
+      "cve_exploit_report::p0_1"
+    ],
+    "the handlerequest() method": [
+      "cve_exploit_report::p0_1"
+    ],
+    "requestparser.java": [
+      "cve_exploit_report::p0_1"
+    ],
+    "which": [
+      "cve_exploit_report::p0_1",
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_2"
+    ],
+    "a command string": [
+      "cve_exploit_report::p0_1"
+    ],
+    "it": [
+      "cve_exploit_report::p0_1"
+    ],
+    "execution": [
+      "cve_exploit_report::p0_1"
+    ],
+    "this results": [
+      "cve_exploit_report::p0_1"
+    ],
+    "arbitrary code execution": [
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "the privileges": [
+      "cve_exploit_report::p0_1"
+    ],
+    "the tomcat service account": [
+      "cve_exploit_report::p0_1"
+    ],
+    "java": [
+      "cve_exploit_report::p0_1"
+    ],
+    "sprintf": [
+      "cve_exploit_report::p0_1"
+    ],
+    "specially crafted": [
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "remote attacker": [
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "malicious input": [
+      "cve_exploit_report::p0_1"
+    ],
+    "crowdstrike": [
+      "cve_exploit_report::p0_2"
+    ],
+    "january 15, 2024": [
+      "cve_exploit_report::p0_2"
+    ],
+    "the vulnerability": [
+      "cve_exploit_report::p0_2",
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_1"
+    ],
+    "researchers": [
+      "cve_exploit_report::p0_2",
+      "sample_general::p0_2"
+    ],
+    "january": [
+      "cve_exploit_report::p0_2"
+    ],
+    "december 2023": [
+      "cve_exploit_report::p0_2"
+    ],
+    "analysis": [
+      "cve_exploit_report::p0_2"
+    ],
+    "server logs": [
+      "cve_exploit_report::p0_2"
+    ],
+    "compromised systems": [
+      "cve_exploit_report::p0_2"
+    ],
+    "threat actors": [
+      "cve_exploit_report::p0_2"
+    ],
+    "this flaw": [
+      "cve_exploit_report::p0_2"
+    ],
+    "december": [
+      "cve_exploit_report::p0_2"
+    ],
+    "cryptocurrency mining malware": [
+      "cve_exploit_report::p0_2"
+    ],
+    "the attack vector": [
+      "cve_exploit_report::p0_2"
+    ],
+    "no authentication": [
+      "cve_exploit_report::p0_2"
+    ],
+    "internet-facing tomcat servers": [
+      "cve_exploit_report::p0_2"
+    ],
+    "organizations": [
+      "cve_exploit_report::p0_3",
+      "general_paragraph::p0_2"
+    ],
+    "affected versions": [
+      "cve_exploit_report::p0_3"
+    ],
+    "apache tomcat version 9.0.66": [
+      "cve_exploit_report::p0_3"
+    ],
+    "input sanitization": [
+      "cve_exploit_report::p0_3"
+    ],
+    "a temporary workaround": [
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_2"
+    ],
+    "administrators": [
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_2"
+    ],
+    "a web application firewall": [
+      "cve_exploit_report::p0_3"
+    ],
+    "requests": [
+      "cve_exploit_report::p0_3"
+    ],
+    "http headers": [
+      "cve_exploit_report::p0_3"
+    ],
+    "cvss": [
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_1"
+    ],
+    "9.8/10": [
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_1"
+    ],
+    "a cvss score": [
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_1"
+    ],
+    "its remote exploitability": [
+      "cve_exploit_report::p0_3"
+    ],
+    "critical impact": [
+      "cve_exploit_report::p0_3"
+    ],
+    "9.0.66": [
+      "cve_exploit_report::p0_3"
+    ],
+    "9.8": [
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_1"
+    ],
+    "upgrade to apache": [
+      "cve_exploit_report::p0_3"
+    ],
+    "workaround": [
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_2"
+    ],
+    "the past decade": [
+      "general_paragraph::p0_0"
+    ],
+    "cloud computing": [
+      "general_paragraph::p0_0"
+    ],
+    "the software industry": [
+      "general_paragraph::p0_0"
+    ],
+    "amazon": [
+      "general_paragraph::p0_0"
+    ],
+    "microsoft": [
+      "general_paragraph::p0_0"
+    ],
+    "google": [
+      "general_paragraph::p0_0",
+      "sample_general::p0_1"
+    ],
+    "millions": [
+      "general_paragraph::p0_0"
+    ],
+    "companies": [
+      "general_paragraph::p0_0",
+      "sample_general::p0_0"
+    ],
+    "scalable infrastructure": [
+      "general_paragraph::p0_0"
+    ],
+    "developers": [
+      "general_paragraph::p0_0"
+    ],
+    "legacy systems": [
+      "general_paragraph::p0_1"
+    ],
+    "the cloud": [
+      "general_paragraph::p0_1"
+    ],
+    "significant challenges": [
+      "general_paragraph::p0_1"
+    ],
+    "database configurations": [
+      "general_paragraph::p0_1"
+    ],
+    "network security policies": [
+      "general_paragraph::p0_1"
+    ],
+    "many organizations": [
+      "general_paragraph::p0_1"
+    ],
+    "downtime": [
+      "general_paragraph::p0_1"
+    ],
+    "migration": [
+      "general_paragraph::p0_1"
+    ],
+    "their teams": [
+      "general_paragraph::p0_1"
+    ],
+    "the complexity": [
+      "general_paragraph::p0_1"
+    ],
+    "the process": [
+      "general_paragraph::p0_1"
+    ],
+    "network": [
+      "general_paragraph::p0_1"
+    ],
+    "devops": [
+      "general_paragraph::p0_2"
+    ],
+    "docker": [
+      "general_paragraph::p0_2"
+    ],
+    "kubernetes": [
+      "general_paragraph::p0_2"
+    ],
+    "response": [
+      "general_paragraph::p0_2"
+    ],
+    "devops engineers": [
+      "general_paragraph::p0_2"
+    ],
+    "containerization tools": [
+      "general_paragraph::p0_2"
+    ],
+    "these tools": [
+      "general_paragraph::p0_2"
+    ],
+    "teams": [
+      "general_paragraph::p0_2"
+    ],
+    "applications": [
+      "general_paragraph::p0_2"
+    ],
+    "their dependencies": [
+      "general_paragraph::p0_2"
+    ],
+    "consistent behavior": [
+      "general_paragraph::p0_2"
+    ],
+    "development": [
+      "general_paragraph::p0_2"
+    ],
+    "staging": [
+      "general_paragraph::p0_2"
+    ],
+    "production environments": [
+      "general_paragraph::p0_2"
+    ],
+    "nearly forty percent": [
+      "general_paragraph::p0_2"
+    ],
+    "deployment failures": [
+      "general_paragraph::p0_2"
+    ],
+    "that": [
+      "general_paragraph::p0_2",
+      "sample_general::p0_1"
+    ],
+    "this approach": [
+      "general_paragraph::p0_2"
+    ],
+    "john smith": [
+      "sample_medical::p0_0"
+    ],
+    "city hospital": [
+      "sample_medical::p0_0"
+    ],
+    "monday": [
+      "sample_medical::p0_0"
+    ],
+    "the patient": [
+      "sample_medical::p0_0",
+      "sample_medical::p0_2"
+    ],
+    "he": [
+      "sample_medical::p0_0",
+      "sample_medical::p0_2"
+    ],
+    "his chest pain": [
+      "sample_medical::p0_0"
+    ],
+    "his condition": [
+      "sample_medical::p0_1"
+    ],
+    "the medication": [
+      "sample_medical::p0_1"
+    ],
+    "the doctor": [
+      "sample_medical::p0_1"
+    ],
+    "additional tests": [
+      "sample_medical::p0_1"
+    ],
+    "williams": [
+      "sample_medical::p0_1"
+    ],
+    "the treatment plan": [
+      "sample_medical::p0_1"
+    ],
+    "dr. williams": [
+      "sample_medical::p0_1"
+    ],
+    "conclusion": [
+      "sample_medical::p0_2"
+    ],
+    "the new treatment": [
+      "sample_medical::p0_2"
+    ],
+    "friday": [
+      "sample_medical::p0_2"
+    ],
+    "artificial intelligence": [
+      "sample_general::p0_0"
+    ],
+    "the way": [
+      "sample_general::p0_0"
+    ],
+    "information": [
+      "sample_general::p0_0"
+    ],
+    "seconds": [
+      "sample_general::p0_0"
+    ],
+    "machine learning models": [
+      "sample_general::p0_0"
+    ],
+    "vast amounts": [
+      "sample_general::p0_0"
+    ],
+    "data": [
+      "sample_general::p0_0"
+    ],
+    "example": [
+      "sample_general::p0_1"
+    ],
+    "natural language processing": [
+      "sample_general::p0_1"
+    ],
+    "computers": [
+      "sample_general::p0_1"
+    ],
+    "human text": [
+      "sample_general::p0_1"
+    ],
+    "openai": [
+      "sample_general::p0_1"
+    ],
+    "large language models": [
+      "sample_general::p0_1"
+    ],
+    "coherent responses": [
+      "sample_general::p0_1"
+    ],
+    "vaswani et al.": [
+      "sample_general::p0_1"
+    ],
+    "2017": [
+      "sample_general::p0_1"
+    ],
+    "these systems": [
+      "sample_general::p0_1"
+    ],
+    "transformer architectures": [
+      "sample_general::p0_1"
+    ],
+    "vaswani": [
+      "sample_general::p0_1"
+    ],
+    "concerns": [
+      "sample_general::p0_2"
+    ],
+    "bias": [
+      "sample_general::p0_2"
+    ],
+    "safety": [
+      "sample_general::p0_2"
+    ],
+    "stanford": [
+      "sample_general::p0_2"
+    ],
+    "mit": [
+      "sample_general::p0_2"
+    ],
+    "studies": [
+      "sample_general::p0_2"
+    ],
+    "training data": [
+      "sample_general::p0_2"
+    ],
+    "harmful stereotypes": [
+      "sample_general::p0_2"
+    ],
+    "ai": [
+      "sample_general::p0_2"
+    ],
+    "responsible ai development": [
+      "sample_general::p0_2"
+    ],
+    "careful dataset curation": [
+      "sample_general::p0_2"
+    ],
+    "continuous evaluation": [
+      "sample_general::p0_2"
+    ],
+    "a buffer overflow vulnerability": [
+      "sample_security::p0_0"
+    ],
+    "cwe-120": [
+      "sample_security::p0_0"
+    ],
+    "apache http server version": [
+      "sample_security::p0_0"
+    ],
+    "2.4.51": [
+      "sample_security::p0_0"
+    ],
+    "the mod_ssl module": [
+      "sample_security::p0_0",
+      "sample_security::p0_2"
+    ],
+    "user-supplied input": [
+      "sample_security::p0_0"
+    ],
+    "a fixed-size buffer": [
+      "sample_security::p0_0"
+    ],
+    "strcpy": [
+      "sample_security::p0_0"
+    ],
+    "bounds": [
+      "sample_security::p0_0"
+    ],
+    "cve-2024-1234": [
+      "sample_security::p0_0"
+    ],
+    "apache http server": [
+      "sample_security::p0_0"
+    ],
+    "buffer overflow": [
+      "sample_security::p0_0"
+    ],
+    "a specially crafted http request": [
+      "sample_security::p0_1"
+    ],
+    "the target system": [
+      "sample_security::p0_1"
+    ],
+    "users": [
+      "sample_security::p0_2"
+    ],
+    "version": [
+      "sample_security::p0_2"
+    ],
+    "a fix": [
+      "sample_security::p0_2"
+    ],
+    "this issue": [
+      "sample_security::p0_2"
+    ],
+    "the patch": [
+      "sample_security::p0_2"
+    ],
+    "2.4.52": [
+      "sample_security::p0_2"
+    ],
+    "upgrade to version 2.4.52,": [
+      "sample_security::p0_2"
+    ],
+    "disable the": [
+      "sample_security::p0_2"
+    ]
+  },
+  "predicate_index": {
+    "exploited": [
+      "cve_exploit_report::p0_0"
+    ],
+    "has been actively exploited": [
+      "cve_exploit_report::p0_0"
+    ],
+    "discovered": [
+      "cve_exploit_report::p0_0",
+      "sample_security::p0_0"
+    ],
+    "parsing": [
+      "cve_exploit_report::p0_0",
+      "cve_exploit_report::p0_3"
+    ],
+    "passed": [
+      "cve_exploit_report::p0_0"
+    ],
+    "call": [
+      "cve_exploit_report::p0_0"
+    ],
+    "was discovered": [
+      "cve_exploit_report::p0_0"
+    ],
+    "where is passed directly": [
+      "cve_exploit_report::p0_0"
+    ],
+    "exploit": [
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "sending": [
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "crafted": [
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "containing": [
+      "cve_exploit_report::p0_1",
+      "cve_exploit_report::p0_3"
+    ],
+    "can exploit": [
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "specially crafted": [
+      "cve_exploit_report::p0_1",
+      "sample_security::p0_1"
+    ],
+    "processed": [
+      "cve_exploit_report::p0_1"
+    ],
+    "calls": [
+      "cve_exploit_report::p0_1"
+    ],
+    "sprintf": [
+      "cve_exploit_report::p0_1"
+    ],
+    "construct": [
+      "cve_exploit_report::p0_1"
+    ],
+    "passing": [
+      "cve_exploit_report::p0_1"
+    ],
+    "is processed": [
+      "cve_exploit_report::p0_1"
+    ],
+    "to construct": [
+      "cve_exploit_report::p0_1"
+    ],
+    "reported": [
+      "cve_exploit_report::p0_2"
+    ],
+    "was initially reported": [
+      "cve_exploit_report::p0_2"
+    ],
+    "compromised": [
+      "cve_exploit_report::p0_2"
+    ],
+    "revealed": [
+      "cve_exploit_report::p0_2"
+    ],
+    "exploiting": [
+      "cve_exploit_report::p0_2"
+    ],
+    "deploy": [
+      "cve_exploit_report::p0_2"
+    ],
+    "had been exploiting": [
+      "cve_exploit_report::p0_2"
+    ],
+    "to deploy": [
+      "cve_exploit_report::p0_2"
+    ],
+    "requires": [
+      "cve_exploit_report::p0_2",
+      "sample_general::p0_2"
+    ],
+    "making": [
+      "cve_exploit_report::p0_2"
+    ],
+    "facing": [
+      "cve_exploit_report::p0_2"
+    ],
+    "running": [
+      "cve_exploit_report::p0_3"
+    ],
+    "upgrade": [
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_2"
+    ],
+    "includes": [
+      "cve_exploit_report::p0_3",
+      "sample_security::p0_2"
+    ],
+    "should immediately upgrade": [
+      "cve_exploit_report::p0_3"
+    ],
+    "configure": [
+      "cve_exploit_report::p0_3"
+    ],
+    "block": [
+      "cve_exploit_report::p0_3"
+    ],
+    "can configure": [
+      "cve_exploit_report::p0_3"
+    ],
+    "to block": [
+      "cve_exploit_report::p0_3"
+    ],
+    "assigned": [
+      "cve_exploit_report::p0_3"
+    ],
+    "has been assigned": [
+      "cve_exploit_report::p0_3"
+    ],
+    "revolutionized": [
+      "general_paragraph::p0_0"
+    ],
+    "has revolutionized": [
+      "general_paragraph::p0_0"
+    ],
+    "provide": [
+      "general_paragraph::p0_0"
+    ],
+    "now provide worldwide": [
+      "general_paragraph::p0_0"
+    ],
+    "migrating": [
+      "general_paragraph::p0_1"
+    ],
+    "introduces": [
+      "general_paragraph::p0_1"
+    ],
+    "however introduces": [
+      "general_paragraph::p0_1"
+    ],
+    "reviewed": [
+      "general_paragraph::p0_1"
+    ],
+    "need": [
+      "general_paragraph::p0_1"
+    ],
+    "updated": [
+      "general_paragraph::p0_1"
+    ],
+    "must be carefully reviewed": [
+      "general_paragraph::p0_1"
+    ],
+    "to be updated": [
+      "general_paragraph::p0_1"
+    ],
+    "experienced": [
+      "general_paragraph::p0_1"
+    ],
+    "underestimated": [
+      "general_paragraph::p0_1"
+    ],
+    "have experienced": [
+      "general_paragraph::p0_1"
+    ],
+    "adopted": [
+      "general_paragraph::p0_2"
+    ],
+    "have adopted": [
+      "general_paragraph::p0_2"
+    ],
+    "allow": [
+      "general_paragraph::p0_2"
+    ],
+    "package": [
+      "general_paragraph::p0_2"
+    ],
+    "ensuring": [
+      "general_paragraph::p0_2"
+    ],
+    "to package": [
+      "general_paragraph::p0_2"
+    ],
+    "decreased": [
+      "general_paragraph::p0_2"
+    ],
+    "embraced": [
+      "general_paragraph::p0_2"
+    ],
+    "consequently have decreased": [
+      "general_paragraph::p0_2"
+    ],
+    "admitted": [
+      "sample_medical::p0_0"
+    ],
+    "was admitted": [
+      "sample_medical::p0_0"
+    ],
+    "prescribed": [
+      "sample_medical::p0_0"
+    ],
+    "was prescribed aspirin": [
+      "sample_medical::p0_0"
+    ],
+    "worsened": [
+      "sample_medical::p0_1"
+    ],
+    "taking": [
+      "sample_medical::p0_1"
+    ],
+    "however worsened": [
+      "sample_medical::p0_1"
+    ],
+    "ordered": [
+      "sample_medical::p0_1"
+    ],
+    "immediately ordered": [
+      "sample_medical::p0_1"
+    ],
+    "revised": [
+      "sample_medical::p0_1"
+    ],
+    "subsequently was revised": [
+      "sample_medical::p0_1"
+    ],
+    "responded": [
+      "sample_medical::p0_2"
+    ],
+    "responded well": [
+      "sample_medical::p0_2"
+    ],
+    "discharged": [
+      "sample_medical::p0_2"
+    ],
+    "was discharged": [
+      "sample_medical::p0_2"
+    ],
+    "transformed": [
+      "sample_general::p0_0"
+    ],
+    "process": [
+      "sample_general::p0_0"
+    ],
+    "has transformed": [
+      "sample_general::p0_0"
+    ],
+    "analyze": [
+      "sample_general::p0_0"
+    ],
+    "can now analyze": [
+      "sample_general::p0_0"
+    ],
+    "enables": [
+      "sample_general::p0_1"
+    ],
+    "understand": [
+      "sample_general::p0_1"
+    ],
+    "to understand": [
+      "sample_general::p0_1"
+    ],
+    "developed": [
+      "sample_general::p0_1"
+    ],
+    "generate": [
+      "sample_general::p0_1"
+    ],
+    "have developed": [
+      "sample_general::p0_1"
+    ],
+    "rely": [
+      "sample_general::p0_1"
+    ],
+    "introduced": [
+      "sample_general::p0_1"
+    ],
+    "remain": [
+      "sample_general::p0_2"
+    ],
+    "however remain": [
+      "sample_general::p0_2"
+    ],
+    "published": [
+      "sample_general::p0_2"
+    ],
+    "showing": [
+      "sample_general::p0_2"
+    ],
+    "introduce": [
+      "sample_general::p0_2"
+    ],
+    "have published": [
+      "sample_general::p0_2"
+    ],
+    "can introduce": [
+      "sample_general::p0_2"
+    ],
+    "consequently requires": [
+      "sample_general::p0_2"
+    ],
+    "has been discovered": [
+      "sample_security::p0_0"
+    ],
+    "exists": [
+      "sample_security::p0_0"
+    ],
+    "supplied": [
+      "sample_security::p0_0"
+    ],
+    "copied": [
+      "sample_security::p0_0"
+    ],
+    "fixed": [
+      "sample_security::p0_0"
+    ],
+    "using": [
+      "sample_security::p0_0"
+    ],
+    "checking": [
+      "sample_security::p0_0"
+    ],
+    "where is copied": [
+      "sample_security::p0_0"
+    ],
+    "achieving": [
+      "sample_security::p0_1"
+    ],
+    "potentially achieving": [
+      "sample_security::p0_1"
+    ],
+    "rated": [
+      "sample_security::p0_1"
+    ],
+    "has been rated": [
+      "sample_security::p0_1"
+    ],
+    "recommended": [
+      "sample_security::p0_2"
+    ],
+    "are strongly recommended": [
+      "sample_security::p0_2"
+    ],
+    "to upgrade": [
+      "sample_security::p0_2"
+    ],
+    "disable": [
+      "sample_security::p0_2"
+    ],
+    "applied": [
+      "sample_security::p0_2"
+    ],
+    "can disable": [
+      "sample_security::p0_2"
+    ],
+    "is applied": [
+      "sample_security::p0_2"
+    ]
+  }
+}
