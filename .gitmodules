@@ -1,0 +1,8 @@
+[submodule "Sec4AI4Aec-EPSS-Enhanced"]
+	path = Sec4AI4Aec-EPSS-Enhanced
+	url = https://github.com/observatio/Sec4AI4Aec-EPSS-Enhanced.git
+	branch = main
+[submodule "Sec4AI4Aec-EPSS-Enhanced-megavul"]
+	path = Sec4AI4Aec-EPSS-Enhanced-megavul
+	url = https://github.com/observatio/Sec4AI4Aec-EPSS-Enhanced.git
+	branch = megavul-based-with-summarizations

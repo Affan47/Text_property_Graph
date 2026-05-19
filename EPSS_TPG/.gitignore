@@ -57,3 +57,45 @@ output/*.log
 *.swp
 *.swo
 .DS_Store
+
+# ============================================================================
+# Artifact-branch exclusions (artifact/epss-tpg)
+# ----------------------------------------------------------------------------
+# The following directories are intentionally kept out of the artifact tree.
+# They remain on disk for local development but are not part of the artifact.
+# ============================================================================
+
+# Chatbot project — separate effort, not part of the EPSS-TPG model.
+tpg_chatbot/
+docs/chatbot/
+docs/TPG_Chatbot_Technical_Report.md
+
+# LaTeX figures, diagrams and write-ups — built artefacts live elsewhere.
+EPSS_Latex/
+
+# Unit and integration tests — excluded from the artifact tree.
+tests/
+
+# TeX Live installer dropped in the working tree during a tooling setup.
+install-tl-*/
+
+# Runtime logs (per-run training output).
+logs/
+Datasets_information/**/run_logs/
+
+# Per-experiment graph-cache directories that the pipeline regenerates.
+# These can grow to hundreds of GB; reviewers rebuild them from the
+# source CSVs in the Sec4AI4Aec-EPSS-Enhanced submodules.
+data/epss_*/pyg_dataset/
+data/no_security_ablation/
+
+# Per-experiment per-CVE prediction CSVs and training history JSONs —
+# heavy intermediate artefacts; only the small test_results.json
+# summaries are kept in output/.
+output/**/predictions_*.csv
+output/**/predictions_val.csv
+output/**/training_history.json
+output/**/*.png
+output/no_security_ablation/**/predictions_*.csv
+output/no_security_ablation/**/training_history.json
+output/no_security_ablation/**/*.png
