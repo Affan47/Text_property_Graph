@@ -1,0 +1,84 @@
+======================================================================
+  DATASET PROFILE — gpt_combined_summ.csv
+======================================================================
+  File           : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv
+  Size           : 101.36 MB
+  Rows × Columns : 9,218 × 27
+
+  COLUMNS (27):
+    cve                          object    
+    source                       object    
+    date                         object    
+    time                         object    
+    text                         object      [missing: 5 (0.1%)]
+    epss_score                   float64   
+    epss_status                  object    
+    description                  object    
+    cvss_version                 float64   
+    cvss_score                   float64   
+    attack_vector                object    
+    attack_complexity            object    
+    privileges_required          object    
+    user_interaction             object    
+    scope                        object    
+    confidentiality_impact       object    
+    integrity_impact             object    
+    availability_impact          object    
+    usable                       object    
+    source_count                 int64     
+    sources_available            bool      
+    code_available               bool      
+    delta_days_max               float64     [missing: 7,323 (79.4%)]
+    delta_days_min               float64     [missing: 7,323 (79.4%)]
+    source_links                 object      [missing: 1,582 (17.2%)]
+    summ_all_sources             object      [missing: 1,844 (20.0%)]
+    summ_github_urls             object      [missing: 6,972 (75.6%)]
+
+  EPSS TARGET
+    n=9,218   min=0.0000  max=0.9754
+    mean=0.1067  median=0.0009  std=0.2639
+    EPSS ≥ 0.1: 1,427 (15.5%)
+      [0,0.001)        4,785  ( 51.9%)  █████████████████████████
+      [0.001,0.01)     1,972  ( 21.4%)  ██████████
+      [0.01,0.05)        875  (  9.5%)  ████
+      [0.05,0.1)         159  (  1.7%)  
+      [0.1,0.2)          146  (  1.6%)  
+      [0.2,0.5)          298  (  3.2%)  █
+      [0.5,1.0]          983  ( 10.7%)  █████
+
+  CVSS
+    Critical (9.0-10.0): 2,981
+    High     (7.0-8.9 ): 4,540
+    Medium   (4.0-6.9 ): 1,594
+    Low      (0.1-3.9 ): 103
+
+  CVE UNIQUENESS
+    Unique CVEs: 9,218 | Avg rows/CVE: 1.00 | Max: 1
+
+  SOURCE PLATFORMS (12)
+    mastodon_22_05                             3,136
+    cleaned_reddit_posts                       1,333
+    telegram_batch1_cleaned                    1,073
+    hackernews_cve_cleaned                       816
+    telegram_21_05_cleaned                       675
+    telegram_batch2_cleaned                      489
+    bleepingcomputer_cve_30_05_cleaned           387
+    exploitdb_cve_30_05_cleaned                  369
+    bleepingcomputer_22_05_cve_cleaned           368
+    telegram_01_06_cleaned                       327
+    exploitdb_22_05_cve_cleaned                  219
+    telegram_batch3_cleaned                       26
+
+  PIPELINE READINESS
+    has_description : 9,218
+    has_epss_score  : 9,218
+    marked_usable   : 9,217
+    fully_ready     : 9,217
+
+  ADAPTER COMPATIBILITY
+    required_present : ['cve', 'description', 'epss_score']
+    required_missing : []
+    used_missing     : ['summary']
+    renames to apply :
+      summ_all_sources  →  summary
+======================================================================

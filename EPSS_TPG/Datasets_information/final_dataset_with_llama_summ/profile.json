@@ -1,0 +1,422 @@
+{
+  "file": "/home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/final_dataset_with_llama_summ.csv",
+  "size_bytes": 92933611,
+  "size_mb": 92.93,
+  "n_rows": 9218,
+  "n_cols": 26,
+  "column_names": [
+    "cve",
+    "source",
+    "date",
+    "time",
+    "text",
+    "epss_score",
+    "epss_status",
+    "description",
+    "cvss_version",
+    "cvss_score",
+    "attack_vector",
+    "attack_complexity",
+    "privileges_required",
+    "user_interaction",
+    "scope",
+    "confidentiality_impact",
+    "integrity_impact",
+    "availability_impact",
+    "usable",
+    "source_count",
+    "sources_available",
+    "code_available",
+    "delta_days_max",
+    "delta_days_min",
+    "source_links",
+    "summ_llama3.1_8b"
+  ],
+  "columns": [
+    {
+      "name": "cve",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 9218
+    },
+    {
+      "name": "source",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 12,
+      "top_values": {
+        "mastodon_22_05": 3136,
+        "cleaned_reddit_posts": 1333,
+        "telegram_batch1_cleaned": 1073,
+        "hackernews_cve_cleaned": 816,
+        "telegram_21_05_cleaned": 675,
+        "telegram_batch2_cleaned": 489,
+        "bleepingcomputer_cve_30_05_cleaned": 387,
+        "exploitdb_cve_30_05_cleaned": 369,
+        "bleepingcomputer_22_05_cve_cleaned": 368,
+        "telegram_01_06_cleaned": 327,
+        "exploitdb_22_05_cve_cleaned": 219,
+        "telegram_batch3_cleaned": 26
+      }
+    },
+    {
+      "name": "date",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 314
+    },
+    {
+      "name": "time",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 550
+    },
+    {
+      "name": "text",
+      "dtype": "object",
+      "missing": 5,
+      "missing_pct": 0.05,
+      "unique": 6416
+    },
+    {
+      "name": "epss_score",
+      "dtype": "float64",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "stats": {
+        "min": 3e-05,
+        "max": 0.97542,
+        "mean": 0.10665004502061184,
+        "std": 0.26386660164775644,
+        "n_zero": 0
+      }
+    },
+    {
+      "name": "epss_status",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 2,
+      "top_values": {
+        "original": 6200,
+        "enriched": 3018
+      }
+    },
+    {
+      "name": "description",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 5386
+    },
+    {
+      "name": "cvss_version",
+      "dtype": "float64",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "stats": {
+        "min": 3.0,
+        "max": 3.1,
+        "mean": 3.0974831850726847,
+        "std": 0.01566441043681161,
+        "n_zero": 0
+      }
+    },
+    {
+      "name": "cvss_score",
+      "dtype": "float64",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "stats": {
+        "min": 1.9,
+        "max": 10.0,
+        "mean": 8.154209155999132,
+        "std": 1.5155009593281545,
+        "n_zero": 0
+      }
+    },
+    {
+      "name": "attack_vector",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 4,
+      "top_values": {
+        "NETWORK": 7197,
+        "LOCAL": 1722,
+        "ADJACENT_NETWORK": 227,
+        "PHYSICAL": 72
+      }
+    },
+    {
+      "name": "attack_complexity",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 2,
+      "top_values": {
+        "LOW": 8098,
+        "HIGH": 1120
+      }
+    },
+    {
+      "name": "privileges_required",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 3,
+      "top_values": {
+        "NONE": 5809,
+        "LOW": 2779,
+        "HIGH": 630
+      }
+    },
+    {
+      "name": "user_interaction",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 2,
+      "top_values": {
+        "NONE": 7282,
+        "REQUIRED": 1936
+      }
+    },
+    {
+      "name": "scope",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 2,
+      "top_values": {
+        "UNCHANGED": 7083,
+        "CHANGED": 2135
+      }
+    },
+    {
+      "name": "confidentiality_impact",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 3,
+      "top_values": {
+        "HIGH": 7362,
+        "LOW": 938,
+        "NONE": 918
+      }
+    },
+    {
+      "name": "integrity_impact",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 3,
+      "top_values": {
+        "HIGH": 6754,
+        "NONE": 1556,
+        "LOW": 908
+      }
+    },
+    {
+      "name": "availability_impact",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 3,
+      "top_values": {
+        "HIGH": 6481,
+        "NONE": 1971,
+        "LOW": 766
+      }
+    },
+    {
+      "name": "usable",
+      "dtype": "object",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 2,
+      "top_values": {
+        "True": 9217,
+        "True ": 1
+      }
+    },
+    {
+      "name": "source_count",
+      "dtype": "int64",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "stats": {
+        "min": 1.0,
+        "max": 51.0,
+        "mean": 5.2727272727272725,
+        "std": 8.704236725195976,
+        "n_zero": 0
+      }
+    },
+    {
+      "name": "sources_available",
+      "dtype": "bool",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 2,
+      "top_values": {
+        "False": 6837,
+        "True": 2381
+      }
+    },
+    {
+      "name": "code_available",
+      "dtype": "bool",
+      "missing": 0,
+      "missing_pct": 0.0,
+      "unique": 2,
+      "top_values": {
+        "False": 7802,
+        "True": 1416
+      }
+    },
+    {
+      "name": "delta_days_max",
+      "dtype": "float64",
+      "missing": 7323,
+      "missing_pct": 79.44,
+      "stats": {
+        "min": -1050.0,
+        "max": 4533.0,
+        "mean": 156.72664907651716,
+        "std": 478.4985009582952,
+        "n_zero": 161
+      }
+    },
+    {
+      "name": "delta_days_min",
+      "dtype": "float64",
+      "missing": 7323,
+      "missing_pct": 79.44,
+      "stats": {
+        "min": -1005.0,
+        "max": 5162.0,
+        "mean": 208.67651715039577,
+        "std": 543.0326312462372,
+        "n_zero": 108
+      }
+    },
+    {
+      "name": "source_links",
+      "dtype": "object",
+      "missing": 6837,
+      "missing_pct": 74.17,
+      "unique": 1423
+    },
+    {
+      "name": "summ_llama3.1_8b",
+      "dtype": "object",
+      "missing": 6837,
+      "missing_pct": 74.17,
+      "unique": 2382
+    }
+  ],
+  "epss": {
+    "n_present": 9218,
+    "n_missing": 0,
+    "min": 3e-05,
+    "max": 0.97542,
+    "mean": 0.10665004502061184,
+    "median": 0.00091,
+    "std": 0.26386660164775644,
+    "bin_counts": {
+      "[0,0.001)": 4785,
+      "[0.001,0.01)": 1972,
+      "[0.01,0.05)": 875,
+      "[0.05,0.1)": 159,
+      "[0.1,0.2)": 146,
+      "[0.2,0.5)": 298,
+      "[0.5,1.0]": 983
+    },
+    "n_above_0_1": 1427,
+    "pct_above_0_1": 15.48
+  },
+  "cvss": {
+    "n_present": 9218,
+    "critical_9_10": 2981,
+    "high_7_9": 4540,
+    "medium_4_7": 1594,
+    "low_0_4": 103
+  },
+  "cve_uniqueness": {
+    "unique": 9218,
+    "total_rows": 9218,
+    "rows_per_cve_mean": 1.0,
+    "rows_per_cve_max": 1,
+    "single_row_cves": 9218
+  },
+  "source_breakdown": {
+    "mastodon_22_05": 3136,
+    "cleaned_reddit_posts": 1333,
+    "telegram_batch1_cleaned": 1073,
+    "hackernews_cve_cleaned": 816,
+    "telegram_21_05_cleaned": 675,
+    "telegram_batch2_cleaned": 489,
+    "bleepingcomputer_cve_30_05_cleaned": 387,
+    "exploitdb_cve_30_05_cleaned": 369,
+    "bleepingcomputer_22_05_cve_cleaned": 368,
+    "telegram_01_06_cleaned": 327,
+    "exploitdb_22_05_cve_cleaned": 219,
+    "telegram_batch3_cleaned": 26
+  },
+  "pipeline_readiness": {
+    "has_description": 9218,
+    "has_epss_score": 9218,
+    "marked_usable": 9217,
+    "fully_ready": 9217
+  },
+  "adapter_compatibility": {
+    "required_present": [
+      "cve",
+      "description",
+      "epss_score"
+    ],
+    "required_missing": [],
+    "used_present": [
+      "cve",
+      "description",
+      "epss_score",
+      "cvss_score",
+      "date",
+      "source",
+      "attack_vector",
+      "attack_complexity",
+      "privileges_required",
+      "user_interaction",
+      "scope",
+      "confidentiality_impact",
+      "integrity_impact",
+      "availability_impact",
+      "code_available",
+      "source_count"
+    ],
+    "used_missing": [
+      "summary"
+    ],
+    "renames_available": {
+      "summ_llama3.1_8b": "summary"
+    }
+  },
+  "transformations": {
+    "renames_applied": {
+      "summ_llama3.1_8b": "summary"
+    },
+    "filter_original_epss": false,
+    "rows_after_origonly": null,
+    "dedupe_by_base_cve": false,
+    "rows_after_dedup": null,
+    "drop_tabular_leaks": false,
+    "tabular_cols_dropped": [],
+    "drop_summary": false,
+    "rows_in_prepared_csv": 9218
+  }
+}
