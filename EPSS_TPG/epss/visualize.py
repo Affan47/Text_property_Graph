@@ -82,7 +82,16 @@ def save_predictions_csv(
     The predicted_prob is analogous to EPSS score — higher = more likely exploited.
     """
     y_pred = (y_prob >= threshold).astype(int)
-    correct = (y_pred == y_true).astype(int)
+
+    # In soft-label (EPSS) mode, y_true is a float in [0, 1]; in binary
+    # mode it is already 0/1. Casting to int directly would truncate every
+    # soft EPSS score below 1.0 to 0. Preserve the raw value as
+    # ``true_score`` and binarise at the soft positive threshold for
+    # ``true_label``.
+    SOFT_POS = 0.1
+    y_true_arr = np.asarray(y_true, dtype=float)
+    y_true_bin = (y_true_arr >= SOFT_POS).astype(int)
+    correct = (y_pred == y_true_bin).astype(int)
 
     def risk_tier(p):
         if p >= 0.7:   return "CRITICAL"
@@ -92,7 +101,8 @@ def save_predictions_csv(
 
     df = pd.DataFrame({
         "cve_id":         cve_ids,
-        "true_label":     y_true.astype(int),
+        "true_score":     np.round(y_true_arr, 6),
+        "true_label":     y_true_bin,
         "predicted_prob": np.round(y_prob, 6),
         "predicted_label": y_pred,
         "correct":        correct,

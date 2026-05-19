@@ -54,6 +54,7 @@ class Trainer:
         weight_decay: float = 1e-4,
         batch_size: int = 32,
         patience: int = 15,
+        external_test_dataset=None,
     ):
         self.dataset = dataset
         self.model = model.to(device)
@@ -83,25 +84,45 @@ class Trainer:
             self.optimizer, mode="max", factor=0.5, patience=5, min_lr=1e-6
         )
 
-        # Data splits
-        splits = dataset.get_split_indices()
-        self.train_loader = DataLoader(
-            dataset[splits["train"]], batch_size=batch_size, shuffle=True
-        )
-        self.val_loader = DataLoader(
-            dataset[splits["val"]], batch_size=batch_size
-        )
-        self.test_loader = DataLoader(
-            dataset[splits["test"]], batch_size=batch_size
-        )
-
-        # Debug: log split label distributions
-        self._log_split_stats(splits, dataset)
-
-        logger.info(
-            "Splits: train=%d, val=%d, test=%d",
-            len(splits["train"]), len(splits["val"]), len(splits["test"]),
-        )
+        # Data splits. If an external test dataset is provided, do not create a
+        # random internal test split from the training file. This is the mode
+        # needed for real temporal evaluation: train on older CVEs, test on
+        # later-year CVEs.
+        if external_test_dataset is None:
+            splits = dataset.get_split_indices()
+            self.train_loader = DataLoader(
+                dataset[splits["train"]], batch_size=batch_size, shuffle=True,
+                drop_last=True,
+            )
+            self.val_loader = DataLoader(
+                dataset[splits["val"]], batch_size=batch_size
+            )
+            self.test_loader = DataLoader(
+                dataset[splits["test"]], batch_size=batch_size
+            )
+            self._log_split_stats(splits, dataset)
+            logger.info(
+                "Splits: train=%d, val=%d, test=%d",
+                len(splits["train"]), len(splits["val"]), len(splits["test"]),
+            )
+        else:
+            splits = self._train_val_split_indices(dataset, train_ratio=0.85, seed=42)
+            self.train_loader = DataLoader(
+                dataset[splits["train"]], batch_size=batch_size, shuffle=True,
+                drop_last=True,
+            )
+            self.val_loader = DataLoader(
+                dataset[splits["val"]], batch_size=batch_size
+            )
+            self.test_loader = DataLoader(
+                external_test_dataset, batch_size=batch_size
+            )
+            self._log_split_stats(splits, dataset)
+            self._log_external_dataset_stats("external_test", external_test_dataset)
+            logger.info(
+                "Splits: train=%d, val=%d, external_test=%d",
+                len(splits["train"]), len(splits["val"]), len(external_test_dataset),
+            )
 
     def train(self, epochs: int = 100) -> Dict[str, list]:
         """Train the model with early stopping on validation PR-AUC.
@@ -168,8 +189,8 @@ class Trainer:
             batch = batch.to(self.device)
             self.optimizer.zero_grad()
 
-            logits = self.model(batch).squeeze(-1)
-            labels = batch.y.float().squeeze(-1)
+            logits = self.model(batch).view(-1)
+            labels = batch.y.float().view(-1)
             loss = self.criterion(logits, labels)
 
             loss.backward()
@@ -205,6 +226,49 @@ class Trainer:
                     [f"{v:.4f}" for v in ys[:10]],
                 )
 
+    def _train_val_split_indices(
+        self, dataset, train_ratio: float = 0.85, seed: int = 42
+    ) -> Dict[str, List[int]]:
+        """Create a stratified train/val split with no internal test split."""
+        rng = np.random.RandomState(seed)
+        pos_indices = []
+        neg_indices = []
+        for i in range(len(dataset)):
+            if dataset._is_positive(dataset[i].y.item()):
+                pos_indices.append(i)
+            else:
+                neg_indices.append(i)
+
+        rng.shuffle(pos_indices)
+        rng.shuffle(neg_indices)
+
+        n_pos_train = int(len(pos_indices) * train_ratio)
+        n_neg_train = int(len(neg_indices) * train_ratio)
+        if len(pos_indices) > 1:
+            n_pos_train = min(max(1, n_pos_train), len(pos_indices) - 1)
+        if len(neg_indices) > 1:
+            n_neg_train = min(max(1, n_neg_train), len(neg_indices) - 1)
+
+        return {
+            "train": pos_indices[:n_pos_train] + neg_indices[:n_neg_train],
+            "val": pos_indices[n_pos_train:] + neg_indices[n_neg_train:],
+        }
+
+    def _log_external_dataset_stats(self, name: str, dataset) -> None:
+        """Log label distribution for an external held-out dataset."""
+        if len(dataset) == 0:
+            logger.warning("External dataset '%s' is empty!", name)
+            return
+        ys = [dataset[i].y.item() for i in range(len(dataset))]
+        arr = np.array(ys)
+        n_pos = sum(1 for v in ys if dataset._is_positive(v))
+        logger.info(
+            "Split %-13s | n=%4d | n_pos=%4d (%.1f%%) | "
+            "y_min=%.4f | y_max=%.4f | y_mean=%.4f",
+            name, len(ys), n_pos, 100 * n_pos / max(len(ys), 1),
+            arr.min(), arr.max(), arr.mean(),
+        )
+
     def _evaluate(
         self, loader: DataLoader, collect_ids: bool = False
     ) -> Tuple[Dict[str, float], Optional[List[str]], Optional[np.ndarray], Optional[np.ndarray]]:
@@ -223,8 +287,8 @@ class Trainer:
         with torch.no_grad():
             for batch in loader:
                 batch = batch.to(self.device)
-                logits = self.model(batch).squeeze(-1)
-                labels = batch.y.float().squeeze(-1)
+                logits = self.model(batch).view(-1)
+                labels = batch.y.float().view(-1)
 
                 loss = self.criterion(logits, labels)
                 total_loss += loss.item()
@@ -279,6 +343,27 @@ class Trainer:
         ckpt_path = self.output_dir / "best_model.pt"
         if ckpt_path.exists():
             self._load_checkpoint(ckpt_path)
+
+        # Also dump val predictions so downstream threshold tuning can use a
+        # held-out (non-test) split without re-running inference.
+        try:
+            val_metrics, val_ids, val_prob, val_true = self._evaluate(
+                self.val_loader, collect_ids=True
+            )
+            import pandas as _pd
+            _val_true_arr = np.asarray(val_true, dtype=float)
+            _val_true_bin = (_val_true_arr >= 0.1).astype(int)
+            _pd.DataFrame({
+                "cve_id": val_ids or [""] * len(val_prob),
+                "true_score": np.round(_val_true_arr, 6),
+                "true_label": _val_true_bin,
+                "predicted_prob": np.round(val_prob, 6),
+                "split": "val",
+            }).to_csv(self.output_dir / "predictions_val.csv", index=False)
+            with open(self.output_dir / "val_results.json", "w") as f:
+                json.dump(val_metrics, f, indent=2)
+        except Exception as e:
+            logger.warning("Val prediction dump failed (non-fatal): %s", e)
 
         metrics, cve_ids, y_prob, y_true = self._evaluate(
             self.test_loader, collect_ids=True

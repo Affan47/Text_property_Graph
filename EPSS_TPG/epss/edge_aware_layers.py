@@ -221,9 +221,19 @@ TPG_VIEW_NAMES = {
     "sequential": ["NEXT_TOKEN", "NEXT_SENT", "NEXT_PARA"],
     "semantic":   ["COREF", "SRL_ARG", "AMR_EDGE"],
     "discourse":  ["RST_RELATION", "DISCOURSE", "ENTITY_REL", "SIMILARITY"],
+    # 5th view — only populated when the data was built with
+    # --include-security-edges (the SEC_* labels won't be in the vocab
+    # otherwise and this view will silently degrade to an empty list,
+    # which build_view_config_from_vocab handles).
+    "security":   ["SEC_AFFECTS", "SEC_HAS_VERSION", "SEC_LOCATED_IN",
+                   "SEC_CLASSIFIED_AS", "SEC_EXPLOITED_BY", "SEC_CAUSES",
+                   "SEC_MITIGATED_BY", "SEC_USES_FUNCTION", "SEC_THREATENS",
+                   "SEC_HAS_SEVERITY"],
 }
 
-# Default fallback indices (Level 1 enum order) if no vocab file is available
+# Default fallback indices (Level 1 enum order) if no vocab file is available.
+# Without a vocab file we can't tell whether security edges are active, so
+# the fallback uses only the 13 base indices.
 TPG_EDGE_VIEWS = {
     "syntactic":  [0, 9, 10],       # DEP, CONTAINS, BELONGS_TO
     "sequential": [1, 2, 3],        # NEXT_TOKEN, NEXT_SENT, NEXT_PARA
@@ -342,25 +352,24 @@ class EdgeTypeEPSSClassifier(nn.Module):
         )
 
     def forward(self, data):
-        x = self.input_proj(data.x)
-        edge_index = data.edge_index
-        edge_type = data.edge_type if hasattr(data, "edge_type") else None
-
-        for layer in self.layers:
-            x = layer(x, edge_index, edge_type)
+        x = self.get_node_embeddings(data)
 
         x_mean = global_mean_pool(x, data.batch)
         x_max = global_max_pool(x, data.batch)
         graph_emb = torch.cat([x_mean, x_max], dim=-1)
         return self.classifier(graph_emb)
 
-    def get_graph_embedding(self, data):
+    def get_node_embeddings(self, data):
         x = self.input_proj(data.x)
         edge_index = data.edge_index
         edge_type = data.edge_type if hasattr(data, "edge_type") else None
 
         for layer in self.layers:
             x = layer(x, edge_index, edge_type)
+        return x
+
+    def get_graph_embedding(self, data):
+        x = self.get_node_embeddings(data)
 
         x_mean = global_mean_pool(x, data.batch)
         x_max = global_max_pool(x, data.batch)
@@ -411,22 +420,14 @@ class RGATEPSSClassifier(nn.Module):
         )
 
     def forward(self, data):
-        x = self.input_proj(data.x)
-        edge_index = data.edge_index
-        edge_type = data.edge_type if hasattr(data, "edge_type") else None
-        if edge_type is None:
-            edge_type = torch.zeros(edge_index.size(1), dtype=torch.long, device=x.device)
-
-        for block in self.blocks:
-            x = block(x, edge_index, edge_type)
-        x = self.final_norm(x)
+        x = self.get_node_embeddings(data)
 
         x_mean = global_mean_pool(x, data.batch)
         x_max = global_max_pool(x, data.batch)
         graph_emb = torch.cat([x_mean, x_max], dim=-1)
         return self.classifier(graph_emb)
 
-    def get_graph_embedding(self, data):
+    def get_node_embeddings(self, data):
         x = self.input_proj(data.x)
         edge_index = data.edge_index
         edge_type = data.edge_type if hasattr(data, "edge_type") else None
@@ -436,6 +437,10 @@ class RGATEPSSClassifier(nn.Module):
         for block in self.blocks:
             x = block(x, edge_index, edge_type)
         x = self.final_norm(x)
+        return x
+
+    def get_graph_embedding(self, data):
+        x = self.get_node_embeddings(data)
 
         x_mean = global_mean_pool(x, data.batch)
         x_max = global_max_pool(x, data.batch)
@@ -501,29 +506,14 @@ class MultiViewEPSSClassifier(nn.Module):
         return mask
 
     def forward(self, data):
-        x = self.input_proj(data.x)
-        edge_index = data.edge_index
-        edge_type = data.edge_type if hasattr(data, "edge_type") else None
-        if edge_type is None:
-            edge_type = torch.zeros(edge_index.size(1), dtype=torch.long, device=x.device)
-
-        h0 = x
-        view_outputs = []
-        for view_name, view_types in self.edge_view_config.items():
-            mask = self._get_view_mask(edge_type, view_types)
-            edge_index_view = edge_index[:, mask]
-            h_view = self.view_encoders[view_name](h0, edge_index_view)
-            view_outputs.append(h_view)
-
-        h_stacked = torch.stack(view_outputs, dim=1)  # [N, V, D]
-        h_fused, _ = self.fusion(h_stacked, node_context=h0)
+        h_fused = self.get_node_embeddings(data)
 
         x_mean = global_mean_pool(h_fused, data.batch)
         x_max = global_max_pool(h_fused, data.batch)
         graph_emb = torch.cat([x_mean, x_max], dim=-1)
         return self.classifier(graph_emb)
 
-    def get_graph_embedding(self, data):
+    def get_node_embeddings(self, data):
         x = self.input_proj(data.x)
         edge_index = data.edge_index
         edge_type = data.edge_type if hasattr(data, "edge_type") else None
@@ -540,6 +530,10 @@ class MultiViewEPSSClassifier(nn.Module):
 
         h_stacked = torch.stack(view_outputs, dim=1)
         h_fused, _ = self.fusion(h_stacked, node_context=h0)
+        return h_fused
+
+    def get_graph_embedding(self, data):
+        h_fused = self.get_node_embeddings(data)
 
         x_mean = global_mean_pool(h_fused, data.batch)
         x_max = global_max_pool(h_fused, data.batch)

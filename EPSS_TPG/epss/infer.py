@@ -298,6 +298,7 @@ def load_model(checkpoint_path: Path, config_path: Path, device: str):
         tabular_dim=cfg["tabular_dim"],
         num_edge_types=cfg["num_edge_types"],
         edge_type_vocab=edge_type_vocab,
+        two_view=args.get("two_view_tpg", False),
     )
 
     ckpt = torch.load(str(checkpoint_path), map_location=device, weights_only=False)
@@ -391,6 +392,11 @@ def build_inference_dataset(
     logger.info("Wrote %d CVEs to %s", len(labeled), lc_path)
 
     args = cfg["args"]
+    # Mirror every TPG-construction flag from the training config so the
+    # inference dataset has the same node/edge schema. Without this the
+    # model can silently see a different feature/edge distribution than it
+    # was trained on (most notably: SEC_* edges present at inference but
+    # absent in training, leaving the security view with random weights).
     dataset = CVEGraphDataset(
         root=str(work_dir / "pyg_infer"),
         labeled_cves_path=str(lc_path),
@@ -399,6 +405,13 @@ def build_inference_dataset(
         use_hybrid=not args.get("no_hybrid", False),
         include_tabular=args.get("hybrid", True),
         include_epss_feature=not args.get("no_epss_feature", False),
+        include_summary_in_tpg=args.get("include_summary_in_tpg", False),
+        include_security_edges=args.get("include_security_edges", False),
+        summary_only_tpg=args.get("summary_only_tpg", False),
+        two_view_tpg=args.get("two_view_tpg", False),
+        add_source_labels=args.get("add_source_labels", False),
+        summary_pooling_node=args.get("summary_pooling_node", False),
+        tabular_vocab_path=args.get("tabular_vocab_path"),
     )
 
     # Restore original process
@@ -429,7 +442,10 @@ def run_inference(
 
     for batch in loader:
         batch = batch.to(device)
-        logits = model(batch).squeeze(-1)
+        # .view(-1) instead of .squeeze(-1) — squeeze on a 1-element tensor
+        # collapses to scalar, breaking len() and downstream indexing when
+        # the loader's last batch has size 1.
+        logits = model(batch).view(-1)
         probs = torch.sigmoid(logits).cpu().numpy().tolist()
 
         # Recover CVE IDs from batch

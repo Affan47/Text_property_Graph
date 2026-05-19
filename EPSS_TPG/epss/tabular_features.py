@@ -65,7 +65,7 @@ class TabularFeatureExtractor:
         self,
         top_k_cwes: int = 25,
         reference_date: Optional[str] = None,
-        include_epss_feature: bool = True,
+        include_epss_feature: bool = False,
     ):
         self.top_k_cwes = top_k_cwes
         self.ref_date = datetime.fromisoformat(
@@ -102,12 +102,27 @@ class TabularFeatureExtractor:
         self._fitted = True
         return self
 
+    def set_cwe_vocab(self, cwe_to_idx: Dict[str, int]) -> "TabularFeatureExtractor":
+        """Use a pre-fitted CWE vocabulary instead of fitting on this dataset.
+
+        This is required for true external-test evaluation. The later-year test
+        set must be encoded with the training set's CWE mapping; otherwise the
+        same tabular column can mean different CWEs in train and test.
+        """
+        self.cwe_to_idx = {str(cwe): int(idx) for cwe, idx in cwe_to_idx.items()}
+        self._fitted = True
+        logger.info(
+            "Tabular features: loaded fixed CWE vocab with %d entries; total dim=%d",
+            len(self.cwe_to_idx), self.feature_dim,
+        )
+        return self
+
     @property
     def feature_dim(self) -> int:
         """Total dimension of the encoded feature vector.
 
-        With include_epss_feature=True  (default): 57 dims
-        With include_epss_feature=False (no-leakage): 55 dims
+        With include_epss_feature=False (default, no-leakage): 55 dims
+        With include_epss_feature=True  (target leakage):       57 dims
         """
         base = (
             1                           # cvss3_score (normalized)
@@ -153,13 +168,25 @@ class TabularFeatureExtractor:
         Returns:
             numpy array of shape (feature_dim,) = (57,).
         """
+        def _f(v, default=0.0):
+            try:
+                x = float(v)
+            except (TypeError, ValueError):
+                return default
+            if math.isnan(x) or math.isinf(x):
+                return default
+            return x
+
         features = []
 
         # 1. CVSS v3 base score (normalized 0-10 → 0-1)
         #    Format A: "cvss3_score" | Format B: also "cvss3_score" (adapter maps it)
-        cvss_score = record.get("cvss3_score") or record.get("cvss_score")
-        if cvss_score is not None:
-            features.append(float(cvss_score) / 10.0)
+        cvss_score = record.get("cvss3_score")
+        if cvss_score is None:
+            cvss_score = record.get("cvss_score")
+        cvss_f = _f(cvss_score, default=None) if cvss_score is not None else None
+        if cvss_f is not None:
+            features.append(cvss_f / 10.0)
             features.append(1.0)  # has_cvss = True
         else:
             features.append(0.0)
@@ -199,8 +226,8 @@ class TabularFeatureExtractor:
         # than learning genuine exploitation signals from CVE characteristics.
         # Set include_epss_feature=False and retrain for a leakage-free model.
         if self.include_epss_feature:
-            features.append(float(record.get("epss_score", 0.0)))
-            features.append(float(record.get("epss_percentile", 0.0)))
+            features.append(_f(record.get("epss_score", 0.0)))
+            features.append(_f(record.get("epss_percentile", 0.0)))
 
         # 9. Has public exploit / PoC code
         #    Format A: ExploitDB flag | Format B: code_available flag

@@ -85,6 +85,17 @@ def main():
     parser.add_argument("--data-dir", default="data/epss")
     parser.add_argument("--labeled-file", default=None,
                         help="Path to labeled_cves JSON (default: <data-dir>/labeled_cves.json)")
+    parser.add_argument("--test-labeled-file", default=None,
+                        help=(
+                            "Optional external held-out labeled_cves JSON. "
+                            "Use this for temporal evaluation: train/validate on "
+                            "--labeled-file, then evaluate once on this later-year file."
+                        ))
+    parser.add_argument("--test-data-dir", default=None,
+                        help=(
+                            "Optional graph-cache root for --test-labeled-file. "
+                            "Defaults to <data-dir>_external_test."
+                        ))
     parser.add_argument("--epss-csv", default=None,
                         help="Path to pre-downloaded EPSS CSV (e.g. data/epss/epss_scores-2026-03-28.csv). "
                              "Faster than API and includes percentile ranks.")
@@ -95,6 +106,27 @@ def main():
                         help="Path to Sec4AI4Aec-style CSV. Automatically converts to "
                              "labeled_cves.json via csv_adapter and skips NVD collection. "
                              "Example: --source-csv \"data/epss/final_dataset_with_delta_days copy.csv\"")
+    parser.add_argument("--summary-source",
+                        choices=("description",
+                                 "all_sources", "github_urls",
+                                 "commit_url", "code",
+                                 "cvss_metrics",
+                                 "combined", "auto"),
+                        default="auto",
+                        help=(
+                            "Which summary column populates llm_summary when "
+                            "reading a Sec4AI4Aec or megavul CSV. "
+                            "'description' = empty (description-only experiments). "
+                            "Sec4AI4Aec social-CSV columns: "
+                            "'all_sources', 'github_urls'. "
+                            "Megavul commit-CSV columns: 'commit_url' "
+                            "(maps to summ_commit_url), 'code' "
+                            "(maps to summ_before_commit). "
+                            "'cvss_metrics' applies to both schemas. "
+                            "'combined' = concatenation of every summ_* column "
+                            "present in the row. "
+                            "'auto' (default) = first-non-empty fallback chain."
+                        ))
 
     # Dataset
     parser.add_argument("--max-cves", type=int, default=None,
@@ -119,6 +151,65 @@ def main():
                             "learns from CVE text + CVSS + CWE only, making it a true "
                             "predictor rather than an EPSS echo. Use this for a "
                             "deployment-ready model that works on CVEs without EPSS data."
+                        ))
+    parser.add_argument("--include-summary-in-tpg", action="store_true",
+                        help=(
+                            "Concatenate the LLM `llm_summary` field to the CVE "
+                            "description before feeding text to the TPG pipeline. "
+                            "Without this flag (the prior 36+ runs' default), the "
+                            "summary is computed and stored in labeled_cves.json but "
+                            "never read by the model. Use to give TPG access to the "
+                            "colleague-curated source-link summaries."
+                        ))
+    parser.add_argument("--include-security-edges", action="store_true",
+                        help=(
+                            "Run SecurityRelationsPass and emit first-class "
+                            "SecurityEdgeType edges (SEC_AFFECTS, SEC_EXPLOITED_BY, "
+                            "SEC_CLASSIFIED_AS, etc.) between security entities. "
+                            "The GNN's edge-type vocabulary expands from 13 to 23 "
+                            "and SEC_* edges occupy indices 13-22. Default off "
+                            "preserves the prior 36+ training runs."
+                        ))
+    parser.add_argument("--no-security-frontend", action="store_true",
+                        help=(
+                            "Disable the security frontend entirely. The TPG is "
+                            "built with the plain spaCy frontend only, so the "
+                            "graph contains no security entity nodes (CVE_ID, "
+                            "SOFTWARE, VERSION, VULN_TYPE, ATTACK_VECTOR, IMPACT, "
+                            "SEVERITY, REMEDIATION, CODE_ELEMENT, CWE_ID) and no "
+                            "SEC_* edges. Use to measure how much signal the "
+                            "security frontend actually contributes. Processed "
+                            "graphs are cached with a `_nosec` suffix so they "
+                            "do not collide with the default caches."
+                        ))
+    parser.add_argument("--summary-only-tpg", action="store_true",
+                        help=(
+                            "Build each TPG from llm_summary only, without the "
+                            "CVE description. CVEs with empty summaries are "
+                            "skipped. Use this to measure standalone summary signal."
+                        ))
+    parser.add_argument("--two-view-tpg", action="store_true",
+                        help=(
+                            "Build description and llm_summary as separate TPG "
+                            "subgraphs, then use source-aware attention fusion in "
+                            "the model. The batch script is unchanged; enable this "
+                            "per experiment with this flag."
+                        ))
+    parser.add_argument("--add-source-labels", action="store_true",
+                        help=(
+                            "Mark nodes/edges with source_text_type and append a "
+                            "3-dim node feature for description|summary|mixed."
+                        ))
+    parser.add_argument("--summary-pooling-node", action="store_true",
+                        help=(
+                            "Add one pooled summary sentence node, using the mean "
+                            "summary sentence embedding, linked to the document node."
+                        ))
+    parser.add_argument("--graph-diagnostics", action="store_true",
+                        help=(
+                            "Save per-CVE graph-size/source diagnostics in the "
+                            "processed dataset folder for B vs B_S size and "
+                            "over-smoothing analysis."
                         ))
 
     # Model
@@ -148,6 +239,13 @@ def main():
 
     args = parser.parse_args()
 
+    if args.summary_only_tpg and args.two_view_tpg:
+        parser.error("--summary-only-tpg and --two-view-tpg are mutually exclusive")
+    if args.summary_only_tpg and args.include_summary_in_tpg:
+        parser.error("--summary-only-tpg already uses llm_summary; do not combine it with --include-summary-in-tpg")
+    if args.two_view_tpg and args.include_summary_in_tpg:
+        parser.error("--two-view-tpg already uses llm_summary as a separate view; do not combine it with --include-summary-in-tpg")
+
     # Setup
     logging.basicConfig(
         level=logging.INFO,
@@ -171,7 +269,8 @@ def main():
         logger.info("SOURCE CSV MODE: converting %s → %s", args.source_csv, labeled_path)
         logger.info("=" * 60)
         from epss.csv_adapter import convert as csv_convert
-        csv_convert(args.source_csv, str(labeled_path))
+        csv_convert(args.source_csv, str(labeled_path),
+                    summary_source=args.summary_source)
         args.skip_collect = True   # never fetch from NVD when using external CSV
 
     # ─── Phase 1: Data Collection ─────────────────────────────────
@@ -202,6 +301,27 @@ def main():
     logger.info("Dataset: %d CVEs, %d exploited (%.1f%%)",
                 len(labeled), n_pos, 100 * n_pos / max(len(labeled), 1))
 
+    n_summary = sum(
+        1 for v in labeled.values()
+        if str(v.get("llm_summary") or "").strip()
+        and str(v.get("llm_summary") or "").strip().lower() != "nan"
+    )
+    logger.info(
+        "LLM summaries: %d non-empty, %d empty (%.2f%% empty)",
+        n_summary,
+        len(labeled) - n_summary,
+        100 * (len(labeled) - n_summary) / max(len(labeled), 1),
+    )
+    if (args.summary_only_tpg or args.two_view_tpg or args.include_summary_in_tpg) and n_summary == 0:
+        logger.error(
+            "No non-empty llm_summary values found in %s. "
+            "Regenerate labeled_cves.json with --source-csv, or check that the "
+            "CSV has a summary-like column such as summary, llm_summary, "
+            "summ_all_sources, summ_llama3.1_8b, summ_github_urls, or another summ* column.",
+            labeled_path,
+        )
+        sys.exit(1)
+
     # ─── Phase 2: Graph Dataset Construction ──────────────────────
 
     logger.info("=" * 60)
@@ -214,8 +334,16 @@ def main():
         label_mode=args.label_mode,
         embedding_dim=args.embedding_dim,
         use_hybrid=not args.no_hybrid,
+        use_security_frontend=not args.no_security_frontend,
         include_tabular=args.hybrid,
         include_epss_feature=not args.no_epss_feature,
+        include_summary_in_tpg=args.include_summary_in_tpg,
+        include_security_edges=args.include_security_edges,
+        summary_only_tpg=args.summary_only_tpg,
+        two_view_tpg=args.two_view_tpg,
+        add_source_labels=args.add_source_labels,
+        summary_pooling_node=args.summary_pooling_node,
+        graph_diagnostics=args.graph_diagnostics,
         max_cves=args.max_cves,
     )
     logger.info("Dataset: %d graphs", len(dataset))
@@ -223,6 +351,51 @@ def main():
     if len(dataset) == 0:
         logger.error("No graphs were created. Check CVE descriptions.")
         sys.exit(1)
+
+    external_test_dataset = None
+    if args.test_labeled_file:
+        test_labeled_path = Path(args.test_labeled_file)
+        if not test_labeled_path.exists():
+            logger.error("--test-labeled-file does not exist: %s", test_labeled_path)
+            sys.exit(1)
+
+        test_data_dir = (
+            Path(args.test_data_dir)
+            if args.test_data_dir
+            else data_dir.parent / f"{data_dir.name}_external_test"
+        )
+        train_tab_vocab = Path(dataset.processed_dir) / "tabular_vocab.json"
+        tabular_vocab_path = str(train_tab_vocab) if args.hybrid else None
+        if args.hybrid and not train_tab_vocab.exists():
+            logger.error(
+                "Training tabular vocab not found at %s; cannot encode external test set safely",
+                train_tab_vocab,
+            )
+            sys.exit(1)
+
+        logger.info("=" * 60)
+        logger.info("EXTERNAL TEST DATASET: %s", test_labeled_path)
+        logger.info("Using training tabular vocab: %s", tabular_vocab_path)
+        logger.info("=" * 60)
+        external_test_dataset = CVEGraphDataset(
+            root=str(test_data_dir / "pyg_dataset"),
+            labeled_cves_path=str(test_labeled_path),
+            label_mode=args.label_mode,
+            embedding_dim=args.embedding_dim,
+            use_hybrid=not args.no_hybrid,
+            use_security_frontend=not args.no_security_frontend,
+            include_tabular=args.hybrid,
+            include_epss_feature=not args.no_epss_feature,
+            include_summary_in_tpg=args.include_summary_in_tpg,
+            include_security_edges=args.include_security_edges,
+            summary_only_tpg=args.summary_only_tpg,
+            two_view_tpg=args.two_view_tpg,
+            add_source_labels=args.add_source_labels,
+            summary_pooling_node=args.summary_pooling_node,
+            graph_diagnostics=args.graph_diagnostics,
+            tabular_vocab_path=tabular_vocab_path,
+        )
+        logger.info("External test dataset: %d graphs", len(external_test_dataset))
 
     # Determine input feature dimension from first graph
     sample = dataset[0]
@@ -286,6 +459,7 @@ def main():
         tabular_dim=tabular_dim,
         num_edge_types=num_edge_types,
         edge_type_vocab=edge_type_vocab,
+        two_view=args.two_view_tpg,
     )
 
     n_params = sum(p.numel() for p in model.parameters())
@@ -300,6 +474,7 @@ def main():
         weight_decay=args.weight_decay,
         batch_size=args.batch_size,
         patience=args.patience,
+        external_test_dataset=external_test_dataset,
     )
 
     history = trainer.train(epochs=args.epochs)
@@ -322,6 +497,7 @@ def main():
         "model_params": n_params,
         "model_type": model.__class__.__name__,
         "dataset_size": len(dataset),
+        "external_test_dataset_size": len(external_test_dataset) if external_test_dataset is not None else None,
         "in_channels": in_channels,
         "tabular_dim": tabular_dim,
         "num_edge_types": num_edge_types,
