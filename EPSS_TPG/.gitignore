@@ -96,6 +96,15 @@ output/**/predictions_*.csv
 output/**/predictions_val.csv
 output/**/training_history.json
 output/**/*.png
-output/no_security_ablation/**/predictions_*.csv
-output/no_security_ablation/**/training_history.json
-output/no_security_ablation/**/*.png
+
+# The no-security ablation is the headline comparison reported in
+# the EPSS-TPG paper, so we include the whole output/no_security_ablation/
+# tree (best_model.pt, predictions, training history, summaries) and
+# undo the broader exclusions above just for this subtree.
+!output/no_security_ablation/
+!output/no_security_ablation/**
+!output/no_security_ablation/**/best_model.pt
+!output/no_security_ablation/**/predictions_*.csv
+!output/no_security_ablation/**/predictions_val.csv
+!output/no_security_ablation/**/training_history.json
+!output/no_security_ablation/**/*.png
