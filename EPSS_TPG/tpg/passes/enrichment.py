@@ -285,9 +285,13 @@ class EntityRelationPass(BasePass):
                     e1, e2 = ents[i], ents[j]
                     rel_type = "co-occurs"
                     if sent_preds:
-                        mid = (e1.properties.char_start + e2.properties.char_start) / 2
+                        e1_mid = (e1.properties.char_start + e1.properties.char_end) / 2
+                        e2_mid = (e2.properties.char_start + e2.properties.char_end) / 2
+                        mid = (e1_mid + e2_mid) / 2
                         closest_pred = min(sent_preds,
-                                           key=lambda p: abs(p.properties.token_idx - mid))
+                                           key=lambda p: abs(
+                                               ((p.properties.char_start + p.properties.char_end) / 2)
+                                               - mid))
                         rel_type = closest_pred.properties.lemma or closest_pred.properties.text
 
                     graph.add_edge(e1.id, e2.id, EdgeType.ENTITY_REL,

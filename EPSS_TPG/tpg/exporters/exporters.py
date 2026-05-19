@@ -21,7 +21,16 @@ TPG exports in the same structure so existing GNN pipelines
 import json
 from typing import Dict, Any, Optional, List
 from tpg.schema.graph import TextPropertyGraph, TPGNode, TPGEdge
-from tpg.schema.types import TPGSchema, DEFAULT_SCHEMA, NodeType, EdgeType
+from tpg.schema.types import TPGSchema, DEFAULT_SCHEMA, NodeType, EdgeType, SecurityEdgeType
+
+
+def _edge_label(edge_type) -> str:
+    """Return the human-readable label for an edge type — prefixed with
+    ``SEC_`` for security edges so they're distinguishable in JSON output.
+    """
+    if isinstance(edge_type, SecurityEdgeType):
+        return f"SEC_{edge_type.name}"
+    return edge_type.name
 
 
 class GraphSONExporter:
@@ -62,7 +71,7 @@ class GraphSONExporter:
                 "id": f"e{edge.id}",
                 "outV": edge.source,
                 "inV": edge.target,
-                "label": edge.edge_type.name,
+                "label": _edge_label(edge.edge_type),
                 "properties": props,
             })
 
@@ -80,8 +89,10 @@ class GraphSONExporter:
             "schema": {
                 "node_types": [nt.name for nt in graph.schema.node_types],
                 "edge_types": [et.name for et in graph.schema.edge_types],
+                "security_edge_types": [f"SEC_{et.name}" for et in graph.schema.security_edge_types],
                 "num_node_types": graph.schema.num_node_types,
                 "num_edge_types": graph.schema.num_edge_types,
+                "num_edge_types_with_security": graph.schema.num_edge_types_with_security,
             },
             "stats": graph.stats(),
             "vertices": vertices,
@@ -142,7 +153,24 @@ class PyGExporter:
     """
 
     def export(self, graph: TextPropertyGraph, label: Optional[int] = None,
-               embedding_dim: int = 0) -> Dict[str, Any]:
+               embedding_dim: int = 0,
+               use_security_edge_types: bool = False) -> Dict[str, Any]:
+        """Export the TPG to a PyG-ready dict.
+
+        Args:
+            graph: The TextPropertyGraph to export.
+            label: Optional graph-level label (for graph classification).
+            embedding_dim: SecBERT embedding size (768) or 0 to skip.
+            use_security_edge_types: When True, the edge-type vocabulary
+                expands to `schema.num_edge_types_with_security` (e.g. 23
+                instead of 13) and SEC_* edges get unique indices in the
+                range `[num_edge_types, num_edge_types_with_security)`.
+                Default False preserves the prior 13-slot behaviour for
+                reproducibility of the existing 36+ training runs.
+                Edges whose type isn't representable (e.g. SEC_* edges
+                appearing in a graph but `use_security_edge_types=False`)
+                are silently dropped.
+        """
         schema = graph.schema
         all_nodes = graph.nodes()
         all_edges = graph.edges()
@@ -150,7 +178,14 @@ class PyGExporter:
         node_id_to_idx = {node.id: i for i, node in enumerate(all_nodes)}
         N = len(all_nodes)
         T = schema.num_node_types
-        R = schema.num_edge_types
+
+        # Edge-type vocabulary: 13 (base) or 23 (base + security) depending on the flag
+        if use_security_edge_types:
+            R = schema.num_edge_types_with_security
+            etype_index_fn = schema.unified_edge_type_index
+        else:
+            R = schema.num_edge_types
+            etype_index_fn = schema.edge_type_index
 
         x = []
         node_texts = []
@@ -180,15 +215,24 @@ class PyGExporter:
             ])
 
         sources, targets, edge_types, edge_attr = [], [], [], []
+        n_dropped_security_edges = 0
         for edge in all_edges:
-            if edge.source in node_id_to_idx and edge.target in node_id_to_idx:
-                sources.append(node_id_to_idx[edge.source])
-                targets.append(node_id_to_idx[edge.target])
-                etype_idx = schema.edge_type_index(edge.edge_type)
-                edge_types.append(etype_idx)
-                e_onehot = [0] * R
-                e_onehot[etype_idx] = 1
-                edge_attr.append(e_onehot)
+            if edge.source not in node_id_to_idx or edge.target not in node_id_to_idx:
+                continue
+            try:
+                etype_idx = etype_index_fn(edge.edge_type)
+            except KeyError:
+                # Edge type is not representable under the active vocabulary
+                # (typically: SEC_* edge present but use_security_edge_types=False)
+                if isinstance(edge.edge_type, SecurityEdgeType):
+                    n_dropped_security_edges += 1
+                continue
+            sources.append(node_id_to_idx[edge.source])
+            targets.append(node_id_to_idx[edge.target])
+            edge_types.append(etype_idx)
+            e_onehot = [0] * R
+            e_onehot[etype_idx] = 1
+            edge_attr.append(e_onehot)
 
         return {
             "x": x,
@@ -203,13 +247,30 @@ class PyGExporter:
             "node_texts": node_texts,
             "node_pos": node_pos,
             "doc_id": graph.doc_id,
+            "use_security_edge_types": use_security_edge_types,
+            "n_dropped_security_edges": n_dropped_security_edges,
         }
 
-    def export_vocab(self, schema: TPGSchema) -> Dict[str, Any]:
-        """Export vocabulary files (like SemVul's vocab_builder output)."""
+    def export_vocab(self, schema: TPGSchema,
+                     use_security_edge_types: bool = False) -> Dict[str, Any]:
+        """Export vocabulary files (like SemVul's vocab_builder output).
+
+        When `use_security_edge_types=True`, the edge_types vocab includes
+        SEC_* labels at indices [num_edge_types, num_edge_types_with_security).
+        """
+        edge_types = {et.name: i for i, et in enumerate(schema.edge_types)}
+        if use_security_edge_types:
+            base = len(schema.edge_types)
+            for i, set_ in enumerate(schema.security_edge_types):
+                edge_types[f"SEC_{set_.name}"] = base + i
+            num_edge_types = schema.num_edge_types_with_security
+        else:
+            num_edge_types = schema.num_edge_types
+
         return {
             "node_types": {nt.name: i for i, nt in enumerate(schema.node_types)},
-            "edge_types": {et.name: i for i, et in enumerate(schema.edge_types)},
+            "edge_types": edge_types,
             "num_node_types": schema.num_node_types,
-            "num_edge_types": schema.num_edge_types,
+            "num_edge_types": num_edge_types,
+            "use_security_edge_types": use_security_edge_types,
         }

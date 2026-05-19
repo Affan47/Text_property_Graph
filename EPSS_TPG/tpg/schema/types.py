@@ -360,6 +360,55 @@ class TPGSchema:
     def edge_type_index(self, et: EdgeType) -> int:
         return self.edge_type_to_idx[et]
 
+    # ── Unified edge-type indexing (handles base + security) ──
+    # Used when SecurityRelationsPass has emitted SEC_* edges and the
+    # exporter / GNN need a single integer space covering both vocabularies.
+
+    @property
+    def num_edge_types_with_security(self) -> int:
+        """Total edge-type slots when security edges are enabled.
+
+        Returns `len(EdgeType) + len(security_edge_types)`. For the
+        SECURITY_SCHEMA this is 13 + 10 = 23. For DEFAULT_SCHEMA it
+        equals num_edge_types (no security types registered).
+        """
+        return len(self.edge_types) + len(self.security_edge_types)
+
+    def unified_edge_type_index(self, et) -> int:
+        """Map an edge-type enum value to a unified integer index.
+
+        - Base EdgeType values get indices 0..len(edge_types)-1
+        - SecurityEdgeType values get indices len(edge_types)..len(edge_types)+len(security_edge_types)-1
+        - Raises KeyError on unknown enum
+
+        Used by the PyG exporter (when `use_security_edge_types=True`)
+        and by the GNN's edge embedding when security edges are active.
+        """
+        if isinstance(et, EdgeType):
+            return self.edge_type_to_idx[et]
+        if isinstance(et, SecurityEdgeType):
+            base_offset = len(self.edge_types)
+            for i, set_ in enumerate(self.security_edge_types):
+                if set_ is et:
+                    return base_offset + i
+            raise KeyError(f"SecurityEdgeType {et!r} not registered in schema "
+                           f"(include_security={bool(self.security_edge_types)})")
+        raise KeyError(f"Unknown edge type kind: {type(et).__name__}: {et!r}")
+
+    def unified_edge_label_at(self, idx: int) -> str:
+        """Inverse of unified_edge_type_index — return the human-readable label
+        for a given unified index (e.g. 'DEP' for 0, 'SEC_AFFECTS' for 13).
+        """
+        base = list(self.edge_types)
+        if idx < len(base):
+            return base[idx].name
+        sec_idx = idx - len(base)
+        sec = list(self.security_edge_types)
+        if 0 <= sec_idx < len(sec):
+            return f"SEC_{sec[sec_idx].name}"
+        raise KeyError(f"Edge index {idx} out of range "
+                       f"(0..{len(base)+len(sec)-1})")
+
     def describe(self) -> str:
         lines = [
             f"TPG Schema: {self.total_node_labels} node labels, {self.total_edge_labels} edge labels",

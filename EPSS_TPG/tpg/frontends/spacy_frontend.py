@@ -133,7 +133,22 @@ class SpacyFrontend(BaseFrontend):
                     - Cross-sentence token flow
         """
         graph = TextPropertyGraph(schema=self.schema, doc_id=doc_id)
-        paragraphs = [p.strip() for p in re.split(r'\n\s*\n', text) if p.strip()] or [text]
+        paragraphs = []
+        block_start = 0
+        for sep in re.finditer(r'\n\s*\n', text):
+            block = text[block_start:sep.start()]
+            stripped = block.strip()
+            if stripped:
+                leading_ws = len(block) - len(block.lstrip())
+                paragraphs.append((stripped, block_start + leading_ws))
+            block_start = sep.end()
+        block = text[block_start:]
+        stripped = block.strip()
+        if stripped:
+            leading_ws = len(block) - len(block.lstrip())
+            paragraphs.append((stripped, block_start + leading_ws))
+        if not paragraphs:
+            paragraphs = [(text, 0)]
 
         # ═══ Step 1: DOCUMENT root (Joern: METHOD node) ═══
         doc_nid = graph.add_node(NodeType.DOCUMENT, NodeProperties(
@@ -145,7 +160,7 @@ class SpacyFrontend(BaseFrontend):
         token_id_map: Dict[int, int] = {}
         global_sent_idx = 0
 
-        for para_idx, para_text in enumerate(paragraphs):
+        for para_idx, (para_text, para_offset) in enumerate(paragraphs):
 
             # ═══ Step 2: PARAGRAPH node (Joern: BLOCK node) ═══
             para_nid = graph.add_node(NodeType.PARAGRAPH, NodeProperties(
@@ -159,9 +174,18 @@ class SpacyFrontend(BaseFrontend):
             for sent in doc.sents:
 
                 # ═══ Step 3a: SENTENCE node (Joern: METHOD_BLOCK) ═══
+                # char_start tracks the start of the *stripped* text so BERT
+                # offset-mappings (which run on the stripped string) align
+                # with downstream char_start arithmetic. Without this fix
+                # token-level subword features get misaligned by N chars on
+                # any sentence with leading whitespace.
+                _raw = sent.text
+                _lstrip = len(_raw) - len(_raw.lstrip())
+                _rstrip = len(_raw) - len(_raw.rstrip())
                 sent_nid = graph.add_node(NodeType.SENTENCE, NodeProperties(
-                    text=sent.text.strip(), para_idx=para_idx, sent_idx=global_sent_idx,
-                    char_start=sent.start_char, char_end=sent.end_char,
+                    text=_raw.strip(), para_idx=para_idx, sent_idx=global_sent_idx,
+                    char_start=para_offset + sent.start_char + _lstrip,
+                    char_end=para_offset + sent.end_char - _rstrip,
                     source="spacy_frontend"))
                 graph.add_edge(para_nid, sent_nid, EdgeType.CONTAINS)
                 all_sent_ids.append(sent_nid)
@@ -180,8 +204,8 @@ class SpacyFrontend(BaseFrontend):
                         para_idx=para_idx,
                         sent_idx=global_sent_idx,
                         token_idx=token.i - sent.start,
-                        char_start=token.idx,
-                        char_end=token.idx + len(token.text),
+                        char_start=para_offset + token.idx,
+                        char_end=para_offset + token.idx + len(token.text),
                         source="spacy_frontend",
                     ))
                     graph.add_edge(sent_nid, tnid, EdgeType.CONTAINS)
@@ -196,8 +220,8 @@ class SpacyFrontend(BaseFrontend):
                         entity_type=ent.label_,
                         para_idx=para_idx,
                         sent_idx=global_sent_idx,
-                        char_start=ent.start_char,
-                        char_end=ent.end_char,
+                        char_start=para_offset + ent.start_char,
+                        char_end=para_offset + ent.end_char,
                         source="spacy_frontend",
                     ))
                     graph.add_edge(sent_nid, enid, EdgeType.CONTAINS)
@@ -215,6 +239,8 @@ class SpacyFrontend(BaseFrontend):
                             para_idx=para_idx,
                             sent_idx=global_sent_idx,
                             token_idx=token.i - sent.start,
+                            char_start=para_offset + token.idx,
+                            char_end=para_offset + token.idx + len(token.text),
                             source="spacy_frontend",
                         ))
                         graph.add_edge(sent_nid, pnid, EdgeType.CONTAINS)
@@ -235,6 +261,8 @@ class SpacyFrontend(BaseFrontend):
                                         para_idx=para_idx,
                                         sent_idx=global_sent_idx,
                                         token_idx=child.i - sent.start,
+                                        char_start=para_offset + child.idx,
+                                        char_end=para_offset + child.idx + len(child.text),
                                         source="spacy_frontend",
                                     ))
                                     graph.add_edge(arg_nid, para_token_map[child.i],
@@ -255,6 +283,8 @@ class SpacyFrontend(BaseFrontend):
                                 text=chunk.text,
                                 para_idx=para_idx,
                                 sent_idx=global_sent_idx,
+                                char_start=para_offset + chunk.start_char,
+                                char_end=para_offset + chunk.end_char,
                                 source="spacy_frontend",
                             ))
                             graph.add_edge(sent_nid, npnid, EdgeType.CONTAINS)
@@ -268,12 +298,14 @@ class SpacyFrontend(BaseFrontend):
                 # ═══ Step 3g: CLAUSE nodes (Joern: CONTROL_STRUCTURE) ═══
                 if self._has_parser:
                     self._extract_clauses(sent, graph, para_token_map,
-                                          para_idx, global_sent_idx, sent_nid)
+                                          para_idx, global_sent_idx, sent_nid,
+                                          para_offset)
 
                 # ═══ Step 3h: VERB_PHRASE nodes ═══
                 if self._has_parser:
                     self._extract_verb_phrases(sent, graph, para_token_map,
-                                              para_idx, global_sent_idx, sent_nid)
+                                              para_idx, global_sent_idx, sent_nid,
+                                              para_offset)
 
                 # ═══ Step 4a: DEP edges (AST equivalent) ═══
                 if self._has_parser:
@@ -341,7 +373,8 @@ class SpacyFrontend(BaseFrontend):
 
     def _extract_clauses(self, sent, graph: TextPropertyGraph,
                          token_map: Dict[int, int],
-                         para_idx: int, sent_idx: int, sent_nid: int):
+                         para_idx: int, sent_idx: int, sent_nid: int,
+                         para_offset: int = 0):
         """
         Extract CLAUSE nodes — subordinate/relative clauses.
         Joern equivalent: CONTROL_STRUCTURE nodes (if, while, for).
@@ -354,6 +387,8 @@ class SpacyFrontend(BaseFrontend):
                 clause_nid = graph.add_node(NodeType.CLAUSE, NodeProperties(
                     text=clause_text, dep_rel=token.dep_,
                     para_idx=para_idx, sent_idx=sent_idx,
+                    char_start=para_offset + min(t.idx for t in subtree_tokens),
+                    char_end=para_offset + max(t.idx + len(t.text) for t in subtree_tokens),
                     source="spacy_frontend"))
                 graph.add_edge(sent_nid, clause_nid, EdgeType.CONTAINS)
                 for t in subtree_tokens:
@@ -362,7 +397,8 @@ class SpacyFrontend(BaseFrontend):
 
     def _extract_verb_phrases(self, sent, graph: TextPropertyGraph,
                               token_map: Dict[int, int],
-                              para_idx: int, sent_idx: int, sent_nid: int):
+                              para_idx: int, sent_idx: int, sent_nid: int,
+                              para_offset: int = 0):
         """
         Extract VERB_PHRASE nodes — verb + its direct dependents.
         Joern equivalent: compound expression nodes.
@@ -378,6 +414,8 @@ class SpacyFrontend(BaseFrontend):
                 if len(vp_tokens) > 1:
                     vp_nid = graph.add_node(NodeType.VERB_PHRASE, NodeProperties(
                         text=vp_text, para_idx=para_idx, sent_idx=sent_idx,
+                        char_start=para_offset + min(t.idx for t in vp_tokens),
+                        char_end=para_offset + max(t.idx + len(t.text) for t in vp_tokens),
                         source="spacy_frontend"))
                     graph.add_edge(sent_nid, vp_nid, EdgeType.CONTAINS)
                     for t in vp_tokens:

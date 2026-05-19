@@ -79,21 +79,32 @@ class TPGPipeline:
         return self._graphson_exporter.export_string(graph)
 
     def export_pyg(self, graph: TextPropertyGraph, label: Optional[int] = None,
-                   embedding_dim: int = 0) -> dict:
-        return self._pyg_exporter.export(graph, label=label, embedding_dim=embedding_dim)
+                   embedding_dim: int = 0,
+                   use_security_edge_types: bool = False) -> dict:
+        return self._pyg_exporter.export(graph, label=label,
+                                         embedding_dim=embedding_dim,
+                                         use_security_edge_types=use_security_edge_types)
 
 
 class SecurityPipeline(TPGPipeline):
-    """Level 2 — Security-Aware TPG Pipeline."""
+    """Level 2 — Security-Aware TPG Pipeline (rule-only).
+
+    Same `include_security_relations` flag as HybridSecurityPipeline.
+    """
 
     def __init__(self, passes: Optional[List[BasePass]] = None,
-                 schema: Optional[TPGSchema] = None):
+                 schema: Optional[TPGSchema] = None,
+                 include_security_relations: bool = False):
         from tpg.frontends.security_frontend import SecurityFrontend
         super().__init__(
             frontend=SecurityFrontend(schema=schema or SECURITY_SCHEMA),
             passes=passes,
             schema=schema or SECURITY_SCHEMA,
         )
+        self.include_security_relations = include_security_relations
+        if include_security_relations:
+            from tpg.passes.security_relations import SecurityRelationsPass
+            self.passes.append(SecurityRelationsPass())
 
 
 class CrossModalPipeline(TPGPipeline):
@@ -150,14 +161,22 @@ class ModelSecurityPipeline(TPGPipeline):
 
 
 class HybridSecurityPipeline(TPGPipeline):
-    """Level 2c — Hybrid Security TPG Pipeline (Rule + Model)."""
+    """Level 2c — Hybrid Security TPG Pipeline (Rule + Model).
+
+    When `include_security_relations=True`, appends `SecurityRelationsPass` to
+    the default pass list so the graph carries first-class `SecurityEdgeType`
+    edges (SEC_AFFECTS, SEC_EXPLOITED_BY, etc.) on top of the generic
+    linguistic edges. Default is False to preserve reproducibility of the
+    prior 36+ training runs.
+    """
 
     def __init__(self, transformer_model: str = "jackaduma/SecBERT",
                  passes: Optional[List[BasePass]] = None,
                  schema: Optional[TPGSchema] = None,
                  similarity_threshold: float = 0.45,
                  device: Optional[str] = None,
-                 use_model: bool = True):
+                 use_model: bool = True,
+                 include_security_relations: bool = False):
         from tpg.frontends.hybrid_security_frontend import HybridSecurityFrontend
         super().__init__(
             frontend=HybridSecurityFrontend(
@@ -170,6 +189,12 @@ class HybridSecurityPipeline(TPGPipeline):
             passes=passes,
             schema=schema or SECURITY_SCHEMA,
         )
+        # Track for downstream code (the exporter needs to know whether to
+        # use the 23-slot edge vocabulary or stay at the base 13)
+        self.include_security_relations = include_security_relations
+        if include_security_relations:
+            from tpg.passes.security_relations import SecurityRelationsPass
+            self.passes.append(SecurityRelationsPass())
 
 
 def parse_text(text: str, doc_id: str = "") -> TextPropertyGraph:

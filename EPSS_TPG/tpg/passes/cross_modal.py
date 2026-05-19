@@ -163,6 +163,18 @@ class CrossModalPass(BasePass):
         code_elements = [e for e in entities
                          if e.properties.domain_type == "code_construct"]
 
+        # Word-boundary token match — substring `in` matches "free" inside
+        # "freelist_pop", "executable", "freed_list", which is wrong. Anchor
+        # the match to identifier boundaries.
+        def _whole_word_in(needle: str, haystack: str) -> bool:
+            if not needle:
+                return False
+            try:
+                pat = re.compile(r'(?<![A-Za-z0-9_])' + re.escape(needle) + r'(?![A-Za-z0-9_])')
+            except re.error:
+                return False
+            return pat.search(haystack) is not None
+
         for entity in code_elements:
             text = entity.properties.text.lower().rstrip("()")
 
@@ -172,7 +184,7 @@ class CrossModalPass(BasePass):
                 code = call.get("properties", {}).get("CODE", "")
                 if isinstance(code, list):
                     code = code[0].get("value", "") if code else ""
-                if text in code.lower():
+                if _whole_word_in(text, code.lower()):
                     matched_cpg = call
                     break
 
@@ -405,7 +417,18 @@ class CrossModalAligner:
                                     extra={"cpg_original_label": cpg_edge_label}
                                 ))
 
-        # Create cross-modal alignment edges
+        # Create cross-modal alignment edges — same word-boundary rule as
+        # `_align_code_elements` so short tokens like "free"/"exec" don't
+        # substring-match into "freelist_pop"/"executable".
+        def _whole_word_in(needle: str, haystack: str) -> bool:
+            if not needle:
+                return False
+            try:
+                pat = re.compile(r'(?<![A-Za-z0-9_])' + re.escape(needle) + r'(?![A-Za-z0-9_])')
+            except re.error:
+                return False
+            return pat.search(haystack) is not None
+
         # Match text CODE_ELEMENT nodes to CPG CALL/IDENTIFIER nodes
         for tpg_node in tpg.nodes():
             if tpg_node.properties.domain_type == "code_construct":
@@ -414,7 +437,7 @@ class CrossModalAligner:
                     cpg_code = cpg_vertex.get("properties", {}).get("CODE", "")
                     if isinstance(cpg_code, list):
                         cpg_code = cpg_code[0].get("value", "") if cpg_code else ""
-                    if text in cpg_code.lower():
+                    if _whole_word_in(text, cpg_code.lower()):
                         if tpg_node.id in tpg_id_map and cpg_vertex.get("id") in cpg_id_map:
                             merged.add_edge(
                                 tpg_id_map[tpg_node.id],

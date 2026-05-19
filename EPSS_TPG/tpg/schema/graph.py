@@ -14,10 +14,18 @@ TPG mirrors this exactly with Python data structures.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any, Set
+from typing import Dict, List, Optional, Tuple, Any, Set, Union
 from tpg.schema.types import (
-    NodeType, EdgeType, NodeProperties, EdgeProperties, TPGSchema, DEFAULT_SCHEMA
+    NodeType, EdgeType, SecurityEdgeType,
+    NodeProperties, EdgeProperties, TPGSchema, DEFAULT_SCHEMA
 )
+
+# Type alias used across the graph code: an edge can be tagged with either
+# the base linguistic EdgeType or the domain-specific SecurityEdgeType.
+# This union is what lets SecurityRelationsPass emit SEC_AFFECTS,
+# SEC_EXPLOITED_BY, etc. as first-class edge types instead of stuffing the
+# semantics into ENTITY_REL's `entity_rel_type` property.
+AnyEdgeType = Union[EdgeType, SecurityEdgeType]
 
 
 @dataclass
@@ -58,7 +66,7 @@ class TPGEdge:
     id: int                                 # Unique edge ID (Joern has edge IDs)
     source: int                             # Source node ID (Joern: "outV")
     target: int                             # Target node ID (Joern: "inV")
-    edge_type: EdgeType                     # Edge type (Joern: "label")
+    edge_type: "AnyEdgeType"                # EdgeType OR SecurityEdgeType (Joern: "label")
     properties: EdgeProperties              # Properties (Joern: edge properties)
 
     def __repr__(self):
@@ -92,13 +100,16 @@ class TextPropertyGraph:
         self._next_edge_id: int = 0             # Auto-increment edge ID
 
         # Indexes for fast lookup (like Joern's query indexes)
+        # _edges_by_type uses .setdefault so SecurityEdgeType values can also
+        # be used as keys without pre-registration (the enum classes are
+        # different but both are hashable).
         self._nodes_by_type: Dict[NodeType, List[int]] = {nt: [] for nt in NodeType}
-        self._edges_by_type: Dict[EdgeType, List[int]] = {et: [] for et in EdgeType}
+        self._edges_by_type: Dict[Any, List[int]] = {et: [] for et in EdgeType}
         self._outgoing: Dict[int, List[int]] = {}   # node_id -> [edge_ids]
         self._incoming: Dict[int, List[int]] = {}   # node_id -> [edge_ids]
 
-        # Duplicate edge detection
-        self._edge_set: Set[Tuple[int, int, EdgeType]] = set()
+        # Duplicate edge detection (key includes the edge type — base or security)
+        self._edge_set: Set[Tuple[int, int, Any]] = set()
 
         # Metadata
         self.metadata: Dict[str, Any] = {}
@@ -141,12 +152,16 @@ class TextPropertyGraph:
 
     # ── Edge Operations ──
 
-    def add_edge(self, source: int, target: int, edge_type: EdgeType,
+    def add_edge(self, source: int, target: int, edge_type: "AnyEdgeType",
                  properties: Optional[EdgeProperties] = None,
                  allow_duplicate: bool = False) -> int:
         """
         Add an edge to the graph. Returns the edge ID.
         Like Joern's edge creation during passes (CFG pass, DFG pass, etc.)
+
+        `edge_type` may be either the base `EdgeType` (linguistic relations)
+        or `SecurityEdgeType` (CVE-domain relations emitted by
+        SecurityRelationsPass — SEC_AFFECTS, SEC_EXPLOITED_BY, etc.).
 
         Validates that source and target nodes exist.
         Prevents duplicate edges unless allow_duplicate=True.
@@ -157,7 +172,8 @@ class TextPropertyGraph:
         if target not in self._nodes:
             raise ValueError(f"Target node {target} does not exist")
 
-        # Duplicate check
+        # Duplicate check (works for both base and security edge types since
+        # both enum classes hash distinctly)
         edge_key = (source, target, edge_type)
         if not allow_duplicate and edge_key in self._edge_set:
             # Return existing edge ID
@@ -176,7 +192,7 @@ class TextPropertyGraph:
                        edge_type=edge_type, properties=props)
 
         self._edges[edge_id] = edge
-        self._edges_by_type[edge_type].append(edge_id)
+        self._edges_by_type.setdefault(edge_type, []).append(edge_id)
         self._outgoing[source].append(edge_id)
         self._incoming[target].append(edge_id)
 
@@ -185,7 +201,7 @@ class TextPropertyGraph:
     def get_edge(self, edge_id: int) -> Optional[TPGEdge]:
         return self._edges.get(edge_id)
 
-    def edges(self, edge_type: Optional[EdgeType] = None) -> List[TPGEdge]:
+    def edges(self, edge_type: Optional[AnyEdgeType] = None) -> List[TPGEdge]:
         """
         Query edges, optionally filtered by type.
         Like Joern's edge queries.
@@ -194,11 +210,11 @@ class TextPropertyGraph:
             return list(self._edges.values())
         return [self._edges[eid] for eid in self._edges_by_type.get(edge_type, [])]
 
-    def has_edge(self, source: int, target: int, edge_type: EdgeType) -> bool:
+    def has_edge(self, source: int, target: int, edge_type: AnyEdgeType) -> bool:
         """Check if a specific edge exists."""
         return (source, target, edge_type) in self._edge_set
 
-    def neighbors(self, node_id: int, edge_type: Optional[EdgeType] = None,
+    def neighbors(self, node_id: int, edge_type: Optional[AnyEdgeType] = None,
                   direction: str = "out") -> List[Tuple[int, TPGEdge]]:
         """
         Get neighbors of a node, optionally filtered by edge type.
@@ -329,7 +345,11 @@ class TextPropertyGraph:
     def stats(self) -> Dict[str, Any]:
         """Get graph statistics. Like examining a Joern CPG's properties."""
         node_counts = {nt.name: len(ids) for nt, ids in self._nodes_by_type.items() if ids}
-        edge_counts = {et.name: len(ids) for et, ids in self._edges_by_type.items() if ids}
+        edge_counts = {
+            (f"SEC_{et.name}" if isinstance(et, SecurityEdgeType) else et.name): len(ids)
+            for et, ids in self._edges_by_type.items()
+            if ids
+        }
 
         return {
             "doc_id": self.doc_id,
