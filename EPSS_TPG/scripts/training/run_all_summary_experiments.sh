@@ -22,11 +22,12 @@
 # Common flags applied to all 20 runs:
 #   --backbone multiview --hybrid --label-mode soft --epochs 100 --no-epss-feature
 #
-# Source CSVs (the freshly LFS-pulled files, schema verified 2026-05-10):
-#   GPT      Sec4AI4Aec-EPSS-Enhanced/.../gpt_combined_summ.csv      (24,456 unique CVEs)
-#   Gemma    Sec4AI4Aec-EPSS-Enhanced/.../gemma_combined_summ.csv    (16,700 unique CVEs)
-#   Mistral  Sec4AI4Aec-EPSS-Enhanced/.../mistral_combined_summ.csv  (81,655 unique CVEs)
-#   DeepSeek Sec4AI4Aec-EPSS-Enhanced/.../deepseek_combined_summ.csv (26,943 unique CVEs)
+# Source CSVs (in the SummTPGVul sibling repo, override paths with
+# EPSS_TPG_DATA_REPO / EPSS_TPG_MEGAVUL_REPO if cloned elsewhere):
+#   Social-media: SummTPGVul/SummVul/Social_Media_Dataset/Data_Files/
+#                 {gpt,gemma,mistral,deepseek}_combined_summ.csv
+#   Megavul:      SummTPGVul/SummVul/Data_Files/megavul/
+#                 {gpt,gemma,mistral}.csv
 #
 # Usage:
 #   ./run_all_summary_experiments.sh                # all 20 runs (overwrites by default)
@@ -45,10 +46,10 @@ LOG_DIR="$ROOT/datasets_info/Summary_in_TPG_ablation/run_logs"
 mkdir -p "$LOG_DIR"
 cd "$ROOT" || { echo "FATAL: cannot cd into $ROOT"; exit 1; }
 
-# Source CSVs are in two sibling repos (main + megavul branch as a worktree).
-# Override the defaults via env vars if your repos live elsewhere.
-DATA_REPO="${EPSS_TPG_DATA_REPO:-$ROOT/../Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files}"
-MEGAVUL_REPO="${EPSS_TPG_MEGAVUL_REPO:-$ROOT/../Sec4AI4Aec-EPSS-Enhanced-megavul/Sec4AI4Sec-EPSS/Data_Files/megavul}"
+# Source CSVs live in the SummTPGVul sibling repo. Override the defaults
+# via the env vars below if your clone lives elsewhere.
+DATA_REPO="${EPSS_TPG_DATA_REPO:-$ROOT/../SummTPGVul/SummVul/Social_Media_Dataset/Data_Files}"
+MEGAVUL_REPO="${EPSS_TPG_MEGAVUL_REPO:-$ROOT/../SummTPGVul/SummVul/Data_Files/megavul}"
 
 # --- Argument parsing ---------------------------------------------------------
 

@@ -50,7 +50,7 @@ LOG_DIR="$ROOT/datasets_info/Summary_in_TPG_ablation/run_logs_social_retrain"
 mkdir -p "$LOG_DIR"
 cd "$ROOT" || { echo "FATAL: cannot cd into $ROOT"; exit 1; }
 
-DATA_REPO="${EPSS_TPG_DATA_REPO:-$ROOT/../Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files}"
+DATA_REPO="${EPSS_TPG_DATA_REPO:-$ROOT/../SummTPGVul/SummVul/Social_Media_Dataset/Data_Files}"
 
 # --- Argument parsing ---------------------------------------------------------
 

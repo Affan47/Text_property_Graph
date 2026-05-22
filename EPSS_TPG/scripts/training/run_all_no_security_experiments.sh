@@ -45,8 +45,8 @@ LOG_DIR="$ROOT/datasets_info/Security_ablation/run_logs"
 mkdir -p "$LOG_DIR"
 cd "$ROOT" || { echo "FATAL: cannot cd into $ROOT"; exit 1; }
 
-DATA_REPO="${EPSS_TPG_DATA_REPO:-$ROOT/../Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files}"
-MEGAVUL_REPO="${EPSS_TPG_MEGAVUL_REPO:-$ROOT/../Sec4AI4Aec-EPSS-Enhanced-megavul/Sec4AI4Sec-EPSS/Data_Files/megavul}"
+DATA_REPO="${EPSS_TPG_DATA_REPO:-$ROOT/../SummTPGVul/SummVul/Social_Media_Dataset/Data_Files}"
+MEGAVUL_REPO="${EPSS_TPG_MEGAVUL_REPO:-$ROOT/../SummTPGVul/SummVul/Data_Files/megavul}"
 
 # --- Argument parsing ---------------------------------------------------------
 

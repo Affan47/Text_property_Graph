@@ -215,28 +215,39 @@ EPSS_TPG/
 
 ## 3. Dataset assumptions and external repos
 
-The training scripts expect the source CSVs to live in two sibling
-repos, one directory above the project root:
+The training scripts expect the source CSVs to live in a single
+sibling repo (`SummTPGVul`) one directory above the project root:
 
 ```
-../Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/
-    ├── gpt_combined_summ.csv
-    ├── gemma_combined_summ.csv
-    ├── mistral_combined_summ.csv
-    └── deepseek_combined_summ.csv
-
-../Sec4AI4Aec-EPSS-Enhanced-megavul/Sec4AI4Sec-EPSS/Data_Files/megavul/
-    ├── gpt.csv
-    ├── gemma.csv
-    └── mistral.csv
+../SummTPGVul/
+└── SummVul/
+    ├── Social_Media_Dataset/Data_Files/
+    │   ├── gpt_combined_summ.csv
+    │   ├── gemma_combined_summ.csv
+    │   ├── mistral_combined_summ.csv
+    │   └── deepseek_combined_summ.csv
+    └── Data_Files/megavul/
+        ├── gpt.csv
+        ├── gemma.csv
+        └── mistral.csv
 ```
 
-If your repos live elsewhere, export these env vars before running
+Clone it as a sibling of `EPSS_TPG/`:
+
+```bash
+cd /home/ayounas/Text_property_Graph
+git clone https://github.com/observatio/SummTPGVul.git
+# if the CSVs are LFS-tracked:
+sudo apt install -y git-lfs && git lfs install
+cd SummTPGVul && git lfs pull
+```
+
+If your clone lives elsewhere, export these env vars before running
 any training script:
 
 ```bash
-export EPSS_TPG_DATA_REPO=/your/path/to/Data_Files
-export EPSS_TPG_MEGAVUL_REPO=/your/path/to/megavul
+export EPSS_TPG_DATA_REPO=/your/path/to/SummTPGVul/SummVul/Social_Media_Dataset/Data_Files
+export EPSS_TPG_MEGAVUL_REPO=/your/path/to/SummTPGVul/SummVul/Data_Files/megavul
 ```
 
 ---
@@ -253,7 +264,7 @@ the output directory.
 ```bash
 # minimum: source CSV in, output dir out
 python -m epss.run_pipeline \
-    --source-csv ../Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --source-csv ../SummTPGVul/SummVul/Social_Media_Dataset/Data_Files/gpt_combined_summ.csv \
     --data-dir   data/epss_gpt_v2_ALL \
     --output-dir outputs/social_media/gpt/ALL \
     --backbone multiview --hybrid --label-mode soft --epochs 100 \
@@ -499,7 +510,7 @@ Reports per-edge firing rates and per-entity counts for one labelled corpus.
 
 ```bash
 python analysis/analyze_dataset.py \
-    --csv ../Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --csv ../SummTPGVul/SummVul/Social_Media_Dataset/Data_Files/gpt_combined_summ.csv \
     --output-dir datasets_info/gpt_combined_summ
 ```
 

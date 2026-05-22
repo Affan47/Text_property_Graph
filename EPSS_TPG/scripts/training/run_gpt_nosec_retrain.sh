@@ -42,7 +42,7 @@ mkdir -p "$LOG_DIR"
 cd "$ROOT" || { echo "FATAL: cannot cd into $ROOT"; exit 1; }
 
 # Source CSVs live in a sibling repo; override with EPSS_TPG_DATA_REPO if relocated.
-DATA_REPO="${EPSS_TPG_DATA_REPO:-$ROOT/../Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files}"
+DATA_REPO="${EPSS_TPG_DATA_REPO:-$ROOT/../SummTPGVul/SummVul/Social_Media_Dataset/Data_Files}"
 SOURCE_CSV="$DATA_REPO/gpt_combined_summ.csv"
 
 # --- Argument parsing ---------------------------------------------------------
