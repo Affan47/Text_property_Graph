@@ -12,15 +12,26 @@ The new schema additionally provides three LLM summary columns:
 `summ_all_sources`, `summ_github_urls`, `summ_cvss_metrics`.
 
 Summary source selection (`--summary-source`):
-    description    : leave llm_summary empty (description-only experiments)
-    all_sources    : llm_summary <- summ_all_sources
-    github_urls    : llm_summary <- summ_github_urls
-    cvss_metrics   : llm_summary <- summ_cvss_metrics
-    combined       : llm_summary <- "{summ_all_sources}\\n\\n{summ_github_urls}\\n\\n{summ_cvss_metrics}"
-                     (joined with double newlines, empty parts skipped)
-    auto (default) : first non-empty among summ_all_sources, summ_github_urls,
-                     summ_cvss_metrics, summ_llama3.1_8b, llm_summary, summary
-                     -- the legacy fallback chain
+    description       : leave llm_summary empty (description-only experiments)
+    all_sources       : llm_summary <- summ_all_sources
+    github_urls       : llm_summary <- summ_github_urls
+    cvss_metrics      : llm_summary <- summ_cvss_metrics
+    social_media_post : llm_summary <- social_media_post   (truncated to 16 KB)
+    combined          : llm_summary <- "{summ_all_sources}\\n\\n{summ_github_urls}\\n\\n{summ_cvss_metrics}"
+                        (joined with double newlines, empty parts skipped)
+    auto (default)    : first non-empty among summ_all_sources, summ_github_urls,
+                        summ_cvss_metrics, summ_llama3.1_8b, llm_summary, summary
+                        -- the legacy fallback chain
+
+Length cap for `social_media_post`:
+    Raw social-media posts can be very long (median 442 chars but the 99th
+    percentile is 175 K characters and the maximum observed is 492 KB of
+    concatenated comma-separated posts). To keep spaCy and SecBERT
+    processing predictable, the source mode `social_media_post` truncates
+    the text to the first 16 KB by default. 16 KB covers about 94 % of
+    posts in full and amounts to roughly 2-4 K tokens — well within
+    SecBERT's per-segment budget once chunked. Override via the
+    `SOCIAL_MEDIA_POST_MAX_CHARS` environment variable if needed.
 
 Column mapping (CSV → labeled_cves.json):
     cve                                      → cve_id
@@ -70,16 +81,28 @@ SUMMARY_SOURCES = ("description",
                    "all_sources", "github_urls",
                    "commit_url", "code",
                    "cvss_metrics",
-                   "combined", "auto")
+                   "social_media_post",
+                   "combined", "combined_with_smp", "auto")
 
 # Column for each named source mode, in priority order (first existing wins)
 _SUMMARY_COL_MAP = {
-    "all_sources":  ["summ_all_sources"],
-    "github_urls":  ["summ_github_urls"],
-    "cvss_metrics": ["summ_cvss_metrics"],
-    "commit_url":   ["summ_commit_url"],
-    "code":         ["summ_before_commit"],
+    "all_sources":       ["summ_all_sources"],
+    "github_urls":       ["summ_github_urls"],
+    "cvss_metrics":      ["summ_cvss_metrics"],
+    "commit_url":        ["summ_commit_url"],
+    "code":              ["summ_before_commit"],
+    "social_media_post": ["social_media_post"],
 }
+
+# Default character cap for the raw social_media_post column. The 99th
+# percentile of post lengths is ~175 K chars, with the maximum observed at
+# 492 KB; spaCy / SecBERT process those very slowly. 16 KB covers ~94 % of
+# posts in full and stays well under spaCy's default 1 M character limit.
+# Configurable via the SOCIAL_MEDIA_POST_MAX_CHARS environment variable.
+import os as _os
+SOCIAL_MEDIA_POST_MAX_CHARS = int(
+    _os.environ.get("SOCIAL_MEDIA_POST_MAX_CHARS", "16384")
+)
 
 # Legacy fallback chain for `auto`: try in this order, take first non-empty
 _AUTO_PRIORITY = [
@@ -124,6 +147,28 @@ def _value(row: pd.Series, *cols, default=""):
     return default
 
 
+def _maybe_truncate_social_media_post(text: str) -> str:
+    """Cap raw social_media_post to SOCIAL_MEDIA_POST_MAX_CHARS characters.
+
+    The raw column contains concatenated posts joined by ' ,' that can run
+    to hundreds of KB on a few CVEs. We truncate to a single fixed budget
+    so the downstream pipeline keeps a predictable per-CVE runtime.
+    Truncation cuts on a whitespace boundary when one exists in the last
+    256 characters before the limit, otherwise mid-character (the
+    contents are byte-noisy enough that mid-cut is acceptable).
+    """
+    if len(text) <= SOCIAL_MEDIA_POST_MAX_CHARS:
+        return text
+    cut = SOCIAL_MEDIA_POST_MAX_CHARS
+    head = text[:cut]
+    # Prefer to cut at the last whitespace within the final 256 characters
+    # to avoid breaking mid-word in the common case.
+    tail_space = head.rfind(" ", max(0, cut - 256))
+    if tail_space > cut - 256:
+        head = head[:tail_space]
+    return head
+
+
 def _summary_for_row(row: pd.Series, mode: str) -> str:
     """Resolve the llm_summary text for one row given the selected mode."""
     if mode == "description":
@@ -135,12 +180,30 @@ def _summary_for_row(row: pd.Series, mode: str) -> str:
         # Works for both schemas: Sec4AI4Aec uses summ_all_sources / summ_github_urls /
         # summ_cvss_metrics; megavul uses summ_commit_url / summ_before_commit /
         # summ_cvss_metrics. Other summ_* columns are picked up automatically.
+        # Does NOT include social_media_post -- use 'combined_with_smp' for that.
         parts = []
         for col in _ALL_SUMMARY_COLS:
             v = _first_existing(row, [col])
             if v:
                 parts.append(v)
         return "\n\n".join(parts)
+    if mode == "combined_with_smp":
+        # Same as 'combined' but additionally appends the raw social_media_post
+        # column (truncated to 16 KB), so the resulting llm_summary text feeds
+        # every available LLM summary PLUS the original social-media post into
+        # the TPG. Used by the ALL_smp variant in the social-media ablation.
+        parts = []
+        for col in _ALL_SUMMARY_COLS:
+            v = _first_existing(row, [col])
+            if v:
+                parts.append(v)
+        smp = _first_existing(row, ["social_media_post"])
+        if smp:
+            parts.append(_maybe_truncate_social_media_post(smp))
+        return "\n\n".join(parts)
+    if mode == "social_media_post":
+        text = _first_existing(row, _SUMMARY_COL_MAP[mode])
+        return _maybe_truncate_social_media_post(text) if text else ""
     if mode in _SUMMARY_COL_MAP:
         return _first_existing(row, _SUMMARY_COL_MAP[mode])
     raise ValueError(f"Unknown summary mode: {mode!r}. "

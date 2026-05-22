@@ -1,0 +1,186 @@
+{
+  "labeled_cves_path": "data/epss_mistral_v2_ALL/labeled_cves.json",
+  "include_summary": true,
+  "n_cves_in_file": 9218,
+  "n_cves_scanned": 9218,
+  "n_cves_processed": 9218,
+  "n_cves_skipped": 0,
+  "n_cves_with_any_sec_edge": 8780,
+  "pct_cves_with_any_sec_edge": 95.25,
+  "total_sec_edges_in_corpus": 530290,
+  "mean_sec_edges_per_processed_cve": 57.528,
+  "max_sec_edges_in_a_single_cve": 2970,
+  "edge_type_stats": {
+    "AFFECTS": {
+      "n_cves_with_at_least_one": 3106,
+      "pct_cves_with_at_least_one": 33.69,
+      "total_edges_in_corpus": 49171,
+      "min": 0,
+      "max": 936,
+      "mean": 5.334
+    },
+    "HAS_VERSION": {
+      "n_cves_with_at_least_one": 4781,
+      "pct_cves_with_at_least_one": 51.87,
+      "total_edges_in_corpus": 106269,
+      "min": 0,
+      "max": 1804,
+      "mean": 11.528
+    },
+    "LOCATED_IN": {
+      "n_cves_with_at_least_one": 3836,
+      "pct_cves_with_at_least_one": 41.61,
+      "total_edges_in_corpus": 24897,
+      "min": 0,
+      "max": 462,
+      "mean": 2.701
+    },
+    "CLASSIFIED_AS": {
+      "n_cves_with_at_least_one": 100,
+      "pct_cves_with_at_least_one": 1.08,
+      "total_edges_in_corpus": 161,
+      "min": 0,
+      "max": 10,
+      "mean": 0.017
+    },
+    "EXPLOITED_BY": {
+      "n_cves_with_at_least_one": 3951,
+      "pct_cves_with_at_least_one": 42.86,
+      "total_edges_in_corpus": 41772,
+      "min": 0,
+      "max": 468,
+      "mean": 4.532
+    },
+    "CAUSES": {
+      "n_cves_with_at_least_one": 7682,
+      "pct_cves_with_at_least_one": 83.34,
+      "total_edges_in_corpus": 104778,
+      "min": 0,
+      "max": 952,
+      "mean": 11.367
+    },
+    "MITIGATED_BY": {
+      "n_cves_with_at_least_one": 3134,
+      "pct_cves_with_at_least_one": 34.0,
+      "total_edges_in_corpus": 18413,
+      "min": 0,
+      "max": 186,
+      "mean": 1.998
+    },
+    "USES_FUNCTION": {
+      "n_cves_with_at_least_one": 2681,
+      "pct_cves_with_at_least_one": 29.08,
+      "total_edges_in_corpus": 14801,
+      "min": 0,
+      "max": 242,
+      "mean": 1.606
+    },
+    "THREATENS": {
+      "n_cves_with_at_least_one": 6654,
+      "pct_cves_with_at_least_one": 72.18,
+      "total_edges_in_corpus": 125679,
+      "min": 0,
+      "max": 532,
+      "mean": 13.634
+    },
+    "HAS_SEVERITY": {
+      "n_cves_with_at_least_one": 3846,
+      "pct_cves_with_at_least_one": 41.72,
+      "total_edges_in_corpus": 44349,
+      "min": 0,
+      "max": 544,
+      "mean": 4.811
+    }
+  },
+  "entity_category_stats": {
+    "CVE_ID": {
+      "n_cves_with_at_least_one": 3956,
+      "pct_cves_with_at_least_one": 42.92,
+      "total_entities_in_corpus": 10041,
+      "min": 0,
+      "max": 88,
+      "mean": 1.089
+    },
+    "CWE_ID": {
+      "n_cves_with_at_least_one": 205,
+      "pct_cves_with_at_least_one": 2.22,
+      "total_entities_in_corpus": 223,
+      "min": 0,
+      "max": 4,
+      "mean": 0.024
+    },
+    "SOFTWARE": {
+      "n_cves_with_at_least_one": 6700,
+      "pct_cves_with_at_least_one": 72.68,
+      "total_entities_in_corpus": 29873,
+      "min": 0,
+      "max": 52,
+      "mean": 3.241
+    },
+    "VERSION": {
+      "n_cves_with_at_least_one": 6306,
+      "pct_cves_with_at_least_one": 68.41,
+      "total_entities_in_corpus": 20381,
+      "min": 0,
+      "max": 53,
+      "mean": 2.211
+    },
+    "CODE_ELEMENT": {
+      "n_cves_with_at_least_one": 5848,
+      "pct_cves_with_at_least_one": 63.44,
+      "total_entities_in_corpus": 11828,
+      "min": 0,
+      "max": 22,
+      "mean": 1.283
+    },
+    "ATTACK_VECTOR": {
+      "n_cves_with_at_least_one": 9147,
+      "pct_cves_with_at_least_one": 99.23,
+      "total_entities_in_corpus": 35357,
+      "min": 0,
+      "max": 28,
+      "mean": 3.836
+    },
+    "IMPACT": {
+      "n_cves_with_at_least_one": 6811,
+      "pct_cves_with_at_least_one": 73.89,
+      "total_entities_in_corpus": 16272,
+      "min": 0,
+      "max": 34,
+      "mean": 1.765
+    },
+    "VULN_TYPE": {
+      "n_cves_with_at_least_one": 5310,
+      "pct_cves_with_at_least_one": 57.6,
+      "total_entities_in_corpus": 12105,
+      "min": 0,
+      "max": 21,
+      "mean": 1.313
+    },
+    "SEVERITY": {
+      "n_cves_with_at_least_one": 8743,
+      "pct_cves_with_at_least_one": 94.85,
+      "total_entities_in_corpus": 32466,
+      "min": 0,
+      "max": 38,
+      "mean": 3.522
+    },
+    "REMEDIATION": {
+      "n_cves_with_at_least_one": 6726,
+      "pct_cves_with_at_least_one": 72.97,
+      "total_entities_in_corpus": 14410,
+      "min": 0,
+      "max": 12,
+      "mean": 1.563
+    }
+  },
+  "edges_per_cve_distribution": {
+    "0": 438,
+    "1-5": 877,
+    "6-10": 838,
+    "11-25": 1958,
+    "26-50": 2076,
+    "51-100": 1639,
+    "100+": 1392
+  }
+}

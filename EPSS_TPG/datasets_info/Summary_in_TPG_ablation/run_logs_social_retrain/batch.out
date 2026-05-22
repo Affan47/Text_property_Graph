@@ -1,0 +1,282 @@
+nohup: input ignorato
+============================================================
+SOCIAL-MEDIA RETRAIN (19 runs)
+============================================================
+  Total experiments       : 19
+    GPT / Gemma / Mistral : 5 variants each = 15 runs
+    DeepSeek              : 4 variants (no S_smp; CSV is empty for this col)
+  Variants in run order   : D, S_smp, S_git, S_cvss, ALL
+  Filter (regex)          : .
+  Dry-run mode            : false
+  Quiet mode              : true
+  Overwrite existing runs : true
+  Keep per-run pyg cache  : 0  (1 = keep, 0 = delete after test_results.json)
+  Thread settings         : OMP/MKL/OpenBLAS/NumExpr = 32
+  Tokenizer parallelism   : TOKENIZERS_PARALLELISM=true
+  CUDA allocator          : PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+  Common train flags      : --backbone multiview --hybrid --label-mode soft --epochs 100 --no-epss-feature
+  Logs directory          : /home/ayounas/Text_property_Graph/EPSS_TPG/Datasets_information/Summary_in_TPG_ablation/run_logs_social_retrain
+============================================================
+
+[OVERWRITE 1/19] gpt_v2_D - removing old output and graph cache
+
+============================================================
+[START 1/19] gpt_v2_D  @ 2026-05-20 08:54:09
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv
+    output : output/epss_gpt_v2_D
+    extra  : --summary-source description
+    disk free now : 125G
+  Batch progress: 1/19  [█·····························]  5%
+============================================================
+[DONE  1/19] gpt_v2_D  in 12m 58s
+  data-cache cleanup: data/epss_gpt_v2_D   3,3G -> 7,8M
+[OVERWRITE 2/19] gpt_v2_S_smp - removing old output and graph cache
+
+============================================================
+[START 2/19] gpt_v2_S_smp  @ 2026-05-20 09:07:08
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv
+    output : output/epss_gpt_v2_S_smp
+    extra  : --summary-only-tpg --summary-source social_media_post
+    disk free now : 125G
+  Batch progress: 2/19  [███···························]  10%   avg/run: 12m 58s   ETA: 3h 40m 26s
+============================================================
+[DONE  2/19] gpt_v2_S_smp  in 1h 9m 40s
+  data-cache cleanup: data/epss_gpt_v2_S_smp   24G -> 29M
+[OVERWRITE 3/19] gpt_v2_S_git - removing old output and graph cache
+
+============================================================
+[START 3/19] gpt_v2_S_git  @ 2026-05-20 10:16:50
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv
+    output : output/epss_gpt_v2_S_git
+    extra  : --summary-only-tpg --summary-source github_urls
+    disk free now : 125G
+  Batch progress: 3/19  [████··························]  15%   avg/run: 41m 19s   ETA: 11h 1m 4s
+============================================================
+[DONE  3/19] gpt_v2_S_git  in 8m 19s
+  data-cache cleanup: data/epss_gpt_v2_S_git   3,4G -> 11M
+[OVERWRITE 4/19] gpt_v2_S_cvss - removing old output and graph cache
+
+============================================================
+[START 4/19] gpt_v2_S_cvss  @ 2026-05-20 10:25:09
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv
+    output : output/epss_gpt_v2_S_cvss
+    extra  : --summary-only-tpg --summary-source cvss_metrics
+    disk free now : 125G
+  Batch progress: 4/19  [██████························]  21%   avg/run: 30m 19s   ETA: 7h 34m 45s
+============================================================
+[DONE  4/19] gpt_v2_S_cvss  in 14m 12s
+  data-cache cleanup: data/epss_gpt_v2_S_cvss   5,8G -> 14M
+[OVERWRITE 5/19] gpt_v2_ALL - removing old output and graph cache
+
+============================================================
+[START 5/19] gpt_v2_ALL  @ 2026-05-20 10:39:22
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv
+    output : output/epss_gpt_v2_ALL
+    extra  : --include-summary-in-tpg --summary-source combined
+    disk free now : 125G
+  Batch progress: 5/19  [███████·······················]  26%   avg/run: 26m 17s   ETA: 6h 7m 58s
+============================================================
+[DONE  5/19] gpt_v2_ALL  in 45m 8s
+  data-cache cleanup: data/epss_gpt_v2_ALL   19G -> 23M
+[OVERWRITE 6/19] gemma_v2_D - removing old output and graph cache
+
+============================================================
+[START 6/19] gemma_v2_D  @ 2026-05-20 11:24:32
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv
+    output : output/epss_gemma_v2_D
+    extra  : --summary-source description
+    disk free now : 125G
+  Batch progress: 6/19  [█████████·····················]  31%   avg/run: 30m 3s   ETA: 6h 30m 39s
+============================================================
+[DONE  6/19] gemma_v2_D  in 12m 9s
+  data-cache cleanup: data/epss_gemma_v2_D   3,3G -> 7,8M
+[OVERWRITE 7/19] gemma_v2_S_smp - removing old output and graph cache
+
+============================================================
+[START 7/19] gemma_v2_S_smp  @ 2026-05-20 11:36:42
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv
+    output : output/epss_gemma_v2_S_smp
+    extra  : --summary-only-tpg --summary-source social_media_post
+    disk free now : 125G
+  Batch progress: 7/19  [███████████···················]  36%   avg/run: 27m 4s   ETA: 5h 24m 48s
+============================================================
+[DONE  7/19] gemma_v2_S_smp  in 1h 13m 3s
+  data-cache cleanup: data/epss_gemma_v2_S_smp   24G -> 29M
+[OVERWRITE 8/19] gemma_v2_S_git - removing old output and graph cache
+
+============================================================
+[START 8/19] gemma_v2_S_git  @ 2026-05-20 12:49:47
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv
+    output : output/epss_gemma_v2_S_git
+    extra  : --summary-only-tpg --summary-source github_urls
+    disk free now : 125G
+  Batch progress: 8/19  [████████████··················]  42%   avg/run: 33m 38s   ETA: 6h 9m 58s
+============================================================
+[DONE  8/19] gemma_v2_S_git  in 3m 53s
+  data-cache cleanup: data/epss_gemma_v2_S_git   1,5G -> 9,2M
+[OVERWRITE 9/19] gemma_v2_S_cvss - removing old output and graph cache
+
+============================================================
+[START 9/19] gemma_v2_S_cvss  @ 2026-05-20 12:53:40
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv
+    output : output/epss_gemma_v2_S_cvss
+    extra  : --summary-only-tpg --summary-source cvss_metrics
+    disk free now : 125G
+  Batch progress: 9/19  [██████████████················]  47%   avg/run: 29m 55s   ETA: 4h 59m 10s
+============================================================
+[DONE  9/19] gemma_v2_S_cvss  in 11m 14s
+  data-cache cleanup: data/epss_gemma_v2_S_cvss   4,4G -> 12M
+[OVERWRITE 10/19] gemma_v2_ALL - removing old output and graph cache
+
+============================================================
+[START 10/19] gemma_v2_ALL  @ 2026-05-20 13:04:55
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv
+    output : output/epss_gemma_v2_ALL
+    extra  : --include-summary-in-tpg --summary-source combined
+    disk free now : 125G
+  Batch progress: 10/19  [███████████████···············]  52%   avg/run: 27m 50s   ETA: 4h 10m 30s
+============================================================
+[DONE  10/19] gemma_v2_ALL  in 37m 0s
+  data-cache cleanup: data/epss_gemma_v2_ALL   14G -> 19M
+[OVERWRITE 11/19] mistral_v2_D - removing old output and graph cache
+
+============================================================
+[START 11/19] mistral_v2_D  @ 2026-05-20 13:41:56
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/mistral_combined_summ.csv
+    output : output/epss_mistral_v2_D
+    extra  : --summary-source description
+    disk free now : 125G
+  Batch progress: 11/19  [█████████████████·············]  57%   avg/run: 28m 45s   ETA: 3h 50m 0s
+============================================================
+[DONE  11/19] mistral_v2_D  in 10m 29s
+  data-cache cleanup: data/epss_mistral_v2_D   3,3G -> 7,8M
+[OVERWRITE 12/19] mistral_v2_S_smp - removing old output and graph cache
+
+============================================================
+[START 12/19] mistral_v2_S_smp  @ 2026-05-20 13:52:26
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/mistral_combined_summ.csv
+    output : output/epss_mistral_v2_S_smp
+    extra  : --summary-only-tpg --summary-source social_media_post
+    disk free now : 125G
+  Batch progress: 12/19  [██████████████████············]  63%   avg/run: 27m 5s   ETA: 3h 9m 35s
+============================================================
+[DONE  12/19] mistral_v2_S_smp  in 1h 10m 59s
+  data-cache cleanup: data/epss_mistral_v2_S_smp   24G -> 29M
+[OVERWRITE 13/19] mistral_v2_S_git - removing old output and graph cache
+
+============================================================
+[START 13/19] mistral_v2_S_git  @ 2026-05-20 15:03:27
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/mistral_combined_summ.csv
+    output : output/epss_mistral_v2_S_git
+    extra  : --summary-only-tpg --summary-source github_urls
+    disk free now : 125G
+  Batch progress: 13/19  [████████████████████··········]  68%   avg/run: 30m 45s   ETA: 3h 4m 30s
+============================================================
+[DONE  13/19] mistral_v2_S_git  in 5m 13s
+  data-cache cleanup: data/epss_mistral_v2_S_git   2,1G -> 9,7M
+[OVERWRITE 14/19] mistral_v2_S_cvss - removing old output and graph cache
+
+============================================================
+[START 14/19] mistral_v2_S_cvss  @ 2026-05-20 15:08:40
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/mistral_combined_summ.csv
+    output : output/epss_mistral_v2_S_cvss
+    extra  : --summary-only-tpg --summary-source cvss_metrics
+    disk free now : 125G
+  Batch progress: 14/19  [██████████████████████········]  73%   avg/run: 28m 47s   ETA: 2h 23m 55s
+============================================================
+[DONE  14/19] mistral_v2_S_cvss  in 19m 48s
+  data-cache cleanup: data/epss_mistral_v2_S_cvss   7,9G -> 16M
+[OVERWRITE 15/19] mistral_v2_ALL - removing old output and graph cache
+
+============================================================
+[START 15/19] mistral_v2_ALL  @ 2026-05-20 15:28:29
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/mistral_combined_summ.csv
+    output : output/epss_mistral_v2_ALL
+    extra  : --include-summary-in-tpg --summary-source combined
+    disk free now : 125G
+  Batch progress: 15/19  [███████████████████████·······]  78%   avg/run: 28m 8s   ETA: 1h 52m 32s
+============================================================
+[DONE  15/19] mistral_v2_ALL  in 56m 45s
+  data-cache cleanup: data/epss_mistral_v2_ALL   20G -> 24M
+[OVERWRITE 16/19] deepseek_v2_D - removing old output and graph cache
+
+============================================================
+[START 16/19] deepseek_v2_D  @ 2026-05-20 16:25:15
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv
+    output : output/epss_deepseek_v2_D
+    extra  : --summary-source description
+    disk free now : 125G
+  Batch progress: 16/19  [█████████████████████████·····]  84%   avg/run: 30m 3s   ETA: 1h 30m 9s
+============================================================
+[DONE  16/19] deepseek_v2_D  in 10m 37s
+  data-cache cleanup: data/epss_deepseek_v2_D   3,3G -> 7,9M
+[OVERWRITE 17/19] deepseek_v2_S_git - removing old output and graph cache
+
+============================================================
+[START 17/19] deepseek_v2_S_git  @ 2026-05-20 16:35:52
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv
+    output : output/epss_deepseek_v2_S_git
+    extra  : --summary-only-tpg --summary-source github_urls
+    disk free now : 125G
+  Batch progress: 17/19  [██████████████████████████····]  89%   avg/run: 28m 50s   ETA: 57m 40s
+============================================================
+[DONE  17/19] deepseek_v2_S_git  in 2m 45s
+  data-cache cleanup: data/epss_deepseek_v2_S_git   905M -> 8,7M
+[OVERWRITE 18/19] deepseek_v2_S_cvss - removing old output and graph cache
+
+============================================================
+[START 18/19] deepseek_v2_S_cvss  @ 2026-05-20 16:38:37
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv
+    output : output/epss_deepseek_v2_S_cvss
+    extra  : --summary-only-tpg --summary-source cvss_metrics
+    disk free now : 125G
+  Batch progress: 18/19  [████████████████████████████··]  94%   avg/run: 27m 18s   ETA: 27m 18s
+============================================================
+[FAIL  18/19] deepseek_v2_S_cvss  in 3s - see /home/ayounas/Text_property_Graph/EPSS_TPG/Datasets_information/Summary_in_TPG_ablation/run_logs_social_retrain/deepseek_v2_S_cvss.log
+    --- tail of log ---
+    2026-05-20 16:38:39,237 INFO [__main__] ============================================================
+    2026-05-20 16:38:39,237 INFO [__main__] SOURCE CSV MODE: converting /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv → data/epss_deepseek_v2_S_cvss/labeled_cves.json
+    2026-05-20 16:38:39,237 INFO [__main__] ============================================================
+    2026-05-20 16:38:39,425 INFO [epss.csv_adapter] Loading /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv  (97.0 MB)
+    2026-05-20 16:38:39,901 INFO [epss.csv_adapter] Loaded 9218 rows, 27 columns
+    2026-05-20 16:38:39,901 INFO [epss.csv_adapter] Summary mode: cvss_metrics
+    2026-05-20 16:38:39,908 INFO [epss.csv_adapter] Kept 9218 / 9218 rows (dropped missing description or epss_score)
+    2026-05-20 16:38:40,447 INFO [epss.csv_adapter] Built 9218 unique CVE records  (0 skipped: empty cve_id)
+    2026-05-20 16:38:40,448 INFO [epss.csv_adapter] Label distribution: 1427 positive (15.5%), 7791 negative (84.5%)
+    2026-05-20 16:38:40,448 INFO [epss.csv_adapter] Summary coverage (cvss_metrics): 0 non-empty, 9218 empty (100.00% missing)
+    2026-05-20 16:38:40,548 INFO [epss.csv_adapter] Saved → data/epss_deepseek_v2_S_cvss/labeled_cves.json
+    2026-05-20 16:38:40,579 INFO [__main__] Loaded 9218 existing labeled CVEs
+    2026-05-20 16:38:40,579 INFO [__main__] Dataset: 9218 CVEs, 1427 exploited (15.5%)
+    2026-05-20 16:38:40,580 INFO [__main__] LLM summaries: 0 non-empty, 9218 empty (100.00% empty)
+    2026-05-20 16:38:40,580 ERROR [__main__] No non-empty llm_summary values found in data/epss_deepseek_v2_S_cvss/labeled_cves.json. Regenerate labeled_cves.json with --source-csv, or check that the CSV has a summary-like column such as summary, llm_summary, summ_all_sources, summ_llama3.1_8b, summ_github_urls, or another summ* column.
+    --- end of tail ---
+  data-cache cleanup: data/epss_deepseek_v2_S_cvss   7,9M -> 7,9M
+[OVERWRITE 19/19] deepseek_v2_ALL - removing old output and graph cache
+
+============================================================
+[START 19/19] deepseek_v2_ALL  @ 2026-05-20 16:38:40
+    source : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv
+    output : output/epss_deepseek_v2_ALL
+    extra  : --include-summary-in-tpg --summary-source combined
+    disk free now : 125G
+  Batch progress: 19/19  [██████████████████████████████]  100%   avg/run: 27m 18s   ETA: 0s
+============================================================
+[DONE  19/19] deepseek_v2_ALL  in 24m 58s
+  data-cache cleanup: data/epss_deepseek_v2_ALL   7,9G -> 13M
+
+============================================================
+BATCH COMPLETE
+============================================================
+  Total elapsed           : 8h 9m 30s
+  Experiments defined     : 19
+  Filter applied          : .
+  Ran successfully        : 18
+  Skipped (already done)  : 0
+  Skipped (missing CSV)   : 0
+  Failed                  : 1
+  Average per run         : 27m 10s
+  Disk free at end        : 125G
+============================================================
+
+Failed runs (check logs in /home/ayounas/Text_property_Graph/EPSS_TPG/Datasets_information/Summary_in_TPG_ablation/run_logs_social_retrain):
+  - deepseek_v2_S_cvss  ->  /home/ayounas/Text_property_Graph/EPSS_TPG/Datasets_information/Summary_in_TPG_ablation/run_logs_social_retrain/deepseek_v2_S_cvss.log

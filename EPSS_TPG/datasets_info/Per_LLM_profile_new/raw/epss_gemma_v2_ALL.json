@@ -1,0 +1,453 @@
+{
+  "dataset_name": "epss_gemma_v2_ALL",
+  "llm": "gemma",
+  "variant": "ALL",
+  "labeled_path": "data/epss_gemma_v2_ALL/labeled_cves.json",
+  "n_cves_in_file": 9218,
+  "n_cves_scanned": 9218,
+  "n_cves_processed": 9218,
+  "n_cves_skipped": 0,
+  "elapsed_seconds": 680.1,
+  "total_nodes_per_graph": {
+    "n": 9218,
+    "min": 112,
+    "max": 2084,
+    "mean": 441.119,
+    "median": 403,
+    "sum": 4066233,
+    "pct_nonzero": 100.0
+  },
+  "total_edges_per_graph": {
+    "n": 9218,
+    "min": 323,
+    "max": 13311,
+    "mean": 1430.584,
+    "median": 1292,
+    "sum": 13187125,
+    "pct_nonzero": 100.0
+  },
+  "nodes_by_type": {
+    "DOCUMENT": {
+      "n": 9218,
+      "min": 1,
+      "max": 1,
+      "mean": 1.0,
+      "median": 1,
+      "sum": 9218,
+      "pct_nonzero": 100.0
+    },
+    "PARAGRAPH": {
+      "n": 9218,
+      "min": 2,
+      "max": 14,
+      "mean": 3.614,
+      "median": 3,
+      "sum": 33317,
+      "pct_nonzero": 100.0
+    },
+    "SENTENCE": {
+      "n": 9218,
+      "min": 4,
+      "max": 73,
+      "mean": 14.901,
+      "median": 13,
+      "sum": 137359,
+      "pct_nonzero": 100.0
+    },
+    "TOKEN": {
+      "n": 9218,
+      "min": 64,
+      "max": 1262,
+      "mean": 249.734,
+      "median": 227,
+      "sum": 2302046,
+      "pct_nonzero": 100.0
+    },
+    "ENTITY": {
+      "n": 9218,
+      "min": 4,
+      "max": 188,
+      "mean": 27.025,
+      "median": 25,
+      "sum": 249116,
+      "pct_nonzero": 100.0
+    },
+    "PREDICATE": {
+      "n": 9218,
+      "min": 2,
+      "max": 98,
+      "mean": 23.396,
+      "median": 21,
+      "sum": 215663,
+      "pct_nonzero": 100.0
+    },
+    "ARGUMENT": {
+      "n": 9218,
+      "min": 1,
+      "max": 178,
+      "mean": 38.273,
+      "median": 35,
+      "sum": 352803,
+      "pct_nonzero": 100.0
+    },
+    "CONCEPT": {
+      "n": 9218,
+      "min": 0,
+      "max": 0,
+      "mean": 0.0,
+      "median": 0,
+      "sum": 0,
+      "pct_nonzero": 0.0
+    },
+    "NOUN_PHRASE": {
+      "n": 9218,
+      "min": 15,
+      "max": 256,
+      "mean": 56.212,
+      "median": 52,
+      "sum": 518164,
+      "pct_nonzero": 100.0
+    },
+    "VERB_PHRASE": {
+      "n": 9218,
+      "min": 0,
+      "max": 59,
+      "mean": 8.262,
+      "median": 7,
+      "sum": 76158,
+      "pct_nonzero": 99.27
+    },
+    "CLAUSE": {
+      "n": 9218,
+      "min": 0,
+      "max": 48,
+      "mean": 9.262,
+      "median": 9,
+      "sum": 85377,
+      "pct_nonzero": 99.91
+    },
+    "MENTION": {
+      "n": 9218,
+      "min": 0,
+      "max": 33,
+      "mean": 4.439,
+      "median": 4,
+      "sum": 40922,
+      "pct_nonzero": 96.16
+    },
+    "TOPIC": {
+      "n": 9218,
+      "min": 5,
+      "max": 5,
+      "mean": 5.0,
+      "median": 5,
+      "sum": 46090,
+      "pct_nonzero": 100.0
+    }
+  },
+  "edges_by_type": {
+    "DEP": {
+      "n": 9218,
+      "min": 59,
+      "max": 1198,
+      "mean": 234.833,
+      "median": 214,
+      "sum": 2164687,
+      "pct_nonzero": 100.0
+    },
+    "NEXT_TOKEN": {
+      "n": 9218,
+      "min": 63,
+      "max": 1261,
+      "mean": 248.734,
+      "median": 226,
+      "sum": 2292828,
+      "pct_nonzero": 100.0
+    },
+    "NEXT_SENT": {
+      "n": 9218,
+      "min": 3,
+      "max": 72,
+      "mean": 13.901,
+      "median": 12,
+      "sum": 128141,
+      "pct_nonzero": 100.0
+    },
+    "NEXT_PARA": {
+      "n": 9218,
+      "min": 1,
+      "max": 13,
+      "mean": 2.614,
+      "median": 2,
+      "sum": 24099,
+      "pct_nonzero": 100.0
+    },
+    "COREF": {
+      "n": 9218,
+      "min": 0,
+      "max": 92,
+      "mean": 12.583,
+      "median": 11,
+      "sum": 115994,
+      "pct_nonzero": 99.82
+    },
+    "SRL_ARG": {
+      "n": 9218,
+      "min": 2,
+      "max": 356,
+      "mean": 76.547,
+      "median": 70,
+      "sum": 705606,
+      "pct_nonzero": 100.0
+    },
+    "AMR_EDGE": {
+      "n": 9218,
+      "min": 0,
+      "max": 0,
+      "mean": 0.0,
+      "median": 0,
+      "sum": 0,
+      "pct_nonzero": 0.0
+    },
+    "RST_RELATION": {
+      "n": 9218,
+      "min": 0,
+      "max": 8,
+      "mean": 0.902,
+      "median": 1,
+      "sum": 8314,
+      "pct_nonzero": 56.52
+    },
+    "DISCOURSE": {
+      "n": 9218,
+      "min": 9,
+      "max": 170,
+      "mean": 32.03,
+      "median": 29,
+      "sum": 295252,
+      "pct_nonzero": 100.0
+    },
+    "CONTAINS": {
+      "n": 9218,
+      "min": 105,
+      "max": 1921,
+      "mean": 397.406,
+      "median": 363,
+      "sum": 3663290,
+      "pct_nonzero": 100.0
+    },
+    "BELONGS_TO": {
+      "n": 9218,
+      "min": 59,
+      "max": 1597,
+      "mean": 309.055,
+      "median": 285,
+      "sum": 2848868,
+      "pct_nonzero": 100.0
+    },
+    "ENTITY_REL": {
+      "n": 9218,
+      "min": 0,
+      "max": 6135,
+      "mean": 70.598,
+      "median": 37,
+      "sum": 650768,
+      "pct_nonzero": 99.99
+    },
+    "SIMILARITY": {
+      "n": 9218,
+      "min": 0,
+      "max": 0,
+      "mean": 0.0,
+      "median": 0,
+      "sum": 0,
+      "pct_nonzero": 0.0
+    }
+  },
+  "sec_entities_by_type": {
+    "CVE_ID": {
+      "n": 9218,
+      "min": 0,
+      "max": 19,
+      "mean": 0.726,
+      "median": 0,
+      "sum": 6696,
+      "pct_nonzero": 40.64
+    },
+    "CWE_ID": {
+      "n": 9218,
+      "min": 0,
+      "max": 2,
+      "mean": 0.018,
+      "median": 0,
+      "sum": 166,
+      "pct_nonzero": 1.77
+    },
+    "SOFTWARE": {
+      "n": 9218,
+      "min": 0,
+      "max": 26,
+      "mean": 2.737,
+      "median": 2,
+      "sum": 25230,
+      "pct_nonzero": 73.69
+    },
+    "VERSION": {
+      "n": 9218,
+      "min": 0,
+      "max": 53,
+      "mean": 1.839,
+      "median": 1,
+      "sum": 16951,
+      "pct_nonzero": 62.99
+    },
+    "CODE_ELEMENT": {
+      "n": 9218,
+      "min": 0,
+      "max": 16,
+      "mean": 0.877,
+      "median": 1,
+      "sum": 8085,
+      "pct_nonzero": 50.57
+    },
+    "ATTACK_VECTOR": {
+      "n": 9218,
+      "min": 0,
+      "max": 16,
+      "mean": 2.733,
+      "median": 2,
+      "sum": 25193,
+      "pct_nonzero": 99.86
+    },
+    "IMPACT": {
+      "n": 9218,
+      "min": 0,
+      "max": 13,
+      "mean": 1.584,
+      "median": 1,
+      "sum": 14597,
+      "pct_nonzero": 76.31
+    },
+    "VULN_TYPE": {
+      "n": 9218,
+      "min": 0,
+      "max": 10,
+      "mean": 1.028,
+      "median": 1,
+      "sum": 9473,
+      "pct_nonzero": 55.1
+    },
+    "SEVERITY": {
+      "n": 9218,
+      "min": 0,
+      "max": 13,
+      "mean": 1.766,
+      "median": 2,
+      "sum": 16283,
+      "pct_nonzero": 85.73
+    },
+    "REMEDIATION": {
+      "n": 9218,
+      "min": 0,
+      "max": 12,
+      "mean": 0.877,
+      "median": 1,
+      "sum": 8086,
+      "pct_nonzero": 53.28
+    }
+  },
+  "sec_edges_by_type": {
+    "AFFECTS": {
+      "n": 9218,
+      "min": 0,
+      "max": 240,
+      "mean": 2.844,
+      "median": 0,
+      "sum": 26220,
+      "pct_nonzero": 31.89
+    },
+    "HAS_VERSION": {
+      "n": 9218,
+      "min": 0,
+      "max": 950,
+      "mean": 7.561,
+      "median": 0,
+      "sum": 69699,
+      "pct_nonzero": 48.11
+    },
+    "LOCATED_IN": {
+      "n": 9218,
+      "min": 0,
+      "max": 63,
+      "mean": 1.418,
+      "median": 0,
+      "sum": 13069,
+      "pct_nonzero": 34.2
+    },
+    "CLASSIFIED_AS": {
+      "n": 9218,
+      "min": 0,
+      "max": 5,
+      "mean": 0.018,
+      "median": 0,
+      "sum": 163,
+      "pct_nonzero": 1.06
+    },
+    "EXPLOITED_BY": {
+      "n": 9218,
+      "min": 0,
+      "max": 81,
+      "mean": 2.093,
+      "median": 0,
+      "sum": 19293,
+      "pct_nonzero": 40.62
+    },
+    "CAUSES": {
+      "n": 9218,
+      "min": 0,
+      "max": 75,
+      "mean": 6.581,
+      "median": 4,
+      "sum": 60667,
+      "pct_nonzero": 85.78
+    },
+    "MITIGATED_BY": {
+      "n": 9218,
+      "min": 0,
+      "max": 57,
+      "mean": 0.782,
+      "median": 0,
+      "sum": 7213,
+      "pct_nonzero": 24.75
+    },
+    "USES_FUNCTION": {
+      "n": 9218,
+      "min": 0,
+      "max": 50,
+      "mean": 0.697,
+      "median": 0,
+      "sum": 6428,
+      "pct_nonzero": 22.86
+    },
+    "THREATENS": {
+      "n": 9218,
+      "min": 0,
+      "max": 208,
+      "mean": 7.995,
+      "median": 4,
+      "sum": 73702,
+      "pct_nonzero": 73.63
+    },
+    "HAS_SEVERITY": {
+      "n": 9218,
+      "min": 0,
+      "max": 76,
+      "mean": 1.391,
+      "median": 0,
+      "sum": 12824,
+      "pct_nonzero": 35.6
+    }
+  },
+  "mean_sec_entities_per_graph": 14.185,
+  "mean_sec_edges_per_graph": 31.38
+}

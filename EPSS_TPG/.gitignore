@@ -44,11 +44,19 @@ data/epss_full_train/pyg_dataset/raw/labeled_cves.json
 
 # ─── Model Checkpoints ────────────────────────────────────────────────────────
 # Retrain with: python -m epss.run_pipeline ... (see docs/ for full commands)
-output/**/best_model.pt
-output/epss/best_model.pt
+outputs/**/best_model.pt
+outputs/epss/best_model.pt
+
+# ─── Legacy / archived run outputs ────────────────────────────────────────────
+# outputs/_legacy/ holds historical exploratory runs (cross_eval, old
+# architecture sweep, no_security_ablation, etc.) preserved on disk during
+# the outputs/ reorganisation but not part of the canonical
+# social_media/megavul/nvd_kev/security_ablation tree. Kept locally for
+# reference, not tracked.
+outputs/_legacy/
 
 # ─── Run Logs ─────────────────────────────────────────────────────────────────
-output/*.log
+outputs/*.log
 *.log
 
 # ─── IDE & OS ─────────────────────────────────────────────────────────────────
@@ -71,7 +79,7 @@ docs/chatbot/
 docs/TPG_Chatbot_Technical_Report.md
 
 # LaTeX figures, diagrams and write-ups — built artefacts live elsewhere.
-EPSS_Latex/
+docs/papers/
 
 # Unit and integration tests — excluded from the artifact tree.
 tests/
@@ -81,7 +89,7 @@ install-tl-*/
 
 # Runtime logs (per-run training output).
 logs/
-Datasets_information/**/run_logs/
+datasets_info/**/run_logs/
 
 # Per-experiment graph-cache directories that the pipeline regenerates.
 # These can grow to hundreds of GB; reviewers rebuild them from the
@@ -91,20 +99,20 @@ data/no_security_ablation/
 
 # Per-experiment per-CVE prediction CSVs and training history JSONs —
 # heavy intermediate artefacts; only the small test_results.json
-# summaries are kept in output/.
-output/**/predictions_*.csv
-output/**/predictions_val.csv
-output/**/training_history.json
-output/**/*.png
+# summaries are kept in outputs/.
+outputs/**/predictions_*.csv
+outputs/**/predictions_val.csv
+outputs/**/training_history.json
+outputs/**/*.png
 
 # The no-security ablation is the headline comparison reported in
-# the EPSS-TPG paper, so we include the whole output/no_security_ablation/
+# the EPSS-TPG paper, so we include the whole outputs/no_security_ablation/
 # tree (best_model.pt, predictions, training history, summaries) and
 # undo the broader exclusions above just for this subtree.
-!output/no_security_ablation/
-!output/no_security_ablation/**
-!output/no_security_ablation/**/best_model.pt
-!output/no_security_ablation/**/predictions_*.csv
-!output/no_security_ablation/**/predictions_val.csv
-!output/no_security_ablation/**/training_history.json
-!output/no_security_ablation/**/*.png
+!outputs/no_security_ablation/
+!outputs/no_security_ablation/**
+!outputs/no_security_ablation/**/best_model.pt
+!outputs/no_security_ablation/**/predictions_*.csv
+!outputs/no_security_ablation/**/predictions_val.csv
+!outputs/no_security_ablation/**/training_history.json
+!outputs/no_security_ablation/**/*.png

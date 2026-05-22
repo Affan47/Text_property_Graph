@@ -111,14 +111,16 @@ def main():
                                  "all_sources", "github_urls",
                                  "commit_url", "code",
                                  "cvss_metrics",
-                                 "combined", "auto"),
+                                 "social_media_post",
+                                 "combined", "combined_with_smp", "auto"),
                         default="auto",
                         help=(
                             "Which summary column populates llm_summary when "
                             "reading a Sec4AI4Aec or megavul CSV. "
                             "'description' = empty (description-only experiments). "
                             "Sec4AI4Aec social-CSV columns: "
-                            "'all_sources', 'github_urls'. "
+                            "'all_sources', 'github_urls', 'social_media_post' "
+                            "(raw post text, truncated to 16 KB). "
                             "Megavul commit-CSV columns: 'commit_url' "
                             "(maps to summ_commit_url), 'code' "
                             "(maps to summ_before_commit). "
