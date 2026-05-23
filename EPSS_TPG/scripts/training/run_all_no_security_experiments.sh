@@ -128,7 +128,6 @@ declare -A DATASET_CSV
 DATASET_CSV["gpt"]="$DATA_REPO/gpt_combined_summ.csv"
 DATASET_CSV["gemma"]="$DATA_REPO/gemma_combined_summ.csv"
 DATASET_CSV["mistral"]="$DATA_REPO/mistral_combined_summ.csv"
-DATASET_CSV["deepseek"]="$DATA_REPO/deepseek_combined_summ.csv"
 
 declare -A VARIANT_FLAGS
 VARIANT_FLAGS["D"]="--summary-source description"
@@ -152,10 +151,11 @@ MEGAVUL_VARIANT_FLAGS["ALL"]="--include-summary-in-tpg --summary-source combined
 # Each experiment is: run_id | mode (csv|labeled) | source_path | data_dir | output_dir | extra_flags
 EXPERIMENTS=()
 
-# Block 1: Sec4AI4Aec social-media datasets (4 x 5 = 20 runs)
+# Block 1: Sec4AI4Aec social-media datasets (3 x 5 = 15 runs)
 # Output goes under outputs/security_ablation/social_media/<llm>/<variant>/
 # so it sits beside the canonical outputs/social_media/<llm>/<variant>/ tree.
-for ds in gpt gemma mistral deepseek; do
+# DeepSeek was excluded from the baseline.
+for ds in gpt gemma mistral; do
     for variant in D S_all S_git S_cvss ALL; do
         run_id="${ds}_v2_${variant}"
         csv="${DATASET_CSV[$ds]}"

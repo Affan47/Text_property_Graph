@@ -3,8 +3,8 @@
 # run_all_summary_experiments.sh — 5-variant text-source ablation
 # ============================================================================
 # This batch trains the EPSS-TPG GNN under five mutually-exclusive text-source
-# configurations on each of the four updated Sec4AI4Aec datasets (GPT, Gemma,
-# Mistral, DeepSeek). Mistral is new in this iteration; GPT and Gemma have
+# configurations on each of the three updated Sec4AI4Aec datasets (GPT, Gemma,
+# Mistral). Mistral is new in this iteration; GPT and Gemma have
 # been re-fetched against the new schema (date_posted/time_posted,
 # social_media_post, occurrence_count, github_links_with_code_available,
 # days_since_*_git_source) and now expose three LLM-summary columns:
@@ -17,7 +17,7 @@
 #   S_cvss  summ_cvss_metrics only            (--summary-only-tpg --summary-source cvss_metrics)
 #   ALL     description + 3 summaries combined (--include-summary-in-tpg --summary-source combined)
 #
-# Datasets × variants = 4 × 5 = 20 runs.
+# Datasets × variants = 3 × 5 = 15 runs (DeepSeek excluded).
 #
 # Common flags applied to all 20 runs:
 #   --backbone multiview --hybrid --label-mode soft --epochs 100 --no-epss-feature
@@ -25,7 +25,7 @@
 # Source CSVs (in the SummTPGVul sibling repo, override paths with
 # EPSS_TPG_DATA_REPO / EPSS_TPG_MEGAVUL_REPO if cloned elsewhere):
 #   Social-media: SummTPGVul/SummVul/Social_Media_Dataset/Data_Files/
-#                 {gpt,gemma,mistral,deepseek}_combined_summ.csv
+#                 {gpt,gemma,mistral}_combined_summ.csv
 #   Megavul:      SummTPGVul/SummVul/Data_Files/megavul/
 #                 {gpt,gemma,mistral}.csv
 #
@@ -113,7 +113,6 @@ declare -A DATASET_CSV
 DATASET_CSV["gpt"]="$DATA_REPO/gpt_combined_summ.csv"
 DATASET_CSV["gemma"]="$DATA_REPO/gemma_combined_summ.csv"
 DATASET_CSV["mistral"]="$DATA_REPO/mistral_combined_summ.csv"
-DATASET_CSV["deepseek"]="$DATA_REPO/deepseek_combined_summ.csv"
 
 # Variant flags for the Sec4AI4Aec datasets. 'D' = description only.
 # Summary-only variants set --summary-only-tpg AND --summary-source <col>.
@@ -145,13 +144,12 @@ MEGAVUL_VARIANT_FLAGS["ALL"]="--include-summary-in-tpg --summary-source combined
 # Build the experiment list (datasets × variants in a fixed order)
 EXPERIMENTS=()
 
-# Block 1: Sec4AI4Aec social-media datasets (4 × 5 = 20 runs) plus the
-# S_smp (social_media_post) variant for the three LLMs whose CSVs carry
-# non-empty post text (gpt, gemma, mistral). DeepSeek's CSV ships with
-# social_media_post empty for every row, so the S_smp variant is skipped
-# there. This block therefore produces 4×5 + 3 = 23 runs.
-for ds in gpt gemma mistral deepseek; do
-    for variant in D S_all S_git S_cvss ALL; do
+# Block 1: Sec4AI4Aec social-media datasets (3 × 6 = 18 runs).
+# Each LLM (gpt, gemma, mistral) is trained on the five standard variants
+# plus the S_smp (social_media_post) variant for a total of six variants.
+# DeepSeek was excluded from the baseline.
+for ds in gpt gemma mistral; do
+    for variant in D S_all S_git S_cvss ALL S_smp; do
         run_id="${ds}_${variant}"
         csv="${DATASET_CSV[$ds]}"
         data_dir="data/epss_${ds}_v2_${variant}"
@@ -159,15 +157,6 @@ for ds in gpt gemma mistral deepseek; do
         extra_flags="${VARIANT_FLAGS[$variant]}"
         EXPERIMENTS+=("${run_id}|${csv}|${data_dir}|${output_dir}|${extra_flags}")
     done
-    if [[ "$ds" != "deepseek" ]]; then
-        variant="S_smp"
-        run_id="${ds}_${variant}"
-        csv="${DATASET_CSV[$ds]}"
-        data_dir="data/epss_${ds}_v2_${variant}"
-        output_dir="outputs/social_media/${ds}/${variant}"
-        extra_flags="${VARIANT_FLAGS[$variant]}"
-        EXPERIMENTS+=("${run_id}|${csv}|${data_dir}|${output_dir}|${extra_flags}")
-    fi
 done
 
 # Block 2: Megavul commit-based datasets (3 × 5 = 15 runs)
@@ -199,9 +188,9 @@ BATCH_START=$(date +%s)
 # --- Pre-flight banner --------------------------------------------------------
 
 echo "============================================================"
-echo "Text-source ablation: Sec4AI4Aec + megavul (35-run matrix)"
+echo "Text-source ablation: Sec4AI4Aec + megavul (33-run matrix)"
 echo "============================================================"
-echo "  Total experiments:         $TOTAL  (4 social + 3 megavul = 7 datasets × 5 variants)"
+echo "  Total experiments:         $TOTAL  (3 social × 6 variants + 3 megavul × 5 variants = 33)"
 echo "  Filter (regex):            $FILTER"
 echo "  Dry-run mode:              $DRY_RUN"
 echo "  Quiet mode:                $QUIET"

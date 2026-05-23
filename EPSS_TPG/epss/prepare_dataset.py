@@ -2,7 +2,7 @@
 Prepare External CSV → EPSS-GNN Pipeline-Ready CSV
 ===================================================
 Generic adapter for any incoming Sec4AI4Aec-style CSV (canonical, gpt_combined,
-gemma_combined, llama_combined, deepseek_combined, …).
+gemma_combined, llama_combined, mistral_combined, …).
 
 For every incoming dataset this script:
     1. Profiles the CSV  → schema, dtypes, missing values, EPSS distribution,
@@ -79,7 +79,7 @@ COLUMN_RENAMES: Dict[str, str] = {
     "llm_summary":      "summary",
     "gpt_summary":      "summary",
     "gemma_summary":    "summary",
-    "deepseek_summary": "summary",
+    "mistral_summary":  "summary",
 }
 
 

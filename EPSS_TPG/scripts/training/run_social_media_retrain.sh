@@ -2,7 +2,7 @@
 # ============================================================================
 # run_social_media_retrain.sh
 # ============================================================================
-# Retrains 5 variants per LLM on the 4 Sec4AI4Aec social-media CSVs.
+# Retrains 5 variants per LLM on the 3 Sec4AI4Aec social-media CSVs.
 #
 # Variants (in run order, per LLM):
 #   D      description only
@@ -12,8 +12,7 @@
 #   ALL    description + summ_all_sources + summ_github_urls + summ_cvss_metrics
 #          (existing combined mode, no social_media_post)
 #
-# DeepSeek's CSV ships with social_media_post empty for every row, so S_smp
-# is gated to only GPT / Gemma / Mistral. Total: 5 x 3 + 4 x 1 = 19 runs.
+# Total: 5 variants x 3 LLMs = 15 runs (DeepSeek excluded from the baseline).
 #
 # Hardware-aware: exports OMP/MKL/numexpr/tokenizer thread settings so the
 # spaCy + SecBERT path uses the 80-core CPU and the 32 GB GPU effectively.
@@ -27,7 +26,7 @@
 #
 # Usage
 # -----
-#   ./run_social_media_retrain.sh                            # all 19 runs, overwrite
+#   ./run_social_media_retrain.sh                            # all 15 runs, overwrite
 #   ./run_social_media_retrain.sh gpt                        # just GPT (5 runs)
 #   ./run_social_media_retrain.sh 'gemma|mistral'            # gemma + mistral (10 runs)
 #   ./run_social_media_retrain.sh --dry-run                  # preview only
@@ -153,7 +152,6 @@ declare -A DATASET_CSV
 DATASET_CSV["gpt"]="$DATA_REPO/gpt_combined_summ.csv"
 DATASET_CSV["gemma"]="$DATA_REPO/gemma_combined_summ.csv"
 DATASET_CSV["mistral"]="$DATA_REPO/mistral_combined_summ.csv"
-DATASET_CSV["deepseek"]="$DATA_REPO/deepseek_combined_summ.csv"
 
 declare -A VARIANT_FLAGS
 VARIANT_FLAGS["D"]="--summary-source description"
@@ -162,19 +160,12 @@ VARIANT_FLAGS["S_git"]="--summary-only-tpg --summary-source github_urls"
 VARIANT_FLAGS["S_cvss"]="--summary-only-tpg --summary-source cvss_metrics"
 VARIANT_FLAGS["ALL"]="--include-summary-in-tpg --summary-source combined"
 
-# Variants available for every LLM (in run order). S_smp is gated below
-# because DeepSeek's CSV ships with social_media_post empty for every row.
-ALL_VARIANTS=(D S_smp S_git S_cvss ALL)
-NO_SMP_VARIANTS=(D S_git S_cvss ALL)
+# Variants run for every LLM (in run order).
+VARIANTS=(D S_smp S_git S_cvss ALL)
 
 EXPERIMENTS=()
-for ds in gpt gemma mistral deepseek; do
-    if [[ "$ds" == "deepseek" ]]; then
-        variants=("${NO_SMP_VARIANTS[@]}")
-    else
-        variants=("${ALL_VARIANTS[@]}")
-    fi
-    for variant in "${variants[@]}"; do
+for ds in gpt gemma mistral; do
+    for variant in "${VARIANTS[@]}"; do
         run_id="${ds}_v2_${variant}"
         csv="${DATASET_CSV[$ds]}"
         data_dir="data/epss_${ds}_v2_${variant}"
@@ -203,7 +194,6 @@ echo "SOCIAL-MEDIA RETRAIN ($TOTAL runs)"
 echo "============================================================"
 echo "  Total experiments       : $TOTAL"
 echo "    GPT / Gemma / Mistral : 5 variants each = 15 runs"
-echo "    DeepSeek              : 4 variants (no S_smp; CSV is empty for this col)"
 echo "  Variants in run order   : D, S_smp, S_git, S_cvss, ALL"
 echo "  Filter (regex)          : $FILTER"
 echo "  Dry-run mode            : $DRY_RUN"

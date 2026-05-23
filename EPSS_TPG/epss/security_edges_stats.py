@@ -32,8 +32,8 @@ Usage
         --include-summary \\
         --output Datasets_information/Summary_in_TPG_ablation/security_edges_stats.json
 
-    # Compare across the 4 LLM-summarizer datasets
-    for d in gpt_combined gemma_combined llama deepseek; do
+    # Compare across the LLM-summarizer datasets
+    for d in gpt_combined gemma_combined llama; do
         python -m epss.security_edges_stats \\
             --labeled-cves data/epss_${d}/labeled_cves.json \\
             --include-summary \\

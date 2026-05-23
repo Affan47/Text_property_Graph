@@ -9,7 +9,6 @@
 # Output layout:
 #   inference_results/
 #   ├── social_media/
-#   │   ├── deepseek/{D,S_all,S_git,ALL}/
 #   │   ├── gemma/{D,S_all,S_git,S_cvss,ALL}/
 #   │   ├── gpt/{D,S_all,S_git,S_cvss,ALL}/
 #   │   └── mistral/{D,S_all,S_git,S_cvss,ALL}/

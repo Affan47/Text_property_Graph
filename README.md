@@ -50,7 +50,7 @@ the model code stays small.
 
 | Submodule | Holds |
 |---|---|
-| `SummTPGVul` | Both dataset families under one tree. Social-media CSVs (GPT, Gemma, Mistral, DeepSeek LLM summaries per CVE) under `SummVul/Social_Media_Dataset/Data_Files/`. Megavul commit-based CSVs (GPT, Gemma, Mistral) under `SummVul/Data_Files/megavul/`. |
+| `SummTPGVul` | Both dataset families under one tree. Social-media CSVs (GPT, Gemma, Mistral LLM summaries per CVE) under `SummVul/Social_Media_Dataset/Data_Files/`. Megavul commit-based CSVs (GPT, Gemma, Mistral) under `SummVul/Data_Files/megavul/`. The submodule ships a DeepSeek CSV too, but it is not used by the baseline. |
 
 To clone the full artifact with the dataset submodule:
 
@@ -78,9 +78,10 @@ cd SummTPGVul && git lfs pull && cd ..
 
 Three classes of run are scripted:
 
-1. **Social-media ablation (15 runs):** four LLMs (GPT, Gemma,
+1. **Social-media ablation (15 runs):** three LLMs (GPT, Gemma,
    Mistral) crossed with five text-source variants
-   (`D`, `SMP`, `S_git`, `S_cvss`, `ALL`). 
+   (`D`, `SMP`, `S_git`, `S_cvss`, `ALL`), for a total of
+   `3 × 5 = 15` runs. DeepSeek is intentionally excluded.
 2. **Megavul ablation (15 runs):** three LLMs (GPT, Gemma, Mistral)
    crossed with five variants (`D`, `S_url`, `S_code`, `S_cvss`,
    `ALL`), for a total of `3 × 5 = 15` runs.

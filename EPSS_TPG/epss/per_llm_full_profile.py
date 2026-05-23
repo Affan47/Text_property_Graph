@@ -113,7 +113,7 @@ SECURITY_EDGE_TYPES = [
 
 # ─── Dataset enumeration ──────────────────────────────────────────────────────
 
-SOCIAL_LLMS = ["gpt", "gemma", "mistral"]   # DeepSeek dropped (see §8 of the rationale)
+SOCIAL_LLMS = ["gpt", "gemma", "mistral"]   # DeepSeek excluded from the baseline
 SOCIAL_VARIANTS = ["D", "S_smp", "S_git", "S_cvss", "ALL"]
 
 

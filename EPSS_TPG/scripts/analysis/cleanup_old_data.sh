@@ -18,8 +18,8 @@
 #   2. The 32 `data/epss_*_summ_noepss_[A-H]/` dirs — production-honest but
 #      run on per-ablation CSVs we no longer use.
 #
-#   3. The 32 `data/epss_*_combined_<flag>/` and `data/epss_<llama|deepseek>_<flag>/`
-#      old per-ablation prepared-CSV dirs (--dedupe / --filter-original-epss /
+#   3. The old `data/epss_*_combined_<flag>/` and `data/epss_llama_<flag>/`
+#      per-ablation prepared-CSV dirs (--dedupe / --filter-original-epss /
 #      --drop-tabular-leaks / etc.) — replaced by the single baseline CSV.
 #
 #   4. Old experimental training dirs not part of the current investigation
@@ -27,8 +27,8 @@
 #      epss_balanced, etc.).
 #
 # It KEEPS:
-#   - data/epss_gpt_combined, epss_gemma_combined, epss_llama, epss_deepseek
-#     (the 4 baseline prepared CSVs the new script reads as input)
+#   - data/epss_gpt_combined, epss_gemma_combined, epss_llama
+#     (the baseline prepared CSVs the new script reads as input)
 #   - data/epss_gpt_tpg_T1..T7 (TPG-only ablation analysis data)
 #   - data/epss_gpt_cvss_CV1..CV4 (CVSS ablation analysis data)
 #   - data/epss, data/epss_sec4ai, data/epss_sec4ai_noleak (older but small)
@@ -64,7 +64,7 @@ done
 DELETE_LIST=()
 
 # 1. EPSS-leaky summ variants (32 dirs)
-for ds in gpt gemma llama deepseek; do
+for ds in gpt gemma llama; do
     for letter in A B C D E F G H; do
         p="data/epss_${ds}_summ_${letter}"
         [[ -d "$p" ]] && DELETE_LIST+=("EPSS-leaky|${p}|saturated 0.99 from EPSS-feature leak")
@@ -73,7 +73,7 @@ done
 
 # 2. S_NE per-ablation variants (32 dirs — covers ALL letters incl _A)
 #    The simplified script replaces these with fresh epss_<ds>_clean_B_S/ dirs.
-for ds in gpt gemma llama deepseek; do
+for ds in gpt gemma llama; do
     for letter in A B C D E F G H; do
         p="data/epss_${ds}_summ_noepss_${letter}"
         [[ -d "$p" ]] && DELETE_LIST+=("S_NE-old|${p}|production-honest but on per-ablation CSV (replaced by epss_${ds}_clean_B_S)")
@@ -81,7 +81,7 @@ for ds in gpt gemma llama deepseek; do
 done
 
 # 3. Per-ablation prepared-CSV dirs (the source CSVs for the deleted runs above)
-for ds_pattern in epss_gpt_combined epss_gemma_combined epss_llama epss_deepseek; do
+for ds_pattern in epss_gpt_combined epss_gemma_combined epss_llama; do
     for flag in dedup dedup_dedup dedup_nosumm nosumm notabl origonly origonly_notabl max_clean; do
         p="data/${ds_pattern}_${flag}"
         [[ -d "$p" ]] && DELETE_LIST+=("ablation-CSV|${p}|per-ablation prepared CSV — no longer needed by simplified script")

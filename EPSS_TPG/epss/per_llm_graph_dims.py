@@ -51,8 +51,8 @@ BASE_EDGE_TYPES = [
     "CONTAINS", "BELONGS_TO", "ENTITY_REL", "SIMILARITY",
 ]
 
-# Social-media datasets: 4 LLMs x 5 variants
-SOCIAL_LLMS = ["gpt", "gemma", "mistral", "deepseek"]
+# Social-media datasets: 3 LLMs x 5 variants (DeepSeek excluded)
+SOCIAL_LLMS = ["gpt", "gemma", "mistral"]
 SOCIAL_VARIANTS = ["D", "S_all", "S_git", "S_cvss", "ALL"]
 # Megavul datasets: 3 LLMs x 5 variants
 MEGAVUL_LLMS = ["gpt", "gemma", "mistral"]

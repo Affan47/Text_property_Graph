@@ -131,8 +131,7 @@ The layout the scripts expect under the submodule is:
 ├── Social_Media_Dataset/Data_Files/
 │   ├── gpt_combined_summ.csv
 │   ├── gemma_combined_summ.csv
-│   ├── mistral_combined_summ.csv
-│   └── deepseek_combined_summ.csv
+│   └── mistral_combined_summ.csv
 └── Data_Files/megavul/
     ├── gpt.csv
     ├── gemma.csv
@@ -184,13 +183,12 @@ one is idempotent (rerun with `--no-overwrite` to skip completed runs),
 supports `--dry-run` for previewing without executing, and accepts a
 regex filter as a positional argument to subset the run list.
 
-`run_social_media_retrain.sh` is the 19-run social-media baseline that the
-paper reports on — GPT, Gemma, Mistral and DeepSeek crossed with the five
-text-source variants, with the DeepSeek block skipping the SMP variant
-because its CSV ships with the social-media-post column empty.
+`run_social_media_retrain.sh` is the 15-run social-media baseline that the
+paper reports on — GPT, Gemma and Mistral crossed with the five
+text-source variants (`D`, `SMP`, `S_git`, `S_cvss`, `ALL`).
 
 ```bash
-scripts/training/run_social_media_retrain.sh                  # all 19 runs
+scripts/training/run_social_media_retrain.sh                  # all 15 runs
 scripts/training/run_social_media_retrain.sh gpt              # GPT block only
 scripts/training/run_social_media_retrain.sh 'gemma|mistral'  # two LLMs
 scripts/training/run_social_media_retrain.sh --threads 16     # cap OMP threads
