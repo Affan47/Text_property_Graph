@@ -1,268 +1,166 @@
-# EPSS-TPG: CVE Exploitation Prediction with Text Property Graphs
+# EPSS-TPG
 
-A graph neural network that predicts whether a CVE will be exploited
-in the wild, from the CVE's text description plus structured
-vulnerability metadata. Each CVE is converted into a Text Property
-Graph (TPG) that captures syntactic, sequential, semantic, discourse,
-and security relations; a multi-view GGNN reads that graph; an
-optional tabular branch reads the CVSS, CWE, age and exploit
-availability fields; a small head produces the predicted exploitation
-probability.
+This is the code for an experiment that asks a simple question: can a graph
+neural network read a CVE's text description, combine it with the usual
+vulnerability metadata, and predict whether the CVE will be exploited in the
+wild?
 
-This README covers the **practical use** of the code: the directory
-layout, the dataset assumptions, and the exact command line for every
-script in the repository (training, inference, dataset analysis).
-The underlying methodology and the empirical evidence are written up
-under [docs/papers/](docs/papers/) (LaTeX) and [docs/](docs/) (Markdown).
+The short answer is "yes, and the gap between the GNN and the standard EPSS
+score is real". The longer answer lives in the methodology write-ups under
+[docs/](docs/), but this README is purely about getting your hands on the code
+and running it. It walks through what the project contains, where to put the
+source data, and the exact command line for every script that ships in this
+tree.
 
-> Every command in this README is given relative to the project root
-> and resolves its own paths from `${BASH_SOURCE[0]}`. You can invoke
-> any shell script from any working directory.
+Every shell script in here resolves its own paths from `BASH_SOURCE`, so you
+can run them from anywhere. Python is invoked as `python -m epss.X` or
+`python <script_path>.py` and works the same way from any cwd as long as the
+project root is on `PYTHONPATH` (which it is automatically if you run from the
+root or call `python -m`).
 
----
+## What you need
 
-## Contents
+Python 3.10 or newer, PyTorch 2.x (CUDA build if you have a GPU), and
+PyTorch Geometric 2.5+. On top of that, the TPG construction needs spaCy
+with an English model (`python -m spacy download en_core_web_sm`) and the
+Hugging Face Transformers library to load SecBERT (`jackaduma/SecBERT`).
+Everything else (numpy, pandas, scikit-learn, tqdm) is standard.
 
-1. [Prerequisites](#1-prerequisites)
-2. [Repository layout](#2-repository-layout)
-3. [Dataset assumptions and external repos](#3-dataset-assumptions-and-external-repos)
-4. [Training scripts](#4-training-scripts)
-5. [Inference-only scripts](#5-inference-only-scripts)
-6. [Dataset analysis and statistics scripts](#6-dataset-analysis-and-statistics-scripts)
-7. [Maintenance scripts](#7-maintenance-scripts)
-8. [Where results and artefacts live](#8-where-results-and-artefacts-live)
-9. [Reproducing the paper](#9-reproducing-the-paper)
-
----
-
-## 1. Prerequisites
-
-- Python 3.10 or newer
-- PyTorch 2.x (CUDA build recommended; CPU works but is 5--10x slower)
-- PyTorch Geometric 2.5+
-- spaCy + an English model: `python -m spacy download en_core_web_sm`
-- Hugging Face Transformers (for SecBERT, `jackaduma/SecBERT`)
-- Standard scientific Python: numpy, pandas, scikit-learn, tqdm
-
-Quick CUDA check:
+Quick sanity check:
 
 ```bash
-python -c "import torch; print('cuda available:', torch.cuda.is_available()); print('torch:', torch.__version__)"
+python -c "import torch; print('cuda available:', torch.cuda.is_available())"
 ```
 
-If `cuda available: False`, install a CUDA-enabled wheel from the
-PyTorch website. Every script in this README falls back to CPU
-automatically when CUDA is not available.
+If it prints `False`, the code will still run on CPU — just five to ten times
+slower for training. Inference is fine on CPU.
 
----
-
-## 2. Repository layout
+## How the project is laid out
 
 ```
 EPSS_TPG/
 │
-├── epss/                         # Main Python package (training + model + dataset)
-│   ├── run_pipeline.py           # Train a single configuration end-to-end
-│   ├── train.py                  # Trainer class (loss, eval, checkpointing)
-│   ├── test_only.py              # Run test on a saved checkpoint (no train)
-│   ├── infer.py                  # Score CVEs by ID, range, or recent days
-│   ├── cve_dataset.py            # PyG dataset (one graph per CVE)
-│   ├── gnn_model.py              # Model factory
-│   ├── edge_aware_layers.py      # Multi-view GGNN encoder + attention fusion
-│   ├── tabular_features.py       # CVSS/CWE/age/exploit feature builder
-│   ├── csv_adapter.py            # Convert source CSVs to labelled records
-│   ├── data_collector.py         # NVD + KEV + EPSS + ExploitDB downloader
-│   ├── prepare_dataset.py        # Generic CSV → labelled-records adapter
-│   ├── make_temporal_splits.py   # Create explicit temporal train/test splits
-│   ├── visualize.py              # Save predictions CSVs and plots
-│   ├── threshold_analysis.py     # Recompute metrics at multiple thresholds
-│   ├── backfill_val_predictions.py  # Rebuild predictions_val.csv for old runs
-│   ├── cross_distribution_eval.py   # Evaluate on a held-out labelled corpus
-│   ├── per_llm_full_profile.py   # Per-LLM graph + security overlay profile
-│   ├── per_llm_graph_dims.py     # Per-LLM mean/median graph size
-│   └── security_edges_stats.py   # SEC_* edge firing-rate statistics
+├── epss/            Main Python package. Training, dataset construction,
+│                    the GNN itself, the inference entry points, and the
+│                    profiling utilities live here. Everything is importable
+│                    as epss.X or runnable as python -m epss.X.
 │
-├── tpg/                          # Text Property Graph backend
-│   ├── pipeline.py               # spaCy + SecBERT TPG construction
-│   ├── schema/                   # Node and edge type schema
-│   ├── frontends/                # spaCy / security / hybrid frontends
-│   ├── passes/                   # Security pass + cross-modal pass
-│   └── exporters/                # PyG tensor export
+├── tpg/             The Text Property Graph backend. Builds the per-CVE
+│                    graph with a spaCy frontend and a hybrid SecBERT +
+│                    rule-based security overlay, then exports it as a
+│                    PyG tensor for the GNN to consume.
 │
-├── analysis/                     # Top-level dataset-analysis Python scripts
-│   ├── analyze_dataset.py        # Full schema + statistical profile of a CSV
-│   ├── generate_visualizations.py  # Re-generate plots for a saved checkpoint
-│   └── verify_features.py        # Cross-check labelled-record dtypes
+├── analysis/        Stand-alone analysis scripts (CSV profiling, feature
+│                    verification, plot generation for an existing
+│                    checkpoint). Run as python analysis/<name>.py.
 │
-├── inference/                    # Top-level inference-only Python scripts
-│   └── infer.py                  # CLI for scoring new / specific CVEs from NVD
+├── inference/       Stand-alone CLI for scoring CVEs you fetch live from
+│                    NVD, with five different modes (by ID, by file of IDs,
+│                    by date range, by recent days, or temporal evaluation
+│                    against ground truth).
 │
-├── scripts/                      # All batch (.sh) entry points
-│   ├── training/                 # End-to-end training batches
-│   │   ├── run_social_media_retrain.sh         # 19-run social-media matrix
-│   │   ├── run_gpt_nosec_retrain.sh            # 5 GPT NOSEC runs
-│   │   ├── run_all_summary_experiments.sh      # 38-run full ablation
-│   │   └── run_all_no_security_experiments.sh  # 38-run security-ablation
-│   ├── inference/                # Inference-only batches (no training)
-│   │   ├── run_inference_on_all.sh             # Score every saved checkpoint
-│   │   └── test_all_datasets.sh                # Test-only evaluation per family
-│   └── analysis/                 # Maintenance / cleanup batches
-│       └── cleanup_old_data.sh   # Free pyg-cache disk after runs finish
+├── scripts/         All shell-script batch entry points, grouped by
+│                    purpose: training/ for end-to-end retrains,
+│                    inference/ for test-only evaluations, and analysis/
+│                    for maintenance tasks.
 │
-├── examples/                     # Stand-alone usage examples
-│   ├── demo.py                   # Minimal TPG build + GNN forward demo
-│   ├── compare_frontends.py      # spaCy-only vs hybrid security frontend
-│   ├── experiment.py             # End-to-end experiment skeleton
-│   └── TPG_sample_output.json    # Example graph dump
+├── examples/        Small standalone examples that exercise the TPG and
+│                    GNN APIs in isolation. Useful as a smoke test after
+│                    a fresh install.
 │
-├── docs/                         # Documentation
-│   ├── papers/                   # LaTeX papers + compiled PDFs
-│   │   ├── security_frontend_rationale.tex  # Main methodology document
-│   │   ├── tpg_chapter.tex                  # TPG chapter
-│   │   ├── model_architecture.tex           # Model architecture chapter
-│   │   ├── experiment_results_35_runs.tex   # Results chapter
-│   │   ├── dataset_features.tex             # Dataset feature dictionary
-│   │   └── *.pdf                            # Compiled outputs
-│   ├── EPSS_GNN_Technical_Report.md
-│   ├── TPG_COMPLETE_GUIDE.md
-│   ├── Security_TPG_Complete_Reference.md
-│   ├── tpg_architecture/                    # Architecture deep-dives
-│   ├── chatbot/                             # Chatbot module docs
-│   ├── domain_examples/                     # Worked examples
-│   ├── epss_model/                          # EPSS model notes
-│   └── experiments/                         # Experiment write-ups
+├── docs/            Markdown documentation: the technical report, the
+│                    complete TPG guide, the security-frontend reference,
+│                    plus per-topic write-ups under tpg_architecture/,
+│                    epss_model/, experiments/, and domain_examples/.
 │
-├── data/                         # Source data + per-run pyg graph caches
-│   ├── epss/                     # NVD/KEV labelled records and supporting JSONs
-│   ├── epss_<llm>_v2_<variant>/  # Per-run datasets for the social-media ablation
-│   ├── epss_mv_<llm>_<variant>/  # Per-run datasets for the Megavul ablation
-│   └── (every dataset directory contains pyg_dataset/processed/cve_graphs_*.pt
-│       — the multi-GB graph tensor cache; deleted after evaluation by the
-│       disk-cleanup hook unless --keep-cache is passed)
+├── data/            Source data and labelled records. The per-experiment
+│                    pyg graph caches that the training scripts generate
+│                    are not tracked (they're large and regeneratable).
 │
-├── outputs/                      # Trained checkpoints + per-run predictions + metrics
-│   ├── social_media/             # Social-media corpus runs
-│   │   ├── deepseek/{D, S_git, ALL}
-│   │   ├── gemma/{D, SMP, S_git, S_cvss, ALL}
-│   │   ├── gpt/{D, SMP, S_git, S_cvss, ALL}
-│   │   ├── mistral/{D, SMP, S_git, S_cvss, ALL}
-│   │   └── test_only_summary.csv
-│   ├── megavul/                  # Megavul corpus runs
-│   │   ├── gpt/{D, S_url, S_code, S_cvss, ALL}
-│   │   ├── gemma/{D, S_url, S_code, S_cvss, ALL}
-│   │   ├── mistral/{D, S_url, S_code, S_cvss, ALL}
-│   │   └── test_only_summary.csv
-│   ├── nvd_kev/                  # NVD/KEV reference runs
-│   │   ├── multiview_hybrid_rerun/
-│   │   ├── temporal_2020_2022_to_2023_2024/
-│   │   ├── temporal_2020_to_2021_2026_noepss/
-│   │   └── temporal_multiview_hybrid/
-│   ├── security_ablation/        # NOSEC runs (security frontend disabled)
-│   │   └── gpt_v2_{D,S_smp,S_git,S_cvss,ALL}_nosec/
-│   ├── _legacy/                  # Older / exploratory runs (preserved, not deleted)
-│   │   ├── cross_eval/           # Cross-distribution evaluation (~48 GB)
-│   │   ├── no_security_ablation/ # Old 38-run security-ablation batch
-│   │   ├── epss_{gcn,gat,sage,rgat,multiview,edge_type}_{hybrid,text}/   # Old arch sweep
-│   │   ├── epss_full_*/          # Legacy full-NVD runs
-│   │   ├── epss_sec4ai*/         # Early Sec4AI4Aec runs (pre-baseline)
-│   │   └── (logs, old inference outputs, graphson exports, ...)
-│   └── test_only_combined_summary.csv   # Cross-family aggregate summary
+├── outputs/         Where every training run drops its artefacts, grouped
+│                    by dataset family: social_media/, megavul/, nvd_kev/,
+│                    and security_ablation/. Each run directory holds the
+│                    test_results.json metrics summary, the experiment
+│                    config that produced it, and (for the security
+│                    ablation) the full set of checkpoints and predictions.
 │
-├── inference_results/            # Test outputs from scripts/inference/run_inference_on_all.sh
-│   ├── social_media/<llm>/<variant>/   # test_results.json + predictions_test.csv
-│   ├── megavul/<llm>/<variant>/        # same
-│   ├── nvd_kev/<llm>/<variant>/        # same
-│   ├── social_media_summary.csv
-│   ├── megavul_summary.csv
-│   └── combined_summary.csv
+├── inference_results/   Where the inference batches in scripts/inference/
+│                        land their summaries.
 │
-├── datasets_info/                # Dataset-information artefacts + ablation logs
-│   ├── Per_LLM_profile/                 # Original per-LLM security profile
-│   ├── Per_LLM_profile_new/             # Refreshed 15-run social-media profile
-│   ├── Summary_in_TPG_ablation/         # Run logs + summary tables (.md, .json)
-│   ├── Security_ablation/               # Security-frontend ablation logs
-│   ├── CVSS_ablation/                   # CVSS-ablation logs
-│   ├── TPG_ablation/                    # TPG-mode ablation logs
-│   ├── gpt_combined_summ/               # Per-source profiling (GPT)
-│   ├── gemma_combined_summ/             # Per-source profiling (Gemma)
-│   ├── deepseek_combined_summ/          # Per-source profiling (DeepSeek)
-│   └── OVERALL_ANALYSIS.md              # Cross-cut summary
+├── datasets_info/   Dataset profiling artefacts: per-LLM profiles, ablation
+│                    summary tables, and per-source CSV statistics.
 │
-├── logs/                         # Run logs from inference/test-only batches
-├── tpg_chatbot/                  # Chatbot persistence
-├── README.md                     # This file
-└── .gitignore
+├── SummTPGVul/      Git submodule holding the source CSVs for both
+│                    dataset families. See "Source data" below.
+│
+└── README.md        You are here.
 ```
 
-### What each top-level folder is for
+A few cross-references that the layout doesn't make obvious. The training
+scripts in `scripts/training/` are thin wrappers around
+`python -m epss.run_pipeline`, just with the right flags pre-filled for
+each ablation. The two `inference/` directories (one for Python, one for
+shell scripts under `scripts/inference/`) are intentional — the Python
+one is the user-facing CLI for scoring new CVEs, the shell one is for
+sweeping evaluation over your saved checkpoints. Don't confuse
+`inference/infer.py` (CLI for fresh CVEs) with `epss/infer.py`
+(package-internal temporal scorer called via `python -m epss.infer`).
 
-| Folder | Purpose |
-|---|---|
-| `epss/` | The main Python package. Importable as `epss.X`; runnable as `python -m epss.X`. Contains everything that trains the model, scores it, and analyses its outputs. |
-| `tpg/` | The TPG core library. Builds the per-CVE graph and exports it as PyG tensors. `epss/` depends on this. |
-| `analysis/` | Stand-alone dataset-analysis scripts that do not need to be in the package. Run as `python analysis/X.py`. |
-| `inference/` | Stand-alone inference CLI. Distinct from `epss/infer.py` (which is the package-internal version called via `python -m epss.infer` for temporal evaluation). |
-| `scripts/` | All `.sh` batch entry points, grouped by purpose: `training/`, `inference/`, `analysis/`. Every script resolves its own paths from `${BASH_SOURCE[0]}`. |
-| `examples/` | Small stand-alone examples to verify the install and demonstrate the API. |
-| `docs/` | All Markdown documentation. `docs/papers/` holds the LaTeX sources and compiled PDFs. |
-| `data/` | Source data and per-run pyg graph caches. Heavy (~250 GB). Caches are auto-deleted by the disk-cleanup hook unless you pass `--keep-cache`. |
-| `outputs/` | All training run outputs: `best_model.pt`, `test_results.json`, `predictions_*.csv`, `training_history.json`, `experiment_config.json`. |
-| `inference_results/` | Per-family inference summaries written by `scripts/inference/run_inference_on_all.sh`. |
-| `datasets_info/` | Dataset profiling artefacts: per-LLM profiles, ablation run logs, summary tables. |
-| `logs/` | Top-level log files written by the inference/test-only batches. |
+## Source data
 
----
-
-## 3. Dataset assumptions and external repos
-
-The training scripts expect the source CSVs to live in a single
-sibling repo (`SummTPGVul`) one directory above the project root:
-
-```
-../SummTPGVul/
-└── SummVul/
-    ├── Social_Media_Dataset/Data_Files/
-    │   ├── gpt_combined_summ.csv
-    │   ├── gemma_combined_summ.csv
-    │   ├── mistral_combined_summ.csv
-    │   └── deepseek_combined_summ.csv
-    └── Data_Files/megavul/
-        ├── gpt.csv
-        ├── gemma.csv
-        └── mistral.csv
-```
-
-Clone it as a sibling of `EPSS_TPG/`:
+The training scripts expect to find the source CSVs in the `SummTPGVul`
+git submodule, cloned one directory above the project root. After cloning
+the parent repo, fetch the submodule contents:
 
 ```bash
-cd /home/ayounas/Text_property_Graph
-git clone https://github.com/observatio/SummTPGVul.git
-# if the CSVs are LFS-tracked:
-sudo apt install -y git-lfs && git lfs install
-cd SummTPGVul && git lfs pull
+git submodule update --init --recursive
 ```
 
-If your clone lives elsewhere, export these env vars before running
-any training script:
+If your clone uses Git LFS for the large CSVs (the submodule's
+`.gitattributes` will tell you), pull those too:
+
+```bash
+sudo apt install -y git-lfs && git lfs install
+cd ../SummTPGVul && git lfs pull && cd -
+```
+
+The layout the scripts expect under the submodule is:
+
+```
+../SummTPGVul/SummVul/
+├── Social_Media_Dataset/Data_Files/
+│   ├── gpt_combined_summ.csv
+│   ├── gemma_combined_summ.csv
+│   ├── mistral_combined_summ.csv
+│   └── deepseek_combined_summ.csv
+└── Data_Files/megavul/
+    ├── gpt.csv
+    ├── gemma.csv
+    └── mistral.csv
+```
+
+If you keep the submodule somewhere else, point the scripts at it with
+two environment variables:
 
 ```bash
 export EPSS_TPG_DATA_REPO=/your/path/to/SummTPGVul/SummVul/Social_Media_Dataset/Data_Files
 export EPSS_TPG_MEGAVUL_REPO=/your/path/to/SummTPGVul/SummVul/Data_Files/megavul
 ```
 
----
+Add them to `~/.bashrc` to make the override permanent.
 
-## 4. Training scripts
+## Training
 
-### 4.1 Single-run training (one configuration)
+### One configuration end-to-end
 
-`epss/run_pipeline.py` is the canonical entry point — it builds the
-labelled records, constructs the per-CVE graphs, trains the GGNN,
-evaluates it on the held-out test split, and writes everything to
-the output directory.
+`python -m epss.run_pipeline` is the canonical training entry point. It
+reads the source CSV, builds the per-CVE labelled records, constructs the
+TPG cache, trains the multi-view GGNN, evaluates on the held-out test
+split, and writes everything to the output directory you point it at.
+
+A minimal social-media ALL invocation:
 
 ```bash
-# minimum: source CSV in, output dir out
 python -m epss.run_pipeline \
     --source-csv ../SummTPGVul/SummVul/Social_Media_Dataset/Data_Files/gpt_combined_summ.csv \
     --data-dir   data/epss_gpt_v2_ALL \
@@ -271,174 +169,150 @@ python -m epss.run_pipeline \
     --no-epss-feature --include-summary-in-tpg --summary-source combined
 ```
 
-Most important flags (see `python -m epss.run_pipeline --help` for the full list):
+`python -m epss.run_pipeline --help` documents every flag. The ones you'll
+reach for most often are `--backbone` (gcn, gat, multiview), `--hybrid`
+(turn on the tabular branch with CVSS, CWE, age and exploit-availability
+features), `--label-mode` (binary KEV vs soft EPSS), `--no-epss-feature`
+(removes EPSS from the tabular branch — required when training against
+the soft EPSS target to prevent leakage), and the text-source switches
+(`--summary-only-tpg`, `--include-summary-in-tpg`, `--summary-source`).
 
-| Flag | Effect |
-|---|---|
-| `--backbone {gcn,gat,multiview}` | GNN backbone. `multiview` (default in batches) uses 5 GGNN heads. |
-| `--hybrid` | Add the tabular branch (CVSS, CWE, age, exploit). |
-| `--label-mode {binary,soft}` | Binary KEV label or soft EPSS regression target. |
-| `--epochs N` | Number of training epochs. |
-| `--no-epss-feature` | Remove EPSS from the tabular branch (prevents leakage when target is soft EPSS). |
-| `--no-security-frontend` | Disable the security pipeline entirely (NOSEC mode). |
-| `--include-security-edges` | Emit the typed SEC_* edges (default off). |
-| `--summary-only-tpg` | Build the TPG from a single summary column only (no description). |
-| `--include-summary-in-tpg` | Concatenate description with summary columns. |
-| `--summary-source {description,combined,all_sources,github_urls,cvss_metrics,social_media_post,commit_url,code}` | Which text source to feed to the TPG. |
+### The batch scripts
 
-### 4.2 Batch training: full ablation matrix
+There are four pre-baked training batches under `scripts/training/`. Each
+one is idempotent (rerun with `--no-overwrite` to skip completed runs),
+supports `--dry-run` for previewing without executing, and accepts a
+regex filter as a positional argument to subset the run list.
 
-The full 38-run text-source ablation (social-media + Megavul, all four LLMs, all five variants each):
-
-```bash
-scripts/training/run_all_summary_experiments.sh
-
-# common variants:
-scripts/training/run_all_summary_experiments.sh gpt            # only the GPT runs
-scripts/training/run_all_summary_experiments.sh S_cvss         # only the S_cvss variants
-scripts/training/run_all_summary_experiments.sh --dry-run      # preview without executing
-scripts/training/run_all_summary_experiments.sh --no-overwrite # skip runs already done
-scripts/training/run_all_summary_experiments.sh --quiet        # suppress per-run streaming
-```
-
-### 4.3 Batch training: social-media 19-run baseline
-
-The refreshed 19-run social-media batch (GPT/Gemma/Mistral × {D, SMP, S_git, S_cvss, ALL} plus 4 DeepSeek runs, disk-cleaning after each run):
+`run_social_media_retrain.sh` is the 19-run social-media baseline that the
+paper reports on — GPT, Gemma, Mistral and DeepSeek crossed with the five
+text-source variants, with the DeepSeek block skipping the SMP variant
+because its CSV ships with the social-media-post column empty.
 
 ```bash
 scripts/training/run_social_media_retrain.sh                  # all 19 runs
-scripts/training/run_social_media_retrain.sh gpt              # 5 GPT runs only
-scripts/training/run_social_media_retrain.sh 'gemma|mistral'  # 10 runs (Gemma + Mistral)
-scripts/training/run_social_media_retrain.sh --keep-cache     # keep pyg caches (~40 GB per run)
-scripts/training/run_social_media_retrain.sh --threads 16     # OMP/MKL thread count (default 32)
+scripts/training/run_social_media_retrain.sh gpt              # GPT block only
+scripts/training/run_social_media_retrain.sh 'gemma|mistral'  # two LLMs
+scripts/training/run_social_media_retrain.sh --threads 16     # cap OMP threads
 ```
 
-### 4.4 Batch training: GPT NOSEC ablation (5 runs)
-
-Mirrors the 5 GPT social-media variants with `--no-security-frontend` so the WITH-vs-NOSEC comparison can be refreshed:
+`run_gpt_nosec_retrain.sh` is the 5-run GPT NOSEC ablation that pairs
+with the social-media baseline to produce the WITH-vs-NOSEC table in
+the methodology document.
 
 ```bash
-scripts/training/run_gpt_nosec_retrain.sh                # all 5 NOSEC runs
-scripts/training/run_gpt_nosec_retrain.sh --dry-run      # preview
-scripts/training/run_gpt_nosec_retrain.sh 'D|ALL'        # filter to D and ALL
-scripts/training/run_gpt_nosec_retrain.sh --no-overwrite # skip if test_results.json already exists
+scripts/training/run_gpt_nosec_retrain.sh
+scripts/training/run_gpt_nosec_retrain.sh 'D|ALL'    # subset by variant
 ```
 
-### 4.5 Batch training: full security ablation (38 runs)
-
-The 38-run security ablation (every run with `--no-security-frontend`), kept in a separate output tree so it does not collide with the WITH-sec batch:
+`run_all_summary_experiments.sh` is the full 38-run ablation matrix
+covering both dataset families (social-media + Megavul) and every LLM,
+without the security-frontend ablation.
 
 ```bash
-scripts/training/run_all_no_security_experiments.sh           # all 38 NOSEC runs
-scripts/training/run_all_no_security_experiments.sh gpt       # only GPT
-scripts/training/run_all_no_security_experiments.sh nvd_kev   # only the NVD/KEV reference runs
-scripts/training/run_all_no_security_experiments.sh --dry-run # preview
+scripts/training/run_all_summary_experiments.sh
+scripts/training/run_all_summary_experiments.sh S_cvss   # all S_cvss variants
 ```
 
-NOSEC outputs go to `outputs/security_ablation/{social_media,megavul,nvd_kev}/...`.
+`run_all_no_security_experiments.sh` mirrors that same 38-run matrix
+with `--no-security-frontend` on every run, plus the three NVD/KEV
+reference runs. Outputs land in `outputs/security_ablation/` rather than
+on top of the WITH-sec baseline.
 
----
+```bash
+scripts/training/run_all_no_security_experiments.sh
+scripts/training/run_all_no_security_experiments.sh nvd_kev   # just NVD/KEV
+```
 
-## 5. Inference-only scripts
+All four batches stream their progress to stdout by default. Pass
+`--quiet` to send the per-run output to a log file and only print the
+batch banner.
 
-These never train. They load a saved checkpoint, score either the
-original test split or fresh CVEs, and write metrics / predictions.
+## Inference and evaluation
 
-### 5.1 Test-only evaluation on a single saved checkpoint
+There's a clear split between *test-only evaluation* (load a saved
+checkpoint, re-score the test split, write the metrics) and *fresh
+inference* (score CVEs that the model has never seen, fetched live from
+NVD). Both modes have a Python entry point and a shell wrapper.
+
+### Re-evaluating a saved checkpoint
+
+For a single run:
 
 ```bash
 python -m epss.test_only \
-    --run-dir outputs/social_media/gpt/ALL          # required: dir with best_model.pt + experiment_config.json
-    --batch-size 16                             # optional override
-    --threshold 0.5                             # decision threshold for F1 / precision / recall
-    --device cuda                               # auto-detect by default
+    --run-dir outputs/social_media/gpt/ALL \
+    --batch-size 16 \
+    --threshold 0.5
 ```
 
-Writes `test_results.json` and `predictions_test.csv` next to the checkpoint.
+The script reads `experiment_config.json` from the run directory,
+rebuilds the dataset the same way the training did, loads `best_model.pt`,
+and writes a fresh `test_results.json` and `predictions_test.csv`. Device
+is auto-detected; pass `--device cuda` or `--device cpu` to force it.
 
-### 5.2 Batch test-only across every saved checkpoint
+To sweep every saved checkpoint at once, use one of the two batch
+wrappers under `scripts/inference/`. `test_all_datasets.sh` reruns
+test-only evaluation in place, overwriting each run's
+`test_results.json` and `predictions_test.csv` and producing a
+per-family summary CSV:
 
 ```bash
-scripts/inference/test_all_datasets.sh                # all three families (social, megavul, nvd_kev)
-scripts/inference/test_all_datasets.sh social_media   # one family only
-scripts/inference/test_all_datasets.sh megavul nvd_kev  # multiple families
-
-# env overrides:
-DEVICE=cuda BATCH_SIZE=16 THRESHOLD=0.5 scripts/inference/test_all_datasets.sh
+scripts/inference/test_all_datasets.sh                # all four families
+scripts/inference/test_all_datasets.sh social_media   # just one family
+DEVICE=cuda BATCH_SIZE=16 scripts/inference/test_all_datasets.sh
 ```
 
-Each run's `test_results.json` and `predictions_test.csv` are rewritten in place;
-per-family `outputs/test_only_<family>_summary.csv` summaries are produced.
-
-### 5.3 Test all checkpoints and route results into a fresh tree
+`run_inference_on_all.sh` does the same evaluation but routes the
+results into a fresh tree under `inference_results/<family>/<llm>/<variant>/`
+so the originals are left alone:
 
 ```bash
-scripts/inference/run_inference_on_all.sh                  # all families → inference_results/
-scripts/inference/run_inference_on_all.sh social_media     # just one family
-OUT_ROOT=/tmp/my_inf  scripts/inference/run_inference_on_all.sh  # override output root
+scripts/inference/run_inference_on_all.sh
+OUT_ROOT=/tmp/eval scripts/inference/run_inference_on_all.sh
 ```
 
-Produces `inference_results/<family>/<llm>/<variant>/test_results.json` plus
-per-family and combined summary CSVs.
+### Scoring CVEs the model never saw
 
-### 5.4 Score arbitrary / unseen CVEs (NVD-fetched)
-
-The user-facing inference CLI in `inference/infer.py`:
+`inference/infer.py` is the user-facing CLI. It fetches CVE descriptions
+from NVD, builds a TPG, and scores them with a saved checkpoint. Five
+modes:
 
 ```bash
-# 5.4.1 Specific CVE IDs
+# By CVE ID
 python inference/infer.py \
     --checkpoint outputs/social_media/gpt/ALL/best_model.pt \
     --config     outputs/social_media/gpt/ALL/experiment_config.json \
     --cve-ids CVE-2024-1234 CVE-2024-5678
 
-# 5.4.2 File of CVE IDs (one per line)
-python inference/infer.py \
-    --checkpoint outputs/social_media/gpt/ALL/best_model.pt \
-    --config     outputs/social_media/gpt/ALL/experiment_config.json \
-    --cve-file ids.txt
+# By file of IDs
+python inference/infer.py --cve-file ids.txt --checkpoint ... --config ...
 
-# 5.4.3 Recent N days (fetched live from NVD)
-python inference/infer.py \
-    --checkpoint outputs/social_media/gpt/ALL/best_model.pt \
-    --config     outputs/social_media/gpt/ALL/experiment_config.json \
-    --recent-days 30
+# By recent days
+python inference/infer.py --recent-days 30 --checkpoint ... --config ...
 
-# 5.4.4 Date range
-python inference/infer.py \
-    --checkpoint outputs/social_media/gpt/ALL/best_model.pt \
-    --config     outputs/social_media/gpt/ALL/experiment_config.json \
-    --date-range 2024-01-01 2024-01-31
+# By date range
+python inference/infer.py --date-range 2024-01-01 2024-01-31 \
+                         --checkpoint ... --config ...
 
-# 5.4.5 Temporal evaluation (train cutoff vs. KEV ground truth today)
-python inference/infer.py \
-    --checkpoint outputs/social_media/gpt/ALL/best_model.pt \
-    --config     outputs/social_media/gpt/ALL/experiment_config.json \
-    --temporal-eval --train-cutoff 2024-01-01 --eval-days 30
+# Temporal evaluation against ground truth
+python inference/infer.py --temporal-eval --train-cutoff 2024-01-01 \
+                         --eval-days 30 --checkpoint ... --config ...
 ```
 
-Each invocation writes a CSV sorted by exploit probability (descending),
-with `cve_id, prob, tier, binary_pred, cvss_score, published, in_kev, description`.
+Each call writes a CSV sorted by exploit probability with columns
+`cve_id, prob, tier, binary_pred, cvss_score, published, in_kev,
+description`.
 
-### 5.5 Temporal inference with ground-truth verification (package version)
+The `python -m epss.infer` module is a complementary, package-internal
+temporal scorer that additionally verifies predictions against the FIRST
+EPSS API. Use it when you want a programmatic comparison rather than a
+user-facing CSV.
 
-`epss/infer.py` is a complementary, package-internal temporal scorer
-that verifies predictions against KEV + the FIRST EPSS API:
+### Cross-distribution evaluation
 
-```bash
-python -m epss.infer --mode post-dataset \
-    --after-date 2025-07-01 --before-date 2025-09-30 \
-    --checkpoint outputs/_legacy/epss_sec4ai/best_model.pt \
-    --config     outputs/_legacy/epss_sec4ai/experiment_config.json
-
-python -m epss.infer --mode pre-dataset \
-    --before-date 2021-11-01 \
-    --checkpoint outputs/_legacy/epss_sec4ai/best_model.pt
-```
-
-### 5.6 Cross-distribution evaluation
-
-Score a trained model against a held-out labelled corpus (one the model never saw):
+If you want to score a trained model against an entirely different
+labelled corpus (one the model never saw at training time), use:
 
 ```bash
 python -m epss.cross_distribution_eval \
@@ -447,66 +321,42 @@ python -m epss.cross_distribution_eval \
     --eval-data  data/epss_mv_mistral_ALL/labeled_cves.json
 ```
 
-### 5.7 Threshold sweep (post-processing only, no inference)
+## Dataset profiling and analysis
 
-```bash
-python -m epss.threshold_analysis \
-    --runs-root outputs \
-    --output    outputs/threshold_analysis
-```
+The methodology document leans on a few profile-generation scripts. They
+all live under `epss/` (because they import other `epss.*` modules) and
+write their outputs into `datasets_info/`.
 
-Reads every `predictions_test.csv` it finds, recomputes F1 / precision /
-recall / accuracy at multiple decision thresholds, and writes
-`outputs/threshold_analysis/REPORT.md` plus per-run threshold curves.
-
-### 5.8 Backfill `predictions_val.csv` for older runs
-
-For runs that finished before the `visualize.py` patches were in
-place, regenerate the validation predictions without retraining:
-
-```bash
-python -m epss.backfill_val_predictions --root outputs
-```
-
----
-
-## 6. Dataset analysis and statistics scripts
-
-### 6.1 Full per-LLM graph + security profile (15-run social-media)
-
-Builds the complete per-(LLM, variant) profile used in the LaTeX
-methodology document — mean graph size, mean SEC_* edge count, every
-entity-type and edge-type breakdown:
+The headline profiler is `per_llm_full_profile`, which reads the labelled
+records for every (LLM, variant) social-media dataset, runs the rule-only
+security pipeline over each, and emits a JSON / CSV / Markdown triple
+with mean graph size, mean SEC overlay density, and the full entity- and
+edge-type breakdowns.
 
 ```bash
 python -m epss.per_llm_full_profile \
     --output-dir datasets_info/Per_LLM_profile_new \
-    --workers 8       # multiprocess pool (default: half the available cores)
+    --workers 8
 ```
 
-Outputs `per_llm_full_profile.{json,csv,md}` plus per-dataset raw JSONs in
-`datasets_info/Per_LLM_profile_new/raw/`.
-
-### 6.2 Per-LLM graph dimensions only (fast)
-
-If you only need mean/median nodes and edges per graph (no security
-pipeline re-run, just a read of the pyg cache):
+`per_llm_graph_dims` is the fast version — node and edge counts only,
+read straight from the pyg cache:
 
 ```bash
 python -m epss.per_llm_graph_dims --output-dir datasets_info/Per_LLM_profile
 ```
 
-### 6.3 SEC_* edge firing statistics on a single corpus
+`security_edges_stats` tabulates SEC_* edge firing rates on a single
+labelled corpus:
 
 ```bash
 python -m epss.security_edges_stats \
     --labeled-cves data/epss_gpt_v2_ALL/labeled_cves.json \
-    --variant      ALL
+    --variant ALL
 ```
 
-Reports per-edge firing rates and per-entity counts for one labelled corpus.
-
-### 6.4 Profile a source CSV (schema, missingness, EPSS distribution)
+Three stand-alone scripts live under `analysis/`. `analyze_dataset.py`
+profiles a source CSV (schema, missingness, EPSS distribution):
 
 ```bash
 python analysis/analyze_dataset.py \
@@ -514,7 +364,9 @@ python analysis/analyze_dataset.py \
     --output-dir datasets_info/gpt_combined_summ
 ```
 
-### 6.5 Verify labelled-record dtypes across two source pipelines
+`verify_features.py` compares the labelled-record dtypes between two
+data-source pipelines (useful when you want to confirm the NVD pipeline
+and the CSV-derived pipeline agree on every field):
 
 ```bash
 python analysis/verify_features.py \
@@ -522,83 +374,71 @@ python analysis/verify_features.py \
     --b data/epss_sec4ai/labeled_cves.json
 ```
 
-Useful when comparing the NVD pipeline against the Sec4AI4Aec CSV-derived
-pipeline to confirm dtypes and value distributions match.
-
-### 6.6 Regenerate plots for an existing checkpoint
+`generate_visualizations.py` regenerates the full plot suite for an
+existing checkpoint without retraining — handy when you've changed the
+plot code and don't want to wait two hours for a rerun:
 
 ```bash
-python analysis/generate_visualizations.py \
-    --run-dir outputs/social_media/gpt/ALL
+python analysis/generate_visualizations.py --run-dir outputs/social_media/gpt/ALL
 ```
 
-Detects the trained `tabular_dim` from the saved weights, slices the
-dataset to match, and writes the full plot suite (confusion matrix,
-PR curve, ROC curve, calibration, prediction histogram) into the run dir.
-
-### 6.7 Standalone TPG examples
+For sanity checks of the TPG and GNN APIs in isolation, the
+`examples/` directory has three small scripts:
 
 ```bash
 python examples/demo.py                # build a TPG from a single CVE
-python examples/compare_frontends.py   # spaCy-only vs hybrid security frontend
+python examples/compare_frontends.py   # spaCy vs hybrid security frontend
 python examples/experiment.py          # end-to-end mini experiment
 ```
 
----
+## Maintenance
 
-## 7. Maintenance scripts
-
-### 7.1 Free per-run pyg graph caches (recover disk)
-
-After a training batch finishes, the per-run pyg caches (5--40 GB each
-for the dense social-media datasets) can be freed without losing the
-saved model, predictions, or labelled records:
+The training batches generate large per-experiment pyg graph caches
+(roughly 5–40 GB per social-media run). After a batch finishes, the
+caches can be freed without losing the saved models, predictions, or
+labelled records:
 
 ```bash
-scripts/analysis/cleanup_old_data.sh --dry-run   # preview what would be deleted (run this first)
-scripts/analysis/cleanup_old_data.sh             # actually delete (asks for confirmation)
-scripts/analysis/cleanup_old_data.sh --force     # skip confirmation
+scripts/analysis/cleanup_old_data.sh --dry-run    # preview what would go
+scripts/analysis/cleanup_old_data.sh              # delete (asks first)
+scripts/analysis/cleanup_old_data.sh --force      # skip the prompt
 ```
 
-Only `pyg_dataset/processed/cve_graphs_*.pt` and `pyg_dataset/raw/` are
-removed. Everything in `outputs/` is preserved.
+Only the regeneratable pyg cache directories are removed — everything in
+`outputs/` is left untouched.
 
----
+## Where things end up
 
-## 8. Where results and artefacts live
+Each training run drops a small set of artefacts into its output
+directory. The naming convention is consistent across families:
 
-| Artefact | Path |
+| File | What it is |
 |---|---|
-| Trained model checkpoint | `outputs/<family>/<llm>/<variant>/best_model.pt` |
-| Per-CVE test predictions | `outputs/<family>/<llm>/<variant>/predictions_test.csv` |
-| Per-CVE val predictions | `outputs/<family>/<llm>/<variant>/predictions_val.csv` |
-| Headline metrics (PR, ROC, F1, Brier, ...) | `outputs/<family>/<llm>/<variant>/test_results.json` |
-| Per-epoch training curve | `outputs/<family>/<llm>/<variant>/training_history.json` |
-| Hyperparameters / config | `outputs/<family>/<llm>/<variant>/experiment_config.json` |
-| Generated plots | `outputs/<family>/<llm>/<variant>/*.png` |
-| Per-family inference summaries | `inference_results/<family>_summary.csv` |
-| Combined inference summary | `inference_results/combined_summary.csv` |
-| Per-LLM dataset profile | `datasets_info/Per_LLM_profile_new/per_llm_full_profile.{json,csv,md}` |
-| Batch run logs | `datasets_info/<ablation>/run_logs/<run_id>.log` |
-| Threshold-sweep report | `outputs/threshold_analysis/REPORT.md` |
+| `best_model.pt` | The trained checkpoint with the lowest validation loss |
+| `experiment_config.json` | Every hyperparameter and flag the run used (replays cleanly with `test_only`) |
+| `test_results.json` | PR-AUC, ROC-AUC, F1, precision, recall, Brier, threshold, sample counts |
+| `val_results.json` | Same metrics on the validation split |
 
----
+For the batch scripts under `scripts/inference/`, the per-family CSVs
+land at `outputs/<family>/test_only_summary.csv` and the cross-family
+aggregate at `outputs/test_only_combined_summary.csv`.
 
-## 9. Reproducing the paper
+The profiling scripts in `epss/per_llm_*` and `epss/security_edges_stats`
+write their JSON/CSV/Markdown reports under `datasets_info/`.
 
-The methodology document `docs/papers/security_frontend_rationale.tex`
-references three result blocks. To reproduce each:
+## Reproducing the paper
 
-| Section | Batch |
+The methodology document under [docs/](docs/) refers to three result
+blocks. Each one is produced by a single batch script:
+
+| Result block | How to reproduce |
 |---|---|
-| §6 GPT WITH-vs-NOSEC ablation | `scripts/training/run_gpt_nosec_retrain.sh` (NOSEC) + WITH-sec runs from §8 |
-| §7 Per-LLM characterisation of Megavul | `scripts/training/run_all_summary_experiments.sh` filter `mv_*` |
-| §8 Social-media 15-run baseline | `scripts/training/run_social_media_retrain.sh 'gpt\|gemma\|mistral'` |
-| §7 + §8 graph-characterisation tables | `python -m epss.per_llm_full_profile --output-dir datasets_info/Per_LLM_profile_new` |
+| GPT WITH-vs-NOSEC ablation | `scripts/training/run_gpt_nosec_retrain.sh` (NOSEC half) plus the GPT runs in the social-media baseline |
+| Per-LLM Megavul characterisation | `scripts/training/run_all_summary_experiments.sh mv_*` |
+| 15-run social-media baseline | `scripts/training/run_social_media_retrain.sh 'gpt\|gemma\|mistral'` |
+| Per-LLM graph + SEC overlay profile | `python -m epss.per_llm_full_profile --output-dir datasets_info/Per_LLM_profile_new` |
 
-Compile the LaTeX with any TeX Live installation:
-
-```bash
-cd docs/papers
-latexmk -pdf -interaction=nonstopmode security_frontend_rationale.tex
-```
+The numbers reported in the methodology document were collected with
+`--epochs 100`, `--backbone multiview`, `--hybrid`, `--label-mode soft`,
+and `--no-epss-feature`. Hold those constant and the headline metrics
+should reproduce within stochastic noise.
