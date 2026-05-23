@@ -12,11 +12,6 @@ batch scripts that reproduce the training and evaluation runs.
 ```
 Text_property_Graph/
 ├── README.md                                  (this file)
-├── docs/                                      project-wide documentation
-│   ├── TPG_COMPLETE_GUIDE.md
-│   ├── cpg_diagram.html
-│   ├── cpg_tpg_mirror.html
-│   └── security_tpg.html
 │
 ├── SummTPGVul/                                submodule: source CSVs for both
 │                                              dataset families (social-media

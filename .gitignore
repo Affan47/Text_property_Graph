@@ -1,0 +1,10 @@
+# ────────────────────────────────────────────────────────────────────
+# Parent-repo .gitignore
+#
+# Most of the artefact-tree exclusions live inside EPSS_TPG/.gitignore.
+# This file only excludes things at the repo root.
+# ────────────────────────────────────────────────────────────────────
+
+# Project-wide markdown / HTML documentation kept locally for reference,
+# not part of the artifact tree.
+/docs/
