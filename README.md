@@ -99,10 +99,4 @@ in `EPSS_TPG/outputs/security_ablation/`.
 
 
 
-## Branches
 
-- `artifact/epss-tpg` — the artifact branch (this branch).
-- `main` — initial repository snapshot.
-- `feature/tpg-chatbot` — the development branch (includes the
-  chatbot work and the LaTeX write-ups, not part of the artifact).
-- `feature/epss-gnn` — the original EPSS-GNN development branch.
