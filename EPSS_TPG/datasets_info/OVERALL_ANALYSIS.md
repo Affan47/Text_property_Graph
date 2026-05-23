@@ -1,6 +1,100 @@
 # Overall Analysis — Ablation Programme
 
-**Last updated:** 2026-05-04 (after rerunning the 16 clean Summary-in-TPG experiments after the TPG offset/CVSS-version fixes)
+> **Reading guide.** This document is in two halves.
+>
+> 1. **Current state** (immediately below) — what the project actually does
+>    today, the canonical datasets, the canonical run matrix, the per-LLM
+>    profiling outputs that feed the methodology document, and pointers to
+>    the active scripts.
+> 2. **Historical record** (everything after the `---` separator below the
+>    current-state section) — the 32-run + 7-TPG + 4-CVSS + 16-clean
+>    ablation programme that uncovered the EPSS-as-feature target leakage,
+>    eliminated the four ablatable hypotheses, and drove the architecture
+>    we now use. The historical record references datasets that are no
+>    longer part of the canonical baseline (Llama and DeepSeek were
+>    dropped) but the findings remain valid for the period they describe.
+
+---
+
+## Current state
+
+**Updated:** 2026-05-23.
+
+The current canonical training matrix is **15 social-media runs + 15
+Megavul runs + 5 GPT NOSEC runs + 3 NVD/KEV reference runs = 38 runs**.
+All source CSVs live in the `SummTPGVul` submodule cloned as a sibling of
+`EPSS_TPG/`.
+
+### Canonical datasets
+
+| Family | Source path under `../SummTPGVul/SummVul/` | LLMs | Variants |
+|---|---|---|---|
+| Social-media | `Social_Media_Dataset/Data_Files/` | GPT, Gemma, Mistral | `D`, `SMP`, `S_git`, `S_cvss`, `ALL` |
+| Megavul     | `Data_Files/megavul/`                | GPT, Gemma, Mistral | `D`, `S_url`, `S_code`, `S_cvss`, `ALL` |
+
+DeepSeek and Llama are not part of the canonical baseline. DeepSeek's CSV
+ships with `social_media_post` empty for every row (so the `SMP` variant
+cannot be built for it); the Llama dataset was retired during the
+ablation programme.
+
+### Canonical run matrix
+
+| Block | How to launch | Output tree |
+|---|---|---|
+| 15 social-media runs (3 LLMs × 5 variants) | `scripts/training/run_social_media_retrain.sh` | `outputs/social_media/<llm>/<variant>/` |
+| 15 Megavul runs (3 LLMs × 5 variants) | `scripts/training/run_all_summary_experiments.sh mv_*` | `outputs/megavul/<llm>/<variant>/` |
+| 5 GPT NOSEC runs (WITH-vs-NOSEC ablation) | `scripts/training/run_gpt_nosec_retrain.sh` | `outputs/security_ablation/gpt_v2_*_nosec/` |
+| 3 NVD/KEV reference runs (binary + temporal) | included in `scripts/training/run_all_no_security_experiments.sh` `nvd_kev` filter | `outputs/nvd_kev/` |
+| Full security-frontend ablation (33 runs: 15 social + 15 Megavul + 3 NVD/KEV) | `scripts/training/run_all_no_security_experiments.sh` | `outputs/security_ablation/{social_media,megavul,nvd_kev}/...` |
+
+### Per-LLM profiling artefacts (current)
+
+- `Per_LLM_profile_new/per_llm_full_profile.{csv,json,md}` — mean graph
+  size, mean SEC entity / SEC edge counts, full per-(LLM, variant)
+  breakdown for the 15-run social-media baseline. Produced by
+  `python -m epss.per_llm_full_profile`. Source of the §7 and §8 tables in
+  the LaTeX methodology document.
+- `Per_LLM_profile/per_llm_security_profile.csv` — original per-LLM
+  security profile covering both social-media and Megavul. Source of the
+  §6 / §7 Megavul tables in the methodology document.
+
+### Headline finding that drove the current architecture
+
+The 32-run programme documented below identified that the model's
+PR-AUC ≥ 0.97 across the original hybrid runs was a target-leakage
+artefact from `epss/tabular_features.py` (`include_epss_feature=True`
+silently fed the training label as a tabular feature). The fix
+(`--no-epss-feature`) is now the default for every training script in
+`scripts/training/`. The clean in-distribution PR-AUC is roughly
+**0.83 on the curated corpus** — strong on the curated full data, but
+representative of the model's actual signal-from-text capability rather
+than the inflated 0.97-1.00 figure of the leaky runs.
+
+### Pointers to live scripts
+
+| Script | What it does |
+|---|---|
+| `python -m epss.run_pipeline` | Single-configuration training entry point. `--no-epss-feature` is now used by every batch script. |
+| `python -m epss.test_only` | Re-evaluate a saved checkpoint without retraining. |
+| `python -m epss.per_llm_full_profile` | Build the per-(LLM, variant) graph + SEC overlay profile. |
+| `python -m epss.cross_distribution_eval` | Score a trained model against a held-out labelled corpus (the experiment originally proposed as "K" in the historical record). |
+| `python inference/infer.py` | User-facing CLI for scoring fresh CVEs from NVD. |
+
+---
+
+## Historical record
+
+The rest of this document is the archived 32-run + 7-TPG + 4-CVSS +
+16-clean ablation programme that diagnosed the EPSS-as-feature leak and
+drove the current architecture. The dataset list, run counts, and
+configurations described below were valid at the time the experiments
+ran; they no longer match the canonical baseline (Llama and DeepSeek
+have been dropped, Mistral was added, and the Megavul corpus is now
+part of the standard matrix). Paths shown as
+`Sec4AI4Aec-EPSS-Enhanced/...` historically referred to the data
+submodule that has since been replaced by `SummTPGVul/`.
+
+**Last updated (historical):** 2026-05-04 (after rerunning the 16 clean Summary-in-TPG experiments after the TPG offset/CVSS-version fixes)
 **Scope:** Synthesis of all ablation work to date — **32 hybrid runs** (4 datasets × 8 ablation configurations) + **7 TPG-isolation runs** + **4 CVSS-ablation runs** + **16 clean Summary-in-TPG runs** = **59 total trainings**, plus one prior cross-distribution evaluation.
 
 ## 2026-05-04 UPDATE — clean 16-run confirmation completed
@@ -479,7 +573,7 @@ The combination yields a 4 × 8 grid where rows are LLM-summary content and colu
 
 ## 2. The full 32-run PR-AUC table
 
-Numbers below are read directly from `output/<dir>/test_results.json` for each run. All runs use the same model architecture, hyperparameters, label mode, and 100-epoch budget.
+Numbers below are read directly from `outputs/<dir>/test_results.json` for each run. All runs use the same model architecture, hyperparameters, label mode, and 100-epoch budget.
 
 | Run ID | Configuration | GPT | Gemma | Llama | DeepSeek | min | max | spread |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
@@ -672,7 +766,7 @@ The literature norm for EPSS prediction is roughly **0.55-0.75 PR-AUC** on repre
 ### 6.3 What was accomplished
 
 - Built a generic `prepare_dataset.py` that handles 4 different colleague-built CSV variants without modifying any existing pipeline code.
-- Built a per-dataset `Datasets_information/` documentation system with 4 dataset reports.
+- Built a per-dataset `datasets_info/` documentation system with 4 dataset reports.
 - Executed 32 controlled training runs spanning 4 LLM summarizers and 4 feature ablations.
 - Used the 4-summarizer comparison as a controlled A/B/C/D test that decisively rejected the LLM-summary-leakage hypothesis.
 - Narrowed the search space for the leakage source from "any feature in the dataset" to "features identical across the 4 datasets" — reducing ~20 candidate columns to ~6.

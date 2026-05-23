@@ -1,46 +1,47 @@
-# Dataset And Experiment Reports
+# Dataset and Experiment Reports
 
-This folder keeps the experiment reports, dataset profiles, batch scripts, run
-logs, and generated statistics in one place. The name is kept as
-`Datasets_information` because existing commands and scripts already refer to
-this path.
+This folder holds the dataset profiles, per-LLM characterisations, ablation
+run logs, and the long-form analysis writeups for the EPSS-TPG experiments.
 
-For a cleaner top-level documentation entry point, see
-[../docs/experiments/README.md](../docs/experiments/README.md).
+For the project-level entry point, see [../README.md](../README.md). For the
+methodology writeup that the LaTeX paper draws from, see
+[../docs/](../docs/).
 
-## Folder Groups
+## What lives here
 
-| Group | Folders |
+| Folder / file | What it is |
 |---|---|
-| Dataset reports | `gpt_combined_summ`, `gemma_combined_summ`, `final_dataset_with_llama_summ`, `deepseek_combined_summ` |
-| Ablation studies | `TPG_ablation`, `CVSS_ablation`, `Summary_in_TPG_ablation` |
-| Overall synthesis | `OVERALL_ANALYSIS.md` |
+| `Per_LLM_profile/` | Original per-LLM security-overlay profile (graph dimensions + SEC_* edge firing rates) computed against the cached PyG tensors. Inputs to the LaTeX methodology document. |
+| `Per_LLM_profile_new/` | Refreshed per-(LLM, variant) profile for the current 15-run social-media baseline, recomputed directly from `labeled_cves.json` after the per-run pyg caches were freed. Source of the per-LLM tables in §7 and §8 of the methodology. |
+| `Summary_in_TPG_ablation/` | Run logs, summary tables (`results.md`, `all_runs_aggregate.json`), and per-experiment statistics for the summary-in-TPG ablation matrix. |
+| `Security_ablation/` | Run logs for the security-frontend ablation (WITH-vs-NOSEC). |
+| `CVSS_ablation/` | Run logs for the CVSS-feature ablation (historical). |
+| `TPG_ablation/` | Run logs for the TPG-only isolation study (historical). |
+| `gpt_combined_summ/` | Per-source profile for the GPT social-media CSV (historical 8-run ablation results plus the schema profile). |
+| `gemma_combined_summ/` | Per-source profile for the Gemma social-media CSV (historical). |
+| `final_dataset_with_llama_summ/` | Per-source profile for the Llama social-media CSV (historical — Llama is not used in the current baseline). |
+| `OVERALL_ANALYSIS.md` | Long-form synthesis. Opens with the current state, followed by the archived 32-run programme that drove the current architecture. |
 
-Each dataset-report subdirectory documents one incoming dataset:
-- `README.md` — features, distributions, critical findings, schema vs `csv_adapter` expectations, reproduction commands
-- `profile.json` — machine-readable profile produced by `epss/prepare_dataset.py`
-- `profile.txt`  — human-readable summary of the profile
+The `*_combined_summ/` per-source folders are kept for historical reference;
+they document the colleague-curated CSVs and the early 32-run ablation
+matrix that ultimately uncovered the EPSS-as-feature target leakage. The
+current canonical dataset is the [`SummTPGVul`](../../SummTPGVul) submodule
+under `../SummTPGVul/SummVul/`.
 
-## Dataset Index
+## Current canonical datasets
 
-| Dataset | Source | Rows | Unique base CVEs | Status |
-|---|---|---:|---:|---|
-| [gpt_combined_summ](gpt_combined_summ/README.md) | `Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv` | 9,218 | 5,692 | ⚠ 8-run ablation completed; PR-AUC stays ≥ 0.97 even at "max-clean" — signal source not yet identified ([details](gpt_combined_summ/ablation_results.md)) |
-| [gemma_combined_summ](gemma_combined_summ/README.md) | `Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv` | 9,218 | 5,692 | ✅ 8-run ablation completed; cross-dataset A/B with gpt_combined definitively rejects LLM-summary leakage hypothesis ([details](gemma_combined_summ/ablation_results.md)) |
-| [final_dataset_with_llama_summ](final_dataset_with_llama_summ/README.md) | `Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/final_dataset_with_llama_summ.csv` | 9,218 | 5,692 | ✅ 8-run ablation completed; 3-way GPT vs Gemma vs Llama comparison **triple-rejects** LLM-summary leakage hypothesis (Run D spread = 0.0002 across 3 datasets) ([details](final_dataset_with_llama_summ/ablation_results.md)) |
-| [deepseek_combined_summ](deepseek_combined_summ/README.md) | `Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv` | 9,218 | 5,692 | ✅ 8-run ablation completed; 4-way GPT vs Gemma vs Llama vs DeepSeek comparison **quadruple-rejects** LLM-summary leakage hypothesis (Run D spread = 0.0010 across 4 datasets) ([details](deepseek_combined_summ/ablation_results.md)) |
+The model is trained on two dataset families, both shipped in the
+`SummTPGVul` submodule:
 
-## Overall Synthesis
+| Family | Source | Coverage | Variants per LLM |
+|---|---|---|---|
+| Social-media | `SummTPGVul/SummVul/Social_Media_Dataset/Data_Files/` | GPT, Gemma, Mistral (DeepSeek excluded — its CSV ships with `social_media_post` empty for every row) | `D`, `SMP`, `S_git`, `S_cvss`, `ALL` |
+| Megavul | `SummTPGVul/SummVul/Data_Files/megavul/` | GPT, Gemma, Mistral | `D`, `S_url`, `S_code`, `S_cvss`, `ALL` |
 
-[**OVERALL_ANALYSIS.md**](OVERALL_ANALYSIS.md) — Full 32-run synthesis (4 datasets × 8 ablation configurations). Headline: all four ablatable hypotheses (CVE duplication, LLM summary text, tabular proxies, imputed labels) are now rejected on all four datasets. The leakage source must be in features identical across the datasets — most likely the NVD `description` text, CVSS components, or sample-selection bias.
-
-## Ablation Studies
-
-| Study | Status | Description |
-|---|---|---|
-| [TPG_ablation](TPG_ablation/README.md) | ✅ 7 runs completed — see [results](TPG_ablation/tpg_ablation_results.md) | **Major finding:** TPG-only PR-AUC = 0.81 on full data, 0.34 on max-clean — vs hybrid 0.998 / 0.974. The tabular branch (dominated by CVSS) carries 0.19-0.63 PR-AUC of the model's signal. CVSS is now the prime suspect for the inflated metric across the 32 prior runs. |
-| [CVSS_ablation](CVSS_ablation/README.md) | 4-run plan ready | Tests whether the CVSS components are the missing ~0.19 PR-AUC the TPG ablation localised. New `--drop-cvss` flag in `prepare_dataset.py` removes all 10 CVSS columns. |
-| [Summary_in_TPG_ablation](Summary_in_TPG_ablation/README.md) | ✅ 16 clean runs completed — see [results](Summary_in_TPG_ablation/results.md) | Production-honest matrix with `--no-epss-feature` across 4 datasets × 4 variants. Post-TPG-fix rerun on 2026-05-04: baseline mean PR-AUC = 0.8333; summary mean Δ = −0.0120; security-edge mean Δ = +0.0057; both features mean Δ = −0.0068. No feature gain exceeds bootstrap noise. |
+Both families have **3 LLMs × 5 variants = 15 runs**, totalling 30 canonical
+training runs. The security-frontend ablation reruns the same matrix with
+`--no-security-frontend` and adds three NVD/KEV reference runs, for an
+additional 33 runs landing under `outputs/security_ablation/`.
 
 ## Adding a new dataset
 
@@ -51,4 +52,12 @@ python -m epss.prepare_dataset \
     --output-dir data/epss_<tag>
 ```
 
-This generates `<stem>_profile.json` and `<stem>_profile.txt` under the output dir. Copy them into a new subdirectory of `Datasets_information/<stem>/` and write a `README.md` summarising features and any critical findings.
+The adapter writes a `*_profile.json` and `*_profile.txt` to the output
+directory. Copy them into a new `datasets_info/<tag>/` subdirectory along
+with a `README.md` summarising the schema and any critical findings.
+
+## See also
+
+- [OVERALL_ANALYSIS.md](OVERALL_ANALYSIS.md) — the synthesis writeup
+- [Per_LLM_profile_new/per_llm_full_profile.csv](Per_LLM_profile_new/per_llm_full_profile.csv) — per-(LLM, variant) graph + SEC_* overlay stats for the current 15-run baseline
+- [Summary_in_TPG_ablation/results.md](Summary_in_TPG_ablation/results.md) — summary-in-TPG ablation results
