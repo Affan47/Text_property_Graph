@@ -83,25 +83,21 @@ cd SummTPGVul && git lfs pull && cd ..
 
 Three classes of run are scripted:
 
-1. **Social-media ablation (19 runs):** four LLMs (GPT, Gemma,
-   Mistral, DeepSeek) crossed with five text-source variants
-   (`D`, `SMP`, `S_git`, `S_cvss`, `ALL`). The DeepSeek block
-   skips the `SMP` variant because its CSV ships with the
-   `social_media_post` column empty for every row, so the total
-   is `3 × 5 + 1 × 4 = 19` rather than 20.
+1. **Social-media ablation (15 runs):** four LLMs (GPT, Gemma,
+   Mistral) crossed with five text-source variants
+   (`D`, `SMP`, `S_git`, `S_cvss`, `ALL`). 
 2. **Megavul ablation (15 runs):** three LLMs (GPT, Gemma, Mistral)
    crossed with five variants (`D`, `S_url`, `S_code`, `S_cvss`,
    `ALL`), for a total of `3 × 5 = 15` runs.
 3. **NVD/KEV reference runs:** binary KEV classification and the
    two temporal-shift configurations.
 
-The security-frontend ablation reruns the same matrix (the 19-run
+The security-frontend ablation reruns the same matrix (the 15-run
 social-media block plus the 15-run Megavul block plus the three
 NVD/KEV runs) with `--no-security-frontend` on every run, landing
 in `EPSS_TPG/outputs/security_ablation/`.
 
-See [`EPSS_TPG/README.md`](EPSS_TPG/README.md) for the full
-training, testing, and inference commands.
+
 
 ## Branches
 
