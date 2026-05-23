@@ -207,6 +207,4 @@ scripts/analysis/cleanup_old_data.sh              # delete (asks for confirmatio
 scripts/analysis/cleanup_old_data.sh --force      # skip the prompt
 ```
 
-For the full per-flag documentation (every `--backbone`, `--label-mode`,
-`--summary-source`, etc.) see [EPSS_TPG/README.md](EPSS_TPG/README.md).
 
