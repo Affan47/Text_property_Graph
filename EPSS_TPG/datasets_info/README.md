@@ -3,9 +3,7 @@
 This folder holds the dataset profiles, per-LLM characterisations, ablation
 run logs, and the long-form analysis writeups for the EPSS-TPG experiments.
 
-For the project-level entry point, see [../README.md](../README.md). For the
-methodology writeup that the LaTeX paper draws from, see
-[../docs/](../docs/).
+For the project-level entry point, see [../README.md](../README.md).
 
 ## What lives here
 
@@ -58,6 +56,5 @@ with a `README.md` summarising the schema and any critical findings.
 
 ## See also
 
-- [OVERALL_ANALYSIS.md](OVERALL_ANALYSIS.md) — the synthesis writeup
 - [Per_LLM_profile_new/per_llm_full_profile.csv](Per_LLM_profile_new/per_llm_full_profile.csv) — per-(LLM, variant) graph + SEC_* overlay stats for the current 15-run baseline
 - [Summary_in_TPG_ablation/results.md](Summary_in_TPG_ablation/results.md) — summary-in-TPG ablation results
