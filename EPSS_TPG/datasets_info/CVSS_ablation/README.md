@@ -66,15 +66,15 @@ If CV1 ≈ T1, that closes the loop: CVSS was indeed providing the missing signa
 
 ## 4. Reproduction commands
 
-All commands assume working directory `/home/ayounas/Text_property_Graph/EPSS_TPG`. Each `prepare → train` pair uses a unique data-dir/output-dir. **All 4 runs use `--hybrid` ON** — the goal here is to ablate CVSS within the hybrid model.
+All commands assume working directory `EPSS_TPG`. Each `prepare → train` pair uses a unique data-dir/output-dir. **All 4 runs use `--hybrid` ON** — the goal here is to ablate CVSS within the hybrid model.
 
 ### Run CV1 — Drop CVSS only
 
 ```bash
-cd /home/ayounas/Text_property_Graph/EPSS_TPG
+cd EPSS_TPG
 
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_cvss_CV1 \
     --drop-cvss
 
@@ -89,7 +89,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_cvss_CV2 \
     --drop-cvss --drop-tabular-leaks
 
@@ -104,7 +104,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_cvss_CV3 \
     --drop-cvss --drop-tabular-leaks --filter-original-epss
 
@@ -119,7 +119,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_cvss_CV4 \
     --drop-cvss --drop-tabular-leaks --drop-summary --filter-original-epss --dedupe-by-base-cve
 

@@ -140,7 +140,7 @@ All on `gpt_combined_summ`. **The crucial new flag is `--no-epss-feature` on `ru
 #### Run NL1 — Baseline + no-epss-feature
 
 ```bash
-cd /home/ayounas/Text_property_Graph/EPSS_TPG
+cd EPSS_TPG
 
 # Re-uses the original gpt baseline prepared CSV (no flags) — no re-prep needed
 python -m epss.run_pipeline \

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Source path** | `/home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv` |
+| **Source path** | `Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv` |
 | **Pipeline-prepared copy** | `data/epss_gpt_combined/gpt_combined_summ_prepared.csv` |
 | **Raw size** | 101.4 MB |
 | **Generated** | 2026-04-28 |
@@ -155,11 +155,11 @@ Any join with CISA KEV, NVD, or any external CVE-keyed source will miss every re
 ## 5. Reproduction
 
 ```bash
-cd /home/ayounas/Text_property_Graph/EPSS_TPG
+cd EPSS_TPG
 
 # Profile + prepare (idempotent — safe to re-run)
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_combined
 
 # Train via the existing pipeline (UNTOUCHED)

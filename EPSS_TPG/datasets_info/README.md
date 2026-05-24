@@ -44,7 +44,7 @@ additional 33 runs landing under `outputs/security_ablation/`.
 ## Adding a new dataset
 
 ```bash
-cd /home/ayounas/Text_property_Graph/EPSS_TPG
+cd EPSS_TPG
 python -m epss.prepare_dataset \
     --input  /path/to/<new>.csv \
     --output-dir data/epss_<tag>

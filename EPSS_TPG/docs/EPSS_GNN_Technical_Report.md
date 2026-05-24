@@ -1,7 +1,7 @@
 # EPSS-GNN: CVE Exploitation Prediction via Graph Neural Networks on Text Property Graphs
 
 **Project:** EPSS-GNN — Exploit Prediction Scoring using Text Property Graphs and Graph Neural Networks
-**Repository:** `feature/epss-gnn` branch at `github.com/Affan47/Text_property_Graph`
+**Repository:** `feature/epss-gnn` branch at `github.com/<owner>/Text_property_Graph`
 **Project Root:** `~/Text_property_Graph/TPG_TextPropertyGraph/`
 **Hardware:** NVIDIA RTX 5000 Ada (32 GB VRAM), CUDA 12.1, PyTorch 2.3.0, PyG 2.7.0
 **Last Updated:** 2026-04-09

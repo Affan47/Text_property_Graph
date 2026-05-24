@@ -55,7 +55,7 @@ the model code stays small.
 To clone the full artifact with the dataset submodule:
 
 ```bash
-git clone --recurse-submodules https://github.com/Affan47/Text_property_Graph.git
+git clone --recurse-submodules https://github.com/<owner>/Text_property_Graph.git
 cd Text_property_Graph
 git checkout artifact/epss-tpg
 ```

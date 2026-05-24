@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Source path** | `/home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv` |
+| **Source path** | `Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv` |
 | **Pipeline-prepared copy** | `data/epss_deepseek/deepseek_combined_summ_prepared.csv` |
 | **Raw size** | 97.0 MB |
 | **Generated** | 2026-04-29 |
@@ -125,7 +125,7 @@ Once all 8 runs complete, `ablation_results.md` will be created here with the sa
 
 ## 6. Reproduction commands
 
-All commands assume working directory `/home/ayounas/Text_property_Graph/EPSS_TPG`.
+All commands assume working directory `EPSS_TPG`.
 
 ### Run A — Baseline (already prepared in §0)
 
@@ -141,7 +141,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
     --output-dir data/epss_deepseek_dedup \
     --dedupe-by-base-cve
 
@@ -156,7 +156,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
     --output-dir data/epss_deepseek_dedup_nosumm \
     --dedupe-by-base-cve --drop-summary
 
@@ -171,7 +171,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
     --output-dir data/epss_deepseek_nosumm \
     --drop-summary
 
@@ -186,7 +186,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
     --output-dir data/epss_deepseek_notabl \
     --drop-tabular-leaks
 
@@ -201,7 +201,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
     --output-dir data/epss_deepseek_origonly \
     --filter-original-epss
 
@@ -216,7 +216,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
     --output-dir data/epss_deepseek_origonly_notabl \
     --filter-original-epss --drop-tabular-leaks
 
@@ -231,7 +231,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv \
     --output-dir data/epss_deepseek_max_clean \
     --dedupe-by-base-cve --filter-original-epss --drop-tabular-leaks --drop-summary
 

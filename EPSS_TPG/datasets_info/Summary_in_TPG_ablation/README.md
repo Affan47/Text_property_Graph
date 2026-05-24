@@ -150,7 +150,7 @@ Before training, [`epss/security_edges_stats.py`](../../epss/security_edges_stat
 The script accepts any `labeled_cves.json`, so the same scan can be run on each of the 4 LLM-summary corpora:
 
 ```bash
-cd /home/ayounas/Text_property_Graph/EPSS_TPG
+cd EPSS_TPG
 
 for ds in gpt_combined gemma_combined llama deepseek; do
     python -m epss.security_edges_stats \
@@ -175,7 +175,7 @@ Each dataset takes ~10 minutes (rule-only pipeline, no SecBERT). Comparing the r
 
 ## 4. Reproduction commands
 
-All commands assume working directory `/home/ayounas/Text_property_Graph/EPSS_TPG`. The current script runs the focused 16-run clean matrix and reuses the baseline prepared CSV for each dataset.
+All commands assume working directory `EPSS_TPG`. The current script runs the focused 16-run clean matrix and reuses the baseline prepared CSV for each dataset.
 
 ### Quickest path: run the batch script
 
@@ -207,7 +207,7 @@ focused 16-run script above.
 If you only have time for **one** new run, this is the most informative:
 
 ```bash
-cd /home/ayounas/Text_property_Graph/EPSS_TPG
+cd EPSS_TPG
 
 # gpt_B_SE — full data, no EPSS leak, summary in TPG, security edges ON
 python -m epss.run_pipeline \
@@ -236,7 +236,7 @@ If you prefer to run individual commands by hand, the explicit per-dataset/per-v
 #### 4.1.1 Variant S — Summary fed to TPG, EPSS feature ON
 
 ```bash
-cd /home/ayounas/Text_property_Graph/EPSS_TPG
+cd EPSS_TPG
 
 # A_S — Baseline + summary
 python -m epss.run_pipeline --source-csv data/epss_gpt_combined/gpt_combined_summ_prepared.csv \

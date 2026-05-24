@@ -98,17 +98,17 @@ Given the universal pattern across the 32 prior runs (Precision = 1.000 in 30 of
 
 ## 6. Reproduction commands
 
-All commands assume working directory `/home/ayounas/Text_property_Graph/EPSS_TPG`. Each `prepare → train` pair uses a unique `data-dir` and `output-dir` so PyG caches and artefacts don't collide with the prior 32 runs.
+All commands assume working directory `EPSS_TPG`. Each `prepare → train` pair uses a unique `data-dir` and `output-dir` so PyG caches and artefacts don't collide with the prior 32 runs.
 
 **The crucial line in every train command is the absence of `--hybrid`.**
 
 ### Run T1 — TPG-only on full data
 
 ```bash
-cd /home/ayounas/Text_property_Graph/EPSS_TPG
+cd EPSS_TPG
 
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_tpg_T1
 
 python -m epss.run_pipeline \
@@ -122,7 +122,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_tpg_T2 \
     --drop-summary
 
@@ -137,7 +137,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_tpg_T3 \
     --dedupe-by-base-cve --filter-original-epss
 
@@ -152,7 +152,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_tpg_T4 \
     --dedupe-by-base-cve --filter-original-epss --drop-tabular-leaks --drop-summary
 
@@ -167,7 +167,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_tpg_T5 \
     --minimal-text-only --drop-summary
 
@@ -182,7 +182,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_tpg_T6 \
     --minimal-text-only
 
@@ -197,7 +197,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_tpg_T7 \
     --dedupe-by-base-cve --filter-original-epss --minimal-text-only
 

@@ -126,11 +126,11 @@ The 4 ablations done here ruled out duplication and summary text. To find the re
 ## 6. Reproduction
 
 ```bash
-cd /home/ayounas/Text_property_Graph/EPSS_TPG
+cd EPSS_TPG
 
 # Run A — baseline (already done)
 python -m epss.prepare_dataset \
-    --input  /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input  Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_combined
 python -m epss.run_pipeline \
     --source-csv data/epss_gpt_combined/gpt_combined_summ_prepared.csv \
@@ -140,7 +140,7 @@ python -m epss.run_pipeline \
 
 # Run B — dedupe only
 python -m epss.prepare_dataset \
-    --input  /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input  Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_combined_dedup --dedupe-by-base-cve
 python -m epss.run_pipeline \
     --source-csv data/epss_gpt_combined_dedup/gpt_combined_summ_dedup_prepared.csv \
@@ -150,7 +150,7 @@ python -m epss.run_pipeline \
 
 # Run C — dedupe + drop summary
 python -m epss.prepare_dataset \
-    --input  /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input  Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_combined_dedup_nosumm --dedupe-by-base-cve --drop-summary
 python -m epss.run_pipeline \
     --source-csv data/epss_gpt_combined_dedup_nosumm/gpt_combined_summ_dedup_nosumm_prepared.csv \
@@ -160,7 +160,7 @@ python -m epss.run_pipeline \
 
 # Run D — drop summary only
 python -m epss.prepare_dataset \
-    --input  /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
+    --input  Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv \
     --output-dir data/epss_gpt_combined_nosumm --drop-summary
 python -m epss.run_pipeline \
     --source-csv data/epss_gpt_combined_nosumm/gpt_combined_summ_nosumm_prepared.csv \

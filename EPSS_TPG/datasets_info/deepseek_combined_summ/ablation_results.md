@@ -172,7 +172,7 @@ Recommended next experiments (I, J, K, L, M) listed in `gpt_combined_summ/ablati
 
 ## 5. Reproduction
 
-All commands assume working directory `/home/ayounas/Text_property_Graph/EPSS_TPG`. The full 8-run command sequence is in [README.md §6](README.md#6-reproduction-commands). For each run, the prepare step produces a uniquely-suffixed `*_prepared.csv` that the train step consumes.
+All commands assume working directory `EPSS_TPG`. The full 8-run command sequence is in [README.md §6](README.md#6-reproduction-commands). For each run, the prepare step produces a uniquely-suffixed `*_prepared.csv` that the train step consumes.
 
 The bug fix that unblocked Run F on the GPT side (replace `.squeeze(-1)` with `.view(-1)` in `epss/train.py:171,172,226,227`) was already in place when the deepseek runs were executed. No additions to `prepare_dataset.py`'s `COLUMN_RENAMES` were required for deepseek (existing `summ_all_sources → summary` mapping handled it).
 

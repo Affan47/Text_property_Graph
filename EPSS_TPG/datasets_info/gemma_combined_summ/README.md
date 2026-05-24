@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Source path** | `/home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv` |
+| **Source path** | `Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv` |
 | **Pipeline-prepared copy** | `data/epss_gemma_combined/gemma_combined_summ_prepared.csv` |
 | **Raw size** | 98.8 MB |
 | **Generated** | 2026-04-28 |
@@ -99,7 +99,7 @@ After all 8 runs complete, `ablation_results.md` (see below) will be populated w
 
 ## 6. Reproduction commands
 
-All commands assume working directory is `/home/ayounas/Text_property_Graph/EPSS_TPG`.
+All commands assume working directory is `EPSS_TPG`.
 
 ### Run A — Baseline (already done in §0; the prepared CSV is in `data/epss_gemma_combined/`)
 
@@ -115,7 +115,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
     --output-dir data/epss_gemma_combined_dedup \
     --dedupe-by-base-cve
 
@@ -130,7 +130,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
     --output-dir data/epss_gemma_combined_dedup_nosumm \
     --dedupe-by-base-cve --drop-summary
 
@@ -145,7 +145,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
     --output-dir data/epss_gemma_combined_nosumm \
     --drop-summary
 
@@ -160,7 +160,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
     --output-dir data/epss_gemma_combined_notabl \
     --drop-tabular-leaks
 
@@ -175,7 +175,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
     --output-dir data/epss_gemma_combined_origonly \
     --filter-original-epss
 
@@ -190,7 +190,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
     --output-dir data/epss_gemma_combined_origonly_notabl \
     --filter-original-epss --drop-tabular-leaks
 
@@ -205,7 +205,7 @@ python -m epss.run_pipeline \
 
 ```bash
 python -m epss.prepare_dataset \
-    --input /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
+    --input Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv \
     --output-dir data/epss_gemma_combined_max_clean \
     --dedupe-by-base-cve --filter-original-epss --drop-tabular-leaks --drop-summary
 
