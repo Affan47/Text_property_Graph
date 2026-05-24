@@ -9,8 +9,7 @@ the GNN reads the graph rather than a flat embedding.
 
 This README is the practical guide. It explains what's in the repo,
 where to put the source data, and the exact command line for every
-script you might want to run. The why and the headline results are in
-the markdown documentation under [docs/](docs/).
+script you might want to run.
 
 A note on running the tools. Every shell script in `scripts/` figures
 out its own location and resolves paths from there, so you can launch
@@ -69,11 +68,6 @@ EPSS_TPG/
 ├── examples/        Small standalone scripts that exercise the TPG and
 │                    GNN APIs in isolation. Useful as a smoke test after
 │                    install.
-│
-├── docs/            Markdown documentation: the technical report, the
-│                    complete TPG guide, the security-frontend reference,
-│                    plus per-topic write-ups under tpg_architecture/,
-│                    epss_model/, experiments/, and domain_examples/.
 │
 ├── data/            Source data and labelled records. The per-experiment
 │                    pyg graph caches that training generates are large
@@ -421,8 +415,8 @@ write their JSON / CSV / Markdown reports under `datasets_info/`.
 
 ## Reproducing the headline results
 
-The technical write-ups in [docs/](docs/) reference a handful of result
-blocks. Each one comes from a single batch script:
+A handful of result blocks come up most often. Each one is produced
+by a single batch script:
 
 | Result block | How to reproduce |
 |---|---|

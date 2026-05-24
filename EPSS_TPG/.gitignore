@@ -75,11 +75,11 @@ outputs/*.log
 
 # Chatbot project — separate effort, not part of the EPSS-TPG model.
 tpg_chatbot/
-docs/chatbot/
-docs/TPG_Chatbot_Technical_Report.md
 
-# LaTeX figures, diagrams and write-ups — built artefacts live elsewhere.
-docs/papers/
+# Markdown / LaTeX documentation kept locally for reference, not part
+# of the artifact tree. Subsumes the previous docs/chatbot/,
+# docs/papers/, and docs/TPG_Chatbot_Technical_Report.md rules.
+docs/
 
 # Unit and integration tests — excluded from the artifact tree.
 tests/
