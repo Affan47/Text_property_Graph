@@ -1,0 +1,127 @@
+{
+  "source_revision": "a1e32ca3f16052b987767c013a49e2441b972e55",
+  "files": {
+    "cves_unique_with_source_links_clean.json": {
+      "records": 5692,
+      "unique_cves": 5692,
+      "field_count_distribution": {
+        "15": 5692
+      },
+      "nonstandard_literals": {},
+      "bytes": 8916392,
+      "sha256": "2486beefcdce3361a3368bf060ff1eddf6aae33c516b6b593481f5e403c0f7cd"
+    },
+    "cves_merged_refetched.json": {
+      "records": 5968,
+      "unique_cves": 5968,
+      "field_count_distribution": {
+        "26": 5968
+      },
+      "nonstandard_literals": {
+        "NaN": 2445
+      },
+      "bytes": 14945049,
+      "sha256": "e5949453c96b2f1b7e295daf3da1747a250927929da2cb8567ba8fb003ef7e32"
+    },
+    "cves_merged_with_url_dates.json": {
+      "records": 5968,
+      "unique_cves": 5968,
+      "field_count_distribution": {
+        "28": 5968
+      },
+      "nonstandard_literals": {
+        "NaN": 2445
+      },
+      "bytes": 24459113,
+      "sha256": "8c3a398282cea1eb4d5d07272dae67a0da36b5df8a7503b282063561a8e3016e"
+    },
+    "cves_merged_with_url_dates_vc_kev.json": {
+      "records": 5968,
+      "unique_cves": 5968,
+      "field_count_distribution": {
+        "29": 5420,
+        "39": 548
+      },
+      "nonstandard_literals": {
+        "NaN": 2445
+      },
+      "bytes": 45192541,
+      "sha256": "726c345c8ee2519fa83b74d25b866841cd77714b57928cb21fcc3adef3357098"
+    },
+    "cves_unique_with_source_links_clean.csv": {
+      "records": 5692,
+      "columns": 15,
+      "csv_json_differing_cells_or_rows": 0,
+      "bytes": 5728703,
+      "sha256": "97d4c71e9fc372534753f92c8fb1b62c378ed383e1f36e9371946cc595418301"
+    },
+    "cves_merged_refetched.csv": {
+      "records": 5968,
+      "columns": 26,
+      "csv_json_differing_cells_or_rows": 0,
+      "bytes": 9134105,
+      "sha256": "b941a4fca4a93f819b0492fe328103417f620fa8b8050d6f5c3445f4fe74ea39"
+    }
+  },
+  "integrity_errors": [],
+  "readiness_warnings": [
+    "cves_merged_refetched.json: 2445 non-standard JSON constants; strict JSON parsers reject this file",
+    "cves_merged_with_url_dates.json: 2445 non-standard JSON constants; strict JSON parsers reject this file",
+    "cves_merged_with_url_dates_vc_kev.json: 2445 non-standard JSON constants; strict JSON parsers reject this file",
+    "The README says 29 fields for the date-only intermediate; the file has 28",
+    "The six revision files do not provide EPSS-window targets or generated revision summaries",
+    "The documented fetch_vulncheck_data.py and refetch_all_metrics implementation are missing from the pinned branch",
+    "The upstream summary loop omits the required api_key argument",
+    "The upstream NVD reference fetch indexes cve[\"\"] instead of cve[\"references\"]; a mocked valid response yields an empty list",
+    "The reference-history fetch warns about partial responses but does not paginate them",
+    "Snapshot consistency does not validate historical availability, negative labels or a leakage-free training split"
+  ],
+  "lineage": {
+    "base_to_refetched_added": 283,
+    "base_to_refetched_removed": 7,
+    "refetched_to_dates": {
+      "same_cve_ids": true,
+      "rows_with_changed_existing_fields": 0
+    },
+    "dates_to_kev": {
+      "same_cve_ids": true,
+      "rows_with_changed_existing_fields": 0
+    }
+  },
+  "metrics": {
+    "kev_positive": 548,
+    "kev_negative": 5420,
+    "cisa_members_among_kev": 342,
+    "missing_cvss_vectors": 77,
+    "cvss_versions": {
+      "3.1": 5667,
+      "3.0": 157,
+      "None": 77,
+      "2.0": 67
+    },
+    "nvd_statuses": {
+      "Analyzed": 2389,
+      "Modified": 2059,
+      "Deferred": 1520
+    },
+    "reference_url_slots": 26221,
+    "distinct_url_strings": 14975,
+    "reference_date_entries": 18297,
+    "reference_match_modes": {
+      "exact": 17878,
+      "case_insensitive": 419
+    },
+    "missing_earliest_reference_dates": 0,
+    "url_dates_status": {
+      "ok": 5968
+    },
+    "published_date_min": "1997-01-01",
+    "published_date_max": "2026-06-18"
+  },
+  "upstream_code_checks": {
+    "fetch_vulncheck_data_py_tracked": false,
+    "refetch_all_metrics_in_documented_script": false,
+    "summary_call_missing_api_key": true,
+    "mocked_valid_reference_response_returns": []
+  }
+}

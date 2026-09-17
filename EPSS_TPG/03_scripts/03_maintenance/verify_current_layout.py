@@ -7,6 +7,8 @@ import os
 from pathlib import Path
 import subprocess
 
+from audit_revision_data import audit
+
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / '.tpg-project-root').is_file())
 REVISION = 'a1e32ca3f16052b987767c013a49e2441b972e55'
 
@@ -50,9 +52,14 @@ def main():
             for p in (ROOT / name).rglob('*'):
                 if p.is_file() and p.name not in {'.gitkeep', 'README.md'}:
                     errors.append(f'Unexpected retained artifact: {p.relative_to(ROOT)}')
+    snapshot = audit()
+    errors.extend(snapshot['integrity_errors'])
+    for warning in snapshot['readiness_warnings']:
+        print('WARNING:', warning)
     for error in errors:
         print('ERROR:', error)
     print(f'Validation errors: {len(errors)}')
+    print('This validates the downloaded snapshot, not training readiness; review the warnings.')
     return bool(errors)
 
 

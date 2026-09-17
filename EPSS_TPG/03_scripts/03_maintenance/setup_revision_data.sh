@@ -3,7 +3,7 @@
 set -euo pipefail
 if [[ "${1:-}" == --help ]]; then
     printf '%s\n' 'Usage: bash setup_revision_data.sh' \
-        'Requires Git LFS and a clean dataset submodule. Downloads three current files.'
+        'Requires Git LFS and a clean dataset submodule. Downloads six revision/lineage files.'
     exit 0
 fi
 if (( $# != 0 )); then
@@ -36,8 +36,11 @@ fi
 git -C "$SUBMODULE" fetch origin "$BRANCH"
 PATTERNS=(
     /README.md /.gitattributes /.gitignore
+    /Sec4AI4Sec-EPSS/Data_Files/cves_unique_with_source_links_clean.csv
+    /Sec4AI4Sec-EPSS/Data_Files/cves_unique_with_source_links_clean.json
     /Sec4AI4Sec-EPSS/Data_Files/cves_merged_refetched.csv
     /Sec4AI4Sec-EPSS/Data_Files/cves_merged_refetched.json
+    /Sec4AI4Sec-EPSS/Data_Files/cves_merged_with_url_dates.json
     /Sec4AI4Sec-EPSS/Data_Files/cves_merged_with_url_dates_vc_kev.json
     /Sec4AI4Sec-EPSS/Data_Files/fetch_url_dates.py
     /Sec4AI4Sec-EPSS/LLM_summaries_gen/gen_llm_summ_web_parsing_bs.py
@@ -48,7 +51,7 @@ if [[ "$(git -C "$SUBMODULE" rev-parse HEAD)" != "$REVISION" ]]; then
     GIT_LFS_SKIP_SMUDGE=1 git -C "$SUBMODULE" switch --detach "$REVISION"
 fi
 git -C "$SUBMODULE" lfs pull \
-    --include='Sec4AI4Sec-EPSS/Data_Files/cves_merged_refetched.csv,Sec4AI4Sec-EPSS/Data_Files/cves_merged_refetched.json,Sec4AI4Sec-EPSS/Data_Files/cves_merged_with_url_dates_vc_kev.json' \
+    --include='Sec4AI4Sec-EPSS/Data_Files/cves_unique_with_source_links_clean.csv,Sec4AI4Sec-EPSS/Data_Files/cves_unique_with_source_links_clean.json,Sec4AI4Sec-EPSS/Data_Files/cves_merged_refetched.csv,Sec4AI4Sec-EPSS/Data_Files/cves_merged_refetched.json,Sec4AI4Sec-EPSS/Data_Files/cves_merged_with_url_dates.json,Sec4AI4Sec-EPSS/Data_Files/cves_merged_with_url_dates_vc_kev.json' \
     --exclude=''
 git -C "$SUBMODULE" status --short --branch
 printf 'Dataset snapshot: %s\n' "$REVISION"

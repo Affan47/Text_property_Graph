@@ -6,7 +6,7 @@ The existing `SummTPGVul` submodule already used `https://github.com/observatio/
 
 The selected branch is now `tpg-paper-revision`; `.gitmodules` records that preference. The intended parent-repository gitlink is `a1e32ca3f16052b987767c013a49e2441b972e55`, replacing `0a6263121359f81fa62eeb0a495eb6f877028d39`. The parent commit, not the branch name alone, makes the selection reproducible.
 
-The current checkout exposes three revision dataset files and selected preparation scripts using sparse checkout. Sparse-checkout settings are local Git configuration, not inherited through the gitlink. The setup script below reproduces them for another checkout. The upstream branch still includes older data and results; they were not modified or deleted upstream.
+The current checkout exposes six revision/lineage dataset files and selected preparation scripts using sparse checkout. The first cleanup selected three final files; the subsequent README audit added the base CSV/JSON pair and the reference-date intermediate. Sparse-checkout settings are local Git configuration, not inherited through the gitlink. The setup script below reproduces them for another checkout. The upstream branch still includes older data and results; they were not modified or deleted upstream.
 
 ## Reproduce This Checkout
 
@@ -64,3 +64,5 @@ Deleting files in a new commit removes them from the branch's current tree after
 ## Before Training Again
 
 See [the verified dataset guide](../03_datasets/00_README.md). The new source schema is not compatible with the previous EPSS adapter. The new JSON is an array of CVE records with VulnCheck membership; it is not the normalized dictionary expected by `CVEGraphDataset`. A target-specific adapter and evaluation design remain to be implemented.
+
+The deeper [README audit](../03_datasets/01_REVISION_README_AUDIT.md) also found non-standard JSON constants, missing regeneration code and upstream script defects. The verifier now reports these warnings rather than implying that count checks alone establish readiness.
