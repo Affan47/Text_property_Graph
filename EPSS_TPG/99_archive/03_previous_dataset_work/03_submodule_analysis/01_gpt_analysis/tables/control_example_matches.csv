@@ -1,0 +1,9 @@
+Example,Role,CVE,First captured post,Days after event,Source,Year / severity / CVSS,Starting EPSS percentile
+A,Posted CVE,CVE-2024-42733,2025-03-10,0,Mastodon,2024 / Critical / 9.8,0.1187
+A,Comparison 1,CVE-2024-48573,2025-04-10,31,ExploitDB,2024 / Critical / 9.8,0.1187
+A,Comparison 2,CVE-2024-35056,2025-04-11,32,HackerNews,2024 / Critical / 9.8,0.1187
+A,Comparison 3,CVE-2024-50672,2025-04-15,36,ExploitDB,2024 / Critical / 9.8,0.1187
+B,Posted CVE,CVE-2023-28461,2025-01-09,0,BleepingComputer,2023 / Critical / 9.8,0.97173
+B,Comparison 1,CVE-2023-34048,2025-03-04,54,BleepingComputer,2023 / Critical / 9.8,0.97409
+B,Comparison 2,CVE-2023-26602,2025-04-16,97,ExploitDB,2023 / Critical / 9.8,0.97588
+B,Comparison 3,CVE-2023-30258,2025-04-11,92,ExploitDB,2023 / Critical / 9.8,0.98104

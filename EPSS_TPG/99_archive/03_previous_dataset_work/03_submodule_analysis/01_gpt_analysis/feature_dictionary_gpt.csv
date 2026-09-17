@@ -1,0 +1,29 @@
+column,role,dtype,missing,missing_pct,distinct_non_null
+cve,row identifier with canonical CVE plus row suffix,object,0,0.0,9218
+source,social platform or source,object,0,0.0,6
+date_posted,post date; Telegram dates excluded from temporal analysis,object,0,0.0,314
+time_posted,post time when available,object,0,0.0,550
+social_media_post,raw post text,object,5,0.05,6415
+epss_score,exploit prediction score,float64,0,0.0,1496
+epss_status,whether EPSS was original or enriched,object,0,0.0,2
+description,CVE description,object,0,0.0,5386
+cvss_version,CVSS version,float64,0,0.0,2
+cvss_score,CVSS base score,float64,0,0.0,78
+attack_vector,CVSS metric,object,0,0.0,4
+attack_complexity,CVSS metric,object,0,0.0,2
+privileges_required,CVSS metric,object,0,0.0,3
+user_interaction,CVSS metric,object,0,0.0,2
+scope,CVSS metric,object,0,0.0,2
+confidentiality_impact,CVSS metric,object,0,0.0,3
+integrity_impact,CVSS metric,object,0,0.0,3
+availability_impact,CVSS metric,object,0,0.0,3
+occurrence_count,count feature supplied in source data,int64,0,0.0,34
+sources_available,whether external source links exist,bool,0,0.0,2
+github_links_with_code_available,whether GitHub code links exist,bool,0,0.0,2
+days_since_latest_git_source,lag to latest GitHub source,float64,7323,79.44,478
+days_since_oldest_git_source,lag to oldest GitHub source,float64,7323,79.44,520
+source_links,serialized external source URLs,object,1582,17.16,4897
+summ_all_sources,LLM summary of all sources,object,1612,17.49,7606
+summ_github_urls,LLM summary of GitHub URLs,object,6972,75.63,1440
+summ_cvss_metrics,LLM summary of CVSS metrics,object,0,0.0,9218
+github_urls,serialized GitHub URLs,object,6879,74.63,1657

@@ -1,0 +1,5 @@
+metric,value,pct
+events,4187,100.0
+kev_ever,284,6.78
+kev_after_event,119,2.84
+kev_within_90d,102,2.44

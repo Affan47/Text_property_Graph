@@ -1,0 +1,10 @@
+model,summary_field,non_null,missing_pct,median_words_non_null,p90_words_non_null,max_words_non_null
+gemma,summ_all_sources,7636,17.16,81.0,136.5,343
+gpt,summ_all_sources,7606,17.49,111.0,180.0,561
+mistral,summ_all_sources,7317,20.62,122.0,205.0,504
+gemma,summ_cvss_metrics,9218,0.0,66.0,82.0,117
+gpt,summ_cvss_metrics,9218,0.0,85.0,136.0,249
+mistral,summ_cvss_metrics,9016,2.19,108.0,150.0,259
+gemma,summ_github_urls,2381,74.17,81.0,118.0,424
+gpt,summ_github_urls,2246,75.63,210.0,298.5,1208
+mistral,summ_github_urls,2388,74.09,113.0,190.0,830

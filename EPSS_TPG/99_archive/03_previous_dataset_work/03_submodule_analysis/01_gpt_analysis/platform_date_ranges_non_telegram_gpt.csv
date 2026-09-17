@@ -1,0 +1,6 @@
+source,rows,first_post_date,last_post_date,unique_canonical_cves,median_cvss,median_epss
+Mastodon,3136,2024-09-04,2025-05-20,2860,8.8,0.00043
+Reddit,1333,2021-11-23,2025-06-01,616,7.8,0.00174
+HackerNews,816,2025-04-07,2025-05-28,483,7.8,0.00738
+BleepingComputer,755,2025-01-04,2025-05-30,276,8.0,0.00228
+ExploitDB,588,2023-05-02,2025-05-29,362,7.8,0.00146

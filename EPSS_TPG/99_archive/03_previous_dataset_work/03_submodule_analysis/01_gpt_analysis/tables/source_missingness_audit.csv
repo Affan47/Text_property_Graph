@@ -1,0 +1,7 @@
+scope,field,rows_checked,rows_missing,missing_pct,interpretation
+Each model file,social_media_post,9218,5,0.05,Five absent posts occur outside the analysis population; all analyzed rows contain post text.
+Each model file,days_since_latest_git_source,9218,7323,79.44,Present only when dated Git evidence is available.
+Each model file,days_since_oldest_git_source,9218,7323,79.44,Present only when dated Git evidence is available.
+Each model file,source_links,9218,1582,17.16,Absence exactly agrees with sources_available=False.
+Each model file,github_urls,9218,6879,74.63,Optional evidence; most rows do not contain a GitHub URL.
+Analysis population,21 required core fields,6628,0,0.0,"No analyzed row is missing its CVE, date, post text, EPSS, CVSS, or core metadata."

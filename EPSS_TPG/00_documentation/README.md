@@ -1,6 +1,6 @@
 # Start Here
 
-This is the main reading path. Read the first two documents before choosing a topic. Older research reports are preserved, but their claims and paths should be interpreted using the current project findings.
+This is the main reading path. The current data comes from `SummTPGVul/tpg-paper-revision`. Previous datasets and trained runs were retired; their reports are historical, not evidence about the replacement data.
 
 | Read | Document | What you learn |
 |---|---|---|
@@ -21,8 +21,9 @@ This is the main reading path. Read the first two documents before choosing a to
 - Numbered folders describe a topic or processing stage.
 - Real Markdown and LaTeX documentation is centralized here. README entries beside code are navigation links.
 - Python packages keep valid import names such as `tpg` and `epss`. Their functions and classes were not renamed.
-- Dataset snapshots, experiment IDs and cache-internal names remain stable identifiers.
-- `99_historical_indexes/` preserves earlier indexes and parallel document versions. Use the topic guides above first.
+- Previous dataset reports, experiment tables and parallel document versions live in [the retirement archive](../99_archive/03_previous_dataset_work/README.md).
 - Research documents were relocated, not scientifically revalidated by the layout change. Some contain historical findings or references to artifacts no longer available.
 
 The Git submodule `SummTPGVul` retains its upstream layout. It is accessible through `04_data/02_source_repository`.
+
+Use [the dataset transition guide](07_maintenance/04_DATASET_TRANSITION.md) for the pinned sparse-checkout command and the cleanup inventory.

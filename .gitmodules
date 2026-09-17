@@ -1,3 +1,4 @@
 [submodule "SummTPGVul"]
 	path = SummTPGVul
 	url = https://github.com/observatio/SummTPGVul.git
+	branch = tpg-paper-revision

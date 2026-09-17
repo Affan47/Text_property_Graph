@@ -14,14 +14,15 @@ For the implementation, follow [the code reading order](00_documentation/01_star
 | 06 | Runtime | Logs |
 | 99 | Archive | TeX installer and compatibility paths for old documents |
 
-The unnumbered names `tpg`, `epss`, `data`, `outputs`, `docs` and similar entries are compatibility symlinks, not duplicate copies. Browse the numbered folders; old commands and saved configuration paths can continue to use the aliases. Python package names and experiment IDs retain their original spelling.
+The unnumbered names `tpg`, `epss`, `data`, `outputs`, `docs` and similar entries are compatibility symlinks, not duplicate copies. Python package names retain their spelling. Old datasets and saved experiments have been retired; their analysis is in `99_archive/03_previous_dataset_work/`.
+
+The source submodule now selects `tpg-paper-revision`. Read [the dataset transition guide](00_documentation/07_maintenance/04_DATASET_TRANSITION.md) before training: the replacement files require a new adapter and explicit target definition.
 
 From this directory:
 
 ```bash
 python -m epss.run_pipeline --help
-bash 03_scripts/01_training/run_social_media_retrain.sh --dry-run
+python 03_scripts/03_maintenance/verify_current_layout.py --expect-empty
 ```
 
 See [the migration record](00_documentation/07_maintenance/01_LAYOUT_AND_COMPATIBILITY.md) for exact paths and verification details.
-

@@ -1,0 +1,360 @@
+nohup: input ignorato
+============================================================
+SECURITY-FRONTEND ABLATION (--no-security-frontend on every run)
+============================================================
+  Total experiments:         38
+  Filter (regex):            .
+  Dry-run mode:              false
+  Quiet mode:                true
+  Overwrite existing runs:   true
+  Working directory:         /home/ayounas/Text_property_Graph/EPSS_TPG
+  Output base:               output/no_security_ablation/
+  Data base:                 data/no_security_ablation/
+  Logs directory:            /home/ayounas/Text_property_Graph/EPSS_TPG/Datasets_information/Security_ablation/run_logs
+  Common train flags:        --backbone multiview --hybrid --epochs 100 --no-security-frontend
+============================================================
+
+[OVERWRITE 1/38] gpt_v2_D - removing old output and graph cache
+
+============================================================
+[START 1/38] gpt_v2_D  @ 2026-05-18 12:05:09
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv
+    output  : output/no_security_ablation/gpt_v2_D
+    extra   : --label-mode soft --no-epss-feature --summary-source description
+  Batch progress: 1/38  [······························]  2%
+============================================================
+[DONE  1/38] gpt_v2_D  in 5m 54s
+[OVERWRITE 2/38] gpt_v2_S_all - removing old output and graph cache
+
+============================================================
+[START 2/38] gpt_v2_S_all  @ 2026-05-18 12:11:03
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv
+    output  : output/no_security_ablation/gpt_v2_S_all
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source all_sources
+  Batch progress: 2/38  [█·····························]  5%   avg/run: 5m 54s   ETA: 3h 32m 24s
+============================================================
+[DONE  2/38] gpt_v2_S_all  in 6m 52s
+[OVERWRITE 3/38] gpt_v2_S_git - removing old output and graph cache
+
+============================================================
+[START 3/38] gpt_v2_S_git  @ 2026-05-18 12:17:56
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv
+    output  : output/no_security_ablation/gpt_v2_S_git
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source github_urls
+  Batch progress: 3/38  [██····························]  7%   avg/run: 6m 23s   ETA: 3h 43m 25s
+============================================================
+[DONE  3/38] gpt_v2_S_git  in 3m 55s
+[OVERWRITE 4/38] gpt_v2_S_cvss - removing old output and graph cache
+
+============================================================
+[START 4/38] gpt_v2_S_cvss  @ 2026-05-18 12:21:52
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv
+    output  : output/no_security_ablation/gpt_v2_S_cvss
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source cvss_metrics
+  Batch progress: 4/38  [███···························]  10%   avg/run: 5m 33s   ETA: 3h 8m 42s
+============================================================
+[DONE  4/38] gpt_v2_S_cvss  in 7m 15s
+[OVERWRITE 5/38] gpt_v2_ALL - removing old output and graph cache
+
+============================================================
+[START 5/38] gpt_v2_ALL  @ 2026-05-18 12:29:07
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gpt_combined_summ.csv
+    output  : output/no_security_ablation/gpt_v2_ALL
+    extra   : --label-mode soft --no-epss-feature --include-summary-in-tpg --summary-source combined
+  Batch progress: 5/38  [███···························]  13%   avg/run: 5m 59s   ETA: 3h 17m 27s
+============================================================
+[DONE  5/38] gpt_v2_ALL  in 19m 8s
+[OVERWRITE 6/38] gemma_v2_D - removing old output and graph cache
+
+============================================================
+[START 6/38] gemma_v2_D  @ 2026-05-18 12:48:15
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv
+    output  : output/no_security_ablation/gemma_v2_D
+    extra   : --label-mode soft --no-epss-feature --summary-source description
+  Batch progress: 6/38  [████··························]  15%   avg/run: 8m 36s   ETA: 4h 35m 12s
+============================================================
+[DONE  6/38] gemma_v2_D  in 7m 29s
+[OVERWRITE 7/38] gemma_v2_S_all - removing old output and graph cache
+
+============================================================
+[START 7/38] gemma_v2_S_all  @ 2026-05-18 12:55:44
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv
+    output  : output/no_security_ablation/gemma_v2_S_all
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source all_sources
+  Batch progress: 7/38  [█████·························]  18%   avg/run: 8m 25s   ETA: 4h 20m 55s
+============================================================
+[DONE  7/38] gemma_v2_S_all  in 8m 42s
+[OVERWRITE 8/38] gemma_v2_S_git - removing old output and graph cache
+
+============================================================
+[START 8/38] gemma_v2_S_git  @ 2026-05-18 13:04:26
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv
+    output  : output/no_security_ablation/gemma_v2_S_git
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source github_urls
+  Batch progress: 8/38  [██████························]  21%   avg/run: 8m 27s   ETA: 4h 13m 30s
+============================================================
+[DONE  8/38] gemma_v2_S_git  in 1m 37s
+[OVERWRITE 9/38] gemma_v2_S_cvss - removing old output and graph cache
+
+============================================================
+[START 9/38] gemma_v2_S_cvss  @ 2026-05-18 13:06:03
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv
+    output  : output/no_security_ablation/gemma_v2_S_cvss
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source cvss_metrics
+  Batch progress: 9/38  [███████·······················]  23%   avg/run: 7m 36s   ETA: 3h 40m 24s
+============================================================
+[DONE  9/38] gemma_v2_S_cvss  in 5m 23s
+[OVERWRITE 10/38] gemma_v2_ALL - removing old output and graph cache
+
+============================================================
+[START 10/38] gemma_v2_ALL  @ 2026-05-18 13:11:26
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/gemma_combined_summ.csv
+    output  : output/no_security_ablation/gemma_v2_ALL
+    extra   : --label-mode soft --no-epss-feature --include-summary-in-tpg --summary-source combined
+  Batch progress: 10/38  [███████·······················]  26%   avg/run: 7m 21s   ETA: 3h 25m 48s
+============================================================
+[DONE  10/38] gemma_v2_ALL  in 14m 4s
+[OVERWRITE 11/38] mistral_v2_D - removing old output and graph cache
+
+============================================================
+[START 11/38] mistral_v2_D  @ 2026-05-18 13:25:30
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/mistral_combined_summ.csv
+    output  : output/no_security_ablation/mistral_v2_D
+    extra   : --label-mode soft --no-epss-feature --summary-source description
+  Batch progress: 11/38  [████████······················]  28%   avg/run: 8m 1s   ETA: 3h 36m 27s
+============================================================
+[DONE  11/38] mistral_v2_D  in 4m 32s
+[OVERWRITE 12/38] mistral_v2_S_all - removing old output and graph cache
+
+============================================================
+[START 12/38] mistral_v2_S_all  @ 2026-05-18 13:30:02
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/mistral_combined_summ.csv
+    output  : output/no_security_ablation/mistral_v2_S_all
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source all_sources
+  Batch progress: 12/38  [█████████·····················]  31%   avg/run: 7m 42s   ETA: 3h 20m 12s
+============================================================
+[DONE  12/38] mistral_v2_S_all  in 7m 11s
+[OVERWRITE 13/38] mistral_v2_S_git - removing old output and graph cache
+
+============================================================
+[START 13/38] mistral_v2_S_git  @ 2026-05-18 13:37:13
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/mistral_combined_summ.csv
+    output  : output/no_security_ablation/mistral_v2_S_git
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source github_urls
+  Batch progress: 13/38  [██████████····················]  34%   avg/run: 7m 40s   ETA: 3h 11m 40s
+============================================================
+[DONE  13/38] mistral_v2_S_git  in 2m 12s
+[OVERWRITE 14/38] mistral_v2_S_cvss - removing old output and graph cache
+
+============================================================
+[START 14/38] mistral_v2_S_cvss  @ 2026-05-18 13:39:25
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/mistral_combined_summ.csv
+    output  : output/no_security_ablation/mistral_v2_S_cvss
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source cvss_metrics
+  Batch progress: 14/38  [███████████···················]  36%   avg/run: 7m 14s   ETA: 2h 53m 36s
+============================================================
+[DONE  14/38] mistral_v2_S_cvss  in 11m 45s
+[OVERWRITE 15/38] mistral_v2_ALL - removing old output and graph cache
+
+============================================================
+[START 15/38] mistral_v2_ALL  @ 2026-05-18 13:51:10
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/mistral_combined_summ.csv
+    output  : output/no_security_ablation/mistral_v2_ALL
+    extra   : --label-mode soft --no-epss-feature --include-summary-in-tpg --summary-source combined
+  Batch progress: 15/38  [███████████···················]  39%   avg/run: 7m 34s   ETA: 2h 54m 2s
+============================================================
+[DONE  15/38] mistral_v2_ALL  in 25m 17s
+[OVERWRITE 16/38] deepseek_v2_D - removing old output and graph cache
+
+============================================================
+[START 16/38] deepseek_v2_D  @ 2026-05-18 14:16:27
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv
+    output  : output/no_security_ablation/deepseek_v2_D
+    extra   : --label-mode soft --no-epss-feature --summary-source description
+  Batch progress: 16/38  [████████████··················]  42%   avg/run: 8m 45s   ETA: 3h 12m 30s
+============================================================
+[DONE  16/38] deepseek_v2_D  in 6m 33s
+[OVERWRITE 17/38] deepseek_v2_S_all - removing old output and graph cache
+
+============================================================
+[START 17/38] deepseek_v2_S_all  @ 2026-05-18 14:23:00
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv
+    output  : output/no_security_ablation/deepseek_v2_S_all
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source all_sources
+  Batch progress: 17/38  [█████████████·················]  44%   avg/run: 8m 36s   ETA: 3h 0m 36s
+============================================================
+[DONE  17/38] deepseek_v2_S_all  in 6m 21s
+[OVERWRITE 18/38] deepseek_v2_S_git - removing old output and graph cache
+
+============================================================
+[START 18/38] deepseek_v2_S_git  @ 2026-05-18 14:29:21
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv
+    output  : output/no_security_ablation/deepseek_v2_S_git
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source github_urls
+  Batch progress: 18/38  [██████████████················]  47%   avg/run: 8m 28s   ETA: 2h 49m 20s
+============================================================
+[DONE  18/38] deepseek_v2_S_git  in 1m 20s
+[OVERWRITE 19/38] deepseek_v2_S_cvss - removing old output and graph cache
+
+============================================================
+[START 19/38] deepseek_v2_S_cvss  @ 2026-05-18 14:30:41
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv
+    output  : output/no_security_ablation/deepseek_v2_S_cvss
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source cvss_metrics
+  Batch progress: 19/38  [███████████████···············]  50%   avg/run: 8m 5s   ETA: 2h 33m 35s
+============================================================
+[FAIL  19/38] deepseek_v2_S_cvss  in 3s - see /home/ayounas/Text_property_Graph/EPSS_TPG/Datasets_information/Security_ablation/run_logs/deepseek_v2_S_cvss.log
+    --- tail of log ---
+    2026-05-18 14:30:42,744 INFO [numexpr.utils] Note: detected 88 virtual cores but NumExpr set to maximum of 64, check "NUMEXPR_MAX_THREADS" environment variable.
+    2026-05-18 14:30:42,744 INFO [numexpr.utils] Note: NumExpr detected 88 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+    2026-05-18 14:30:42,744 INFO [numexpr.utils] NumExpr defaulting to 16 threads.
+    2026-05-18 14:30:42,818 INFO [epss.csv_adapter] Loading /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv  (97.0 MB)
+    2026-05-18 14:30:43,318 INFO [epss.csv_adapter] Loaded 9218 rows, 27 columns
+    2026-05-18 14:30:43,318 INFO [epss.csv_adapter] Summary mode: cvss_metrics
+    2026-05-18 14:30:43,324 INFO [epss.csv_adapter] Kept 9218 / 9218 rows (dropped missing description or epss_score)
+    2026-05-18 14:30:43,892 INFO [epss.csv_adapter] Built 9218 unique CVE records  (0 skipped: empty cve_id)
+    2026-05-18 14:30:43,892 INFO [epss.csv_adapter] Label distribution: 1427 positive (15.5%), 7791 negative (84.5%)
+    2026-05-18 14:30:43,893 INFO [epss.csv_adapter] Summary coverage (cvss_metrics): 0 non-empty, 9218 empty (100.00% missing)
+    2026-05-18 14:30:44,001 INFO [epss.csv_adapter] Saved → data/no_security_ablation/deepseek_v2_S_cvss/labeled_cves.json
+    2026-05-18 14:30:44,034 INFO [__main__] Loaded 9218 existing labeled CVEs
+    2026-05-18 14:30:44,035 INFO [__main__] Dataset: 9218 CVEs, 1427 exploited (15.5%)
+    2026-05-18 14:30:44,036 INFO [__main__] LLM summaries: 0 non-empty, 9218 empty (100.00% empty)
+    2026-05-18 14:30:44,036 ERROR [__main__] No non-empty llm_summary values found in data/no_security_ablation/deepseek_v2_S_cvss/labeled_cves.json. Regenerate labeled_cves.json with --source-csv, or check that the CSV has a summary-like column such as summary, llm_summary, summ_all_sources, summ_llama3.1_8b, summ_github_urls, or another summ* column.
+    --- end of tail ---
+[OVERWRITE 20/38] deepseek_v2_ALL - removing old output and graph cache
+
+============================================================
+[START 20/38] deepseek_v2_ALL  @ 2026-05-18 14:30:44
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced/Sec4AI4Sec-EPSS/Data_Files/deepseek_combined_summ.csv
+    output  : output/no_security_ablation/deepseek_v2_ALL
+    extra   : --label-mode soft --no-epss-feature --include-summary-in-tpg --summary-source combined
+  Batch progress: 20/38  [███████████████···············]  52%   avg/run: 8m 5s   ETA: 2h 25m 30s
+============================================================
+[DONE  20/38] deepseek_v2_ALL  in 9m 22s
+[OVERWRITE 21/38] mv_gpt_D - removing old output and graph cache
+
+============================================================
+[START 21/38] mv_gpt_D  @ 2026-05-18 14:40:06
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced-megavul/Sec4AI4Sec-EPSS/Data_Files/megavul/gpt.csv
+    output  : output/no_security_ablation/mv_gpt_D
+    extra   : --label-mode soft --no-epss-feature --summary-source description
+  Batch progress: 21/38  [████████████████··············]  55%   avg/run: 8m 9s   ETA: 2h 18m 33s
+============================================================
+[DONE  21/38] mv_gpt_D  in 3m 14s
+[OVERWRITE 22/38] mv_gpt_S_url - removing old output and graph cache
+
+============================================================
+[START 22/38] mv_gpt_S_url  @ 2026-05-18 14:43:20
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced-megavul/Sec4AI4Sec-EPSS/Data_Files/megavul/gpt.csv
+    output  : output/no_security_ablation/mv_gpt_S_url
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source commit_url
+  Batch progress: 22/38  [█████████████████·············]  57%   avg/run: 7m 54s   ETA: 2h 6m 24s
+============================================================
+[DONE  22/38] mv_gpt_S_url  in 3m 55s
+[OVERWRITE 23/38] mv_gpt_S_code - removing old output and graph cache
+
+============================================================
+[START 23/38] mv_gpt_S_code  @ 2026-05-18 14:47:15
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced-megavul/Sec4AI4Sec-EPSS/Data_Files/megavul/gpt.csv
+    output  : output/no_security_ablation/mv_gpt_S_code
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source code
+  Batch progress: 23/38  [██████████████████············]  60%   avg/run: 7m 42s   ETA: 1h 55m 30s
+============================================================
+[DONE  23/38] mv_gpt_S_code  in 8m 51s
+[OVERWRITE 24/38] mv_gpt_S_cvss - removing old output and graph cache
+
+============================================================
+[START 24/38] mv_gpt_S_cvss  @ 2026-05-18 14:56:06
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced-megavul/Sec4AI4Sec-EPSS/Data_Files/megavul/gpt.csv
+    output  : output/no_security_ablation/mv_gpt_S_cvss
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source cvss_metrics
+  Batch progress: 24/38  [██████████████████············]  63%   avg/run: 7m 46s   ETA: 1h 48m 44s
+============================================================
+[DONE  24/38] mv_gpt_S_cvss  in 4m 28s
+[OVERWRITE 25/38] mv_gpt_ALL - removing old output and graph cache
+
+============================================================
+[START 25/38] mv_gpt_ALL  @ 2026-05-18 15:00:34
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced-megavul/Sec4AI4Sec-EPSS/Data_Files/megavul/gpt.csv
+    output  : output/no_security_ablation/mv_gpt_ALL
+    extra   : --label-mode soft --no-epss-feature --include-summary-in-tpg --summary-source combined
+  Batch progress: 25/38  [███████████████████···········]  65%   avg/run: 7m 37s   ETA: 1h 39m 1s
+============================================================
+[FAIL  25/38] mv_gpt_ALL  in 16m 15s - see /home/ayounas/Text_property_Graph/EPSS_TPG/Datasets_information/Security_ablation/run_logs/mv_gpt_ALL.log
+    --- tail of log ---
+      File "/home/ayounas/.miniconda3/envs/CodeBERTFusion/lib/python3.10/site-packages/torch_geometric/data/in_memory_dataset.py", line 81, in __init__
+        super().__init__(root, transform, pre_transform, pre_filter, log,
+      File "/home/ayounas/.miniconda3/envs/CodeBERTFusion/lib/python3.10/site-packages/torch_geometric/data/dataset.py", line 115, in __init__
+        self._process()
+      File "/home/ayounas/.miniconda3/envs/CodeBERTFusion/lib/python3.10/site-packages/torch_geometric/data/dataset.py", line 262, in _process
+        self.process()
+      File "/home/ayounas/Text_property_Graph/EPSS_TPG/epss/cve_dataset.py", line 340, in process
+        self.save(data_list, self.processed_paths[0])
+      File "/home/ayounas/.miniconda3/envs/CodeBERTFusion/lib/python3.10/site-packages/torch_geometric/data/in_memory_dataset.py", line 127, in save
+        fs.torch_save((data.to_dict(), slices, data.__class__), path)
+      File "/home/ayounas/.miniconda3/envs/CodeBERTFusion/lib/python3.10/site-packages/torch_geometric/io/fs.py", line 213, in torch_save
+        f.write(buffer.getvalue())
+      File "/home/ayounas/.local/lib/python3.10/site-packages/fsspec/implementations/local.py", line 422, in write
+        return self.f.write(*args, **kwargs)
+    OSError: [Errno 28] No space left on device
+    --- end of tail ---
+[OVERWRITE 26/38] mv_mistral_D - removing old output and graph cache
+
+============================================================
+[START 26/38] mv_mistral_D  @ 2026-05-18 15:16:49
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced-megavul/Sec4AI4Sec-EPSS/Data_Files/megavul/mistral.csv
+    output  : output/no_security_ablation/mv_mistral_D
+    extra   : --label-mode soft --no-epss-feature --summary-source description
+  Batch progress: 26/38  [████████████████████··········]  68%   avg/run: 7m 37s   ETA: 1h 31m 24s
+============================================================
+[FAIL  26/38] mv_mistral_D  in 2s - see /home/ayounas/Text_property_Graph/EPSS_TPG/Datasets_information/Security_ablation/run_logs/mv_mistral_D.log
+    --- tail of log ---
+    --- end of tail ---
+[OVERWRITE 27/38] mv_mistral_S_url - removing old output and graph cache
+
+============================================================
+[START 27/38] mv_mistral_S_url  @ 2026-05-18 15:16:51
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced-megavul/Sec4AI4Sec-EPSS/Data_Files/megavul/mistral.csv
+    output  : output/no_security_ablation/mv_mistral_S_url
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source commit_url
+  Batch progress: 27/38  [█████████████████████·········]  71%   avg/run: 7m 37s   ETA: 1h 23m 47s
+============================================================
+[FAIL  27/38] mv_mistral_S_url  in 2s - see /home/ayounas/Text_property_Graph/EPSS_TPG/Datasets_information/Security_ablation/run_logs/mv_mistral_S_url.log
+    --- tail of log ---
+    --- end of tail ---
+[OVERWRITE 28/38] mv_mistral_S_code - removing old output and graph cache
+
+============================================================
+[START 28/38] mv_mistral_S_code  @ 2026-05-18 15:16:53
+    mode    : csv
+    source  : /home/ayounas/Text_property_Graph/Sec4AI4Aec-EPSS-Enhanced-megavul/Sec4AI4Sec-EPSS/Data_Files/megavul/mistral.csv
+    output  : output/no_security_ablation/mv_mistral_S_code
+    extra   : --label-mode soft --no-epss-feature --summary-only-tpg --summary-source code
+  Batch progress: 28/38  [██████████████�

@@ -1,0 +1,21 @@
+canonical_cve,rows,platforms,max_cvss,max_epss,any_github_code,first_post,last_post
+CVE-2025-32433,40,"BleepingComputer, HackerNews, Mastodon, Reddit",10.0,0.56843,True,2025-04-17,2025-05-13
+CVE-2025-31324,39,"BleepingComputer, HackerNews, Mastodon, Reddit",10.0,0.79541,False,2025-04-17,2025-05-28
+CVE-2025-24054,39,"BleepingComputer, ExploitDB, HackerNews, Mastodon, Reddit",6.5,0.38929,False,2025-04-16,2025-05-23
+CVE-2025-31201,37,"HackerNews, Mastodon, Reddit",6.8,0.005,True,2025-04-17,2025-05-24
+CVE-2025-29927,36,"BleepingComputer, ExploitDB, Mastodon, Reddit",9.1,0.93113,True,2025-03-21,2025-05-26
+CVE-2025-0282,28,"BleepingComputer, ExploitDB, Mastodon, Reddit",9.0,0.92336,False,2025-01-08,2025-04-27
+CVE-2025-29824,25,"BleepingComputer, HackerNews, Mastodon, Reddit",7.8,0.19164,False,2025-04-08,2025-05-14
+CVE-2025-31200,25,"HackerNews, Reddit",7.5,0.00445,True,2025-04-17,2025-05-28
+CVE-2025-21204,23,"BleepingComputer, Mastodon, Reddit",7.8,0.00075,False,2025-04-14,2025-05-24
+CVE-2025-32756,22,"BleepingComputer, HackerNews, Reddit",9.8,0.09111,False,2025-05-13,2025-06-01
+CVE-2025-31161,20,"BleepingComputer, ExploitDB, Mastodon, Reddit",9.8,0.8174,False,2025-04-01,2025-05-24
+CVE-2025-27363,20,"BleepingComputer, HackerNews, Mastodon, Reddit",8.1,0.75464,False,2025-03-11,2025-05-10
+CVE-2024-53104,20,"BleepingComputer, HackerNews, Mastodon, Reddit",7.8,0.02438,False,2025-02-03,2025-05-06
+CVE-2025-42599,19,"BleepingComputer, Mastodon, Reddit",9.8,0.28554,False,2025-04-18,2025-05-01
+CVE-2025-22457,18,"BleepingComputer, HackerNews, Mastodon, Reddit",9.0,0.24069,False,2025-04-03,2025-04-25
+CVE-2024-38475,17,"BleepingComputer, HackerNews, Reddit",9.1,0.93167,True,2025-04-25,2025-05-09
+CVE-2025-3248,17,"BleepingComputer, ExploitDB, HackerNews, Mastodon, Reddit",9.8,0.91175,True,2025-04-07,2025-05-19
+CVE-2025-47241,17,"HackerNews, Reddit",4.0,0.00035,True,2025-05-20,2025-05-26
+CVE-2025-30406,16,"HackerNews, Mastodon, Reddit",9.0,0.64127,False,2025-04-04,2025-04-28
+CVE-2024-11477,16,Reddit,7.8,0.34388,False,2025-05-08,2025-05-19

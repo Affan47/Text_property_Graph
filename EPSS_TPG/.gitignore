@@ -1,208 +1,45 @@
-# ─── Python ───────────────────────────────────────────────────────────────────
+# Python and local environments
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
 *.so
 *.egg-info/
-
-# ─── Environments ─────────────────────────────────────────────────────────────
 venv/
 .venv/
 env/
-
-# ─── Large Binary Graph Caches ────────────────────────────────────────────────
-# PyG serialized tensors (.pt) — regenerate with:
-#   python -m epss.run_pipeline --backbone multiview --hybrid ...
-# (takes ~2 h for 10K graphs on RTX 5000 Ada; stored in data/*/pyg_dataset/processed/)
-*.pt
-
-# ─── External Dataset (from Sec4AI4Aec-EPSS-Enhanced repo, tracked via LFS there) ──
-data/epss/final_dataset_with_delta_days.csv
-# Derived labeled JSON from the adapter (regenerate with: python -m epss.csv_adapter)
-data/epss_sec4ai/labeled_cves.json
-
-# ─── Large Raw / Derived Data Files ───────────────────────────────────────────
-# These files exceed GitHub's 100 MB limit or are derived/regeneratable.
-# Full rebuild instructions: docs/EPSS_GNN_Technical_Report.md (Section 4)
-
-# Raw NVD full fetch (~120 MB each) — rebuild: python -m epss.data_collector
-data/epss_full/nvd_cves.json
-data/epss/nvd_cves.json
-
-# Master merged labeled dataset (>85 MB) — derived from NVD + KEV + EPSS + ExploitDB
-data/epss_full/labeled_cves.json
-data/epss/labeled_cves.json
-
-# 150 MB copy used by epss_full_train/ PyG pipeline
-data/epss_full_train/pyg_dataset/raw/labeled_cves.json
-
-# ─── Compressed EPSS Bulk Downloads ───────────────────────────────────────────
-# Download from: https://epss.cyentia.com/epss_scores-YYYY-MM-DD.csv.gz
-# Then: python -c "from epss.data_collector import load_epss_csv; load_epss_csv(...)"
-*.gz
-
-# ─── Model Checkpoints ────────────────────────────────────────────────────────
-# Retrain with: python -m epss.run_pipeline ... (see docs/ for full commands)
-outputs/**/best_model.pt
-outputs/epss/best_model.pt
-
-# ─── Legacy / archived run outputs ────────────────────────────────────────────
-# outputs/_legacy/ holds historical exploratory runs (cross_eval, old
-# architecture sweep, no_security_ablation, etc.) preserved on disk during
-# the outputs/ reorganisation but not part of the canonical
-# social_media/megavul/nvd_kev/security_ablation tree. Kept locally for
-# reference, not tracked.
-outputs/_legacy/
-
-# ─── Run Logs ─────────────────────────────────────────────────────────────────
-outputs/*.log
-*.log
-
-# ─── IDE & OS ─────────────────────────────────────────────────────────────────
 .vscode/
 .idea/
 *.swp
 *.swo
 .DS_Store
 
-# ============================================================================
-# Artifact-branch exclusions (artifact/epss-tpg)
-# ----------------------------------------------------------------------------
-# The following directories are intentionally kept out of the artifact tree.
-# They remain on disk for local development but are not part of the artifact.
-# ============================================================================
+# Source datasets belong to the submodule, not the parent repository.
+04_data/01_records_and_graphs/*
+!04_data/01_records_and_graphs/.gitkeep
+!04_data/01_records_and_graphs/README.md
+05_results/**/*
+!05_results/**/
+!05_results/**/.gitkeep
+!05_results/**/README.md
+*.pt
+*.pth
+*.gz
+*.log
 
-# Chatbot project — separate effort, not part of the EPSS-TPG model.
-tpg_chatbot/
-
-# Markdown / LaTeX documentation kept locally for reference, not part
-# of the artifact tree. Subsumes the previous docs/chatbot/,
-# docs/papers/, and docs/TPG_Chatbot_Technical_Report.md rules.
-docs/
-
-# Unit and integration tests — excluded from the artifact tree.
-tests/
-
-# TeX Live installer dropped in the working tree during a tooling setup.
-install-tl-*/
-
-# Runtime logs (per-run training output).
-logs/
-datasets_info/**/run_logs/
-
-# Per-experiment graph-cache directories that the pipeline regenerates.
-# These can grow to hundreds of GB; reviewers rebuild them from the
-# source CSVs in the Sec4AI4Aec-EPSS-Enhanced submodules.
-data/epss_*/pyg_dataset/
-data/no_security_ablation/
-
-# Per-experiment per-CVE prediction CSVs and training history JSONs —
-# heavy intermediate artefacts; only the small test_results.json
-# summaries are kept in outputs/.
-outputs/**/predictions_*.csv
-outputs/**/predictions_val.csv
-outputs/**/training_history.json
-outputs/**/*.png
-
-# The no-security ablation is the headline comparison reported in
-# the EPSS-TPG paper, so we include the whole outputs/no_security_ablation/
-# tree (best_model.pt, predictions, training history, summaries) and
-# undo the broader exclusions above just for this subtree.
-!outputs/no_security_ablation/
-!outputs/no_security_ablation/**
-!outputs/no_security_ablation/**/best_model.pt
-!outputs/no_security_ablation/**/predictions_*.csv
-!outputs/no_security_ablation/**/predictions_val.csv
-!outputs/no_security_ablation/**/training_history.json
-!outputs/no_security_ablation/**/*.png
-
-# Numbered canonical locations (legacy names above remain compatibility links).
-04_data/01_records_and_graphs/epss/final_dataset_with_delta_days.csv
-04_data/01_records_and_graphs/epss_sec4ai/labeled_cves.json
-04_data/01_records_and_graphs/epss_full/nvd_cves.json
-04_data/01_records_and_graphs/epss/nvd_cves.json
-04_data/01_records_and_graphs/epss_full/labeled_cves.json
-04_data/01_records_and_graphs/epss/labeled_cves.json
-04_data/01_records_and_graphs/epss_*/pyg_dataset/
-04_data/01_records_and_graphs/no_security_ablation/
-05_results/01_training/**/best_model.pt
-05_results/01_training/**/predictions_*.csv
-05_results/01_training/**/training_history.json
-05_results/01_training/**/*.png
-05_results/01_training/99_legacy/
-05_results/03_dataset_analysis/**/run_logs*/
-01_tpg/05_workspace/
-06_runtime/
-99_archive/01_texlive_installer/
-00_documentation/06_papers/03_build_files/
-00_documentation/07_maintenance/documentation_before_reorganization.json
-
-# Preserve eligibility of artifacts that were already tracked before relocation.
-!04_data/01_records_and_graphs/epss_*/pyg_dataset/
-04_data/01_records_and_graphs/epss_*/pyg_dataset/*
-!04_data/01_records_and_graphs/epss_*/pyg_dataset/processed/
-!04_data/01_records_and_graphs/epss_*/pyg_dataset/raw/
-04_data/01_records_and_graphs/epss_*/pyg_dataset/processed/*
-04_data/01_records_and_graphs/epss_*/pyg_dataset/raw/*
-!01_tpg/04_chatbot/tpg_chatbot/
-!05_results/03_dataset_analysis/05_summary_ablation/run_logs_social_retrain/
-05_results/03_dataset_analysis/05_summary_ablation/run_logs_social_retrain/*
-!04_data/01_records_and_graphs/epss_5pct_train/pyg_dataset/processed/edge_type_vocab.json
-!04_data/01_records_and_graphs/epss_5pct_train/pyg_dataset/processed/node_type_vocab.json
-!04_data/01_records_and_graphs/epss_5pct_train/pyg_dataset/raw/labeled_cves.json
-!04_data/01_records_and_graphs/epss_balanced/pyg_dataset/raw/labeled_cves.json
-!04_data/01_records_and_graphs/epss_full/pyg_dataset/raw/.gitkeep
-!04_data/01_records_and_graphs/epss_full_train/pyg_dataset/processed/edge_type_vocab.json
-!04_data/01_records_and_graphs/epss_full_train/pyg_dataset/processed/node_type_vocab.json
-!04_data/01_records_and_graphs/epss_sec4ai/pyg_dataset/processed/edge_type_vocab.json
-!04_data/01_records_and_graphs/epss_sec4ai/pyg_dataset/processed/node_type_vocab.json
-!04_data/01_records_and_graphs/epss_sec4ai/pyg_dataset/raw/labeled_cves.json
-!04_data/01_records_and_graphs/epss_sec4ai/pyg_dataset/raw/labeled_cves.sha256
-!04_data/01_records_and_graphs/epss_sec4ai_noleak/pyg_dataset/processed/edge_type_vocab.json
-!04_data/01_records_and_graphs/epss_sec4ai_noleak/pyg_dataset/processed/node_type_vocab.json
-!04_data/01_records_and_graphs/epss_sec4ai_noleak/pyg_dataset/processed/tabular_vocab.json
-!04_data/01_records_and_graphs/epss_sec4ai_noleak/pyg_dataset/raw/labeled_cves.json
-!04_data/01_records_and_graphs/epss_sec4ai_noleak/pyg_dataset/raw/labeled_cves.sha256
-!04_data/01_records_and_graphs/epss_temporal_train/pyg_dataset/processed/edge_type_vocab.json
-!04_data/01_records_and_graphs/epss_temporal_train/pyg_dataset/processed/node_type_vocab.json
-!04_data/01_records_and_graphs/epss_temporal_train/pyg_dataset/raw/labeled_cves.json
-!04_data/01_records_and_graphs/epss_test/pyg_dataset/raw/.gitkeep
-!04_data/01_records_and_graphs/epss_test/pyg_dataset/raw/labeled_cves.json
-!05_results/03_dataset_analysis/05_summary_ablation/run_logs_social_retrain/batch.out
-!01_tpg/04_chatbot/tpg_chatbot/__init__.py
-!01_tpg/04_chatbot/tpg_chatbot/chatbot.py
-!01_tpg/04_chatbot/tpg_chatbot/graph_store.py
-!01_tpg/04_chatbot/tpg_chatbot/ingest.py
-!01_tpg/04_chatbot/tpg_chatbot/retriever.py
-
-# Additional generated records stay local; retain small split manifests.
-04_data/01_records_and_graphs/epss/labeled_cves_2020_only_source.json
-04_data/01_records_and_graphs/epss_*_v2_*/labeled_cves.json
-04_data/01_records_and_graphs/epss_mv_*/labeled_cves.json
-04_data/01_records_and_graphs/epss_temporal_2020*/labeled_cves_temporal_*.json
-04_data/01_records_and_graphs/epss_temporal_2020*/labeled_cves_temporal_test_pyg_dataset/
-
-# Publish empty runtime directories, never local database contents or installers.
-!01_tpg/05_workspace/
-01_tpg/05_workspace/*
-!01_tpg/05_workspace/01_database/
-!01_tpg/05_workspace/02_uploads/
-01_tpg/05_workspace/01_database/*
-01_tpg/05_workspace/02_uploads/*
-!01_tpg/05_workspace/01_database/.gitkeep
-!01_tpg/05_workspace/02_uploads/.gitkeep
-!06_runtime/
-06_runtime/*
-!06_runtime/README.md
-!06_runtime/01_logs/
+# Runtime state, retaining empty directory placeholders.
+01_tpg/05_workspace/**/*
+!01_tpg/05_workspace/**/
+!01_tpg/05_workspace/**/.gitkeep
 06_runtime/01_logs/*
 !06_runtime/01_logs/.gitkeep
-!05_results/01_training/99_legacy/
-05_results/01_training/99_legacy/*
-!05_results/01_training/99_legacy/.gitkeep
-/install-tl-*
 /tpg_workspace.db-shm
 /tpg_workspace.db-wal
+/install-tl-*
+99_archive/01_texlive_installer/
+00_documentation/06_papers/03_build_files/
 99_archive/02_legacy_document_paths/papers/*.aux
 99_archive/02_legacy_document_paths/papers/*.out
+
+# Reports are archived, but generated download caches stay out of Git.
+99_archive/03_previous_dataset_work/**/epss_cache/
+99_archive/03_previous_dataset_work/**/documentation_before_reorganization.json
+99_archive/03_previous_dataset_work/**/03_build_files/

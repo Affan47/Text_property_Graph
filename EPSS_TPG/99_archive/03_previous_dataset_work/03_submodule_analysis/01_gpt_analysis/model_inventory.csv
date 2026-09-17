@@ -1,0 +1,4 @@
+model_file,model,pandas_rows,csv_reader_rows,row_count_verified,columns,telegram_rows,analysis_rows_excluding_telegram,unique_raw_cve_ids,unique_canonical_cves,date_min_non_telegram,date_max_non_telegram,invalid_dates
+gemma_combined_summ.csv,gemma,9218,9218,True,28,2590,6628,9218,5692,2021-11-23,2025-06-01,0
+gpt_combined_summ.csv,gpt,9218,9218,True,28,2590,6628,9218,5692,2021-11-23,2025-06-01,0
+mistral_combined_summ.csv,mistral,9218,9218,True,28,2590,6628,9218,5692,2021-11-23,2025-06-01,0

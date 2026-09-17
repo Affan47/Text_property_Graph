@@ -1,1 +1,1 @@
-../../00_documentation/99_historical_indexes/EPSS_GNN_Technical_Report.md
+../03_previous_dataset_work/01_documentation/99_historical_indexes/EPSS_GNN_Technical_Report.md

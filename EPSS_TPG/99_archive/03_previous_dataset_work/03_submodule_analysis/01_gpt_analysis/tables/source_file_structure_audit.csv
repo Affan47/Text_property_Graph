@@ -1,0 +1,4 @@
+model_file,model,pandas_rows,csv_reader_rows,columns,complete_columns,columns_with_missing,ragged_rows
+gemma_combined_summ.csv,Gemma,9218,9218,28,21,7,0
+gpt_combined_summ.csv,GPT,9218,9218,28,21,7,0
+mistral_combined_summ.csv,Mistral,9218,9218,28,20,8,0

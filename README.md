@@ -16,14 +16,16 @@ EPSS_TPG/
   99_archive/        Installer and legacy document paths
 ```
 
-`SummTPGVul/` is the source-dataset Git submodule. Its registered name and upstream directory structure are preserved. You can also browse it through `EPSS_TPG/04_data/02_source_repository/`.
+`SummTPGVul/` is the source-dataset Git submodule, now selected from `tpg-paper-revision`. You can also browse it through `EPSS_TPG/04_data/02_source_repository/`. See [the current dataset guide](EPSS_TPG/00_documentation/03_datasets/00_README.md).
+
+The previous local datasets and saved runs were retired. Their analyses are separated into `EPSS_TPG/99_archive/03_previous_dataset_work/`. The replacement dataset requires a new adapter and target definition before training; the old experiment commands are not compatible.
 
 The unnumbered entries inside `EPSS_TPG/` are compatibility links, not extra copies. They preserve Python imports, old commands and saved paths. See [the layout guide](EPSS_TPG/00_documentation/07_maintenance/01_LAYOUT_AND_COMPATIBILITY.md).
 
 ```bash
 cd EPSS_TPG
 python -m epss.run_pipeline --help
-bash 03_scripts/01_training/run_social_media_retrain.sh --dry-run
+python 03_scripts/03_maintenance/verify_current_layout.py --expect-empty
 ```
 
-The earlier repository guide is preserved in [the documentation archive](EPSS_TPG/00_documentation/01_start_here/04_ORIGINAL_REPOSITORY_GUIDE.md).
+For setup and publication commands, read [the dataset transition guide](EPSS_TPG/00_documentation/07_maintenance/04_DATASET_TRANSITION.md).

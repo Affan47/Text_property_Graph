@@ -1,0 +1,4 @@
+model,source_summary_missing_with_input,github_summary_missing_with_input,cvss_summary_missing_with_input
+Gemma,0,7,0
+GPT,30,141,0
+Mistral,319,0,202

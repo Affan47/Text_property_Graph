@@ -1,0 +1,3 @@
+horizon_days,events_with_outcome,mean_percentile_delta,median_percentile_delta,increase_pct,decrease_pct,unchanged_pct
+7,4092,0.04298957820772238,0.0012499999999999872,81.92,17.38,0.71
+30,4088,0.06072665877495107,0.0061199999999999866,83.93,15.85,0.22
