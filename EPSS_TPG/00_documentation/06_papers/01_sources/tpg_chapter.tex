@@ -1,0 +1,776 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!60!black
+}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  columns=fullflexible,
+  breaklines=true,
+  frame=single,
+  framesep=4pt,
+  xleftmargin=2pt,
+  xrightmargin=2pt,
+  keywordstyle=\color{blue!60!black}\bfseries,
+  commentstyle=\color{gray!70!black}\itshape,
+  stringstyle=\color{green!50!black},
+  showstringspaces=false
+}
+
+\title{The Text Property Graph: A Code-Inspired Representation for Security Text}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+Security text is not only a sequence of words. A CVE description, exploit
+report, vendor advisory, or threat-intelligence note usually states which
+vulnerability is being discussed, which software is affected, which version is
+vulnerable, how the attack works, what impact follows, and what mitigation is
+recommended. These facts are not isolated keywords. They are connected through
+syntax, sentence order, entity references, discourse markers, and
+domain-specific security relations.
+
+The Text Property Graph (TPG) is the representation used in this project to
+preserve those relations. A TPG is a directed, typed, attributed property
+graph. Its nodes represent linguistic and security objects, such as documents,
+paragraphs, sentences, tokens, entities, predicates, CVE identifiers, software
+products, versions, attack vectors, impacts, severities, and remediations. Its
+edges represent typed relations between those objects, including containment,
+dependency, sequence, coreference, predicate-argument binding, discourse
+relation, entity relation, and security-specific relations.
+
+The TPG is inspired by the Code Property Graph (CPG). A CPG combines several
+views of source code into one graph: syntax, control flow, data flow, and
+dependence. The TPG transfers the same design principle to text. Instead of
+leaving dependency parses, named entities, coreference links, discourse
+relations, and security facts as disconnected outputs, it stores them as
+different edge types over one shared graph.
+
+This chapter explains the problem that motivates TPG, the fundamental structure
+of the representation, its relationship to the CPG, and why it is useful for
+security-related text. The description is grounded in the project
+documentation and implementation, especially the files under
+\texttt{docs/}, \texttt{EPSS\_TPG/docs/}, and \texttt{EPSS\_TPG/tpg/}.
+
+\section{Problem Definition}
+
+\subsection{Why Flat Text Representations Are Not Enough}
+
+Most modern NLP pipelines begin by reducing text to tokens or subword tokens.
+Those tokens are then embedded by a transformer and pooled or passed to a
+downstream model. This approach is effective for many tasks, but it does not
+make the structure of the text explicit. A vector representation may contain
+useful information, but it does not directly expose relations such as:
+
+\begin{itemize}
+    \item which CVE affects which software product;
+    \item which version belongs to that software;
+    \item which attack vector leads to which impact;
+    \item which sentence gives the mitigation;
+    \item which pronoun or phrase refers back to a previous entity;
+    \item which sentence explains, contrasts with, or follows another sentence.
+\end{itemize}
+
+For security text, this is a serious limitation. A vulnerability advisory is
+often short and dense. Its meaning depends on relations. The words
+\texttt{remote}, \texttt{critical}, \texttt{Apache}, and \texttt{patch} are
+useful, but the important question is how they are connected. A sentence saying
+that a remote attacker can exploit Apache is different from a sentence saying
+that Apache released a patch to prevent remote exploitation. A representation
+that only stores a token sequence has to infer this structure indirectly.
+
+\subsection{What the TPG Is Designed to Preserve}
+
+The TPG is designed to preserve the structural information that a flat token
+sequence hides. It keeps the following layers in one graph:
+
+\begin{itemize}
+    \item document structure, from document to paragraph to sentence to token;
+    \item syntactic dependency structure inside each sentence;
+    \item sequential flow across tokens, sentences, and paragraphs;
+    \item entity mentions and coreference chains;
+    \item predicate-argument relations;
+    \item discourse and rhetorical relations;
+    \item security entities and security-specific typed relations;
+    \item contextual embeddings when the model-based frontend is available.
+\end{itemize}
+
+The goal is not to replace transformer embeddings. The goal is to place those
+embeddings inside a richer structure. In the EPSS-TPG pipeline, the final graph
+can be exported to PyTorch Geometric as \texttt{x}, \texttt{edge\_index},
+\texttt{edge\_type}, and \texttt{edge\_attr}, so a GNN can use both node
+features and typed graph structure.
+
+\section{Why We Use a Property Graph}
+
+\subsection{Multiple Relations on the Same Text}
+
+Text contains many relation types at the same time. A token belongs to a
+sentence. The same token may depend syntactically on another token, appear
+inside an entity span, be followed by another token, and carry a contextual
+embedding. A sentence may continue the previous sentence, contrast with it, or
+explain it. A CVE mention may be connected to a software product, a CWE, an
+impact, and a mitigation.
+
+A property graph is a natural fit because it allows all of these relations to
+coexist. The same node can participate in several edge types without being
+duplicated. This is the main reason TPG is more expressive than a single
+sequence, a single parse tree, or a bag of extracted entities.
+
+\subsection{Typed Nodes, Typed Edges, and Properties}
+
+In a TPG, every node has a type and a property map. The implementation stores
+node properties such as text, lemma, part-of-speech tag, dependency relation,
+entity type, sentence index, token index, character offsets, domain type,
+confidence, source, and optional embedding. Every edge also has a type and may
+carry properties such as dependency label, semantic-role label, discourse
+label, coreference cluster, relation type, confidence, or other metadata.
+
+This follows the same property-graph idea used by Joern's CPG. The project
+implementation stores this schema in \texttt{tpg/schema/types.py}, with
+\texttt{NodeProperties}, \texttt{EdgeProperties}, \texttt{NodeType},
+\texttt{EdgeType}, \texttt{SecurityNodeType}, \texttt{SecurityEdgeType}, and
+\texttt{TPGSchema}.
+
+\section{spaCy as the Linguistic Backend}
+
+\subsection{Official Definition and Role}
+
+The generic TPG does not start from hand-written token rules. It starts from
+spaCy, which is the linguistic backend of the Level 1 graph construction.
+spaCy describes itself as ``Industrial-strength Natural Language Processing in
+Python''\footnote{\url{https://spacy.io/}}. Its project description defines it
+as a library for advanced NLP in Python and Cython, designed for real products,
+with pretrained pipelines for tokenization, tagging, parsing, named entity
+recognition, text classification, and related NLP tasks.\footnote{\url{https://pypi.org/project/spacy/}}
+
+The important point for TPG is that spaCy does not only split text into tokens.
+Its standard processing pipeline converts raw text into a \texttt{Doc} object
+with linguistic annotations. The official linguistic-features documentation
+states that spaCy is designed so that raw text becomes a \texttt{Doc} object
+with annotations attached to it.\footnote{\url{https://spacy.io/usage/linguistic-features\#\#tokenization}}
+Those annotations include token boundaries, sentence boundaries,
+part-of-speech tags, lemmas, dependency-parse labels, noun chunks, and named
+entities when the selected pipeline provides the relevant components.
+
+\subsection{How spaCy Works}
+
+At a high level, spaCy processes text through a language pipeline. The first
+stage is tokenization. spaCy's tokenizer is non-destructive: the tokenized
+\texttt{Doc} can reconstruct the original input text. This matters for TPG
+because token character offsets must remain aligned with the original document.
+
+After tokenization, trained spaCy components can add statistical annotations.
+For English pipelines such as \texttt{en\_core\_web\_sm}, the relevant
+annotations are:
+
+\begin{itemize}
+    \item \textbf{sentence boundaries}, exposed through \texttt{Doc.sents};
+    \item \textbf{tokens}, with text, lemma, part-of-speech tag, dependency
+    relation, token index, and character offsets;
+    \item \textbf{dependency parses}, where each token has a syntactic head and
+    a dependency label such as \texttt{nsubj}, \texttt{dobj},
+    \texttt{amod}, or \texttt{prep};
+    \item \textbf{named entities}, exposed through \texttt{Doc.ents}, with
+    entity labels such as organization, product, date, or geopolitical entity;
+    \item \textbf{noun chunks}, which spaCy defines as base noun phrases
+    available through \texttt{Doc.noun\_chunks} when a parser is present.
+\end{itemize}
+
+The dependency parser is especially important for TPG. spaCy's dependency
+parse gives the syntactic backbone that becomes the \texttt{DEP} subgraph. In
+the CPG analogy, this is the closest text-side equivalent of the AST view.
+
+\subsection{How TPG Uses spaCy}
+
+The project uses spaCy through \texttt{tpg/frontends/spacy\_frontend.py}. The
+\texttt{SpacyFrontend} attempts to load \texttt{en\_core\_web\_sm}. If that
+model is unavailable, it falls back to a blank English pipeline with a
+sentencizer. The fallback can still split sentences, but it does not provide
+the same parser, POS tagger, lemmatizer, noun chunks, or named entity
+recognition as the trained model. Therefore, the full TPG linguistic structure
+depends on the trained spaCy pipeline being available.
+
+The TPG construction uses spaCy annotations as follows:
+
+\begin{enumerate}
+    \item The input text is split into paragraphs using blank-line boundaries.
+    \item Each paragraph is passed to spaCy, producing a \texttt{Doc}.
+    \item For every sentence in \texttt{Doc.sents}, the frontend creates a
+    \texttt{SENTENCE} node.
+    \item For every spaCy token, it creates a \texttt{TOKEN} node with text,
+    lemma, POS tag, dependency relation, entity IOB tag, entity type, sentence
+    index, token index, and character span.
+    \item For every named entity in \texttt{sent.ents}, it creates an
+    \texttt{ENTITY} node and links that entity to its tokens with
+    \texttt{BELONGS\_TO}.
+    \item For content verbs, it creates \texttt{PREDICATE} nodes. Auxiliary
+    verbs are filtered out.
+    \item For syntactic children whose dependency labels can be mapped to
+    semantic roles, it creates \texttt{ARGUMENT} nodes and \texttt{SRL\_ARG}
+    edges.
+    \item For noun chunks, it creates \texttt{NOUN\_PHRASE} nodes.
+    \item For selected clausal dependencies such as \texttt{advcl},
+    \texttt{relcl}, \texttt{ccomp}, and \texttt{acl}, it creates
+    \texttt{CLAUSE} nodes.
+    \item For verb phrases with auxiliaries, negation, particles, or adverbial
+    modifiers, it creates \texttt{VERB\_PHRASE} nodes.
+\end{enumerate}
+
+The spaCy frontend also creates the initial graph edges. It adds
+\texttt{CONTAINS} edges for document hierarchy, \texttt{DEP} edges from each
+token's syntactic head to its dependent, \texttt{NEXT\_TOKEN} edges for token
+order, \texttt{NEXT\_SENT} edges for sentence order, \texttt{NEXT\_PARA} edges
+for paragraph order, and cross-sentence \texttt{NEXT\_TOKEN} edges from the
+last token of one sentence to the first token of the next sentence.
+
+\subsection{Why spaCy Is the Right Backend for TPG}
+
+spaCy is suitable for this role because it gives the TPG a stable linguistic
+front end. It provides tokenization, sentence segmentation, POS tags,
+dependency labels, entity spans, noun chunks, lemmas, and character offsets in
+one consistent \texttt{Doc} object. The TPG frontend then converts those
+annotations into graph nodes and edges.
+
+In other words, spaCy supplies the first layer of linguistic analysis, while
+TPG supplies the graph representation. spaCy answers: what are the tokens,
+sentences, syntactic heads, noun chunks, and entities? TPG answers: how should
+those objects be connected in a typed graph that can be queried, exported, and
+used by a GNN?
+
+Once the spaCy frontend has produced the linguistic skeleton, a separate
+embedding pass attaches contextual vectors. The project uses
+\textbf{SecBERT}\footnote{\url{https://huggingface.co/jackaduma/SecBERT}}, a
+BERT model further pre-trained on cybersecurity text, kept frozen at inference
+time. The embedder runs SecBERT on the raw text, aligns its WordPiece
+sub-tokens to spaCy token character spans, and stores a 768-dimensional
+contextual vector on each \texttt{TOKEN} node under
+\texttt{node.properties.extra["embedding"]}. Sentence-level
+\texttt{[CLS]}-derived embeddings and entity-level mean embeddings are stored
+on \texttt{SENTENCE} and \texttt{ENTITY} nodes by the same pass. Downstream,
+the GNN reads each node's feature as the concatenation of a 13-dimensional
+node-type one-hot and that 768-dimensional embedding, giving a 781-dimensional
+node-feature vector. The detailed architecture of the GNN that consumes these
+features is described in the companion document
+\texttt{multiview\_tpg\_formula.tex}.
+
+\section{Fundamental Concepts of the TPG}
+
+\subsection{Formal Definition}
+
+A Text Property Graph for one document can be written as:
+
+\[
+G = (V, E, X, R, \tau, \pi_V, \pi_E)
+\]
+
+where \(V\) is the set of nodes, \(E\) is the set of directed edges, \(X\) is
+the node-feature matrix, \(R\) is the edge-relation vocabulary, \(\tau\) maps
+each edge to a relation type, and \(\pi_V\), \(\pi_E\) are node and edge
+property maps.
+
+In the PyTorch Geometric export, the graph is represented by:
+
+\begin{itemize}
+    \item \texttt{x}: node features, including node-type one-hot features and
+    optional contextual embeddings;
+    \item \texttt{edge\_index}: directed graph connectivity;
+    \item \texttt{edge\_type}: integer edge-type labels;
+    \item \texttt{edge\_attr}: one-hot edge-type features;
+    \item \texttt{y}: graph-level label when the graph is used for supervised
+    learning.
+\end{itemize}
+
+\subsection{Two Practical Schema Levels}
+
+For this project, the TPG is used at two practical levels.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lp{0.68\textwidth}}
+\toprule
+Level & Description \\
+\midrule
+Level 1: Generic TPG & General text graph with 13 base node types and 13 base edge types. It is produced mainly by the spaCy frontend and enrichment passes. \\
+Level 2: Security TPG & Security-aware graph that adds 12 security node types and 10 security edge types for vulnerability text. \\
+\bottomrule
+\end{tabular}
+\caption{TPG levels used in this chapter and in the EPSS-TPG work.}
+\end{table}
+
+The generic level is meant for ordinary text. The security level is the
+domain-specific extension used for CVE advisories and vulnerability-related
+text. This chapter focuses only on these two levels.
+
+\section{Connection to the Code Property Graph}
+
+\subsection{What the CPG Solved for Code}
+
+The Code Property Graph was introduced for source-code analysis. A code
+vulnerability often cannot be detected from syntax alone. One may need to know
+where a function call appears, whether a guard exists before it, whether
+untrusted input reaches it, and which statements depend on which conditions.
+The CPG solves this by storing several views of the program in one property
+graph.
+
+The TPG applies the same idea to text. The analogy is not that natural language
+is the same as source code. The analogy is that both code and text contain
+several structural views, and these views are more useful when they are joined
+into one graph.
+
+\subsection{CPG-to-TPG Mapping}
+
+The mapping from CPG concepts to TPG concepts is implemented directly in the
+project schema. The main mapping is shown below.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+CPG view or edge & TPG analogue & Meaning in text \\
+\midrule
+AST & \texttt{DEP} & Syntactic dependency structure \\
+CFG (intra-block) & \texttt{NEXT\_TOKEN} & Token order inside a sentence \\
+CFG (cross-block) & \texttt{NEXT\_SENT} & Sentence order within a paragraph \\
+CFG (cross-scope) & \texttt{NEXT\_PARA} & Paragraph order within the document \\
+REACHING\_DEF & \texttt{COREF} & Entity reference flow through text \\
+ARGUMENT & \texttt{SRL\_ARG} & Predicate-argument binding \\
+CDG & \texttt{RST\_RELATION} & Rhetorical relation: cause, contrast, condition \\
+DOMINATE & \texttt{DISCOURSE} & General discourse continuation \\
+CONTAINS & \texttt{CONTAINS} & Structural containment \\
+BINDS\_TO & \texttt{BELONGS\_TO} & Token membership in entity or phrase \\
+CALL & \texttt{ENTITY\_REL} & Relation between entities through predicates \\
+EVAL\_TYPE & \texttt{SIMILARITY} & Semantic similarity between nodes \\
+(no CPG analogue) & \texttt{AMR\_EDGE} & AMR semantic relation slot \\
+\bottomrule
+\end{tabular}
+\caption{Main CPG-to-TPG mapping used in the implementation. Source:
+\texttt{tpg/schema/types.py}, dictionaries \texttt{JOERN\_TO\_TPG\_NODE\_MAP}
+and \texttt{JOERN\_TO\_TPG\_EDGE\_MAP}.}
+\end{table}
+
+This mapping is the core reason TPG can be described as code-inspired. It is
+not just a graph built from text; it is a graph whose views deliberately mirror
+the multi-view structure of CPGs.
+
+\section{Nodes}
+
+\subsection{Generic Node Types}
+
+The generic TPG schema defines 13 node types.
+
+\begin{longtable}{lp{0.68\textwidth}}
+\caption{Generic TPG node types.}\\
+\toprule
+Node type & Role \\
+\midrule
+\endfirsthead
+\toprule
+Node type & Role \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{DOCUMENT} & Root node for the whole document. \\
+\texttt{PARAGRAPH} & Structural container for a paragraph. \\
+\texttt{SENTENCE} & Sentence-level unit. \\
+\texttt{TOKEN} & Atomic linguistic token. \\
+\texttt{ENTITY} & Named or extracted entity. \\
+\texttt{PREDICATE} & Verb or action node. \\
+\texttt{ARGUMENT} & Role-bearing argument linked to a predicate. \\
+\texttt{CONCEPT} & Abstract concept or category. \\
+\texttt{NOUN\_PHRASE} & Noun phrase chunk. \\
+\texttt{VERB\_PHRASE} & Verb phrase chunk. \\
+\texttt{CLAUSE} & Clause or subordinate structure. \\
+\texttt{MENTION} & Coreference mention such as a pronoun. \\
+\texttt{TOPIC} & Document-level topic node. \\
+\end{longtable}
+
+\subsection{Security Node Types}
+
+The security extension adds 12 domain-specific node types.
+
+\begin{longtable}{lp{0.68\textwidth}}
+\caption{Security-specific TPG node types.}\\
+\toprule
+Node type & Role \\
+\midrule
+\endfirsthead
+\toprule
+Node type & Role \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{CVE\_ID} & Vulnerability identifier. \\
+\texttt{CWE\_ID} & Weakness class identifier. \\
+\texttt{SOFTWARE} & Affected software product. \\
+\texttt{VERSION} & Software version. \\
+\texttt{COMPONENT} & Affected component or module. \\
+\texttt{CODE\_ELEMENT} & Function, API, variable, or code construct mentioned in text. \\
+\texttt{ATTACK\_VECTOR} & Attack method or access path. \\
+\texttt{IMPACT} & Consequence of exploitation. \\
+\texttt{REMEDIATION} & Patch, upgrade, workaround, or mitigation. \\
+\texttt{THREAT\_ACTOR} & Attacker or actor type. \\
+\texttt{VULN\_TYPE} & Vulnerability category such as buffer overflow, XSS, or SQL injection. \\
+\texttt{SEVERITY} & CVSS score or qualitative severity term. \\
+\end{longtable}
+
+\section{Edges}
+
+\subsection{Generic Edge Types}
+
+The edge vocabulary is the most important part of the TPG. It is what turns a
+set of text objects into a multi-view graph.
+
+\begin{longtable}{lp{0.68\textwidth}}
+\caption{Generic TPG edge types.}\\
+\toprule
+Edge type & Meaning \\
+\midrule
+\endfirsthead
+\toprule
+Edge type & Meaning \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{DEP} & Syntactic dependency from head token to dependent token. \\
+\texttt{NEXT\_TOKEN} & Sequential token order. \\
+\texttt{NEXT\_SENT} & Sequential sentence order. \\
+\texttt{NEXT\_PARA} & Sequential paragraph order. \\
+\texttt{COREF} & Coreference link between repeated mentions or pronouns and entities. \\
+\texttt{SRL\_ARG} & Predicate-argument relation. \\
+\texttt{AMR\_EDGE} & Abstract meaning relation slot in the schema. \\
+\texttt{RST\_RELATION} & Explicit rhetorical relation such as cause, contrast, temporal, condition, or summary. \\
+\texttt{DISCOURSE} & General discourse continuation or topic-to-sentence relation. \\
+\texttt{CONTAINS} & Structural containment from document to paragraph to sentence to node. \\
+\texttt{BELONGS\_TO} & Membership relation from entity, phrase, predicate, or argument to token. \\
+\texttt{ENTITY\_REL} & Relation between entities, usually inferred from nearby predicates. \\
+\texttt{SIMILARITY} & Semantic similarity relation. \\
+\end{longtable}
+
+\subsection{Security Edge Types}
+
+Security edges are optional first-class edge types emitted by
+\texttt{SecurityRelationsPass}. They are not only properties on generic
+\texttt{ENTITY\_REL} edges.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+Security edge & Source role & Target role \\
+\midrule
+\texttt{SEC\_AFFECTS} & CVE / vulnerability & software \\
+\texttt{SEC\_HAS\_VERSION} & software & version \\
+\texttt{SEC\_LOCATED\_IN} & CVE / vulnerability & component \\
+\texttt{SEC\_CLASSIFIED\_AS} & CVE & CWE \\
+\texttt{SEC\_EXPLOITED\_BY} & CVE / vulnerability & attack vector \\
+\texttt{SEC\_CAUSES} & attack vector & impact \\
+\texttt{SEC\_MITIGATED\_BY} & CVE / vulnerability & remediation \\
+\texttt{SEC\_USES\_FUNCTION} & CVE / vulnerability & code element \\
+\texttt{SEC\_THREATENS} & attack vector / threat actor & software \\
+\texttt{SEC\_HAS\_SEVERITY} & CVE & severity \\
+\bottomrule
+\end{tabular}
+\caption{Security relation types used by the Level 2 TPG.}
+\end{table}
+
+When security edges are enabled, the edge vocabulary expands from 13 generic
+edge types to 23 total edge types. Security edges occupy indices 13--22 in the
+unified edge-type vocabulary. This matters for GNN training: the model can only
+learn from these relations when the dataset and model use the expanded
+edge-type vocabulary.
+
+\section{How the TPG Is Constructed}
+
+\subsection{Generic Pipeline}
+
+The generic pipeline is implemented by \texttt{TPGPipeline}. It follows the
+same broad shape as Joern: a frontend builds the initial graph, enrichment
+passes add more edges and nodes, and exporters write the graph to external
+formats.
+
+\begin{enumerate}
+    \item The spaCy frontend parses the text and creates document, paragraph,
+    sentence, token, entity, predicate, argument, phrase, and clause nodes.
+    \item The frontend adds structural and syntactic edges such as
+    \texttt{CONTAINS}, \texttt{DEP}, \texttt{NEXT\_TOKEN},
+    \texttt{NEXT\_SENT}, \texttt{NEXT\_PARA}, \texttt{BELONGS\_TO}, and
+    \texttt{SRL\_ARG}.
+    \item \texttt{CoreferencePass} adds \texttt{COREF} edges.
+    \item \texttt{DiscoursePass} adds \texttt{RST\_RELATION} or
+    \texttt{DISCOURSE} edges.
+    \item \texttt{EntityRelationPass} adds \texttt{ENTITY\_REL} edges between
+    entities in the same sentence, using nearby predicates when available.
+    \item \texttt{TopicPass} creates \texttt{TOPIC} nodes and links them to
+    relevant sentences.
+    \item The SecBERT embedder runs once over the raw text, aligns its
+    WordPiece sub-tokens to spaCy token character spans, and attaches a
+    768-dimensional contextual vector to every \texttt{TOKEN} (and to
+    \texttt{SENTENCE} and \texttt{ENTITY} nodes via mean-pooling). This is the
+    step that turns a 13-dimensional one-hot into the 781-dimensional node
+    feature consumed by the GNN.
+    \item The exporter writes the graph as GraphSON or PyTorch Geometric
+    tensors.
+\end{enumerate}
+
+\subsection{Security Pipeline}
+
+The security pipeline has three practical variants. All three extend, rather
+than replace, the generic pipeline above: the spaCy frontend always runs
+first, and the security frontends overlay security-specific entities and
+relations on top of the generic linguistic graph.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+Pipeline & Frontend & Role \\
+\midrule
+\texttt{SecurityPipeline} & rule-based & Regex and dictionary extraction. \\
+\texttt{ModelSecurityPipeline} & SecBERT-based & Embeddings and similarity-based extraction. \\
+\texttt{HybridSecurityPipeline} & rule + model & Default security pipeline when model dependencies are available. \\
+\bottomrule
+\end{tabular}
+\caption{Security pipeline variants in the implementation.}
+\end{table}
+
+The rule-based frontend is deterministic and strong for structured identifiers
+such as CVE IDs, CWE IDs, and version strings. The model-based frontend adds
+contextual embeddings and can identify less rigid security language. The hybrid
+frontend runs rule extraction first and then adds model-derived entities that
+do not overlap with rule-derived spans. This gives a practical balance between
+precision on canonical patterns and coverage for less standard wording.
+
+\section{TPG versus Tokenization}
+
+Tokenization is necessary, but it is not a complete representation of text. A
+tokenizer answers the question: what units does the text split into? A TPG
+answers a larger question: what typed objects and typed relations are present
+in the text?
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{0.28\textwidth}p{0.30\textwidth}p{0.30\textwidth}}
+\toprule
+Aspect & Tokenization & Text Property Graph \\
+\midrule
+Primary unit & token or subword & typed node and typed edge \\
+Structure & linear order & multi-relational graph \\
+Syntax & implicit or absent & explicit \texttt{DEP} edges \\
+Coreference & not represented directly & explicit \texttt{COREF} edges \\
+Document layout & usually flattened & document, paragraph, sentence hierarchy \\
+Domain relations & not represented directly & optional security nodes and edges \\
+Model input & sequence tensor & graph tensors plus node features \\
+\bottomrule
+\end{tabular}
+\caption{Difference between tokenization and TPG representation.}
+\end{table}
+
+The TPG still uses tokens. Token nodes are part of the graph, and transformer
+embeddings may be attached to those nodes. The difference is that token
+embeddings are not the whole representation. They become node features inside a
+larger graph that preserves structural and domain relations.
+
+\section{TPG versus Knowledge Graphs}
+
+A knowledge graph usually stores normalized facts about entities. For example,
+it may store that one CVE affects one product or has one severity. This is
+useful, but a knowledge graph often abstracts away the text that produced the
+fact.
+
+A TPG keeps the linguistic evidence and the extracted domain relations in the
+same graph. The sentence, tokens, predicates, entity spans, dependency edges,
+and security relation edges are present together. This makes TPG closer to a
+text analysis graph than to a clean factual database.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{0.28\textwidth}p{0.30\textwidth}p{0.30\textwidth}}
+\toprule
+Aspect & Knowledge graph & Text Property Graph \\
+\midrule
+Main goal & Store facts about entities & Preserve text structure and extracted relations \\
+Typical node & canonical entity & document, sentence, token, entity, predicate, security object \\
+Text evidence & often external or discarded & retained inside the graph \\
+Syntax and discourse & usually absent & explicit edge layers \\
+Best use & factual lookup and reasoning & graph learning, structural retrieval, explainable text analysis \\
+\bottomrule
+\end{tabular}
+\caption{Knowledge graph versus TPG.}
+\end{table}
+
+The security TPG can contain knowledge-graph-like facts, but it is not only a
+knowledge graph. It is a text-derived property graph with linguistic, document,
+and security layers.
+
+\section{How TPG Helps Security Text}
+
+Security meaning is relational. A useful representation should preserve
+relations such as:
+
+\begin{itemize}
+    \item CVE affects software;
+    \item software has version;
+    \item CVE is classified as CWE;
+    \item attack vector causes impact;
+    \item vulnerability is mitigated by remediation;
+    \item CVE has severity;
+    \item vulnerability mentions a code element.
+\end{itemize}
+
+These relations are represented directly by the security edge types. They give
+a graph neural network more information than a list of security keywords. The
+model can pass messages along typed edges such as \texttt{SEC\_AFFECTS},
+\texttt{SEC\_EXPLOITED\_BY}, and \texttt{SEC\_MITIGATED\_BY}. This allows the
+graph branch to distinguish between the presence of a term and the role that
+term plays in the advisory.
+
+The EPSS-TPG model also uses a multiview GNN. In that setup, edge types are
+grouped into views such as syntactic, sequential, semantic, discourse, and
+security views. This matches the CPG-inspired design: different relations are
+not collapsed into one adjacency matrix, but kept as separate signals that the
+model can weight.
+
+\section{Worked Example}
+
+Consider the sentence:
+
+\begin{quote}
+\textit{CVE-2024-1234: A buffer overflow in libfoo 1.2.3 allows remote
+attackers to execute arbitrary code. The vulnerability has a CVSS v3 base
+score of 9.8 indicating high severity.}
+\end{quote}
+
+After the linguistic frontend, security frontend, and security-relations pass,
+the graph contains ordinary linguistic nodes and security nodes, including:
+
+\begin{itemize}
+    \item a \texttt{CVE\_ID} node for \texttt{CVE-2024-1234};
+    \item a \texttt{VULN\_TYPE} node for \texttt{buffer overflow};
+    \item a \texttt{SOFTWARE} node for \texttt{libfoo};
+    \item a \texttt{VERSION} node for \texttt{1.2.3};
+    \item an \texttt{ATTACK\_VECTOR} node for \texttt{remote};
+    \item an \texttt{IMPACT} node for \texttt{execute arbitrary code};
+    \item a \texttt{SEVERITY} node for \texttt{high severity}.
+\end{itemize}
+
+The graph can then contain security edges such as:
+
+\begin{itemize}
+    \item \texttt{SEC\_AFFECTS} from \texttt{CVE-2024-1234} to
+    \texttt{libfoo};
+    \item \texttt{SEC\_HAS\_VERSION} from \texttt{libfoo} to
+    \texttt{1.2.3};
+    \item \texttt{SEC\_EXPLOITED\_BY} from \texttt{CVE-2024-1234} to
+    \texttt{remote};
+    \item \texttt{SEC\_CAUSES} from \texttt{remote} to
+    \texttt{execute arbitrary code};
+    \item \texttt{SEC\_HAS\_SEVERITY} from \texttt{CVE-2024-1234} to
+    \texttt{high severity}.
+\end{itemize}
+
+In addition, every \texttt{TOKEN} node carries a 768-dimensional SecBERT
+embedding obtained by averaging the WordPiece sub-token vectors whose character
+spans fall inside the token. The \texttt{SENTENCE} and \texttt{ENTITY} nodes
+carry sentence- and entity-level embeddings derived in the same step. The
+final node-feature vector consumed by the GNN is therefore the concatenation
+of the 13-dimensional node-type one-hot and the 768-dimensional contextual
+embedding, for a total of 781 dimensions per node.
+
+This example shows the difference between text extraction and graph
+representation. The TPG does not only detect the words; it connects them with
+typed relations \emph{and} attaches contextual embeddings to those connected
+nodes, so a downstream GNN can reason over both the structure and the local
+semantics simultaneously.
+
+\section{Positioning as a State-of-the-Art-Style Technique}
+
+The TPG should be described carefully. It is not enough to say that any graph
+representation is automatically state of the art. The contribution is more
+specific. TPG combines three modern ideas in one implemented pipeline:
+
+\begin{enumerate}
+    \item it adopts the CPG principle of multi-view representation and
+    transfers it to text;
+    \item it keeps transformer embeddings as node features rather than
+    discarding neural language representations;
+    \item it adds a domain-specific security layer so the graph contains both
+    linguistic structure and security semantics.
+\end{enumerate}
+
+This makes TPG stronger than plain tokenization, richer than a single
+dependency tree, and more evidence-preserving than a clean knowledge graph. A
+fair claim is that this project presents a modern, CPG-inspired, multi-view
+graph representation for security text. Downstream performance claims should
+still be tied to the actual experiments.
+
+\section{Limitations}
+
+The TPG is useful, but it should not be overstated.
+
+\begin{itemize}
+    \item Coreference is heuristic in the current enrichment pass. It uses
+    recency and basic agreement rather than a full neural coreference system.
+    \item Discourse relations are marker-based. They capture explicit markers
+    such as \texttt{however}, \texttt{because}, and \texttt{subsequently}, but
+    they do not perform full discourse parsing.
+    \item Security extraction depends on rules, dictionaries, thresholds, and
+    model coverage.
+    \item Security edges are opt-in. If the pipeline does not enable security
+    relations and the GNN edge vocabulary is not expanded, the model cannot use
+    first-class \texttt{SEC\_*} edge types.
+    \item TPG is a representation. It improves the information available to a
+    model, but it does not guarantee better performance on every downstream
+    task.
+\end{itemize}
+
+\section{Conclusion}
+
+The Text Property Graph represents text as a structured, typed, attributed
+graph. Its central idea is borrowed from the Code Property Graph: keep several
+views of the input in one graph rather than treating them as separate analyses.
+For text, those views are dependency structure, sequence, coreference,
+predicate-argument structure, discourse, entity relations, and optional
+security-specific relations.
+
+This makes TPG different from tokenization and different from a conventional
+knowledge graph. Tokenization gives a sequence of units. A knowledge graph
+usually gives normalized facts. A TPG keeps both the textual evidence and the
+relations extracted from that evidence.
+
+For security-related text, this is especially useful because the meaning of an
+advisory is carried by relations: which vulnerability affects which software,
+through which attack vector, with which impact, and with which remediation.
+The implemented TPG pipeline therefore provides a defensible, CPG-inspired,
+state-of-the-art-style representation for security text.
+
+\end{document}

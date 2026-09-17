@@ -1,0 +1,74 @@
+[
+  {
+    "document": "00_documentation/05_prediction/01_README.md",
+    "links": [
+      "../../Datasets_information/Summary_in_TPG_ablation/README.md",
+      "../../Datasets_information/OVERALL_ANALYSIS.md",
+      "../../Datasets_information/README.md"
+    ],
+    "preexisting_missing_count": 3
+  },
+  {
+    "document": "00_documentation/04_experiments/01_EXPERIMENTS_README.md",
+    "links": [
+      "../../Datasets_information/README.md",
+      "../../Datasets_information/OVERALL_ANALYSIS.md",
+      "../../Datasets_information/README.md",
+      "../../Datasets_information/Summary_in_TPG_ablation/README.md",
+      "../../Datasets_information/Summary_in_TPG_ablation/results.md",
+      "../../Datasets_information/TPG_ablation/README.md",
+      "../../Datasets_information/CVSS_ablation/README.md",
+      "../../Datasets_information/gpt_combined_summ/README.md",
+      "../../Datasets_information/gemma_combined_summ/README.md",
+      "../../Datasets_information/final_dataset_with_llama_summ/README.md",
+      "../../Datasets_information/deepseek_combined_summ/README.md"
+    ],
+    "preexisting_missing_count": 10
+  },
+  {
+    "document": "00_documentation/99_historical_indexes/01_previous_docs_index.md",
+    "links": [
+      "../../Datasets_information/README.md"
+    ],
+    "preexisting_missing_count": 1
+  },
+  {
+    "document": "00_documentation/03_datasets/01_DATASET_FEATURE_DICTIONARY.md",
+    "links": [
+      "../../Datasets_information/README.md",
+      "../../Datasets_information/gpt_combined_summ/README.md",
+      "../../Datasets_information/gemma_combined_summ/README.md",
+      "../../Datasets_information/final_dataset_with_llama_summ/README.md",
+      "../../Datasets_information/deepseek_combined_summ/README.md"
+    ],
+    "preexisting_missing_count": 5
+  },
+  {
+    "document": "00_documentation/04_experiments/05_summary_ablation/02_RESULTS.md",
+    "links": [
+      "../../../01_tpg/02_examples/03_generated/cross_eval/gpt_B_on_nvd_full/cross_distribution_results.json"
+    ],
+    "preexisting_missing_count": 1
+  },
+  {
+    "document": "00_documentation/04_experiments/07_cvss_ablation/01_README.md",
+    "links": [
+      "../../../05_results/03_dataset_analysis/OVERALL_ANALYSIS.md"
+    ],
+    "preexisting_missing_count": 1
+  },
+  {
+    "document": "00_documentation/04_experiments/06_graph_ablation/01_README.md",
+    "links": [
+      "../../../05_results/03_dataset_analysis/OVERALL_ANALYSIS.md"
+    ],
+    "preexisting_missing_count": 1
+  },
+  {
+    "document": "00_documentation/03_datasets/04_deepseek/01_README.md",
+    "links": [
+      "../../../05_results/03_dataset_analysis/OVERALL_ANALYSIS.md"
+    ],
+    "preexisting_missing_count": 1
+  }
+]

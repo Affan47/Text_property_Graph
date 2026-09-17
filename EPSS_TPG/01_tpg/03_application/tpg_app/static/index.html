@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TPG Platform — Document Intelligence</title>
+<script src="/static/vis-network.min.js"
+        onerror="this.remove();var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/vis-network@9.1.9/standalone/umd/vis-network.min.js';document.head.appendChild(s)"></script>
+<style>
+  :root { --bg:#0f1420; --panel:#171e2e; --panel2:#1e2740; --text:#e7ecf5;
+          --muted:#8b96ad; --accent:#5b8cff; --good:#3ecf8e; --warn:#ffb454;
+          --bad:#ff6b6b; --border:#2a3552; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.5 -apple-system,'Segoe UI',Roboto,sans-serif;
+         background:var(--bg); color:var(--text); }
+
+  /* global progress bar */
+  #topbar { position:fixed; top:0; left:0; right:0; height:3px; z-index:99;
+            background:transparent; overflow:hidden; }
+  #topbar.on::before { content:''; position:absolute; height:100%; width:38%;
+            background:linear-gradient(90deg,transparent,var(--accent),transparent);
+            animation:slide 1.1s linear infinite; }
+  @keyframes slide { from{left:-40%} to{left:100%} }
+
+  header { display:flex; align-items:center; gap:14px; padding:14px 22px;
+           background:var(--panel); border-bottom:1px solid var(--border); }
+  header h1 { font-size:17px; margin:0; }
+  header .sub { color:var(--muted); font-size:12px; }
+  #stats { margin-left:auto; color:var(--muted); font-size:12px; }
+  nav { display:flex; gap:4px; padding:10px 22px 0; background:var(--panel); }
+  nav button { background:none; border:none; color:var(--muted); padding:8px 14px;
+               cursor:pointer; font-size:13px; border-bottom:2px solid transparent; }
+  nav button.active { color:var(--text); border-bottom-color:var(--accent); }
+  main { padding:20px 22px; max-width:1200px; margin:0 auto; }
+  .tab { display:none; } .tab.active { display:block; }
+  .card { background:var(--panel); border:1px solid var(--border);
+          border-radius:10px; padding:16px; margin-bottom:16px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  input[type=text], textarea, select {
+    background:var(--panel2); color:var(--text); border:1px solid var(--border);
+    border-radius:7px; padding:9px 11px; font-size:13px; flex:1; min-width:180px; }
+  textarea { width:100%; min-height:90px; resize:vertical; }
+  button.btn { background:var(--accent); color:#fff; border:none; border-radius:7px;
+               padding:9px 16px; cursor:pointer; font-size:13px; font-weight:600;
+               display:inline-flex; align-items:center; gap:8px; }
+  button.btn.ghost { background:var(--panel2); color:var(--text);
+                     border:1px solid var(--border); }
+  button.btn:disabled { opacity:.55; cursor:wait; }
+
+  /* spinner */
+  .spin { width:14px; height:14px; border:2px solid rgba(255,255,255,.25);
+          border-top-color:#fff; border-radius:50%; display:inline-block;
+          animation:rot .7s linear infinite; flex:none; }
+  .ghost .spin { border-color:rgba(139,150,173,.3); border-top-color:var(--muted); }
+  @keyframes rot { to{transform:rotate(360deg)} }
+
+  /* determinate progress bar */
+  .pbar { height:8px; background:var(--panel2); border-radius:5px; overflow:hidden;
+          border:1px solid var(--border); }
+  .pbar > div { height:100%; width:0%; background:var(--accent);
+                transition:width .25s ease; border-radius:5px; }
+  .pbar.indet > div { width:35%; animation:slide 1.1s linear infinite; position:relative; }
+
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:7px 9px; border-bottom:1px solid var(--border); }
+  th { color:var(--muted); font-weight:600; font-size:12px; }
+  .pill { display:inline-block; background:var(--panel2); border:1px solid var(--border);
+          border-radius:20px; padding:1px 9px; font-size:11px; color:var(--muted);
+          margin:1px; }
+  .pill.type { color:var(--warn); }
+  .hit { border-left:3px solid var(--accent); padding:10px 12px; margin:10px 0;
+         background:var(--panel2); border-radius:0 8px 8px 0; }
+  .hit .meta { color:var(--muted); font-size:12px; margin-bottom:5px; }
+  .answer { white-space:pre-wrap; background:var(--panel2); border-radius:8px;
+            padding:14px; border:1px solid var(--border); }
+  .empty { color:var(--muted); padding:14px 4px; }
+
+  /* skeleton loaders */
+  .skel { border-radius:8px; margin:10px 0; height:58px;
+          background:linear-gradient(90deg,var(--panel2) 25%,#26314f 45%,var(--panel2) 65%);
+          background-size:220% 100%; animation:shimmer 1.2s linear infinite; }
+  @keyframes shimmer { from{background-position:120% 0} to{background-position:-100% 0} }
+
+  #graphwrap { position:relative; }
+  #graphviz { height:560px; background:var(--panel2); border-radius:8px;
+              border:1px solid var(--border); }
+  #graph-overlay { position:absolute; inset:0; display:none; flex-direction:column;
+                   align-items:center; justify-content:center; gap:12px;
+                   background:rgba(15,20,32,.7); border-radius:8px; z-index:5; }
+  #graph-overlay.show { display:flex; }
+  #graph-overlay .pbar { width:280px; }
+  #graph-info { color:var(--muted); font-size:12px; margin-top:8px; }
+
+  .msg { font-size:12px; margin-top:8px; }
+  .msg.ok { color:var(--good); } .msg.err { color:var(--bad); }
+  a.del { color:var(--bad); cursor:pointer; text-decoration:none; }
+  .drop { border:2px dashed var(--border); border-radius:10px; padding:26px;
+          text-align:center; color:var(--muted); cursor:pointer; transition:.15s; }
+  .drop.over { border-color:var(--accent); color:var(--text); background:var(--panel2); }
+  .drop.busy { pointer-events:none; opacity:.6; }
+  h3 { margin:4px 0 12px; font-size:14px; }
+
+  /* feature explanations */
+  .help { color:var(--muted); font-size:12px; line-height:1.55; margin:2px 0 12px; }
+  .help b { color:var(--text); font-weight:600; }
+  .help .pill { font-size:10px; }
+  details.how { margin-top:10px; font-size:12px; color:var(--muted);
+                border-top:1px dashed var(--border); padding-top:8px; }
+  details.how summary { cursor:pointer; color:var(--accent); font-size:12px;
+                        user-select:none; }
+  details.how li { margin:3px 0; }
+
+  /* upload queue */
+  .up-item { display:flex; align-items:center; gap:10px; padding:8px 10px;
+             background:var(--panel2); border:1px solid var(--border);
+             border-radius:8px; margin-top:8px; font-size:13px; }
+  .up-item .name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .up-item .state { font-size:12px; color:var(--muted); }
+  .up-item.done .state { color:var(--good); }
+  .up-item.fail .state { color:var(--bad); }
+  .up-item .pbar { width:130px; flex:none; }
+
+  /* toast */
+  #toast { position:fixed; bottom:18px; right:18px; max-width:380px; z-index:100;
+           display:flex; flex-direction:column; gap:8px; }
+  .toast { background:var(--panel); border:1px solid var(--border); border-left:3px solid var(--bad);
+           border-radius:8px; padding:10px 14px; font-size:13px; box-shadow:0 6px 22px rgba(0,0,0,.45);
+           animation:pop .18s ease; }
+  .toast.ok { border-left-color:var(--good); }
+  @keyframes pop { from{transform:translateY(8px);opacity:0} }
+</style>
+</head>
+<body>
+<div id="topbar"></div>
+<header>
+  <h1>🕸 TPG Platform</h1>
+  <span class="sub">Text Property Graph · Document Intelligence</span>
+  <span id="stats"><span class="spin"></span></span>
+</header>
+<nav>
+  <button data-tab="docs" class="active">Documents</button>
+  <button data-tab="ask">Ask</button>
+  <button data-tab="entities">Entities</button>
+  <button data-tab="graph">Graph</button>
+</nav>
+<main>
+
+<!-- ── Documents ── -->
+<section class="tab active" id="tab-docs">
+  <div class="card">
+    <h3>Ingest — feed any document into the Text Property Graph</h3>
+    <div class="help">
+      Every source is <b>extracted → chunked into passages → parsed into a TPG</b>
+      (sentences, tokens, entities, predicates, relations) and stored in the local
+      SQLite knowledge base. Nothing leaves this machine.
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <label style="color:var(--muted);font-size:12px" title="The domain overlay adds typed entities and relations on top of the generic linguistic graph">Domain</label>
+      <select id="domain" title="Which domain rules to apply during parsing"></select>
+      <span class="help" style="margin:0">
+        picks the extraction rules: <b>security</b> → CVE/CWE IDs, versions, impacts ·
+        <b>medical</b> → drugs, dosages, conditions · <b>legal</b> → statutes, parties ·
+        <b>financial</b> → money, tickers · <b>scientific</b> → citations, measurements ·
+        <b>general</b> → language only
+      </span>
+    </div>
+    <div class="drop" id="drop" title="Files are uploaded, text-extracted and TPG-parsed on the server">
+      <b>Drop files here or click to choose</b><br>
+      <span style="font-size:12px">PDF · DOCX · HTML · Markdown · TXT · CSV · JSON — e.g. a CVE advisory PDF,
+      a clinical report, a contract, an earnings filing</span>
+    </div>
+    <input type="file" id="file" multiple style="display:none">
+    <div id="upqueue"></div>
+    <div class="row" style="margin-top:12px">
+      <input type="text" id="url" title="The page (or remote PDF) is fetched server-side and ingested like a file"
+             placeholder="…or paste a URL — e.g. https://nvd.nist.gov/vuln/detail/CVE-2024-3094">
+      <button class="btn ghost" id="btn-url" onclick="ingestUrl()"
+              title="Download the URL, strip boilerplate (nav/scripts), parse the content">Fetch URL</button>
+    </div>
+    <textarea id="rawtext" style="margin-top:10px"
+      placeholder="…or paste raw text — e.g.  CVE-2024-1234 is a heap overflow in the parse_header() function of Apache HTTP Server 2.4.51. A remote attacker can send a crafted request to trigger remote code execution. Upgrade to 2.4.52."></textarea>
+    <div class="row" style="margin-top:8px">
+      <input type="text" id="rawname" placeholder="name — e.g. apache-advisory-2024" style="max-width:240px">
+      <button class="btn ghost" id="btn-text" onclick="ingestText()"
+              title="Parse the pasted text directly, no file needed">Ingest text</button>
+    </div>
+    <div class="msg" id="ingest-msg"></div>
+    <details class="how"><summary>ℹ What happens when I ingest?</summary>
+      <ol>
+        <li><b>Extract</b> — the right reader per format (pdfplumber for PDF, python-docx for Word,
+            BeautifulSoup for HTML…) pulls clean text with page/section context.</li>
+        <li><b>Chunk</b> — text is split into paragraph-sized passages on sentence boundaries
+            (≤1200 chars) so each passage is a coherent graph unit.</li>
+        <li><b>TPG parse</b> — spaCy builds the linguistic graph (like a Code Property Graph for text:
+            containment ≈ AST, token flow ≈ CFG, coreference ≈ data-flow), then the selected
+            domain's rules add typed entities (<span class="pill type">CVE_ID</span>
+            <span class="pill type">DRUG</span> …) and relations
+            (<span class="pill type">AFFECTS</span> <span class="pill type">TREATS</span> …).</li>
+        <li><b>Store</b> — passages, entities, relations and the full per-passage graph (GraphSON)
+            land in SQLite with a BM25 full-text index. Re-ingesting the same source is skipped.</li>
+      </ol>
+    </details>
+  </div>
+  <div class="card">
+    <h3>Indexed documents</h3>
+    <div class="help">Everything currently in the knowledge base. Deleting a document removes its
+      passages, entities and relations (shared entities survive if other documents mention them).</div>
+    <div id="docs-loading" class="skel" style="display:none"></div>
+    <table id="docs-table"><thead>
+      <tr><th>Name</th><th>Domain</th><th>Passages</th><th>Added</th><th></th></tr>
+    </thead><tbody></tbody></table>
+  </div>
+</section>
+
+<!-- ── Ask ── -->
+<section class="tab" id="tab-ask">
+  <div class="card">
+    <h3>Ask — query the knowledge graph in natural language</h3>
+    <div class="help">
+      Your question is itself <b>parsed into a TPG</b>; its entities and predicates are
+      matched against the graph, fused with BM25 full-text scoring, and the best
+      passages come back ranked with their matched entities.
+    </div>
+    <div class="row">
+      <input type="text" id="question"
+             placeholder='e.g. "What does CVE-2024-1234 affect and how is it fixed?" · "Which passages mention remote code execution?"'
+             onkeydown="if(event.key==='Enter')doQuery()">
+      <button class="btn" id="btn-query" onclick="doQuery()"
+              title="Local graph + BM25 retrieval — instant, offline, no API key">Search graph</button>
+      <button class="btn ghost" id="btn-ask" onclick="doAsk()"
+              title="Same retrieval, then Claude writes a cited answer — needs ANTHROPIC_API_KEY on the server">Answer with AI</button>
+    </div>
+    <div class="help" style="margin:8px 0 0">
+      <b>Search graph</b> = retrieval only: local, instant, zero external calls.
+      &nbsp;·&nbsp; <b>Answer with AI</b> = retrieval + a written answer with source citations
+      (optional; needs <code>ANTHROPIC_API_KEY</code> on the server).
+    </div>
+    <div class="msg" id="ask-msg"></div>
+  </div>
+  <div id="answer-card" class="card" style="display:none">
+    <h3>Answer</h3><div class="answer" id="answer"></div>
+  </div>
+  <div id="digest-card" class="card" style="display:none">
+    <h3>Key sentences — extractive answer (local, no AI)</h3>
+    <div class="help">The sentences from the matched passages that best cover your
+      question's content words, with their sources.</div>
+    <div id="digest"></div>
+  </div>
+  <div class="card"><h3>Matched passages</h3>
+    <div class="help">Ranked evidence. <b>score</b> = 3×exact entity match + 1.5×partial match +
+      1×predicate match + up-to-2×BM25 text relevance. The chips show which of your
+      question's entities matched inside each passage.</div>
+    <div id="hits"><div class="empty">Type a question above and press <b>Search graph</b>.</div></div>
+  </div>
+</section>
+
+<!-- ── Entities ── -->
+<section class="tab" id="tab-entities">
+  <div class="card">
+    <h3>Entities — everything the TPG recognised in your documents</h3>
+    <div class="help">
+      Entities come from two extractors working together: the <b>domain rules</b>
+      (typed, e.g. <span class="pill type">CVE_ID</span> <span class="pill type">VERSION</span>
+      <span class="pill type">IMPACT</span>) and <b>spaCy NER</b> (generic, e.g.
+      <span class="pill type">ORG</span> <span class="pill type">DATE</span>).
+      Explore one to see its typed relations and what it co-occurs with.
+    </div>
+    <div class="row">
+      <input type="text" id="ent-search"
+             placeholder='e.g. CVE-2024-1234 · "buffer overflow" · aspirin · Apache — partial names work too'
+             onkeydown="if(event.key==='Enter')exploreEntity()">
+      <button class="btn" id="btn-explore" onclick="exploreEntity()"
+              title="Show this entity's typed relations and co-mentioned entities">Explore</button>
+    </div>
+  </div>
+  <div class="card" id="nb-card" style="display:none">
+    <h3 id="nb-title"></h3>
+    <div class="help"><b>Relations</b> are typed edges the TPG extracted from sentences
+      (domain rules like AFFECTS/TREATS, or the connecting verb). ×N = how many passages
+      support the relation.</div>
+    <div id="nb-relations"></div>
+    <h3 style="margin-top:14px">Co-mentioned with</h3>
+    <div class="help">Entities appearing in the same passages — the untyped neighborhood,
+      useful for discovering context the rules didn't label.</div>
+    <div id="nb-comentions"></div>
+  </div>
+  <div class="card">
+    <h3>Top entities</h3>
+    <div class="help">Ranked by mention count across all documents. Click a name to explore it.</div>
+    <div id="ent-loading" class="skel" style="display:none"></div>
+    <table id="ent-table"><thead>
+      <tr><th>Entity</th><th>Type</th><th>Mentions</th></tr>
+    </thead><tbody></tbody></table>
+  </div>
+</section>
+
+<!-- ── Graph ── -->
+<section class="tab" id="tab-graph">
+  <div class="card">
+    <h3>Knowledge graph — the document corpus as one picture</h3>
+    <div class="help">
+      Each <b>dot is an entity</b> (size = how often it is mentioned, colour = its type)
+      and each <b>arrow is a typed relation</b> extracted from your sentences —
+      e.g. <i>CVE-2024-1234 —AFFECTS→ 2.4.51</i>. Drag nodes, scroll to zoom,
+      hover a node for its type and mention count.
+    </div>
+    <div class="row">
+      <button class="btn" id="btn-graph" onclick="loadGraph()"
+              title="Fetch the top entities + relations and lay them out with physics">Render knowledge graph</button>
+      <label style="color:var(--muted);font-size:12px"
+             title="How many of the most-mentioned entities to include">entities</label>
+      <select id="graph-limit" style="max-width:90px;flex:none">
+        <option>30</option><option selected>60</option><option>100</option><option>150</option>
+      </select>
+      <span class="sub" style="color:var(--muted)">fewer = clearer clusters · more = broader coverage</span>
+    </div>
+    <div id="graphwrap" style="margin-top:12px">
+      <div id="graphviz"></div>
+      <div id="graph-overlay">
+        <div id="graph-stage">Fetching graph…</div>
+        <div class="pbar"><div id="graph-pbar"></div></div>
+      </div>
+    </div>
+    <div id="graph-info"></div>
+  </div>
+</section>
+
+</main>
+<div id="toast"></div>
+<script>
+/* ── infrastructure: fetch wrapper with global progress + toasts ── */
+let inflight = 0;
+function busy(delta) {
+  inflight = Math.max(0, inflight + delta);
+  document.getElementById('topbar').classList.toggle('on', inflight > 0);
+}
+async function api(path, opt) {
+  busy(1);
+  try {
+    const r = await fetch('/api' + path, opt);
+    if (!r.ok) {
+      const detail = (await r.json().catch(() => ({detail: r.statusText}))).detail;
+      throw new Error(typeof detail === 'string' ? detail : JSON.stringify(detail));
+    }
+    return await r.json();
+  } finally { busy(-1); }
+}
+const $ = id => document.getElementById(id);
+const esc = s => (s ?? '').toString().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(text, ok=false) {
+  const el = document.createElement('div');
+  el.className = 'toast' + (ok ? ' ok' : '');
+  el.textContent = text;
+  $('toast').appendChild(el);
+  setTimeout(() => el.remove(), 6000);
+}
+function setBusyBtn(id, on, labelBusy) {
+  const b = $(id);
+  if (on) { b.dataset.label = b.textContent; b.disabled = true;
+            b.innerHTML = `<span class="spin"></span>${labelBusy || b.dataset.label}`; }
+  else { b.disabled = false; b.textContent = b.dataset.label || b.textContent; }
+}
+
+/* ── tabs (lazy auto-load per tab) ── */
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('nav button, .tab').forEach(e => e.classList.remove('active'));
+  b.classList.add('active'); $('tab-' + b.dataset.tab).classList.add('active');
+  if (b.dataset.tab === 'entities') loadEntities();
+  if (b.dataset.tab === 'graph' && !graphLoaded) loadGraph();
+});
+
+/* ── header stats + domains + docs ── */
+async function refresh() {
+  try {
+    const s = await api('/stats');
+    $('stats').textContent = `${s.documents} docs · ${s.passages} passages · ${s.entities} entities · ${s.relations} relations`;
+  } catch (e) { $('stats').textContent = 'API unreachable'; toast('API unreachable: ' + e.message); }
+  loadDocs();
+}
+async function loadDomains() {
+  try {
+    const ds = await api('/domains');
+    $('domain').innerHTML = ds.map(d =>
+      `<option value="${d.name}">${d.name} (${d.entity_rules} rules)</option>`).join('');
+    $('domain').value = 'security';
+  } catch (e) { toast('Could not load domains: ' + e.message); }
+}
+async function loadDocs() {
+  $('docs-loading').style.display = 'block';
+  try {
+    const docs = await api('/documents');
+    $('docs-table').querySelector('tbody').innerHTML = docs.map(d => `
+      <tr><td>${esc(d.name)}</td><td><span class="pill">${esc(d.domain)}</span></td>
+      <td>${d.n_passages}</td><td>${new Date(d.created_at*1000).toLocaleString()}</td>
+      <td><a class="del" onclick="delDoc('${d.id}')">delete</a></td></tr>`).join('')
+      || '<tr><td colspan=5 class="empty">No documents yet — ingest something above.</td></tr>';
+  } catch (e) { toast('Could not list documents: ' + e.message); }
+  $('docs-loading').style.display = 'none';
+}
+async function delDoc(id) {
+  try { await api('/documents/' + id, {method:'DELETE'}); toast('Document deleted', true); }
+  catch (e) { toast(e.message); }
+  refresh(); graphLoaded = false;
+}
+
+/* ── ingest: upload queue with per-file progress ── */
+const drop = $('drop'), fileInput = $('file');
+drop.onclick = () => fileInput.click();
+drop.ondragover = e => { e.preventDefault(); drop.classList.add('over'); };
+drop.ondragleave = () => drop.classList.remove('over');
+drop.ondrop = e => { e.preventDefault(); drop.classList.remove('over'); uploadFiles(e.dataTransfer.files); };
+fileInput.onchange = () => { uploadFiles(fileInput.files); fileInput.value = ''; };
+
+function uploadWithProgress(url, formData, onProgress) {
+  /* XHR so we get real upload progress; parse phase shows indeterminate */
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.upload.onprogress = e => { if (e.lengthComputable) onProgress(e.loaded / e.total); };
+    xhr.onload = () => {
+      let body = {};
+      try { body = JSON.parse(xhr.responseText); } catch {}
+      xhr.status >= 200 && xhr.status < 300 ? resolve(body)
+        : reject(new Error(body.detail || xhr.statusText));
+    };
+    xhr.onerror = () => reject(new Error('network error'));
+    xhr.send(formData);
+  });
+}
+
+async function uploadFiles(files) {
+  if (!files.length) return;
+  drop.classList.add('busy'); busy(1);
+  for (const f of files) {
+    const item = document.createElement('div');
+    item.className = 'up-item';
+    item.innerHTML = `<span class="spin"></span><span class="name">${esc(f.name)}</span>
+      <div class="pbar"><div></div></div><span class="state">uploading…</span>`;
+    $('upqueue').appendChild(item);
+    const bar = item.querySelector('.pbar > div'), state = item.querySelector('.state');
+    try {
+      const fd = new FormData(); fd.append('file', f);
+      const r = await uploadWithProgress(
+        `/api/ingest/file?domain=${$('domain').value}&overwrite=true`, fd,
+        p => { bar.style.width = Math.round(p * 60) + '%';
+               if (p >= 1) { state.textContent = 'parsing TPG… (can take a while for big PDFs)';
+                             item.querySelector('.pbar').classList.add('indet'); } });
+      item.querySelector('.pbar').classList.remove('indet');
+      bar.style.width = '100%';
+      item.classList.add('done'); item.querySelector('.spin')?.remove();
+      state.textContent = `✓ ${r.passages} passages · ${r.entities} entities · ${r.relations} relations`;
+    } catch (e) {
+      item.classList.add('fail'); item.querySelector('.spin')?.remove();
+      item.querySelector('.pbar').classList.remove('indet');
+      state.textContent = '✗ ' + e.message; toast(`${f.name}: ${e.message}`);
+    }
+  }
+  drop.classList.remove('busy'); busy(-1);
+  refresh(); graphLoaded = false;
+}
+
+async function ingestUrl() {
+  const url = $('url').value.trim(); if (!url) return;
+  setBusyBtn('btn-url', true, 'Fetching + parsing…');
+  try {
+    const r = await api('/ingest/url', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({url, domain: $('domain').value, overwrite: true})});
+    msg('ingest-msg', `✓ ${r.name}: ${r.passages} passages, ${r.entities} entities`, 'ok');
+    toast(`Ingested ${r.name}`, true); refresh(); graphLoaded = false;
+  } catch (e) { msg('ingest-msg', '✗ ' + e.message, 'err'); toast(e.message); }
+  setBusyBtn('btn-url', false);
+}
+async function ingestText() {
+  const text = $('rawtext').value.trim(); if (!text) return;
+  const name = $('rawname').value.trim() || 'pasted-text';
+  setBusyBtn('btn-text', true, 'Parsing…');
+  try {
+    const r = await api('/ingest/text', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({text, name, domain: $('domain').value, overwrite: true})});
+    msg('ingest-msg', `✓ ${r.name}: ${r.passages} passages, ${r.entities} entities`, 'ok');
+    toast(`Ingested ${r.name}`, true); refresh(); graphLoaded = false;
+  } catch (e) { msg('ingest-msg', '✗ ' + e.message, 'err'); toast(e.message); }
+  setBusyBtn('btn-text', false);
+}
+function msg(id, text, cls) { const el = $(id); el.textContent = text; el.className = 'msg ' + cls; }
+
+/* ── query / ask ── */
+function hitsSkeleton(n=3) {
+  $('hits').innerHTML = Array.from({length:n}, () => '<div class="skel"></div>').join('');
+}
+async function doQuery() {
+  const q = $('question').value.trim(); if (!q) return;
+  setBusyBtn('btn-query', true, 'Searching…'); hitsSkeleton();
+  $('answer-card').style.display = 'none'; $('digest-card').style.display = 'none';
+  msg('ask-msg', '', '');
+  try {
+    const r = await api('/query', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({question: q, top_k: 6})});
+    const hits = r.hits || r;               // tolerate old response shape
+    const digest = r.digest || [];
+    if (digest.length) {
+      $('digest-card').style.display = 'block';
+      $('digest').innerHTML = digest.map(d => `
+        <div class="hit" style="border-left-color:var(--good)">
+          <div>${esc(d.sentence)}</div>
+          <div class="meta" style="margin:5px 0 0">${esc(d.doc)}${d.page ? ` · page ${d.page}` : ''}${d.section ? ` · ${esc(d.section)}` : ''}</div>
+        </div>`).join('');
+    }
+    renderHits(hits);
+    msg('ask-msg', `${hits.length} passages matched`, 'ok');
+  } catch (e) { $('hits').innerHTML = ''; msg('ask-msg', '✗ ' + e.message, 'err'); toast(e.message); }
+  setBusyBtn('btn-query', false);
+}
+async function doAsk() {
+  const q = $('question').value.trim(); if (!q) return;
+  setBusyBtn('btn-ask', true, 'Retrieving + generating…'); hitsSkeleton(2);
+  msg('ask-msg', 'Retrieving passages, then generating the answer — typically 5–20 s…', '');
+  try {
+    const r = await api('/ask', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({question: q, top_k: 6})});
+    $('answer-card').style.display = 'block'; $('answer').textContent = r.answer;
+    $('hits').innerHTML = '';
+    msg('ask-msg', `Answer grounded in ${r.sources.length} passages`, 'ok');
+  } catch (e) { $('hits').innerHTML = ''; msg('ask-msg', '✗ ' + e.message, 'err'); toast(e.message); }
+  setBusyBtn('btn-ask', false);
+}
+function renderHits(hits) {
+  $('hits').innerHTML = hits.map(h => `
+    <div class="hit">
+      <div class="meta">${esc(h.doc)}${h.page ? ` · page ${h.page}` : ''}${h.section ? ` · ${esc(h.section)}` : ''}
+        · score ${h.score}
+        ${h.matched_entities.slice(0,5).map(e => `<span class="pill">${esc(e)}</span>`).join('')}</div>
+      <div>${esc(h.text)}</div>
+    </div>`).join('') || '<div class="empty">No matches — try different terms, or check the Documents tab.</div>';
+}
+
+/* ── entities ── */
+async function loadEntities() {
+  $('ent-loading').style.display = 'block';
+  try {
+    const ents = await api('/entities?limit=50');
+    $('ent-table').querySelector('tbody').innerHTML = ents.map(e => `
+      <tr><td style="cursor:pointer;color:var(--accent)"
+          onclick="$('ent-search').value='${esc(e.display).replace(/'/g,"\\'")}';exploreEntity()">${esc(e.display)}</td>
+      <td><span class="pill type">${esc(e.etype) || '—'}</span></td><td>${e.n}</td></tr>`).join('')
+      || '<tr><td colspan=3 class="empty">No entities yet.</td></tr>';
+  } catch (e) { toast(e.message); }
+  $('ent-loading').style.display = 'none';
+}
+async function exploreEntity() {
+  const name = $('ent-search').value.trim(); if (!name) return;
+  setBusyBtn('btn-explore', true, 'Exploring…');
+  try {
+    const nb = await api(`/entities/${encodeURIComponent(name)}/neighborhood`);
+    $('nb-card').style.display = 'block';
+    $('nb-title').textContent = 'Neighborhood of "' + name + '"';
+    $('nb-relations').innerHTML = nb.relations.map(r =>
+      `<div>${esc(r.src)} <span class="pill type">${esc(r.rel)}</span> ${esc(r.dst)}
+       <span class="pill">×${r.n}</span></div>`).join('')
+      || '<div class="empty">No typed relations.</div>';
+    $('nb-comentions').innerHTML = nb.co_mentions.slice(0,30).map(c =>
+      `<span class="pill">${esc(c.display)} ×${c.n}</span>`).join('')
+      || '<div class="empty">None.</div>';
+  } catch (e) { toast(e.message); }
+  setBusyBtn('btn-explore', false);
+}
+
+/* ── graph (auto-load, real stabilization progress) ── */
+let graphLoaded = false, network = null;
+function graphOverlay(show, stage, pct) {
+  $('graph-overlay').classList.toggle('show', show);
+  if (stage !== undefined) $('graph-stage').textContent = stage;
+  const bar = $('graph-pbar');
+  bar.parentElement.classList.toggle('indet', pct === undefined);
+  if (pct !== undefined) bar.style.width = Math.round(pct) + '%';
+}
+async function loadGraph() {
+  if (typeof vis === 'undefined') {
+    graphOverlay(false);
+    $('graph-info').textContent = '';
+    toast('Graph library failed to load (vis-network). Hard-refresh the page (Ctrl+Shift+R).');
+    return;
+  }
+  setBusyBtn('btn-graph', true, 'Loading…');
+  graphOverlay(true, 'Fetching graph data…');
+  try {
+    const limit = $('graph-limit').value;
+    const g = await api('/graph?limit=' + limit);
+    if (!g.nodes.length) {
+      graphOverlay(false); $('graph-info').textContent = 'No entities yet — ingest a document first.';
+      setBusyBtn('btn-graph', false); return;
+    }
+    graphOverlay(true, `Laying out ${g.nodes.length} nodes / ${g.edges.length} edges…`, 0);
+    const colors = {}; const palette = ['#5b8cff','#3ecf8e','#ffb454','#ff6b6b','#b98cff','#4dd0e1','#f06292'];
+    let ci = 0;
+    const seenIds = new Set();
+    const nodes = [];
+    for (const n of g.nodes) {
+      if (seenIds.has(n.id)) continue;   // defensive: vis rejects duplicate ids
+      seenIds.add(n.id);
+      if (!(n.etype in colors)) colors[n.etype] = palette[ci++ % palette.length];
+      nodes.push({ id: n.id, label: n.label, value: n.weight,
+                   color: colors[n.etype], title: `${n.etype || 'entity'} · ${n.weight} mentions` });
+    }
+    const edges = g.edges
+      .filter(e => seenIds.has(e.from) && seenIds.has(e.to))
+      .map(e => ({ from: e.from, to: e.to, label: e.label,
+        font: {size:10, color:'#8b96ad', strokeWidth:0}, color: {color:'#2a3552'}, arrows: 'to' }));
+    if (network) network.destroy();
+    network = new vis.Network($('graphviz'),
+      { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) },
+      { nodes: {shape:'dot', scaling:{min:8,max:34}, font:{color:'#e7ecf5',size:12}},
+        physics: {barnesHut:{gravitationalConstant:-4000, springLength:130},
+                  stabilization:{iterations:400, updateInterval:20}},
+        interaction: {hover:true} });
+    network.on('stabilizationProgress', p => graphOverlay(true, 'Laying out…', 100 * p.iterations / p.total));
+    network.once('stabilizationIterationsDone', () => {
+      graphOverlay(false);
+      $('graph-info').textContent =
+        `${nodes.length} entities · ${edges.length} relations · drag to explore, scroll to zoom · click an entity type legend: ` +
+        Object.entries(colors).map(([t]) => t || 'generic').slice(0,7).join(', ');
+      graphLoaded = true;
+    });
+  } catch (e) {
+    graphOverlay(false); toast('Graph failed: ' + e.message);
+  }
+  setBusyBtn('btn-graph', false);
+}
+
+loadDomains(); refresh();
+</script>
+</body>
+</html>

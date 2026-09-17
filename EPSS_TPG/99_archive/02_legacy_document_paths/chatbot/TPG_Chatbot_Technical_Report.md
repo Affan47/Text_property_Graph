@@ -1,0 +1,1 @@
+../../../00_documentation/02_tpg/07_CHATBOT_TECHNICAL_REPORT.md

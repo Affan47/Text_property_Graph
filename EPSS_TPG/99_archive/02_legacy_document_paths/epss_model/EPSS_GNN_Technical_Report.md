@@ -1,0 +1,1 @@
+../../../00_documentation/05_prediction/02_EPSS_GNN_TECHNICAL_REPORT.md

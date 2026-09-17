@@ -1,0 +1,20 @@
+# TPG Platform — application dependencies
+# Core NLP
+spacy>=3.5
+# python -m spacy download en_core_web_sm
+
+# API + server
+fastapi>=0.110
+uvicorn>=0.27
+python-multipart>=0.0.9
+
+# Extractors
+pdfplumber>=0.10
+python-docx>=1.1
+beautifulsoup4>=4.12
+
+# Graph ecosystem exports
+networkx>=3.0
+
+# Optional: LLM answering (ask command / /api/ask)
+anthropic>=0.40
