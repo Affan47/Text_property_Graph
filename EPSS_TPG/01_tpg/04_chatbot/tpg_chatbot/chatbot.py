@@ -62,14 +62,14 @@ Usage
 ─────
     # Step 1 — Build the graph store (run once)
     cd /home/ayounas/Text_property_Graph/EPSS_TPG
-    python -m tpg_chatbot.ingest --input data/pdfs --store tpg_chatbot/store.json
+    python -m tpg_chatbot.ingest --input 01_tpg/02_examples/04_inputs/02_pdf --store 01_tpg/05_workspace/03_chatbot_stores/store.json
 
     # Step 2 — Start the chatbot
     export ANTHROPIC_API_KEY=sk-ant-...
-    python tpg_chatbot/chatbot.py --store tpg_chatbot/store.json
+    python 01_tpg/04_chatbot/tpg_chatbot/chatbot.py --store 01_tpg/05_workspace/03_chatbot_stores/store.json
 
     # One-shot query
-    python tpg_chatbot/chatbot.py --store tpg_chatbot/store.json --query "What CVEs affect Apache?"
+    python 01_tpg/04_chatbot/tpg_chatbot/chatbot.py --store 01_tpg/05_workspace/03_chatbot_stores/store.json --query "What CVEs affect Apache?"
 """
 
 from __future__ import annotations

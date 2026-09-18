@@ -34,7 +34,7 @@ cd ~/Text_property_Graph/EPSS_TPG
 ### Step 1 — Install dependencies (one time)
 
 ```bash
-pip install -r tpg_app/requirements.txt
+pip install -r 01_tpg/03_application/tpg_app/requirements.txt
 python -m spacy download en_core_web_sm      # skip if already installed
 ```
 
@@ -159,7 +159,7 @@ query returns the smoke-test passage first with `CVE-2024-7777` in
 
 ```bash
 # Build (from the EPSS_TPG root)
-docker build -f tpg_app/Dockerfile -t tpg-platform .
+docker build -f 01_tpg/03_application/tpg_app/Dockerfile -t tpg-platform .
 # Run with a persistent volume for the DB + uploads
 docker run -p 8742:8742 -v tpg_data:/data tpg-platform
 ```

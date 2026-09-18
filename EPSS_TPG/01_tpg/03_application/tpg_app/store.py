@@ -95,8 +95,11 @@ class PassageHit:
     matched_entities: List[str] = field(default_factory=list)
 
 
+from tpg.paths import DEFAULT_DATABASE
+
+
 class TPGStore:
-    def __init__(self, db_path: str = "tpg_store.db"):
+    def __init__(self, db_path: str = DEFAULT_DATABASE):
         self.db_path = str(db_path)
         Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
         self._conn = sqlite3.connect(self.db_path, check_same_thread=False)

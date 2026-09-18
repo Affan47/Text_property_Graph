@@ -44,9 +44,11 @@ PROJECT_ROOT = str(next(
 ))
 sys.path.insert(0, PROJECT_ROOT)
 
-OUTPUT_COMPARISON_DIR = os.path.join(PROJECT_ROOT, "output", "comparison")
-OUTPUT_GRAPHSON_SECURITY_DIR = os.path.join(PROJECT_ROOT, "output", "graphson", "security")
-OUTPUT_PYG_SECURITY_DIR = os.path.join(PROJECT_ROOT, "output", "pyg", "security")
+from tpg.paths import GENERATED
+
+OUTPUT_COMPARISON_DIR = str(GENERATED / "comparison")
+OUTPUT_GRAPHSON_SECURITY_DIR = str(GENERATED / "graphson/security")
+OUTPUT_PYG_SECURITY_DIR = str(GENERATED / "pyg/security")
 
 from tpg.schema.types import NodeType, EdgeType
 

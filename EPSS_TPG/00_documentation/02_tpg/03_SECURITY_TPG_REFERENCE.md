@@ -53,7 +53,7 @@ The **Hybrid pipeline (Level 2c) is the default** for `parse_security_text()`. I
 
 ### 2a. SecurityFrontend (Rule-Based)
 
-**File**: `tpg/frontends/security_frontend.py` (417 lines)
+**File**: `01_tpg/01_core/tpg/frontends/security_frontend.py` (417 lines)
 **Approach**: Deterministic regex patterns + keyword dictionaries
 **Dependencies**: None (only spaCy)
 
@@ -93,7 +93,7 @@ The **Hybrid pipeline (Level 2c) is the default** for `parse_security_text()`. I
 
 ### 2b. ModelSecurityFrontend (Transformer-Based)
 
-**File**: `tpg/frontends/model_security_frontend.py` (609 lines)
+**File**: `01_tpg/01_core/tpg/frontends/model_security_frontend.py` (609 lines)
 **Approach**: Pre-trained transformer (SecBERT) for zero-shot classification
 **Dependencies**: `torch`, `transformers`
 
@@ -172,7 +172,7 @@ Entity type prototypes (3 descriptive phrases per type, pre-computed mean embedd
 
 ### 2c. HybridSecurityFrontend (Fusion) — DEFAULT
 
-**File**: `tpg/frontends/hybrid_security_frontend.py` (519 lines)
+**File**: `01_tpg/01_core/tpg/frontends/hybrid_security_frontend.py` (519 lines)
 **Approach**: Rule-based extraction first, then model overlay
 **Dependencies**: `torch`, `transformers` (optional — falls back to rule-only)
 
@@ -610,7 +610,7 @@ When `embedding_dim=768`:
 ### Directory Layout
 
 ```
-output/
+01_tpg/02_examples/03_generated/
 ├── graphson/                      # GraphSON JSON (Joern-compatible)
 │   ├── general/                   # General/generic text
 │   │   ├── general_paragraph_tpg.json
@@ -828,7 +828,7 @@ pipeline = HybridSecurityPipeline()
 graph = pipeline.run(text, doc_id="cve_2024_1234")
 
 # GraphSON (Joern-compatible JSON)
-pipeline.export_graphson(graph, "output/graphson/security/cve_2024_1234_tpg.json")
+pipeline.export_graphson(graph, "01_tpg/02_examples/03_generated/graphson/security/cve_2024_1234_tpg.json")
 
 # GraphSON as string
 json_str = pipeline.export_graphson_string(graph)
@@ -909,21 +909,21 @@ Model loading is a one-time cost (~0.2s). Subsequent calls are faster.
 
 ```bash
 # Compare all three frontends (default CVE text)
-python examples/compare_frontends.py
+python 01_tpg/02_examples/01_scripts/compare_frontends.py
 
 # Compare on your own text
-python examples/compare_frontends.py --file data/text/cve_exploit_report.txt
+python 01_tpg/02_examples/01_scripts/compare_frontends.py --file 01_tpg/02_examples/04_inputs/01_text/cve_exploit_report.txt
 
 # Rule-only (no model dependencies needed)
-python examples/compare_frontends.py --rule-only
+python 01_tpg/02_examples/01_scripts/compare_frontends.py --rule-only
 
 # Custom threshold
-python examples/compare_frontends.py --threshold 0.55
+python 01_tpg/02_examples/01_scripts/compare_frontends.py --threshold 0.55
 
 # Export results
-python examples/compare_frontends.py --export-json output/comparison/my_results.json
+python 01_tpg/02_examples/01_scripts/compare_frontends.py --export-json 01_tpg/02_examples/03_generated/comparison/my_results.json
 
 # Process security text through experiment script (uses Hybrid by default)
-python examples/experiment.py --file data/text/cve_exploit_report.txt --security
-python examples/experiment.py --file data/text/cve_exploit_report.txt --security --rule-only
+python 01_tpg/02_examples/01_scripts/experiment.py --file 01_tpg/02_examples/04_inputs/01_text/cve_exploit_report.txt --security
+python 01_tpg/02_examples/01_scripts/experiment.py --file 01_tpg/02_examples/04_inputs/01_text/cve_exploit_report.txt --security --rule-only
 ```

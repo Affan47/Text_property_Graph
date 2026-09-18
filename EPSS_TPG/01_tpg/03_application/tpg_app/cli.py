@@ -25,9 +25,12 @@ sys.path.insert(0, str(next(
 )))
 
 
+from tpg.paths import DEFAULT_DATABASE
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="tpg", description="TPG document intelligence")
-    p.add_argument("--db", default="tpg_workspace.db", help="SQLite store path")
+    p.add_argument("--db", default=DEFAULT_DATABASE, help="SQLite store path")
     p.add_argument("--domain", default="general",
                    help="domain overlay (general, security, medical, legal, "
                         "financial, scientific, or a registered custom one)")

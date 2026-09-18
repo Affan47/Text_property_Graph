@@ -17,8 +17,8 @@ within each chunk.
 
 Usage
 ─────
-    python -m tpg_chatbot.ingest --input data/pdfs --store tpg_chatbot/store.json
-    python -m tpg_chatbot.ingest --input data/text --store tpg_chatbot/store.json
+    python -m tpg_chatbot.ingest --input 01_tpg/02_examples/04_inputs/02_pdf --store 01_tpg/05_workspace/03_chatbot_stores/store.json
+    python -m tpg_chatbot.ingest --input 01_tpg/02_examples/04_inputs/01_text --store 01_tpg/05_workspace/03_chatbot_stores/store.json
 """
 
 from __future__ import annotations
@@ -35,6 +35,7 @@ sys.path.insert(0, str(next(
 )))
 
 from tpg_chatbot.graph_store import GraphStore, Passage
+from tpg.paths import DEFAULT_CHATBOT_STORE
 
 
 # ── Text extraction ──────────────────────────────────────────────────────────
@@ -288,7 +289,7 @@ def ingest_directory(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Ingest documents into TPG GraphStore")
     parser.add_argument("--input", required=True, help="Path to directory or file")
-    parser.add_argument("--store", default="tpg_chatbot/store.json", help="Output store JSON path")
+    parser.add_argument("--store", default=DEFAULT_CHATBOT_STORE, help="Output store JSON path")
     parser.add_argument("--overwrite", action="store_true", help="Rebuild store from scratch")
     args = parser.parse_args()
 

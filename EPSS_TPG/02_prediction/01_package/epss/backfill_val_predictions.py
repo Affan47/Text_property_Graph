@@ -162,7 +162,7 @@ def backfill_one(run_dir: Path, project_root: Path,
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--root", type=Path, default=Path("output"),
+    parser.add_argument("--root", type=Path, default=Path("05_results/01_training"),
                         help="Root directory containing run subdirectories.")
     parser.add_argument("--runs-glob", nargs="+",
                         default=["epss_*_v2_*", "epss_mv_*"],

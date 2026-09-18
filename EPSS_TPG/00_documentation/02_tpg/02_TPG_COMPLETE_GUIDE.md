@@ -1208,7 +1208,7 @@ Just as Joern's Java frontend **extends** the base frontend to add Java-specific
 
 ### The SecurityFrontend: How It Works
 
-The `SecurityFrontend` is defined in `tpg/frontends/security_frontend.py`. It is a Python class that inherits from `SpacyFrontend`:
+The `SecurityFrontend` is defined in `01_tpg/01_core/tpg/frontends/security_frontend.py`. It is a Python class that inherits from `SpacyFrontend`:
 
 ```python
 class SecurityFrontend(SpacyFrontend):
@@ -1259,7 +1259,7 @@ def parse(self, text, doc_id=""):
 
 ### The Security Keywords: Defined in Code
 
-All security-domain knowledge is hardcoded as **module-level constants** in `tpg/frontends/security_frontend.py`. Here is every dictionary and pattern we defined, and why:
+All security-domain knowledge is hardcoded as **module-level constants** in `01_tpg/01_core/tpg/frontends/security_frontend.py`. Here is every dictionary and pattern we defined, and why:
 
 #### 1. Regex Patterns (for structured identifiers)
 
@@ -1698,7 +1698,7 @@ This allows a single GNN to process both text and code in the same graph.
 
 ```
 TPG_TextPropertyGraph/
-├── tpg/
+├── 01_tpg/01_core/tpg/
 │   ├── __init__.py                    # Package exports
 │   ├── pipeline.py                    # Main entry point (3 pipeline classes)
 │   │
@@ -1721,7 +1721,7 @@ TPG_TextPropertyGraph/
 │   └── utils/
 │       └── __init__.py
 │
-├── examples/
+├── 01_tpg/02_examples/01_scripts/
 │   └── demo.py                        # Full demonstration (all 3 levels)
 │
 ├── tests/
@@ -1811,7 +1811,7 @@ sec_graph = parse_security_text("CVE-2024-1234: buffer overflow...")
 
 ```bash
 cd TPG_TextPropertyGraph
-python examples/demo.py
+python 01_tpg/02_examples/01_scripts/demo.py
 ```
 
 This will:

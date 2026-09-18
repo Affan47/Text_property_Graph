@@ -646,10 +646,10 @@ def main():
 
     # Model
     parser.add_argument("--checkpoint",
-                        default="output/epss_sec4ai/best_model.pt",
+                        default="05_results/01_training/epss_sec4ai/best_model.pt",
                         help="Path to best_model.pt checkpoint")
     parser.add_argument("--config",
-                        default="output/epss_sec4ai/experiment_config.json",
+                        default="05_results/01_training/epss_sec4ai/experiment_config.json",
                         help="Path to experiment_config.json (for model architecture)")
 
     # Options

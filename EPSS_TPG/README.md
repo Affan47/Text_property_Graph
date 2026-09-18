@@ -14,13 +14,14 @@ For the implementation, follow [the code reading order](00_documentation/01_star
 | 06 | Runtime | Logs |
 | 99 | Archive | TeX installer and compatibility paths for old documents |
 
-The unnumbered names `tpg`, `epss`, `data`, `outputs`, `docs` and similar entries are compatibility symlinks, not duplicate copies. Python package names retain their spelling. Old datasets and saved experiments have been retired; their analysis is in `99_archive/03_previous_dataset_work/`.
+TPG packages, examples and runtime files live under `01_tpg/`; their old root-level aliases have been removed. Python package names retain their spelling through an editable installation. Unrelated names such as `epss`, `data`, `outputs` and `docs` remain compatibility symlinks. Old datasets and saved experiments have been retired; their analysis is in `99_archive/03_previous_dataset_work/`.
 
 The source submodule now selects `tpg-paper-revision`. Read [the dataset transition guide](00_documentation/07_maintenance/04_DATASET_TRANSITION.md) before training: the replacement files require a new adapter and explicit target definition.
 
 From this directory:
 
 ```bash
+python -m pip install --no-deps --no-build-isolation -e ./01_tpg
 python -m epss.run_pipeline --help
 python 03_scripts/03_maintenance/verify_current_layout.py --expect-empty
 ```

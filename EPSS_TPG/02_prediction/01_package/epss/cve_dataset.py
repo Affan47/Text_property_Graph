@@ -62,7 +62,7 @@ class CVEGraphDataset(InMemoryDataset):
                         edge-type vocabulary expands from 13 to 23 (the GNN's
                         edge embedding gets 10 new slots). Default False
                         preserves the prior 36+ training runs. See
-                        TPG_examples/README.md §10 for what this changes.
+                        01_tpg/02_examples/02_graphson/README.md §10 for what this changes.
         max_cves: Limit number of CVEs to process (for development/debugging).
         transform: PyG transform to apply to each Data object.
         pre_transform: PyG pre-transform to apply before saving.

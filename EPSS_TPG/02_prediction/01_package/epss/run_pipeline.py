@@ -239,7 +239,7 @@ def main():
     # System
     parser.add_argument("--device", default=None,
                         help="Device (auto-detect if not set)")
-    parser.add_argument("--output-dir", default="output/epss")
+    parser.add_argument("--output-dir", default="05_results/01_training/epss")
     parser.add_argument("--seed", type=int, default=42)
 
     args = parser.parse_args()

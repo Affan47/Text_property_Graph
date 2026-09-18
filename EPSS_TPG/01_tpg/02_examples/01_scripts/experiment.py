@@ -9,37 +9,37 @@ Handles:
     - Hyphenated line breaks re-joined
 
 Directory structure:
-    data/
-        text/       <- Put .txt files here
-        pdfs/       <- Put .pdf files here
-    output/
+    01_tpg/02_examples/04_inputs/
+        01_text/    <- Put .txt files here
+        02_pdf/     <- Put .pdf files here
+    01_tpg/02_examples/03_generated/
         graphson/   <- GraphSON JSON output goes here
         pyg/        <- PyTorch Geometric output goes here
 
 Usage:
     # Process inline text
-    python examples/experiment.py --text "Your paragraph here..."
+    python 01_tpg/02_examples/01_scripts/experiment.py --text "Your paragraph here..."
 
-    # Process a .txt file from data/text/
-    python examples/experiment.py --file data/text/sample_general.txt
+    # Process a .txt file from 01_tpg/02_examples/04_inputs/01_text/
+    python 01_tpg/02_examples/01_scripts/experiment.py --file 01_tpg/02_examples/04_inputs/01_text/sample_general.txt
 
-    # Process a PDF file from data/pdfs/
-    python examples/experiment.py --pdf data/pdfs/report.pdf
+    # Process a PDF file from 01_tpg/02_examples/04_inputs/02_pdf/
+    python 01_tpg/02_examples/01_scripts/experiment.py --pdf 01_tpg/02_examples/04_inputs/02_pdf/report.pdf
 
     # Process specific pages of a PDF
-    python examples/experiment.py --pdf data/pdfs/report.pdf --pages 1-5
+    python 01_tpg/02_examples/01_scripts/experiment.py --pdf 01_tpg/02_examples/04_inputs/02_pdf/report.pdf --pages 1-5
 
     # Use security-aware pipeline (Level 2)
-    python examples/experiment.py --file data/text/sample_security.txt --security
+    python 01_tpg/02_examples/01_scripts/experiment.py --file 01_tpg/02_examples/04_inputs/01_text/sample_security.txt --security
 
-    # Process ALL .txt files in data/text/ at once
-    python examples/experiment.py --batch-text
+    # Process ALL .txt files in 01_tpg/02_examples/04_inputs/01_text/ at once
+    python 01_tpg/02_examples/01_scripts/experiment.py --batch-text
 
-    # Process ALL .pdf files in data/pdfs/ at once
-    python examples/experiment.py --batch-pdf
+    # Process ALL .pdf files in 01_tpg/02_examples/04_inputs/02_pdf/ at once
+    python 01_tpg/02_examples/01_scripts/experiment.py --batch-pdf
 
     # Control chunk size for large documents (default: 500 words)
-    python examples/experiment.py --pdf big_report.pdf --chunk-size 300
+    python 01_tpg/02_examples/01_scripts/experiment.py --pdf big_report.pdf --chunk-size 300
 """
 import sys, os, json, argparse, textwrap, glob, re, time
 from pathlib import Path
@@ -52,9 +52,11 @@ PROJECT_ROOT = str(next(
 sys.path.insert(0, PROJECT_ROOT)
 
 # Default directories (relative to project root)
-DATA_TEXT_DIR = os.path.join(PROJECT_ROOT, "data", "text")
-DATA_PDF_DIR = os.path.join(PROJECT_ROOT, "data", "pdfs")
-OUTPUT_BASE_DIR = os.path.join(PROJECT_ROOT, "output")
+from tpg.paths import TEXT_INPUTS, PDF_INPUTS, GENERATED
+
+DATA_TEXT_DIR = str(TEXT_INPUTS)
+DATA_PDF_DIR = str(PDF_INPUTS)
+OUTPUT_BASE_DIR = str(GENERATED)
 
 # Domain-organized output subdirectories
 OUTPUT_GRAPHSON_DIR = os.path.join(OUTPUT_BASE_DIR, "graphson")
@@ -873,26 +875,26 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent(f"""\
         Directory layout:
-          data/text/                  <- Put .txt files here
-          data/pdfs/                  <- Put .pdf files here
-          output/graphson/general/    <- General text GraphSON output
-          output/graphson/security/   <- Security text GraphSON output
-          output/graphson/medical/    <- Medical text GraphSON output
-          output/pyg/general/         <- General PyG output
-          output/pyg/security/        <- Security PyG output
-          output/pyg/medical/         <- Medical PyG output
-          output/comparison/          <- Frontend comparison results
-          output/analysis/            <- Analysis summaries
+          01_tpg/02_examples/04_inputs/01_text/                  <- Put .txt files here
+          01_tpg/02_examples/04_inputs/02_pdf/                  <- Put .pdf files here
+          01_tpg/02_examples/03_generated/graphson/general/    <- General text GraphSON output
+          01_tpg/02_examples/03_generated/graphson/security/   <- Security text GraphSON output
+          01_tpg/02_examples/03_generated/graphson/medical/    <- Medical text GraphSON output
+          01_tpg/02_examples/03_generated/pyg/general/         <- General PyG output
+          01_tpg/02_examples/03_generated/pyg/security/        <- Security PyG output
+          01_tpg/02_examples/03_generated/pyg/medical/         <- Medical PyG output
+          01_tpg/02_examples/03_generated/comparison/          <- Frontend comparison results
+          01_tpg/02_examples/03_generated/analysis/            <- Analysis summaries
 
         Examples:
-          python examples/experiment.py --text "The server crashed due to a memory leak."
-          python examples/experiment.py --file data/text/sample_general.txt
-          python examples/experiment.py --file data/text/sample_security.txt --security
-          python examples/experiment.py --pdf data/pdfs/report.pdf
-          python examples/experiment.py --pdf data/pdfs/paper.pdf --pages 1-3
-          python examples/experiment.py --pdf data/pdfs/big.pdf --chunk-size 300
-          python examples/experiment.py --batch-text
-          python examples/experiment.py --batch-pdf --security
+          python 01_tpg/02_examples/01_scripts/experiment.py --text "The server crashed due to a memory leak."
+          python 01_tpg/02_examples/01_scripts/experiment.py --file 01_tpg/02_examples/04_inputs/01_text/sample_general.txt
+          python 01_tpg/02_examples/01_scripts/experiment.py --file 01_tpg/02_examples/04_inputs/01_text/sample_security.txt --security
+          python 01_tpg/02_examples/01_scripts/experiment.py --pdf 01_tpg/02_examples/04_inputs/02_pdf/report.pdf
+          python 01_tpg/02_examples/01_scripts/experiment.py --pdf 01_tpg/02_examples/04_inputs/02_pdf/paper.pdf --pages 1-3
+          python 01_tpg/02_examples/01_scripts/experiment.py --pdf 01_tpg/02_examples/04_inputs/02_pdf/big.pdf --chunk-size 300
+          python 01_tpg/02_examples/01_scripts/experiment.py --batch-text
+          python 01_tpg/02_examples/01_scripts/experiment.py --batch-pdf --security
         """))
 
     # Input source (exactly one required)
@@ -900,13 +902,13 @@ def main():
     input_group.add_argument("--text", "-t", type=str,
                              help="Inline text to process (wrap in quotes)")
     input_group.add_argument("--file", "-f", type=str,
-                             help="Path to a .txt file (or use data/text/)")
+                             help="Path to a .txt file (or use 01_tpg/02_examples/04_inputs/01_text/)")
     input_group.add_argument("--pdf", "-p", type=str,
-                             help="Path to a PDF file (or use data/pdfs/)")
+                             help="Path to a PDF file (or use 01_tpg/02_examples/04_inputs/02_pdf/)")
     input_group.add_argument("--batch-text", action="store_true",
-                             help="Process ALL .txt files in data/text/")
+                             help="Process ALL .txt files in 01_tpg/02_examples/04_inputs/01_text/")
     input_group.add_argument("--batch-pdf", action="store_true",
-                             help="Process ALL .pdf files in data/pdfs/")
+                             help="Process ALL .pdf files in 01_tpg/02_examples/04_inputs/02_pdf/")
 
     # Options
     parser.add_argument("--pages", type=str, default=None,
@@ -951,7 +953,7 @@ def main():
 
         print(f"\n{'='*60}")
         print(f"Batch complete! {len(txt_files)} files processed.")
-        print(f"  Output: output/graphson/<domain>/  and  output/pyg/<domain>/")
+        print(f"  Output: 01_tpg/02_examples/03_generated/graphson/<domain>/  and  01_tpg/02_examples/03_generated/pyg/<domain>/")
         print(f"{'='*60}\n")
         return
 
@@ -977,7 +979,7 @@ def main():
 
         print(f"\n{'='*60}")
         print(f"Batch complete! {len(pdf_files)} files processed.")
-        print(f"  Output: output/graphson/<domain>/  and  output/pyg/<domain>/")
+        print(f"  Output: 01_tpg/02_examples/03_generated/graphson/<domain>/  and  01_tpg/02_examples/03_generated/pyg/<domain>/")
         print(f"{'='*60}\n")
         return
 
@@ -1029,8 +1031,8 @@ def main():
 
     print(f"\n{'='*60}")
     print("Done! Output files in:")
-    print(f"  GraphSON: output/graphson/<domain>/")
-    print(f"  PyG:      output/pyg/<domain>/")
+    print(f"  GraphSON: 01_tpg/02_examples/03_generated/graphson/<domain>/")
+    print(f"  PyG:      01_tpg/02_examples/03_generated/pyg/<domain>/")
     print(f"{'='*60}\n")
 
 

@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "text-property-graph-local"
+version = "0.1.0"
+description = "TPG packages for this research checkout"
+requires-python = ">=3.10"
+
+[tool.setuptools]
+packages = ["tpg", "tpg.schema", "tpg.frontends", "tpg.passes", "tpg.exporters", "tpg.utils", "tpg_app", "tpg_chatbot"]
+
+[tool.setuptools.package-dir]
+tpg = "01_core/tpg"
+tpg_app = "03_application/tpg_app"
+tpg_chatbot = "04_chatbot/tpg_chatbot"
+
+[tool.setuptools.package-data]
+tpg_app = ["static/*"]

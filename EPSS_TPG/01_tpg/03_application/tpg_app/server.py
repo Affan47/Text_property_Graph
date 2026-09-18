@@ -34,10 +34,11 @@ from pydantic import BaseModel
 
 from tpg_app.engine import TPGEngine
 from tpg_app.extractors import SUPPORTED_EXTENSIONS
+from tpg.paths import DEFAULT_DATABASE, DEFAULT_UPLOADS
 
-DB_PATH = os.environ.get("TPG_DB", "tpg_workspace.db")
+DB_PATH = os.environ.get("TPG_DB", DEFAULT_DATABASE)
 DEFAULT_DOMAIN = os.environ.get("TPG_DOMAIN", "general")
-UPLOAD_DIR = Path(os.environ.get("TPG_UPLOADS", "tpg_uploads"))
+UPLOAD_DIR = Path(os.environ.get("TPG_UPLOADS", str(DEFAULT_UPLOADS)))
 
 app = FastAPI(title="TPG Platform",
               description="Text Property Graph document intelligence API",

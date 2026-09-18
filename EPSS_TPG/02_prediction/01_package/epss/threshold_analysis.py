@@ -398,13 +398,13 @@ def write_report(records: list[dict], out_dir: Path) -> None:
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--root", type=Path, default=Path("output"),
+    parser.add_argument("--root", type=Path, default=Path("05_results/01_training"),
                         help="Root directory containing run subdirectories.")
     parser.add_argument("--runs-glob", nargs="+",
                         default=["epss_*_v2_*", "epss_mv_*"],
                         help="Glob pattern(s) under --root selecting run dirs.")
     parser.add_argument("--out-dir", type=Path,
-                        default=Path("output/threshold_analysis"),
+                        default=Path("05_results/02_evaluation/threshold_analysis"),
                         help="Directory for the per-run CSV and report.")
     parser.add_argument("--log-level", default="INFO")
     args = parser.parse_args()

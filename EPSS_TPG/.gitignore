@@ -31,8 +31,6 @@ env/
 !01_tpg/05_workspace/**/.gitkeep
 06_runtime/01_logs/*
 !06_runtime/01_logs/.gitkeep
-/tpg_workspace.db-shm
-/tpg_workspace.db-wal
 /install-tl-*
 99_archive/01_texlive_installer/
 00_documentation/06_papers/03_build_files/

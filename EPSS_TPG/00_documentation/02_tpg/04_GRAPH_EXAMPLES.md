@@ -544,7 +544,7 @@ import json
 from pathlib import Path
 from tpg.pipeline import HybridSecurityPipeline
 
-out_dir = Path("TPG_examples")
+out_dir = Path("01_tpg/02_examples/02_graphson")
 plain = HybridSecurityPipeline(include_security_relations=False)
 sec = HybridSecurityPipeline(include_security_relations=True)
 

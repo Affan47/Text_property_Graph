@@ -1,8 +1,8 @@
 # TPG Document Intelligence Chatbot
 ## Technical Architecture and Implementation Report
 
-**Module:** `tpg_chatbot/`
-**Location:** `EPSS_TPG/tpg_chatbot/`
+**Module:** `01_tpg/04_chatbot/tpg_chatbot/`
+**Location:** `EPSS_TPG/01_tpg/04_chatbot/tpg_chatbot/`
 **System type:** Graph-based document question-answering (GraphRAG)
 **Retrieval back-end:** Text Property Graph (TPG) knowledge store
 **Generation back-end:** Anthropic Claude API (`claude-sonnet-4-6`)
@@ -252,12 +252,12 @@ PHASE 2 — QUERY  (runs for every user question)
 
 ## 4. Document Ingestion Pipeline
 
-**File:** `tpg_chatbot/ingest.py`
+**File:** `01_tpg/04_chatbot/tpg_chatbot/ingest.py`
 
 ### Entry point
 
 ```python
-python -m tpg_chatbot.ingest --input data/pdfs --store tpg_chatbot/store.json
+python -m tpg_chatbot.ingest --input 01_tpg/02_examples/04_inputs/02_pdf --store 01_tpg/05_workspace/03_chatbot_stores/store.json
 ```
 
 ### Incremental ingestion
@@ -331,7 +331,7 @@ The `global_chunk_index` is a per-file counter that increments across all pages,
 
 ## 5. Text Property Graph Processing
 
-**Files:** `tpg/pipeline.py`, `tpg/frontends/`, `tpg/passes/`
+**Files:** `01_tpg/01_core/tpg/pipeline.py`, `01_tpg/01_core/tpg/frontends/`, `01_tpg/01_core/tpg/passes/`
 
 ### Pipeline selection
 
@@ -407,7 +407,7 @@ predicate_index["has been actively exploited"] → ["cve_exploit_report::p0_0"]
 
 ## 6. Graph Store
 
-**File:** `tpg_chatbot/graph_store.py`
+**File:** `01_tpg/04_chatbot/tpg_chatbot/graph_store.py`
 
 ### Data model
 
@@ -458,7 +458,7 @@ def save(self, path: str) -> None:
 The store serialises all three dicts to a single JSON file. Loading is instant:
 
 ```python
-store = GraphStore.load("tpg_chatbot/store.json")
+store = GraphStore.load("01_tpg/05_workspace/03_chatbot_stores/store.json")
 # → instantaneous — just JSON.load + dict reconstruction
 ```
 
@@ -473,7 +473,7 @@ store = GraphStore.load("tpg_chatbot/store.json")
 
 ## 7. Retrieval
 
-**File:** `tpg_chatbot/retriever.py`
+**File:** `01_tpg/04_chatbot/tpg_chatbot/retriever.py`
 
 ### Question parsing
 
@@ -548,7 +548,7 @@ The longest words are tried first (more likely to be content words than function
 
 ## 8. Answer Generation
 
-**File:** `tpg_chatbot/chatbot.py`
+**File:** `01_tpg/04_chatbot/tpg_chatbot/chatbot.py`
 
 ### Model
 
@@ -655,7 +655,7 @@ The second question ("it") has no explicit subject, but the conversation history
 
 ```
 EPSS_TPG/
-├── tpg/                          ← existing TPG library (unchanged)
+├── 01_tpg/01_core/tpg/                          ← existing TPG library (unchanged)
 │   ├── pipeline.py               ← SecurityPipeline, HybridSecurityPipeline
 │   ├── frontends/
 │   │   ├── security_frontend.py
@@ -668,7 +668,7 @@ EPSS_TPG/
 │       ├── types.py              ← NodeType, EdgeType, SecurityNodeType
 │       └── graph.py              ← TextPropertyGraph, TPGNode, TPGEdge
 │
-└── tpg_chatbot/                  ← NEW: document QA system
+└── 01_tpg/04_chatbot/tpg_chatbot/                  ← NEW: document QA system
     ├── __init__.py
     ├── graph_store.py            ← Passage dataclass + GraphStore (entity_index, persist)
     ├── ingest.py                 ← PDF/DOCX/TXT → TPG → GraphStore population
@@ -970,7 +970,15 @@ SpaCy and the TPG library dependencies must already be installed (they are — t
 cd /home/ayounas/Text_property_Graph/EPSS_TPG
 ```
 
-**What this does:** Sets your working directory to the EPSS_TPG project root. All subsequent commands assume this is your current directory. Python module resolution (`-m tpg_chatbot.ingest`) depends on being run from this location so that `tpg/` and `tpg_chatbot/` are both importable.
+All relative input and output paths below assume this working directory.
+Install the local packages once in the active Python environment:
+
+```bash
+python -m pip install --no-deps --no-build-isolation -e ./01_tpg
+```
+
+The editable installation makes `tpg` and `tpg_chatbot` importable without
+root-level package links, including when Python is launched from another folder.
 
 ---
 
@@ -998,16 +1006,16 @@ source ~/.bashrc
 ### Step 3 — Ingest your PDF documents
 
 ```bash
-python -m tpg_chatbot.ingest --input data/pdfs --store tpg_chatbot/store.json
+python -m tpg_chatbot.ingest --input 01_tpg/02_examples/04_inputs/02_pdf --store 01_tpg/05_workspace/03_chatbot_stores/store.json
 ```
 
 **What this does — step by step:**
 
-1. **`python -m tpg_chatbot.ingest`** — runs `tpg_chatbot/ingest.py` as a module (the `-m` flag lets Python resolve imports from the project root correctly, so `from tpg.pipeline import ...` works)
+1. **`python -m tpg_chatbot.ingest`** — runs the installed chatbot ingestion module from its source under `01_tpg/04_chatbot/`.
 
-2. **`--input data/pdfs`** — points the ingestion pipeline at the `data/pdfs/` directory. Every file with extension `.pdf`, `.docx`, `.txt`, or `.md` found recursively inside that directory will be processed. You can also pass a single file path (e.g. `--input data/pdfs/report.pdf`)
+2. **`--input 01_tpg/02_examples/04_inputs/02_pdf`** — points the ingestion pipeline at the `01_tpg/02_examples/04_inputs/02_pdf/` directory. Every file with extension `.pdf`, `.docx`, `.txt`, or `.md` found recursively inside that directory will be processed. You can also pass a single file path (e.g. `--input 01_tpg/02_examples/04_inputs/02_pdf/report.pdf`)
 
-3. **`--store tpg_chatbot/store.json`** — specifies where to write the resulting GraphStore. If this file already exists, the pipeline loads it first and only processes files whose filename is not already in the store (incremental mode). This means running the command again after adding new PDFs only processes the new ones.
+3. **`--store 01_tpg/05_workspace/03_chatbot_stores/store.json`** — specifies where to write the resulting GraphStore. If this file already exists, the pipeline loads it first and only processes files whose filename is not already in the store (incremental mode). This means running the command again after adding new PDFs only processes the new ones.
 
 4. **Internally, for each document:**
    - `pdfplumber` opens the PDF and extracts text page by page
@@ -1026,10 +1034,10 @@ python -m tpg_chatbot.ingest --input data/pdfs --store tpg_chatbot/store.json
 ### Step 4 — Ingest text files (optional, additive)
 
 ```bash
-python -m tpg_chatbot.ingest --input data/text --store tpg_chatbot/store.json
+python -m tpg_chatbot.ingest --input 01_tpg/02_examples/04_inputs/01_text --store 01_tpg/05_workspace/03_chatbot_stores/store.json
 ```
 
-**What this does:** Same ingestion pipeline as Step 3, but reading `.txt` files from `data/text/`. Because `store.json` already exists from Step 3 (and `--overwrite` is not passed), the command loads the existing store and appends new passages from the text files without touching the PDF passages already indexed.
+**What this does:** Same ingestion pipeline as Step 3, but reading `.txt` files from `01_tpg/02_examples/04_inputs/01_text/`. Because `store.json` already exists from Step 3 (and `--overwrite` is not passed), the command loads the existing store and appends new passages from the text files without touching the PDF passages already indexed.
 
 You can run this command for any new folder of documents at any time to expand the knowledge base without rebuilding from scratch.
 
@@ -1038,7 +1046,7 @@ You can run this command for any new folder of documents at any time to expand t
 ### Step 5 — Rebuild the store from scratch (when needed)
 
 ```bash
-python -m tpg_chatbot.ingest --input data/pdfs --store tpg_chatbot/store.json --overwrite
+python -m tpg_chatbot.ingest --input 01_tpg/02_examples/04_inputs/02_pdf --store 01_tpg/05_workspace/03_chatbot_stores/store.json --overwrite
 ```
 
 **What this does:** The `--overwrite` flag discards the existing `store.json` and rebuilds the entire index from scratch. Use this when:
@@ -1053,7 +1061,7 @@ Without `--overwrite`, deleted documents remain in the store even after their fi
 ### Step 6 — Start the interactive chatbot
 
 ```bash
-python tpg_chatbot/chatbot.py --store tpg_chatbot/store.json
+python 01_tpg/04_chatbot/tpg_chatbot/chatbot.py --store 01_tpg/05_workspace/03_chatbot_stores/store.json
 ```
 
 **What this does — step by step:**
@@ -1081,7 +1089,7 @@ python tpg_chatbot/chatbot.py --store tpg_chatbot/store.json
 ### Step 7 — One-shot query (no interactive loop)
 
 ```bash
-python tpg_chatbot/chatbot.py --store tpg_chatbot/store.json \
+python 01_tpg/04_chatbot/tpg_chatbot/chatbot.py --store 01_tpg/05_workspace/03_chatbot_stores/store.json \
     --query "What CVEs are documented and what are their CVSS scores?"
 ```
 
@@ -1092,7 +1100,7 @@ python tpg_chatbot/chatbot.py --store tpg_chatbot/store.json \
 ### Step 8 — Retrieve more passages per question
 
 ```bash
-python tpg_chatbot/chatbot.py --store tpg_chatbot/store.json --top-k 10
+python 01_tpg/04_chatbot/tpg_chatbot/chatbot.py --store 01_tpg/05_workspace/03_chatbot_stores/store.json --top-k 10
 ```
 
 **What this does:** The `--top-k` flag controls how many passages the retriever returns per question. Default is 6. Increasing it to 10 gives Claude more context to synthesise from, at the cost of a longer prompt (more tokens). Use a higher value when:
@@ -1114,13 +1122,13 @@ cd /home/ayounas/Text_property_Graph/EPSS_TPG
 export ANTHROPIC_API_KEY=sk-ant-api03-...
 
 # Ingest PDFs (runs TPG on every page chunk — takes a few minutes)
-python -m tpg_chatbot.ingest --input data/pdfs --store tpg_chatbot/store.json
+python -m tpg_chatbot.ingest --input 01_tpg/02_examples/04_inputs/02_pdf --store 01_tpg/05_workspace/03_chatbot_stores/store.json
 
 # Ingest additional text files (incremental — skips PDFs already indexed)
-python -m tpg_chatbot.ingest --input data/text --store tpg_chatbot/store.json
+python -m tpg_chatbot.ingest --input 01_tpg/02_examples/04_inputs/01_text --store 01_tpg/05_workspace/03_chatbot_stores/store.json
 
 # Start interactive chatbot
-python tpg_chatbot/chatbot.py --store tpg_chatbot/store.json
+python 01_tpg/04_chatbot/tpg_chatbot/chatbot.py --store 01_tpg/05_workspace/03_chatbot_stores/store.json
 ```
 
 **After the first run**, ingestion does not need to repeat. From the second session onwards:
@@ -1128,13 +1136,13 @@ python tpg_chatbot/chatbot.py --store tpg_chatbot/store.json
 ```bash
 cd /home/ayounas/Text_property_Graph/EPSS_TPG
 export ANTHROPIC_API_KEY=sk-ant-api03-...
-python tpg_chatbot/chatbot.py --store tpg_chatbot/store.json
+python 01_tpg/04_chatbot/tpg_chatbot/chatbot.py --store 01_tpg/05_workspace/03_chatbot_stores/store.json
 ```
 
 ### Example session
 
 ```
-[STORE] Loading tpg_chatbot/store.json...
+[STORE] Loading 01_tpg/05_workspace/03_chatbot_stores/store.json...
 
 ╔══════════════════════════════════════════════════════════════╗
 ║            TPG Document Intelligence Chatbot                 ║
@@ -1252,7 +1260,7 @@ Replace the CLI loop with a Gradio or Streamlit front-end:
 
 ```bash
 pip install gradio
-python tpg_chatbot/app.py  # browser-based chat UI
+python 01_tpg/04_chatbot/tpg_chatbot/app.py  # browser-based chat UI
 ```
 
 **Multi-store support**

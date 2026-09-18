@@ -37,6 +37,7 @@ sys.path.insert(0, str(next(
 
 from tpg_app.extractors import extract, chunk_blocks, SUPPORTED_EXTENSIONS
 from tpg_app.store import TPGStore, PassageHit
+from tpg.paths import DEFAULT_DATABASE
 
 _MAX_QUERY_ENTITIES = 12
 
@@ -103,7 +104,7 @@ def _clean_entity_text(text: str) -> Optional[str]:
 
 
 class TPGEngine:
-    def __init__(self, db_path: str = "tpg_workspace.db",
+    def __init__(self, db_path: str = DEFAULT_DATABASE,
                  domain: str = "general", store_graphs: bool = True,
                  chunk_chars: int = 1200):
         self.store = TPGStore(db_path)

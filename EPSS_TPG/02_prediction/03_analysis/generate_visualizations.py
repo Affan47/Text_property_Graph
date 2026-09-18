@@ -246,11 +246,11 @@ def run_for_experiment(ckpt_dir: str, device: str = "cpu"):
 
 def main():
     parser = argparse.ArgumentParser(description="Generate EPSS-GNN visualizations")
-    parser.add_argument("--ckpt-dir", default="output/epss_multiview_hybrid",
+    parser.add_argument("--ckpt-dir", default="05_results/01_training/epss_multiview_hybrid",
                         help="Path to experiment output dir (contains best_model.pt)")
     parser.add_argument("--all", action="store_true",
                         help="Process all experiment dirs in output/")
-    parser.add_argument("--output-root", default="output",
+    parser.add_argument("--output-root", default="05_results/01_training",
                         help="Root output dir when --all is used")
     parser.add_argument("--device", default=None)
     args = parser.parse_args()
