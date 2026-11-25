@@ -1,0 +1,22 @@
+{
+  "schema": "ET01_retrospective_day60_v1",
+  "label": "Observed Day-60 EPSS >= 0.1; null is unknown, never negative",
+  "interpretation": "Retrospective score category, not historical prediction, catalogue membership or observed exploitation.",
+  "scope": "Reddit FC01 Run 1 only: three existing evidence-group-disjoint chronological inner folds of original training CVEs; all assessment target dates under EPSS v2.",
+  "parent_locks": {
+    "protocol": "8df0b864043c25e0d722b0655edb4f00e6b48f8e7948b86b2d1d2ea3d419a2c3",
+    "prepared/run1": "242d1cf42acf75db9f7351299b859789245c8501ec61a663a3ef8953dc371cb2",
+    "runs/run1/report": "66c998fa784afa4360dd17a8157d8e161c3c407e669a2d7127c408476e8fdf62"
+  },
+  "primary_view": "pooled_D",
+  "secondary_view": "structured",
+  "reference_seeds": [17, 29, 43, 59, 71],
+  "logistic": {"C": 1.0, "solver": "lbfgs", "max_iter": 2000, "tol": 0.000001, "class_weight": null},
+  "predictors": "Parent fold-fitted CVSS/reference fields and, for pooled_D only, the frozen standalone D TOKEN mean. No EPSS of any date, targets, regression predictions, catalogue fields or IDs.",
+  "operating_point": "Largest selection probability cutoff attaining maximum selection F1; never used for AP or budget rankings.",
+  "budget": "Top ceil(5 percent of all matched out-of-fold CVEs) per system; exact probability ties broken by CVE ID. Also report each fold descriptively.",
+  "bootstrap": {"draws": 10000, "seed": 6029, "unit": "evidence group", "interval": "paired percentile 95%, conditional on these fits; rerank at the same fractional budget in every draw"},
+  "minimum_support": {"train_positives_per_fold": 10, "selection_positives_per_fold": 1, "assessment_positives_per_fold": 10, "assessment_positive_groups_total": 30},
+  "progression": "Require support, and lower bounds above zero for BOTH primary direct-minus-regression differences: AP and recall at 5 percent. Otherwise stop; secondary results cannot override. Passing permits a separate TPG proposal only.",
+  "limitations": "Prior regression outcomes already inspected. This compares two complete systems, not the isolated causal effect of the objective. No separate forecast, old-dataset fit, official holdout or TPG release."
+}

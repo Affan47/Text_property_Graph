@@ -1,0 +1,45 @@
+{
+  "schema": "r03_matched_coreference_development_protocol_v1",
+  "status": "defined_not_trained",
+  "cohort": {"task": "endpoint", "train": 1023, "validation": 197, "split_changes": false, "test_scoring": false},
+  "target": {"name": "EPSS_on_Day_60", "anchor_day": 30, "input_days_inclusive": [0, 30], "target_day": 60, "horizon_days": 30, "missing_target_imputation": false},
+  "graph_inputs": ["description"],
+  "graph_policy": {"extraction": "security_product_version_v3", "filter": "security_product_version_v4", "edge_ablation": "coreference_edge_ablation_v1", "shared_frozen_embeddings": true},
+  "variants": ["no_coref", "repeated_only", "all_coref", "epss_only"],
+  "reference": "persistence_last_observed_input_score",
+  "execution": {"torch_threads": 1, "deterministic_algorithms": true},
+  "config": {
+    "hidden_size": 32,
+    "temporal_hidden_size": 16,
+    "graph_layers": 2,
+    "batch_size": 8,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "huber_beta": 0.01,
+    "gradient_clip_norm": 1.0,
+    "dropout": 0.0,
+    "epochs": 100,
+    "patience": 15,
+    "seeds": [17, 29, 43],
+    "device": "cpu"
+  },
+  "architecture": "Existing EdgeTypeGNN with mean node pooling + mask-aware GRU + concatenation + sigmoid direct-score head; EPSS-only omits the graph branch.",
+  "initialization": "For each seed, save one graph-fusion initial state and reuse it for all three edge modes. EPSS-only has a separate state. Output bias uses training-target mean only.",
+  "batch_order": "Generate all 100 epoch orders once per seed and share across all four variants; stopping may differ but common epochs have identical orders.",
+  "checkpoint_selection": "Earliest strictly lowest validation MAE. Improvement requires MAE < best MAE, with min_delta=0. Stop after 15 consecutive non-improving epochs or epoch 100.",
+  "evaluation": {
+    "primary": "validation_MAE",
+    "secondary": ["RMSE", "mean_signed_error", "Spearman_if_defined", "equal_group_MAE"],
+    "aggregation": "Report every seed and mean plus sample standard deviation across three seeds; never select the best seed. Persistence is deterministic, not three independent runs.",
+    "matched_comparison": "Report each seed's paired MAE differences versus persistence, EPSS-only and no_coref on identical validation CVEs. Descriptive comparisons, not independent confirmatory tests.",
+    "diagnostics": ["training_and_validation_curves", "selected_epoch_and_budget_boundary", "gradient_flow", "prediction_range", "input_missingness_groups_31_30_at_most_29_observations"]
+  },
+  "exclusions": ["SMP", "generated_summaries", "structured_CVSS", "VulnCheck_fields", "future_EPSS_inputs", "test_predictions", "hyperparameter_search"],
+  "limitations": [
+    "Current descriptions are not verified historical Day-30 descriptions; this remains retrospective.",
+    "SecBERT pretraining cutoff and exact historical EPSS release times remain unverified.",
+    "Validation has informed development repeatedly; it is not a final unbiased performance estimate.",
+    "Only explicit COREF edges vary; mention nodes and other coreference-derived structure remain.",
+    "Security relations are candidates; fixed extraction rules do not establish semantic correctness."
+  ]
+}

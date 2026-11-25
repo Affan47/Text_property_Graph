@@ -1,0 +1,25 @@
+{
+  "schema": "gd01_gain_learning_diagnostic_v1",
+  "variants": ["epss_only", "all_sources_epss"],
+  "gain_conditions": ["original", "unit"],
+  "modes": {
+    "smoke": {"per_movement_group": 3, "epochs": 3, "seeds": [17]},
+    "diagnostic": {"per_movement_group": 32, "epochs": 30, "seeds": [17, 29, 43]}
+  },
+  "selection_salt": "gd01-fixed-training-movement-and-magnitude",
+  "selection": "Only original training IDs. Equal unchanged/increased/decreased counts; magnitude-spaced changing examples with deterministic hash ties.",
+  "training": "Frozen MS06 settings except diagnostic epochs and gain. Fixed epoch budget; best checkpoint selected by diagnostic-subset training MAE, including epoch zero.",
+  "interventions": ["epss_swap_keep_persistence", "graph_swap", "no_text", "no_edges", "without_description", "without_github_summary", "without_non_github_summary", "without_smp"],
+  "validation_scoring": false,
+  "test_scoring": false,
+  "limitations": [
+    "This outcome-stratified training subset tests learning mechanics, not generalization or deployment accuracy.",
+    "Training labels select examples and measure training loss; they never enter the encoder or graph store.",
+    "A lower training error does not authorize automatic promotion to a full-cohort model.",
+    "Gain 1 changes gradient and output scaling; it may also increase clipping or instability.",
+    "Gradient/decay norms are diagnostics, not a proof of why an optimizer succeeds or fails.",
+    "Graph swaps also change source availability; interventions can create unrealistic inputs.",
+    "Current text retains the retrospective limitations of MS06; no CVSS branch is added.",
+    "Verification reproduces saved predictions and checks recorded trace hashes; it does not replay every optimizer step."
+  ]
+}

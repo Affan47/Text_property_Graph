@@ -1,0 +1,48 @@
+{
+  "schema": "multisource_source_adapter_v1",
+  "stage": "bounded_source_preview_no_training",
+  "expected_development_counts": {"train": 1023, "validation": 197},
+  "preview_counts": {"train": 16, "validation": 8},
+  "selection_salt": "multisource-source-preview-v1:",
+  "source_fields": {
+    "description": "description",
+    "github_summary": "summ_github_only_urls_fast.gpt-oss:120b",
+    "non_github_summary": "summ_non_github_urls_fast.gpt-oss:120b",
+    "smp": "social_media_posts"
+  },
+  "default_view": "retrospective_date_screened",
+  "date_policy": "Keep nonempty current descriptions/summaries as unverified retrospective text. Keep posts only when their stored date is strictly before Day 30, with no conflicting date for identical platform/text. This screening does not authenticate publication or historical text.",
+  "graph_policy": "Future step: one independent graph per source document, shared fixed security TPG, namespaced node IDs and source_text_type on nodes/edges. No invented links across documents. Reuse fixed description graphs where source hashes match.",
+  "fusion_policy": "Future step: pool graph representations within each source, then combine source representations and presence masks with the EPSS encoder. Missing sources contribute no text and are masked, not replaced with invented text.",
+  "comparisons": {
+    "epss_only": [],
+    "description_epss": ["description"],
+    "github_summary_epss": ["github_summary"],
+    "non_github_summary_epss": ["non_github_summary"],
+    "smp_epss": ["smp"],
+    "all_text_epss": ["description", "github_summary", "non_github_summary", "smp"],
+    "without_description": ["github_summary", "non_github_summary", "smp"],
+    "without_github_summary": ["description", "non_github_summary", "smp"],
+    "without_non_github_summary": ["description", "github_summary", "smp"],
+    "without_smp": ["description", "github_summary", "non_github_summary"]
+  },
+  "comparison_rules": [
+    "Same CVEs and frozen train/validation assignment in every comparison; no complete-case filtering.",
+    "New matched EPSS-only and description-plus-EPSS controls required for any changed fusion architecture.",
+    "Same initialization/seed, batch schedule, loss, optimizer, training budget and checkpoint rule where architecture permits.",
+    "Report every prespecified seed, actual source coverage and effective missing-source masks.",
+    "Choose document/token limits from training-only information before training; never silently truncate.",
+    "No test access or training at this stage; training protocol remains pending source/graph preview."
+  ],
+  "test_scoring": false,
+  "training_enabled": false,
+  "limitations": [
+    "Stored summary fields are not evidence of source-page availability or factual accuracy.",
+    "A reference-addition date does not authenticate the webpage contents.",
+    "Post dates are supplied values; their presence does not prove original publication time.",
+    "Undated descriptions and summaries remain retrospective even when late posts are excluded.",
+    "Source text may itself mention exploitation or later events; excluding structured label fields is not sufficient to guarantee leakage-free text.",
+    "Current study predicts EPSS Day 60, not exploitation or VulnCheck inclusion.",
+    "Existing validation has informed development; it is not an independent final test."
+  ]
+}

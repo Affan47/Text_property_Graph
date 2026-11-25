@@ -1,0 +1,117 @@
+[
+  {
+    "original_sha256": "da568b6b2cc8c887f5fa7b6698699cce061de2960818b5c5818adcbe96b7fb81",
+    "path": "EPSS_TPG/01_tpg/01_core/tpg/paths.py",
+    "published_sha256": "fdbe3ab9ce0f89b6333154c4d537a7fe78a14349e2286ed1b868b3008b0f963c"
+  },
+  {
+    "original_sha256": "20e01233409ce153321431cd8971a75af4e71b36ab15f394dafcb4d525315a61",
+    "path": "EPSS_TPG/01_tpg/02_examples/01_scripts/preview_security_coreference_ablation.py",
+    "published_sha256": "e556922cfa0e2f9baa19799373b57cb32c0a2589ccc9694f4f7ad3ec697ec5a7"
+  },
+  {
+    "original_sha256": "954e8210b197f6c9cfc0745a69a1e2cad53c1e9f561cb9283a3773f93ba2aa2a",
+    "path": "EPSS_TPG/02_prediction/01_package/epss/tpg_revision/github_audit_v1.py",
+    "published_sha256": "ad9e1da2617bca6ec7e68384e7ea26ed60193f22f211dd4ed8a5bfa1e3ac79cd"
+  },
+  {
+    "original_sha256": "15d5691d10bf755326c4743c12e622b6ce445e660e78d3952fbc6bc93dbe5dcd",
+    "path": "EPSS_TPG/02_prediction/01_package/epss/tpg_revision/v5_audit.py",
+    "published_sha256": "e62f4bebea8101c26e3da765b61fdcd9c54f8517f114021146d8ad13e9c0181e"
+  },
+  {
+    "original_sha256": "af069f3e6dff49e7a8fde7f10b2affcde134d26eac49d12cb45af5984cf1b85f",
+    "path": "EPSS_TPG/02_prediction/01_package/epss/tpg_revision/v5_training.py",
+    "published_sha256": "a503bd609b6d0f9596253d57c67cae0e5db5dc272e6aa1918c6834b837f14678"
+  },
+  {
+    "original_sha256": "db84759250cd5f84c2d18edba1f9873ac52235ff6c22fbfd80c98e10afbd9dcb",
+    "path": "EPSS_TPG/02_prediction/01_package/epss/vulncheck_study/adapter_v2.py",
+    "published_sha256": "0dbbe9026987e201d631db0ed639067508e66a9b872ec4da9ebf1a90d1aca620"
+  },
+  {
+    "original_sha256": "3320b9e14ece94a290be1cc4415ff4c30c89f46fc6ab7588acf8828f8d9f7156",
+    "path": "EPSS_TPG/02_prediction/03_analysis/01_revision_dataset/README.md",
+    "published_sha256": "9f4ecd111316bed58dd36eee0b0700dc013e92caf48187d5436a89dc66442201"
+  },
+  {
+    "original_sha256": "7680387118fd37077fa6840a8dd03d16a669c90ba6d583f84b502820e9f37d20",
+    "path": "EPSS_TPG/02_prediction/03_analysis/03_vulncheck_study/02_review_readiness.py",
+    "published_sha256": "53e4353277400edb9c899bb9e788268cee211fbdb9090a66e8375e18332cd7db"
+  },
+  {
+    "original_sha256": "e4605075d2ec317b10efcf13223d31a1d06ba408d9057e9e5cece7e9952057a6",
+    "path": "EPSS_TPG/02_prediction/03_analysis/07_fresh_studies/04_review_ranking_and_fusion.py",
+    "published_sha256": "4254f5522304afa871739c7544111be4ffa4d17ed34c7b0e40ffbd6e6a65e84a"
+  },
+  {
+    "original_sha256": "0dfee6677a021a4045ae497c8e4a0ba90d7af75219f389770d6c5d6c8078e57f",
+    "path": "EPSS_TPG/02_prediction/03_analysis/07_fresh_studies/06_verify_source_readout_pilot.py",
+    "published_sha256": "d006bd3ba89d3b1efa2afe3914a25c698a6022e290657abbf7711dcc9599f76c"
+  },
+  {
+    "original_sha256": "ab81f74d9ef82085a297c87dfb62673ce8fcc27f130771e4f0cb0d616aade3eb",
+    "path": "EPSS_TPG/02_prediction/03_analysis/07_fresh_studies/12_review_external_ct05.py",
+    "published_sha256": "de07bb0619edbc857325f5924eb386be340c88933aaeea91ca807b49997c0cb2"
+  },
+  {
+    "original_sha256": "f9914f0885d050e0bcce9e6768337b0c60432e29c38b1a4870a10bae69b4c614",
+    "path": "EPSS_TPG/02_prediction/03_analysis/08_catalogue_classification/test_epss_publication.py",
+    "published_sha256": "927b3676ca49b3e49b3f023b4b7cf3a4c12c120c82303f8ba36c35db6044e441"
+  },
+  {
+    "original_sha256": "e6e2f848688d6cc843a0d0f8be1c4f6bbaba09d3118e20a25c93d78a91ae9d11",
+    "path": "EPSS_TPG/02_prediction/04_configs/02_vulncheck/02_adapter_smoke_v2.json",
+    "published_sha256": "d0da446449723e7bf44fc47e41d997b4c48fd2fe34ba974834018e5e34da1aef"
+  },
+  {
+    "original_sha256": "d415cc63d0a1f03a1a003f8a38deae0f34020ff15e1666fa74f327117d808f46",
+    "path": "EPSS_TPG/02_prediction/04_configs/03_tpg_revision/01_v5_semantic_review.json",
+    "published_sha256": "43b75afc058df26ff4c1fcf168ffda7c7348d0a9ccfb4f3bb8e0339f64f39598"
+  },
+  {
+    "original_sha256": "90ac69113048aa899b8ae68199d37f2b2fe5399563af8fae2f4ea1818318d0c9",
+    "path": "EPSS_TPG/02_prediction/04_configs/05_reddit_studies/RD02_registered_v2.json",
+    "published_sha256": "473cde2eead6618d79db4c1c49920b4f8fdd565ade33f2d91edf85d8f767987e"
+  },
+  {
+    "original_sha256": "a8cad77eb2815b4ef1fa370f0c0f68d866869d25382b63ba179def78ca62acd4",
+    "path": "EPSS_TPG/02_prediction/04_configs/05_reddit_studies/RD04_stage1_v1.json",
+    "published_sha256": "4b2ba594b80b0d605443f494254acb39b74930533124626e7a3835e5dc335aca"
+  },
+  {
+    "original_sha256": "575c19d92e8629ab44b0c2db12bf449f9f657252b37181381b39d0e220ad98c4",
+    "path": "EPSS_TPG/02_prediction/05_studies/04_vulncheck_snapshot/01_READINESS_RESULTS.md",
+    "published_sha256": "eda263bf7d560707e93723fa29401c54272913cb5f3fe5f57c8deb299d7c5a23"
+  },
+  {
+    "original_sha256": "92552e176149601ef00a7cd0123f74933c257c96c62965ec9278c0ccc30d3757",
+    "path": "EPSS_TPG/02_prediction/05_studies/05_tpg_revision/02_V5_SEMANTIC_AUDIT_AND_SUBTYPES.md",
+    "published_sha256": "92100bc9e2e34beeae16e2b569fad4e6187b539f8daad31da4a7f2de89145cf4"
+  },
+  {
+    "original_sha256": "5a0cbe40e320c6b85a0204be8e2710393fe7347c15dff26c04a7d43a26b23835",
+    "path": "EPSS_TPG/02_prediction/05_studies/05_tpg_revision/04_D_VS_DG.md",
+    "published_sha256": "0bc8362ea547629835156b2fa0185bf6a36c252ada07bd5c9424abb373cacb95"
+  },
+  {
+    "original_sha256": "fb5db56fa277b17f9a40cf294e748a3aabce38926ac790168bbbb37a2a1a2895",
+    "path": "EPSS_TPG/02_prediction/05_studies/05_tpg_revision/README.md",
+    "published_sha256": "5b357c1388b9d8213172ac0c7ed9c8908ca9a6bea87cdd4e409f2d012616bc41"
+  },
+  {
+    "original_sha256": "669272c180e430a71cefbdc98dc8ace8697acd8c7571b26d843e36d4fd2e781c",
+    "path": "EPSS_TPG/02_prediction/05_studies/07_combined_text_fresh/14_CATALOGUE_OUTCOME_VERIFICATION.md",
+    "published_sha256": "5ea4c2859639a58fe1f4ca80bda587a26a1f3a6be9a7025003b3a42dac616f30"
+  },
+  {
+    "original_sha256": "46e867f22254e711d8fee2a3f04cec700ea156ea19c604564f2f4413b31cfe61",
+    "path": "EPSS_TPG/02_prediction/EXPERIMENT_REGISTER.md",
+    "published_sha256": "eda4da45d5ec91113c5e36658bdd49d8ce0b2d714b61b208d7606059443e89e7"
+  },
+  {
+    "original_sha256": "f6be3a8a6f27f84e0b7209e7cfb78c09b904e2863e2dc571d8e6454f1d19d5fa",
+    "path": "EPSS_TPG/01_tpg/02_examples/01_scripts/review_security_product_v4_semantics.py",
+    "published_sha256": "5144aa7089436a14642cccdfd72b5f153a3d04500ab189b15ebc5f3667b3a138"
+  }
+]

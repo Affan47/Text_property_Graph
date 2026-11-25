@@ -1,0 +1,43 @@
+{
+  "schema": "v5_training_semantic_review_v1",
+  "reviewer": "Automated source-grounded review; not independent human annotation or inter-rater validation",
+  "scope": "All 16 fixed training packet descriptions, ENTITY/PREDICATE annotations, and SEC/ENTITY_REL evidence. No test examples or model-error selection.",
+  "decisions": {
+    "CVE-2023-32629": "Local and privilege escalation are supported. Ubuntu Kernels is a product/kernel mention but ORG is coarse. No version or supported named-product/impact relation is fabricated. Product coverage remains incomplete.",
+    "CVE-2024-29291": "Laravel Framework 8 through is not a facility. Integer range 8 through 11 is missed. The description explicitly disputes the issue; preserve that wording. Boundary/range and dispute-scope repairs deferred; no automatic facility-to-product span guess.",
+    "CVE-2024-48973": "allow an attacker does not identify an attack vector. see 3.2.1 looks like a document section but the reference meaning is not independently established: mark uncertain, retain it pending review, do not assert a corrected software release. unencrypted can be an adjectival/participial predicate; retain.",
+    "CVE-2022-24611": "Denial of Service is an impact, not an organization; a correct same-span IMPACT already exists. NodeIDs is not a person but there is no supported replacement subtype in this pass. S0/S2 and product/protocol boundaries remain unresolved. network is actually in the source networking context; retain.",
+    "CVE-2024-24795": "allows an attacker is not an access vector. Apache HTTP Server and version 2.4.59 are supported; no same-sentence owner relation exists because the upgrade is in a later paragraph. Do not invent a cross-paragraph link. splitting is nominal in HTTP Response splitting; its repair is deferred because no corroborating typed VULN_TYPE span exists.",
+    "CVE-2021-37851": "Windows is software, not a location; ESET Endpoint Antivirus is a product, not a person. Same-span software nodes support suppression of those conflicts. Ordinary system is not a function. Listed HAS_VERSION edges support adjacent mentions only; prior-to bounds and semicolon ownership are incomplete, not proof of affected/fixed status.",
+    "CVE-2021-41773": "CVE-2021-42013 is not a person; a same-span CVE_ID exists. path in path normalization is not a predicate. An attacker alone is not a vector. Version edges are mention-only: the source says the 2.4.50 fix was incomplete, so do not infer remediation success. Retain explicit exploitation wording as source evidence, not independent historical evidence.",
+    "CVE-2022-28819": "22.3 is a product version, not a date. write inside the typed out-of-bounds write vulnerability phrase is nominal, not an action predicate. The second version and both and-earlier qualifiers lack complete relation coverage; defer coordination repair.",
+    "CVE-2024-7587": "Three 10.97.3 mentions are incorrectly typed DATE despite matching VERSION nodes. Two versions tokens in explicit product-release lists are not action predicates. GENESIS/ICONICS product-version mention edges have source support; all-versions and and-prior qualifiers are not fully represented. DoS as an organization is wrong, but its span differs from the existing IMPACT; defer abbreviation linking.",
+    "CVE-2014-2397": "Oracle Java and Java SE Embedded are not people. Embedded inside the product name is nominal. Java 7u51 and integer 8 releases are missed. Existing Java subspans do not justify an automatic larger-span replacement; record and defer these product/version/parser defects.",
+    "CVE-2024-7479": "Remote inside TeamViewer Remote Clients names the product, not the attack vector; local in the attacker phrase is valid. Two Windows annotations are wrongly LOC/NORP despite same-span SOFTWARE evidence. Ordinary system is not a function. allows an attacker alone is not a vector. TeamViewer_service.exe is not a person; executable typing and prior-version ownership are deferred.",
+    "CVE-2023-36163": "remote attacker is supported. IP-DOT/BuildaGate product boundaries and v.BuildaGate5 release are not represented adequately. Cross Site Scripting is a missed typed vulnerability mention. No generic IP/address rule is added from this example.",
+    "CVE-2024-53937": "hardware 1.0 explicitly describes a hardware release, not a software version. allows attackers is not an access vector. Victure router as WORK_OF_ART is wrong; firmware EN_V1.0.0_r12_110933 and LAN/protocol distinctions remain incomplete. Preserve does not require wording; no negation is removed.",
+    "CVE-2018-15473": "OpenSSH through 7.7 has an explicit product-version relation with <= operator. CARDINAL 7.7 is a compatible numeric view and is not removed. No automatic repair is warranted by the selected narrow rules; user-enumeration and file mentions remain outside their coverage.",
+    "CVE-2024-54529": "macOS product names are incorrectly tagged PERSON, but boundaries overlap multiple existing nodes and versions; defer rather than merge by guesswork. Sequoia/Sonoma/Ventura have mention-only version edges. Missing macOS prefix ownership and fixed-release meaning are unresolved; no edge is relabelled as affected.",
+    "CVE-2024-24747": "MinIO and the timestamp-shaped RELEASE identifier are missed by the product/version extraction. Fixed wording exists but does not supply an adjacent named product edge. Preserve unless and denied scope. Adding a distant owner link is deferred."
+  },
+  "deferred_taxonomy": {
+    "UNSUPPORTED_OR_PARTIAL_PRODUCT_BOUNDARY": ["CVE-2023-32629", "CVE-2024-29291", "CVE-2022-24611", "CVE-2014-2397", "CVE-2024-7479", "CVE-2023-36163", "CVE-2024-53937", "CVE-2024-54529", "CVE-2024-24747"],
+    "MISSED_RANGE_COORDINATION_OR_NON_DOTTED_RELEASE": ["CVE-2024-29291", "CVE-2021-37851", "CVE-2022-28819", "CVE-2024-7587", "CVE-2014-2397", "CVE-2024-7479", "CVE-2023-36163", "CVE-2024-53937", "CVE-2024-24747"],
+    "UNCERTAIN_SECTION_OR_RELEASE": ["CVE-2024-48973"],
+    "CONTEXT_SCOPE_NOT_FULLY_TYPED": ["CVE-2024-29291", "CVE-2024-24795", "CVE-2021-37851", "CVE-2021-41773", "CVE-2022-28819", "CVE-2024-7587", "CVE-2024-54529", "CVE-2024-24747"],
+    "OTHER_NER_OR_PREDICATE_ERROR_WITHOUT_SAFE_REPLACEMENT": ["CVE-2022-24611", "CVE-2024-24795", "CVE-2014-2397", "CVE-2024-7587", "CVE-2024-7479", "CVE-2024-53937", "CVE-2024-54529"]
+  },
+  "interpretation": "Counts are observations in a bounded development packet, not population extraction precision. Candidate HAS_VERSION is not an affected/fixed or exploitation assertion.",
+  "relation_review": {
+    "CVE-2024-7587": "ENTITY_REL e813-e816 use version as an asserted dependency predicate at the two false versions spans. Suppress all four, even when both endpoint entities survive. Retain the independently supported HAS_VERSION mention edges.",
+    "CVE-2023-36163": "ENTITY_REL e177 follows allows a remote attacker to execute. It is a capability statement, not proof execution happened. Keep candidate status; asserted modality is a residual scope limitation, not a verified exploitation event.",
+    "CVE-2024-53937": "ENTITY_REL e470 follows allows attackers to execute. Its source is the unsupported generic ATTACK_VECTOR annotation and is removed with that node. This does not remove the original action wording or IMPACT mention.",
+    "all_other_relation_rows": "The other 24 ENTITY_REL rows are the generic views of the same 24 SEC_HAS_VERSION candidate mentions, not 48 independent facts. No affected/fixed/exploited conclusion is drawn from them."
+  },
+  "next_comparison": "v5 without subtype features and v5_subtypes, each with node_mean and type_balanced readout, matched seeds/splits/settings. Existing v4 runs retained. No simultaneous regularization change.",
+  "regularization_proposal_not_enabled": {
+    "first": "Fixed graphs/model: AdamW weight_decay 0.0001 versus 0.001, same seeds and AP selection; report Brier/log loss separately.",
+    "second": "A separate predeclared AP-selected versus Brier-selected checkpoint study only if calibrated scores are the objective; do not switch criteria after seeing winners.",
+    "node_penalty": "Deferred: LayerNorm already controls per-node scale. A node-norm penalty needs an explicit location/weight and equal-CVE normalization inside deterministic replay, tested against direct gradients."
+  }
+}

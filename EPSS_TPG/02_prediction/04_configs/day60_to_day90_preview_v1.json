@@ -1,0 +1,38 @@
+{
+  "schema": "day60_to_day90_preview_v1",
+  "stage": "preparation_preview_only",
+  "anchor_day": 60,
+  "target_day": 90,
+  "histories": {"recent_30_60": [30, 60], "long_0_60": [0, 60]},
+  "preview_counts": {"train": 16, "validation": 8},
+  "selection_salt": "day60-to-day90-preview-v1:",
+  "expected_source_cves": 5968,
+  "split_policy": {
+    "validation_start": "2024-01-01",
+    "test_start": "2025-01-01",
+    "test_end": "2026-01-01",
+    "observation_end": "2026-09-29"
+  },
+  "group_policy": "Reuse frozen related-CVE group IDs; recompute crossing-period exclusions at the new anchor. No relaxation of links or duplicate rules.",
+  "eligibility": "Observed Day-90 target and at least one observed score in each history. Export only the intersection for matched history comparisons.",
+  "text_policy": "Reuse the source-aware adapter with Day 60 as anchor. Undated descriptions/summaries stay retrospective. Posts need consistent stored dates strictly before Day 60. No historical authentication is inferred.",
+  "planned_comparisons": [
+    "Persistence at Day 60, identical under both matched histories",
+    "Recent EPSS Days 30-60 versus longer EPSS Days 0-60, same CVEs and 30-day forecast horizon",
+    "Future matched source-aware TPG+EPSS variants, only after source and graph previews"
+  ],
+  "training_enabled": false,
+  "test_score_export": false,
+  "test_text_export": false,
+  "full_development_export_enabled": false,
+  "limitations": [
+    "New preparation is not a continuation or replacement of R07; targets and cohort assignments differ.",
+    "Lower error at a later anchor would not establish an earlier warning or better prediction before the increase.",
+    "Date-level EPSS observations do not establish exact daily release times.",
+    "Group definitions remain conservative and can connect different CVEs through shared links.",
+    "Validation has informed prior development; this is not independent final evaluation.",
+    "Partial histories remain masked; Day-90 targets are never imputed.",
+    "No numerical test labels, histories or test text are exported or analyzed. Full-source integrity checks still verify the frozen files.",
+    "Graph caches and training runners for the new task are not built by this preview."
+  ]
+}

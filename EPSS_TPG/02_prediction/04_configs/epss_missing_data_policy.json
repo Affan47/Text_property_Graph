@@ -1,0 +1,28 @@
+{
+  "schema": "epss_missing_data_policy_v1",
+  "source_sha256": "506ae7da7c9202ca132e4e7ff8511f1fbbea9ab534630374dde5370e0ecfd43c",
+  "preparation_lock_sha256": "1520102f56cacbd67ad68b44b875eba77f350f08b2c1bef900fd62d3f45bf4da",
+  "scope": "endpoint_train_validation_only",
+  "input_days": [0, 30],
+  "target_day": 60,
+  "raw_missing_values": "retain_null_and_audit_reason",
+  "numeric_input_storage": "zero_placeholder_with_observed_mask_and_age_known_mask",
+  "imputation": "none",
+  "future_values_as_inputs": false,
+  "archive_reason_codes_as_predictors": false,
+  "primary_cohort": "unchanged_prepared_endpoint_cohort",
+  "missing_target": "ineligible_never_filled",
+  "minmax_target": "requires_all_days_31_to_60_observed_separate_experiment",
+  "trajectory_target": "observed_targets_only_with_explicit_loss_mask_separate_experiment",
+  "input_coverage_groups": [
+    {"name": "all_31_input_scores", "min_observed": 31, "max_observed": 31},
+    {"name": "one_input_score_missing", "min_observed": 30, "max_observed": 30},
+    {"name": "two_or_more_input_scores_missing", "min_observed": 1, "max_observed": 29}
+  ],
+  "additional_sensitivity_subset": "no_unresolved_input_archive",
+  "small_group_warning_below_cves": 20,
+  "seeds": [17, 29, 43],
+  "model_selection": "none_reuse_all_saved_models",
+  "test_evaluation": false,
+  "interpretation": "Post-hoc validation sensitivity, not evidence that dropping CVEs improves training or that missingness causes prediction errors."
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "ro01_rolling_origin_feasibility_v1",
+  "anchors": [30, 45, 60],
+  "leads": [7, 14, 30],
+  "history_lengths": [10, 20, 31],
+  "large_change_threshold": 0.01,
+  "expected_cohort": {"train": 2519, "validation": 1104},
+  "eligibility": "Dates must remain in the original CVE role, every history must contain an observed score, and the endpoint must be observed. Never select by change magnitude.",
+  "weighting": "Equal total weight per CVE: 1 / eligible windows per CVE if pooling all leads, or 1 / eligible anchors per CVE within a separately trained lead.",
+  "training": false,
+  "test_scoring": false,
+  "limitations": [
+    "Descriptive feasibility only; no model, forecasts, graph construction or automatic decision to train.",
+    "The retained cohort was selected for the earlier Day-60 task, not every possible rolling-origin CVE.",
+    "Later anchors are later decisions, not improved early warning from Day 30.",
+    "Multiple windows from one CVE are dependent; preserve CVE roles and equal total CVE weight.",
+    "Date eligibility is checked before inspecting window scores; blocked windows have no numeric target or change exported.",
+    "Daily score dates do not verify exact release times. Input values on an anchor date require a consistent end-of-day convention later.",
+    "Validation has informed prior development. No final test CVE scores or text are inspected or exported.",
+    "Changed-score counts are descriptive outcomes, never criteria for selecting windows or assigning weights."
+  ]
+}

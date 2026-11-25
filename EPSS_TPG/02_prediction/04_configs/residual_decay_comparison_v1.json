@@ -1,0 +1,30 @@
+{
+  "schema": "r05_residual_decay_comparison_v1",
+  "scope": "bounded_development_comparison_not_full_training",
+  "cohort": {"train": 128, "validation": 64, "selection": "sha256(r05:subset: + split + : + CVE), within frozen R04 splits"},
+  "models": ["epss_only", "no_coref"],
+  "conditions": {"original_decay": 0.0001, "zero_decay": 0.0},
+  "config": {
+    "hidden_size": 32, "temporal_hidden_size": 16, "graph_layers": 2,
+    "batch_size": 8, "learning_rate": 0.001, "weight_decay": 0.0001,
+    "huber_beta": 0.01, "gradient_clip_norm": 1, "dropout": 0,
+    "epochs": 30, "patience": 30, "seeds": [17, 29, 43],
+    "device": "cpu", "correction_gain": 0.00885
+  },
+  "budget": "All 30 epochs run, with no early stopping; identical update counts across decay conditions",
+  "selection": "Earliest strictly lowest validation MAE among epochs 1 through 30; epoch zero ineligible",
+  "gain": "Reuse frozen R04 gain derived only from the 1023 training input histories",
+  "references": ["persistence", "training_median_endpoint_minus_persistence_then_clip"],
+  "primary_comparison": "Within model and seed: zero_decay validation MAE minus original_decay validation MAE",
+  "secondary_checks": ["RMSE", "correction variability", "initial versus selected parameter norms", "gradient counters", "output clipping"],
+  "execution": {"threads": 1, "deterministic_algorithms": true, "device": "cpu"},
+  "exclusions": ["test_scoring", "new_embeddings", "new_graphs", "split_changes", "best_seed_selection", "full_training"],
+  "limitations": [
+    "Outcome-independent subsets of the existing development cohort, not a new independent validation set",
+    "Current descriptions are retrospective and not authenticated historical Day-30 text",
+    "Gradient ratios motivated this experiment but do not establish causality",
+    "Small-cohort validation results are exploratory, not final model selection evidence",
+    "The scalar reference fits median training residuals for MAE, not the neural Smooth L1 objective",
+    "Selected checkpoints may be from different epochs despite equal total training budgets"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schema": "cf01_history_reliance_v1",
+  "seeds": [17, 29, 43],
+  "device": "cpu",
+  "threads": 2,
+  "smoke_validation_cves": 6,
+  "bootstrap_repetitions": 1000,
+  "bootstrap_seed": 6029,
+  "constant_scope": "One full-validation Day-30-to-Day-60 mean raw neural residual per seed; fixed across anchors, leads and bootstrap resamples",
+  "constant_interpretation": "Post-hoc validation-prediction decomposition, not a training-fitted deployable control; no target values used to fit the constant",
+  "last_obs_only": "Keep prefix length and day indices; erase earlier value, observed, age and known-history channels; retain last observation and subsequent age",
+  "flat_history": "Replace prior observed values by latest observed score; preserve all masks, ages, day indices, lengths, leads and carried-forward score",
+  "training_enabled": false,
+  "test_access_enabled": false
+}

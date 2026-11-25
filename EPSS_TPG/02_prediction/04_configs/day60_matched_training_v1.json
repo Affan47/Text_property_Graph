@@ -1,0 +1,34 @@
+{
+  "schema": "ms06_day60_matched_training_v1",
+  "variants": ["epss_only", "description_epss", "all_sources_epss"],
+  "history": "days_0_30",
+  "anchor_day": 30,
+  "target_day": 60,
+  "horizon_days": 30,
+  "cohort": {"train": 2519, "validation": 1104},
+  "loss": "mae",
+  "edge_configuration": "no_coref",
+  "config": {
+    "temporal_hidden_size": 16, "hidden_size": 32, "graph_layers": 2,
+    "dropout": 0.1, "batch_size": 8, "learning_rate": 0.001,
+    "weight_decay": 0.0001, "gradient_clip_norm": 1.0,
+    "epochs": 100, "patience": 15, "seeds": [17, 29, 43],
+    "graph_batch_nodes": 8192, "graph_batch_edges": 32768,
+    "checkpoint_graph_activations": true
+  },
+  "smoke": {"epochs": 3, "patience": 3, "seeds": [17]},
+  "gain_rule": "Median latest observed Day 0-30 EPSS from training CVEs only, bounded to [0.001, 0.05]. No targets or validation inputs.",
+  "selection": "Earliest strictly best validation MAE from epoch 1. No epoch-zero selection. All fixed seeds reported.",
+  "reference": "Repeat the latest observed Day 0-30 EPSS, in the same float32 representation as the model persistence connection.",
+  "test_scoring": false,
+  "limitations": [
+    "Descriptions and summaries are retrospective, not authenticated Day-30 snapshots.",
+    "Stored SMP date screening does not prove historical publication or content availability.",
+    "Distinct CVE IDs are not proof of independent vulnerability families or evidence.",
+    "The graph cache preserves chunks and typed security edges but does not prove semantic correctness.",
+    "Validation has informed development. This is not independent final test evaluation.",
+    "The Day-90 learned branches collapsed. This matched endpoint experiment retains their settings, not a proposed fix.",
+    "Partial histories are retained; observed Day-60 targets are never imputed.",
+    "Smoke metrics test integration only; they do not select seeds or settings."
+  ]
+}

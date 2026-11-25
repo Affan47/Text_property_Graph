@@ -1,0 +1,14 @@
+{
+  "schema": "gb01_group_balanced_validation_v1",
+  "variants": ["epss_only", "all_sources_epss"],
+  "gain": 1.0,
+  "anchor_day": 30,
+  "target_day": 60,
+  "cohort": {"train": 2519, "validation": 1104},
+  "groups": ["unchanged", "increased", "decreased"],
+  "group_rule": "Compare original stored Day-60 target with latest observed original Day 0-30 score, before float32 conversion; exact equality, no tuned threshold.",
+  "weight_rule": "N/(K*n_group), K is the number of nonempty training groups. Full requires all three; smoke may omit groups. Mean training weight is one.",
+  "loss": "mean(weight * absolute_error) per batch; no batch weight renormalization or resampling",
+  "selection": "Unchanged GV01: earliest strictly lowest unweighted validation MAE from epoch 1, patience 15 in full.",
+  "test_scoring": false
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "cs01_consolidated_design_v1",
+  "primary_target_day": 60,
+  "primary_interpretation": "Retrospective reconstruction of Day-60 EPSS from current saved text and structured features; not a historical exploitation forecast.",
+  "source_order": ["description", "github_summary", "non_github_summary", "smp"],
+  "source_fields": {
+    "description": "description",
+    "github_summary": "summ_github_only_urls_fast.gpt-oss:120b",
+    "non_github_summary": "summ_non_github_urls_fast.gpt-oss:120b",
+    "smp": "social_media_posts"
+  },
+  "primary_structured_blocks": ["cvss", "reference_count"],
+  "primary_text_policy": "All current nonempty saved source documents, deduplicated within CVE/source; explicit EPSS score/percentile disclosure candidates quarantined. No claim of historical source availability.",
+  "continuous_anchors": {"first": 0, "last": 89},
+  "continuous_leads": "Every h from 1 through 90-t for anchor t; missing or date-ineligible targets are masked.",
+  "continuous_history": "All available scores from Day 0 through t, with masks and observation age; no future values. Recent 10/20/31-day views are prespecified secondary ablations, not an automatic optimum.",
+  "continuous_min_observed_input": 1,
+  "continuous_loss": "Mean over observed leads within anchor, then eligible anchors within CVE, then CVEs. Never weight by future change.",
+  "continuous_primary_leads": [7, 14, 30],
+  "continuous_primary_comparison": "Day-30 anchor, 30-day lead on the common eligible validation CVEs; report full anchor/lead matrix as secondary, not as an oracle-selected horizon.",
+  "continuous_tpg_policy": "Separate matched extension only after per-document historical availability is verified. A stored post date or NVD reference date is not authentication of the saved text.",
+  "split_policy": "Inherit the complete frozen MS04 CVE role manifest without reassignment. Determine task eligibility separately; do not require Day-30 history for the primary study or Day-60 labels for the continuous study. Keep excluded and test CVEs out of development adaptation.",
+  "development_seeds": [17, 29, 43],
+  "model_components": {
+    "primary": "Frozen shared SecBERT inputs; token-only pooled-text control versus existing EdgeTypeGNNLayer; source attention plus structured MLP; scalar sigmoid Day-60 output. No EPSS input.",
+    "continuous": "Variable-length past-only GRU plus anchor/lead-conditioned residual head, shared across every feasible daily anchor and lead. Initialize at persistence; no targets in forward pass.",
+    "component_status": "Synthetic forward/backward and masking checks only; cache adapters and full fitting/evaluation runners are separate next stages."
+  },
+  "training_budget": {"epochs": 100, "patience": 15, "batch_size": 8, "learning_rate": 0.001, "weight_decay": 0.0001},
+  "training_loss": "MAE; primary gives each CVE equal weight; continuous uses the declared lead/anchor/CVE averaging. Missing targets are masked, not filled.",
+  "selection": "Prespecified validation MAE criterion, report every seed and ablation; stop after the registered comparison, not endless tuning. Baseline remains preferred if no material supported gain.",
+  "classification_diagnostic_thresholds": [0.01, 0.1],
+  "classification_interpretation": "Thresholded EPSS score categories only; not observed exploitation labels.",
+  "test_policy": "Three phases: training-only preprocessing and fitting; validation-only selection; freeze protocol, eligible rules, thresholds, variants, checkpoints and hashes before one held-out test release. No test score access in design/preflight. Test ablations use the same frozen cohort and cannot trigger model selection or retuning.",
+  "training_enabled": false,
+  "test_export_enabled": false,
+  "limitations": [
+    "Current descriptions, summaries and CVSS are retrospective. A unique CVE identifies a vulnerability, not the date a feature was known.",
+    "EPSS prediction is score estimation, not direct exploitation prediction; missing labels are never zero.",
+    "Development includes all already assigned training/validation CVEs eligible for each task, not all source CVEs or the held-out test set.",
+    "Repeated forecasts of one CVE are dependent; evaluation and uncertainty must respect CVE groups.",
+    "No observed future value or future outcome is used to select history length, anchor or horizon.",
+    "All source combinations are registered, but their full training/cache adapters are not implemented by this design preflight.",
+    "Test eligibility counts and test metrics remain unknown until the frozen final evaluation stage."
+  ]
+}

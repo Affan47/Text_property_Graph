@@ -1,0 +1,51 @@
+{
+  "schema": "r06_residual_loss_comparison_v1",
+  "scope": "final_bounded_comparison_before_full_development_training",
+  "cohort": {"train": 128, "validation": 64, "selection": "Reuse exact R05 IDs, split roles and grouping"},
+  "models": ["epss_only", "no_coref"],
+  "losses": ["smooth_l1", "mae"],
+  "config": {
+    "hidden_size": 32, "temporal_hidden_size": 16, "graph_layers": 2,
+    "batch_size": 8, "learning_rate": 0.001, "weight_decay": 0.0001,
+    "huber_beta": 0.01, "gradient_clip_norm": 1, "dropout": 0,
+    "epochs": 30, "patience": 30, "seeds": [17, 29, 43],
+    "device": "cpu", "correction_gain": 0.00885
+  },
+  "budget": "All 30 epochs run; 480 updates per fit; no early stopping",
+  "selection": "Earliest strictly lowest validation MAE among epochs 1-30; epoch zero excluded",
+  "loss_definition": {
+    "smooth_l1": "torch.nn.SmoothL1Loss(beta=0.01, reduction=mean)",
+    "mae": "torch.nn.L1Loss(reduction=mean)"
+  },
+  "control_requirement": "Every fresh Smooth L1 fit must exactly reproduce the matched frozen R05 original-decay state, history, gradients, predictions and metrics",
+  "primary_comparison": "Within model and seed: MAE-loss validation MAE minus Smooth-L1-loss validation MAE",
+  "references": ["persistence", "R05 training-fitted median scalar correction"],
+  "execution": {"threads": 1, "deterministic_algorithms": true, "device": "cpu"},
+  "full_training_decision": {
+    "rule": "One common loss for both models: mean of all six selected-checkpoint validation MAEs per loss; choose MAE only if its mean is more than 1e-12 lower, otherwise retain Smooth L1",
+    "tie_tolerance": 1e-12,
+    "additional_bounded_tuning": false,
+    "next_stage": "Full eligible development cohort, not all raw CVEs",
+    "cohort": {"train": 1023, "validation": 197},
+    "models": ["epss_only", "no_coref"],
+    "seeds": [17, 29, 43],
+    "epochs": 100,
+    "patience": 15,
+    "weight_decay": 0.0001,
+    "correction_gain": 0.00885,
+    "initialization": "Fresh fixed-seed initialization; no R05 or R06 checkpoint warm start",
+    "checkpoint_selection": "Earliest strictly best validation MAE, epochs 1 onward; persistence reported separately",
+    "test_scoring": false,
+    "automatic_training": false,
+    "gate": "Complete verified comparison, finite outputs and exact R05 control parity; repair technical failures without changing the scientific protocol",
+    "baseline_policy": "Proceed to full development training with the chosen loss, but do not claim a learned-model win unless it beats the reference on the stated metric"
+  },
+  "limitations": [
+    "Validation has informed earlier development decisions; this is not an independent final evaluation",
+    "The fixed small cohort is dominated by unchanged EPSS endpoints",
+    "A lower average selects a development setting, not statistical significance or a deployment model",
+    "Current descriptions remain retrospective rather than authenticated historical Day-30 inputs",
+    "Loss magnitude cannot be compared directly between MAE and Smooth L1",
+    "Full training remains a separate user-run stage after verification; no more bounded loss/decay tuning is planned"
+  ]
+}

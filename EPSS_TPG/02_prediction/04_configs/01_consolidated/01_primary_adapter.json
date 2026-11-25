@@ -1,0 +1,23 @@
+{
+  "schema": "ps01_primary_adapter_v1",
+  "target_day": 60,
+  "smoke_counts": {"train": 4, "validation": 2},
+  "smoke_selection": "Greedy source-presence coverage within the frozen CS01 smoke cohort, CVE-sorted tie breaks, then sorted fill to 4/2. No target-value selection; integration sample only.",
+  "source_pooling": "Mean chunk vectors within each document; mean document vectors within each source; masked attention across enabled sources.",
+  "cache_policy": "Exact original text, document ID, chunk offsets, extractor/code, encoder, vocabulary and coverage policy. Never substitute by CVE ID alone.",
+  "structured_blocks": ["cvss", "reference_count"],
+  "extra_structured_predictors": [],
+  "gnn": "EdgeTypeGNNLayer",
+  "smoke": {"seed": 17, "epochs": 3, "hidden": 16, "layers": 1, "batch_size": 2, "learning_rate": 0.001, "weight_decay": 0.0001},
+  "smoke_variants": [
+    {"id": "structured_only", "representation": "pooled_text", "sources": [], "structured": true},
+    {"id": "pooled_D_S1", "representation": "pooled_text", "sources": ["description"], "structured": true},
+    {"id": "tpg_D_S1", "representation": "security_tpg", "sources": ["description"], "structured": true},
+    {"id": "pooled_DGNM_S0", "representation": "pooled_text", "sources": ["description", "github_summary", "non_github_summary", "smp"], "structured": false},
+    {"id": "pooled_DGNM_S1", "representation": "pooled_text", "sources": ["description", "github_summary", "non_github_summary", "smp"], "structured": true},
+    {"id": "tpg_DGNM_S0", "representation": "security_tpg", "sources": ["description", "github_summary", "non_github_summary", "smp"], "structured": false},
+    {"id": "tpg_DGNM_S1", "representation": "security_tpg", "sources": ["description", "github_summary", "non_github_summary", "smp"], "structured": true}
+  ],
+  "full_training_enabled": false,
+  "test_enabled": false
+}

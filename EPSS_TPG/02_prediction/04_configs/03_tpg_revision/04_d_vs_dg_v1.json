@@ -1,0 +1,19 @@
+{
+  "schema": "trv04_execution_v1",
+  "approved_phase1": "08_dg_readiness_v1",
+  "representations": ["pooled_text", "v5_node_mean"],
+  "sources": ["description", "github_summary"],
+  "subtypes_enabled": false,
+  "v6_enabled": false,
+  "accepted_masks_changed": false,
+  "selection": "earliest strict maximum full-validation AP",
+  "threshold": 0.5,
+  "permutation_seeds": [6029, 6030, 6031, 6032, 6033, 6034, 6035, 6036, 6037, 6038],
+  "permutation_rule": "Uniform label-blind derangements within G-present validation CVEs, shared across models/seeds; preserve target D and structured inputs.",
+  "bootstrap_repetitions": 1000,
+  "bootstrap_seed": 6029,
+  "bootstrap_rule": "Paired stratified CVE resampling within each partition; same sampled CVEs for every model/seed; average paired metric differences across all seeds.",
+  "test_scoring": false,
+  "threshold_tuning": false,
+  "interpretation": "Exploratory retrospective listing classification. Permutations test sensitivity to target-content matching, not a pure estimate of source-bias parameters or causal effects."
+}

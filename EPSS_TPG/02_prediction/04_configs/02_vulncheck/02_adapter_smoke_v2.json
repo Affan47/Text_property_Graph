@@ -1,0 +1,45 @@
+{
+  "schema": "vk02_snapshot_adapter_smoke_v2",
+  "source_policy": "vulncheck_source_policy_v2",
+  "source": "SummTPGVul/Sec4AI4Sec-EPSS/Data_Files/epss_recollected_2026-09-30_smp.json",
+  "source_sha256": "506ae7da7c9202ca132e4e7ff8511f1fbbea9ab534630374dde5370e0ecfd43c",
+  "audit": "05_results/05_vulncheck_study/01_readiness_v1/full",
+  "review": "05_results/05_vulncheck_study/02_readiness_review_v1",
+  "manifest": "04_data/01_records_and_graphs/cve_identity_day30_to_day60_v1/full/split_manifest.json",
+  "data_root": "04_data/01_records_and_graphs/vulncheck_snapshot_v2",
+  "result_root": "05_results/05_vulncheck_study/03_classifier_smoke_v2",
+  "source_fields": {
+    "description": "description",
+    "github_summary": "summ_github_only_urls_fast.gpt-oss:120b",
+    "non_github_summary": "summ_non_github_urls_fast.gpt-oss:120b",
+    "smp": "social_media_posts"
+  },
+  "source_order": ["description", "github_summary", "non_github_summary", "smp"],
+  "structured_fields": ["cvss_vector", "cvss_vector_version", "cvss_vector_score", "n_references_nvd"],
+  "evaluation": {
+    "interpretation": "Retrospective listed/not-listed snapshot classification; not exploitation probability or future inclusion.",
+    "development_roles": ["train", "validation"],
+    "previous_test": "Previously observed; never exported, trained or scored by this adapter or smoke.",
+    "excluded_role": "Retained as excluded; no reassignment.",
+    "independent_final_evaluation_ready": false,
+    "full_training_enabled": false,
+    "source_policy_review": "Automated engineering review and focused tests; independent semantic annotation remains pending. Approved here only for adapter/integration smoke."
+  },
+  "smoke": {
+    "counts": {"train": 64, "validation": 32},
+    "sampling": "Seeded sampling within previous role/label; approximately retain positive fraction, at least two of each class. Integration only, not representative performance evidence.",
+    "seed": 17,
+    "max_iter": 300,
+    "C": 1.0,
+    "solver": "liblinear",
+    "class_weight": null,
+    "tfidf_max_features": 4096,
+    "tfidf_ngram_range": [1, 2],
+    "threshold": 0.5,
+    "variants": ["structured_only", "description_tfidf", "description_tfidf_structured", "source_masks_only"],
+    "baseline": "Training label prevalence constant",
+    "selection": "No model or threshold selection; four fixed logistic fits, plus constant. All outputs reported."
+  },
+  "cache_policy": "No TPG or embedding cache is loaded or rebuilt. Future reuse requires exact accepted document text/source and matching extraction/embedding identities.",
+  "predictor_exclusions": "EPSS values/metadata, all catalogue-derived fields and transformations, quarantine reasons/counts, CVE identifiers and roles as numerical features. CVE/role exist only for joining and assertions."
+}

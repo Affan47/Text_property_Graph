@@ -1,0 +1,42 @@
+{
+  "schema": "rd02_summary_extension_v1",
+  "task": "Retrospective Day-60 EPSS estimation with separate webpage-summary sources",
+  "base_export": "05_results/07_reddit_studies/02_rd02_primary_v1/export/full",
+  "default_summary_source": "SummTPGVul/Sec4AI4Sec-EPSS/Data_Files/epss_recollected_2026-09-30_smp.json",
+  "default_summary_sha256": "506ae7da7c9202ca132e4e7ff8511f1fbbea9ab534630374dde5370e0ecfd43c",
+  "fields": {
+    "G": {"text": "summ_github_only_urls_fast.gpt-oss:120b", "references": "github_only_urls"},
+    "N": {"text": "summ_non_github_urls_fast.gpt-oss:120b", "references": "non_github_urls"}
+  },
+  "join": "Exact CVE ID; nonempty original reference set must equal or be a subset of the current same-source reference set. No URL normalization or cross-CVE transfer.",
+  "quality": "Keep exact summary wording. Quarantine EPSS-topic disclosures, explicit contradictory target-CVE claims, exact empty/error placeholders and unmatched references. Flag other-CVE mentions and insufficient-content language for review, not automatic deletion.",
+  "sources": ["D", "G", "N", "M_prose"],
+  "source_views": {
+    "D": ["D"],
+    "DG": ["D", "G"],
+    "DN": ["D", "N"],
+    "DGN": ["D", "G", "N"],
+    "DM_prose": ["D", "M_prose"],
+    "DM_proseG": ["D", "G", "M_prose"],
+    "DM_proseN": ["D", "N", "M_prose"],
+    "DM_proseGN": ["D", "G", "N", "M_prose"]
+  },
+  "representations": ["pooled_text", "v6_tpg"],
+  "seeds": [17, 29, 43],
+  "reuse_references": ["D", "DM_prose"],
+  "new_neural_fits_proposed": 36,
+  "controls": ["training_mean", "training_median", "structured_ridge"],
+  "inherit_settings": "RD02_spec.json",
+  "structured": "Reuse exact RD02 train-fitted vectors; no summary metadata, catalogue fields, CVE IDs, EPSS or timestamps added as predictors",
+  "graph": "Reuse v6 + 32 subtype channels + frozen SecBERT; same two-layer typed-edge GNN, hidden 32. Reuse a chunk only after exact text, offsets and complete processing identity match.",
+  "pooling": "Mean chunks within document, mean documents within D/G/N/M separately, masked source attention, unchanged structured late fusion. Do not concatenate raw sources.",
+  "comparisons": ["DG minus D", "DN minus D", "DGN minus D", "DGN minus DG", "DGN minus DN", "DM_proseG minus DM_prose", "DM_proseN minus DM_prose", "DM_proseGN minus DM_prose", "DM_proseGN minus DGN", "DM_proseGN minus DM_proseG", "DM_proseGN minus DM_proseN", "v6_tpg minus pooled_text for each matched view"],
+  "evaluation": ["Full matched validation cohort", "G present/absent", "N present/absent", "Both/one/neither summary available", "M_prose present/absent", "Frozen 943/29 description-overlap partitions", "Additional summary-overlap sensitivity", "Existing release-version partitions", "All seeds, not a selected seed", "MAE, RMSE, R2, Pearson, Spearman, signed bias, clipping, high-score errors", "1000 paired CVE bootstrap resamples at seed 6029"],
+  "future_diagnostics": ["Same-weight masked-G/N parity against original D/DM_prose paths", "Frozen-model G/N removal on identical CVEs", "Fixed label-blind summary permutation within available-source subsets"],
+  "training_review_sample": 16,
+  "training_enabled": false,
+  "test_enabled": false,
+  "network_enabled": false,
+  "execution_owner": "User runs training only after source review, cache and smoke approval",
+  "limitations": ["Reference matching is not proof of factual accuracy, successful scraping or historical availability", "No claim that summaries were available by Day 60", "Do not choose an LLM or summary version from validation outcome performance", "Sample-only regenerated summaries remain a separate candidate source, not an automatic replacement", "No validation summaries means no usable validation estimate of summary benefit", "Prior RD02 outcomes already inspected; this is additional development, not independent confirmation"]
+}

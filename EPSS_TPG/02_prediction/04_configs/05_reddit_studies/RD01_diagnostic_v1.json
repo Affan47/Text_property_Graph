@@ -1,0 +1,25 @@
+{
+  "schema": "rd01_diagnostic_v1",
+  "publication_start": "2021-04-14",
+  "cutoff": "2026-11-03",
+  "publication_intervals": {
+    "train": ["2021-04-14", "2023-12-31"],
+    "validation": ["2024-01-01", "2024-12-31"],
+    "test": ["2025-01-01", "2026-11-03"]
+  },
+  "post_policies": {"retain_all": null, "quarantine_gt10": 10, "quarantine_gt25": 25},
+  "threshold_basis": "Number of distinct current CVEs attached to the exact text/date/platform fingerprint. Strictly greater than threshold. All attachments of that fingerprint are removed from the candidate M view only.",
+  "exposure_policies": ["never_exposed", "retain_matching_prior_roles"],
+  "exposure_memory": "Original untrimmed conservative components remain the source of prior-role exposure. Removing text never erases prior exposure.",
+  "prior_test_rule": "All original prior-test-connected current CVEs are excluded from every candidate role, retaining the existing RD01 specification's stronger rule.",
+  "cross_interval_rule": "Quarantine entire retained-evidence component if current CVEs span publication roles, including pre-launch/outside-role CVEs. Decide before target availability filtering.",
+  "prior_role_rule": "Never-exposed excludes all original prior-role-connected CVEs. Matching-role policy permits only train/validation exposure compatible with the candidate role; excluded/test/mixed roles cause whole-component quarantine.",
+  "windows_days_each_side": [1, 7, 14, 30],
+  "post_groups": ["bare_id_only", "multi_cve_text", "single_cve_descriptive"],
+  "post_group_meaning": "Disjoint syntax-based categories: identifier-only first; more than one CVE mention second; otherwise exactly one CVE mention with additional wording. Descriptive is not a human relevance judgment.",
+  "hubs_to_detail": 25,
+  "split_frozen": false,
+  "model_training": false,
+  "outcome_optimization": false,
+  "individual_test_scores_exported": false
+}

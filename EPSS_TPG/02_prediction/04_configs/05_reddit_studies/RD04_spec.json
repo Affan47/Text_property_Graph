@@ -1,0 +1,150 @@
+{
+  "bootstrap": {
+    "additional_unit": "shared-post connected component",
+    "confidence": 0.95,
+    "paired": true,
+    "primary_unit": "CVE",
+    "repetitions": 1000,
+    "seed": 6029
+  },
+  "catalogue_predictor_ban": [
+    "in_vckev",
+    "vendor_project",
+    "vckev_cwes",
+    "vckev_date_added",
+    "vckev_updated_at",
+    "cisa_date_added",
+    "due_date",
+    "vckev_known_ransomware_campaign_use",
+    "vckev_reported_exploited_by_canaries",
+    "vckev_reported_exploitation",
+    "vckev_xdb",
+    "derived catalogue counts/masks/nodes/edges"
+  ],
+  "controls": "Persistence from last observed score; lead correction fitted from train residual weighted medians; report raw and clipped versions",
+  "diagnostics": [
+    "Epoch0 exact persistence",
+    "per-epoch selection metric and clipping/bias",
+    "flat_history",
+    "last_obs_only",
+    "validation-derived constant shift (post-hoc diagnostic, not fitted predictor)"
+  ],
+  "event_study": {
+    "causal_claim": false,
+    "eligibility": "Every daily EPSS score from -h through +h observed; recompute counts after recovery/dedup, do not assume old counts unchanged",
+    "multiple_posts": "Report all events with equal-CVE aggregation and first eligible post sensitivity; count all other post entries in window; overlap flag, no claims of independent events",
+    "no_future_text": "Do not add TPG/text to forecaster without content-version/capture availability evidence",
+    "original_cve_counts": {
+      "14": 1729,
+      "7": 2756
+    },
+    "source": "Deduplicated post-date entries; historical wording not authenticated",
+    "summaries": [
+      "EPSS at -h,-1,0,+1,+h",
+      "OLS pre/post slopes excluding event day from slopes",
+      "post-minus-pre change",
+      "max/min in days 1..h",
+      "first day of maximum",
+      "whether already rising before post"
+    ],
+    "test": "Event-level outcomes for prospective test-role CVEs withheld until final release",
+    "timing": "Date-level association only; daily EPSS release vs post time unknown",
+    "training": false,
+    "windows": [
+      7,
+      14
+    ]
+  },
+  "figures": [
+    "error by anchor and lead heatmap",
+    "true/predicted trajectories",
+    "version-crossing comparison",
+    "clipping/bias trajectory",
+    "event-centered score curves with denominators"
+  ],
+  "fresh_training": true,
+  "gates": [
+    "Stage 0 hashes verified",
+    "Stage 1 limitations explicitly accepted or resolved",
+    "RD01 component/chronology review and freeze",
+    "source policy review",
+    "matched-batch smoke and deterministic checkpoint reload"
+  ],
+  "id": "RD04",
+  "inputs": "At anchor t=0..89: only scores observed <=t, observation flags, age and known-history channels; no text or future scores/statuses",
+  "metrics": [
+    "equal-CVE MAE",
+    "equal-CVE RMSE",
+    "signed bias",
+    "clipped fraction",
+    "counts of CVEs/anchors/cells"
+  ],
+  "models": [
+    "persistence",
+    "training_only_lead_median_correction",
+    "temporal_GRU_seed17",
+    "temporal_GRU_seed29",
+    "temporal_GRU_seed43"
+  ],
+  "new_evaluation_warning": "No untouched claim for previously inspected CVEs or connected evidence. This is a proposed later-publication holdout within the saved snapshot, not a prospectively collected cohort.",
+  "reports": [
+    "all seeds and seed means",
+    "per-CVE predictions with actual value, masks and provenance",
+    "fixed-baseline paired differences",
+    "missingness and source-availability strata",
+    "component-aware uncertainty; no test-driven selection"
+  ],
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "slices": [
+    "all eligible cells",
+    "Day30 to Day60 primary",
+    "lead7",
+    "lead14",
+    "lead30",
+    "single-version",
+    "cross-version"
+  ],
+  "stage": 4,
+  "state": "PROPOSED_NOT_FROZEN",
+  "targets": "Actual observed scores at u=t+1..90 within role target-date bounds; keep missing-target masks; lazy windows",
+  "task": "Daily updated future EPSS trajectories; separate descriptive Reddit event analysis",
+  "temporal_settings": {
+    "anchor_packet": 32,
+    "batch_cves": 8,
+    "bootstrap_repetitions": 1000,
+    "bootstrap_seed": 6029,
+    "correction": "Training-only weighted median residual per lead; weights from the full lead/anchor/CVE loss, conditioned on that lead; missing lead uses zero",
+    "epochs": 100,
+    "full_training_enabled": false,
+    "head_hidden": 32,
+    "hidden": 16,
+    "interpretation": "Forecast stored future EPSS scores, not exploitation; date-level availability only; previously exposed test is not a new independent holdout",
+    "learning_rate": 0.001,
+    "loss": "Raw-output MAE; equal observed leads, then anchors, then CVEs",
+    "patience": 15,
+    "schema": "cf01_daily_stage1_v1",
+    "seeds": [
+      17,
+      29,
+      43
+    ],
+    "selection": "Strict minimum clipped validation Day-30 to Day-60 MAE; earliest tie",
+    "smoke": {
+      "epochs": 2,
+      "patience": 2,
+      "train_cves": 12,
+      "validation_cves": 6
+    },
+    "test_access_enabled": false,
+    "threads": 2,
+    "weight_decay": 0.0001
+  },
+  "test_access_enabled": false,
+  "training_enabled": false,
+  "version_policy": "Assign each stored date from the pinned release schedule; test actual anchor/target and input-history spans. Cross-version label for history spanning a release or (anchor,target] crossing a release; do not use only the global 91-day flag",
+  "weighting": "Equal observed leads within anchor, then equal eligible anchors within CVE, then equal CVEs; never weight CVEs by post count"
+}

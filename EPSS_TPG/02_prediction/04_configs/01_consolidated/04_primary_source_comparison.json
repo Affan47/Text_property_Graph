@@ -1,0 +1,14 @@
+{
+  "schema": "ps04_bounded_sources_v1",
+  "source_codes": ["D", "DM", "DGN", "DGNM"],
+  "reused_codes": ["D", "DGNM"],
+  "new_codes": ["DM", "DGN"],
+  "representations": ["pooled_text", "security_tpg"],
+  "structured_blocks": ["cvss", "reference_count"],
+  "seeds": [17, 29, 43],
+  "expected_full_cohort": {"train": 2546, "validation": 1104},
+  "settings": "Inherit unchanged PS02 settings and resource budgets for the same scale.",
+  "comparison": "SMP added with and without both URL summaries; both summaries added with and without SMP; matched TPG versus pooled text.",
+  "test_scoring": false,
+  "interpretation": "Retrospective Day-60 EPSS estimation. These are retrained source comparisons, not causal effects or historical forecasts."
+}

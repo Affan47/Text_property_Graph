@@ -1,0 +1,34 @@
+{
+  "schema": "rd02_registered_source_views_v2",
+  "inherits_settings_from": "RD02_spec.json",
+  "source_policy": "RD01_source_lock_v1.json",
+  "manifest": "05_results/03_dataset_analysis/02_reddit_dataset/08_rd01_source_lock_v1/rd01_frozen_manifest.json",
+  "target": "Observed EPSS score 60 days after NVD publication, within the frozen role boundary",
+  "interpretation": "Retrospective estimation with current text/CVSS, not historically verified forecasting",
+  "controls": ["training_mean", "training_median", "structured_ridge_alpha1"],
+  "neural_variants": [
+    "D_pooled_text_structured",
+    "DM_all_pooled_text_structured",
+    "DM_prose_pooled_text_structured",
+    "D_v6_tpg_subtypes_structured",
+    "DM_all_v6_tpg_subtypes_structured",
+    "DM_prose_v6_tpg_subtypes_structured"
+  ],
+  "seeds": [17, 29, 43],
+  "total_proposed_fits": 21,
+  "graph": {
+    "frontend": "SpacyFrontendV6 with versioned security corrections",
+    "subtype_vocabulary": "subtypes_v6; 32 channels; SEVERITY at index 31",
+    "gnn": "Existing two-layer edge-type-aware GNN; hidden size 32; no COREF; node-mean readout",
+    "cache_identity": "Exact screened text, parser/pass/schema identities, encoder revision, tokenizer and chunk offsets must match for reuse",
+    "pooling": "Mean chunks within each document, mean documents within source, masked source attention, structured late fusion"
+  },
+  "M_all": "Retained Reddit attachments after disclosure screening",
+  "M_prose": "M_all without bare-CVE-ID-only attachments; no remaining prose means mask_M=0, not CVE removal",
+  "structured": "Same retrospective allowlist and train-only preprocessing as RD02_spec.json; no EPSS or catalogue-derived predictors",
+  "source_gate": "Blocked on unresolved cross-role text overlap review in 08_rd01_source_lock_v1",
+  "training_enabled": false,
+  "test_release_enabled": false,
+  "smoke_runner_implemented": false,
+  "execution_owner": "User; automation must not run smoke or full training"
+}

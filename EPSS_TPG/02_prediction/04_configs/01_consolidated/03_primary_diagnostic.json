@@ -1,0 +1,19 @@
+{
+  "schema": "ps03_saved_model_diagnostic_v1",
+  "model_source": "completed PS02 full core checkpoints",
+  "smoke_cves": 12,
+  "smoke_max_chunks_per_cve": 8,
+  "smoke_seeds": [17],
+  "full_seeds": [17, 29, 43],
+  "shuffle_seed": 6029,
+  "prediction_tolerance": 0.0000001,
+  "edge_interventions": ["remove_security_edges", "remove_all_edges", "zero_edge_features"],
+  "full_review_top_errors_per_model": 10,
+  "full_review_top_gains_per_model": 5,
+  "smoke_review_top_errors_per_model": 2,
+  "smoke_review_top_gains_per_model": 1,
+  "review_models": ["P01_D_pooled_text_S1", "P01_D_security_tpg_S1", "P01_DGNM_security_tpg_S1"],
+  "training": false,
+  "test_scoring": false,
+  "interpretation": "Frozen-model interventions measure sensitivity, not retrained ablation performance or causality. Source evidence flags need human review."
+}

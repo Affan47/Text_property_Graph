@@ -1,0 +1,14 @@
+{
+  "schema": "et02_day60_graph_ablation_v1",
+  "task": "Exploratory retrospective classification of observed Day-60 EPSS >= 0.1. Not exploitation, catalogue membership or a forecast.",
+  "predecessor": "ET01 remains closed at STOP_NO_TPG. ET02 is a separately requested experiment, not progression through that gate.",
+  "datasets": ["reddit", "previous"],
+  "views": ["D", "M", "U", "DM", "DU", "DMU"],
+  "controls": ["training_prevalence", "structured"],
+  "representations": ["pooled", "tpg"],
+  "seeds": [17, 29, 43],
+  "settings": {"hidden": 32, "layers": 2, "readout": "mean", "edge_chunk_size": 8192, "epochs": 100, "patience": 15, "learning_rate": 0.001, "weight_decay": 0.0001, "batch_size": 8},
+  "record_policy": "Use every observed target in each existing training split, positive AND negative. No resampling, no pooling datasets, no official test access. Missing sources are masked, not exclusion criteria.",
+  "training": "CPU, new initialization, AdamW, equal-CVE unweighted binary cross entropy. Keep earliest strictly best validation average precision checkpoint. Same validation set used for reporting.",
+  "reporting": "Primary descriptive metrics: AP and recall at top 5% per seed. Secondary: ROC-AUC, precision/recall/F1 at probability 0.5, Brier, log loss, confusion counts, source coverage and base rate. No threshold search, no independent-test or superiority claims."
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "cf01_daily_stage1_v1",
+  "seeds": [17, 29, 43],
+  "hidden": 16,
+  "head_hidden": 32,
+  "epochs": 100,
+  "patience": 15,
+  "batch_cves": 8,
+  "anchor_packet": 32,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "threads": 2,
+  "loss": "Raw-output MAE; equal observed leads, then anchors, then CVEs",
+  "selection": "Strict minimum clipped validation Day-30 to Day-60 MAE; earliest tie",
+  "correction": "Training-only weighted median residual per lead; weights from the full lead/anchor/CVE loss, conditioned on that lead; missing lead uses zero",
+  "bootstrap_repetitions": 1000,
+  "bootstrap_seed": 6029,
+  "smoke": {"train_cves": 12, "validation_cves": 6, "epochs": 2, "patience": 2},
+  "full_training_enabled": false,
+  "test_access_enabled": false,
+  "interpretation": "Forecast stored future EPSS scores, not exploitation; date-level availability only; previously exposed test is not a new independent holdout"
+}

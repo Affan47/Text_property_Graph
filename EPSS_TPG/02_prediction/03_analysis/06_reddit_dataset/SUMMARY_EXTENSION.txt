@@ -1,0 +1,99 @@
+RD02: ADDING GENERATED WEBPAGE SUMMARIES
+
+Purpose
+The user-generated summaries are intended to be real model inputs, not merely
+URL counts. The completed RD02 run is the D/M/structured reference experiment.
+This extension will compare adding GitHub summaries (G), non-GitHub summaries
+(N), and both, keeping the existing CVEs and labels fixed.
+
+Current implementation
+prepare_rd02_summary_extension.py is a CPU-only preparation and audit tool.
+It joins exact CVE IDs, checks old versus current same-source reference sets,
+preserves exact summary text, screens explicit EPSS-topic disclosures and
+contradictory CVE identity claims, and records missing-source masks. A shared
+URL does not authorize copying one CVE's summary into another CVE. URLs shared
+across distinct CVEs are preserved. No label values are used for source rules.
+
+The original reference set must be nonempty and equal to or contained in the
+current reference set. This establishes a record/reference match, not factual
+accuracy, successful scraping or availability at Day 60. Other-CVE mentions
+and insufficient-information language are review flags, not automatic deletion.
+Six regenerated 50-record samples remain separate inventory entries; no model
+or temperature is chosen from validation performance.
+
+Verified coverage from the saved 5,968-CVE summary source
+                        Train before screen   Train after screen   Validation
+GitHub summaries        177                   177                  0
+Non-GitHub summaries    538                   533                  0
+
+The five excluded N documents mention EPSS. Their original text is unchanged.
+The new development cohort contains 808 CVE IDs from the older source, all in
+training. Neither the older full sources nor the six sample files add a
+summary to the 972 validation CVEs. Do not change splits to repair this gap.
+
+The collection queue has 28,359 CVE/source requests, NOT 28,359 unique URLs:
+- Train G: 7,484; train N: 19,792.
+- Validation G: 184; validation N: 899.
+One request may contain several reference URLs. CVEs without URLs for a source
+keep that source absent; they do not need fabricated text. Requests contain
+development CVEs only and no target scores or catalogue features. They have
+NOT been sent to any website or LLM. Failed collection must remain explicit.
+
+Proposed bounded experiment (not a runnable training stage yet)
+Views: D, DG, DN, DGN, DM_prose, DM_proseG, DM_proseN, DM_proseGN.
+D = description; M_prose = screened Reddit posts excluding bare CVE IDs.
+Each view uses both pooled-text and v6 TPG representations, plus the same
+train-fitted CVSS/reference-count branch. Use seeds 17, 29, 43 and the frozen
+RD02 optimizer, losses, selection rule and budgets. Reuse completed D and
+DM_prose references only after exact model/input and masked-wrapper parity.
+The six new source views imply 36 proposed new neural fits, not runs executed.
+The prior DM_all results remain available as references; no new bare-ID sweep.
+
+Keep sources separate: chunks -> document -> source mean -> masked attention
+over D/G/N/M -> structured late fusion -> scalar Day-60 EPSS prediction.
+Reuse v6, 32 subtype channels, frozen SecBERT and the two-layer typed-edge GNN.
+Do not infer cache compatibility from equal text alone: offsets, parser,
+passes, schemas, tokenizer/encoder identity and embeddings must also match.
+No new graph cache, embeddings, full-training runner or smoke fits are built
+by this preparation step.
+
+Report full validation and G/N-present/absent subsets, both/one/neither summary,
+the fixed 943/29 description-overlap partition, new summary-overlap sensitivity,
+and the existing version slices. Retain MAE, RMSE, R2, Pearson, Spearman, bias,
+clipping and high-score errors; use paired CVE intervals and all three seeds.
+Record source-removal diagnostics on identical CVEs. Do not promote a subgroup
+winner. These remain retrospective inputs, not verified historical forecasting.
+
+Files (under EPSS_TPG)
+Configuration: 02_prediction/04_configs/05_reddit_studies/RD02_summary_extension_v1.json
+Output: 05_results/07_reddit_studies/04_rd02_summary_extension_v1/preparation
+- REPORT.txt / findings.json / coverage.csv: readable and machine-readable facts.
+- summary_inputs.jsonl.gz: separate G/N predictor overlay for all development IDs.
+- summary_audit.jsonl.gz: provenance and quality flags, not encoder input.
+- collection_requests.jsonl.gz: missing-summary work queue, not downloaded content.
+- source_inventory.json: hashes and coverage of three full sources and six samples.
+- training_review.json: 16 training-only semantic-review candidates; judgments pending.
+- cross_role_summary_overlap.json: exact normalized development overlaps involving G/N.
+- base_artifact_references.json: links/hashes to unchanged D/M predictors, labels and vectors.
+- protocol.json / input_hashes.json / artifact_lock.json: reproducible identities.
+
+Commands, one at a time, CPU only
+cd /home/ayounas/Text_property_Graph
+conda activate CodeBERTFusion
+python -m unittest discover -s EPSS_TPG/02_prediction/03_analysis/06_reddit_dataset -p 'test_rd02_summary_extension.py'
+python EPSS_TPG/02_prediction/03_analysis/06_reddit_dataset/prepare_rd02_summary_extension.py --verify-only
+
+On a fresh checkout with no saved preparation, omit --verify-only once.
+A new fully generated summary file can be inspected with --summary-source PATH
+and --output-dir under 05_results/07_reddit_studies/04_rd02_summary_extension_v1,
+using a new destination. It must use the declared G/N summary and URL fields.
+Do not overwrite the original source or this completed preparation bundle.
+
+Next actionable step
+Use the prepared development request queue with a declared collector/prompt/
+model policy, preserving URL receipts, extracted content hashes, generation
+settings and failures. Any newly supplied summary dataset must first pass the
+same join audit. Review the training examples and summary overlap, then build
+a small source-aware cache and smoke gate before authorizing full training.
+With no G/N validation inputs, a training run cannot evaluate direct summary
+benefit. This preparation intentionally does not enable such a run.

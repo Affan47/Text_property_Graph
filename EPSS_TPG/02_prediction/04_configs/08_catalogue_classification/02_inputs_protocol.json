@@ -1,0 +1,23 @@
+{
+  "schema": "cc02_matched_inputs_v1",
+  "output": "05_results/09_catalogue_classification/03_matched_inputs_v1",
+  "snapshot": "05_results/09_catalogue_classification/01_snapshot_v1/catalogue_v1",
+  "readiness_config": "02_prediction/04_configs/07_fresh_studies/10_catalogue_readiness_v1.json",
+  "epss_date": "2026-11-17",
+  "epss_url": "https://raw.githubusercontent.com/empiricalsec/epss_scores/main/2026/epss_scores-2026-11-17.csv.gz",
+  "epss_minimum_rows": 100000,
+  "download_max_bytes": 67108864,
+  "uncompressed_max_bytes": 268435456,
+  "role_seed": 6029,
+  "role_basis_points": {"fitting": 7000, "selection": 1500, "assessment": 1500},
+  "minimum_each_class_per_role": 10,
+  "views": ["D", "DM"],
+  "post_policy": "prose_only; whole-document disclosure quarantine; no CVE deletion",
+  "group_policy": "Union across datasets of identical CVE IDs, normalized accepted D/M text, and existing Reddit evidence components; URLs alone do not merge distinct CVEs.",
+  "role_policy": "SHA256(seed + sorted component members) modulo 10000; no label stratification, seed search or redraw",
+  "interpretation": "Retrospective same-day catalogue membership; not future exploitation or future listing prediction. Inner assessment uses previously studied training records.",
+  "missing_epss": "null plus observed mask; fitting-only median and missing mask for numerical models; raw EPSS ranking additionally reported on the observed subset",
+  "cache_policy": "No prior EPSS-study cache is approved automatically. Reuse requires exact screened text, document order, processing and encoder identity; a separate cache stage must verify it.",
+  "training_enabled": false,
+  "test_access_enabled": false
+}

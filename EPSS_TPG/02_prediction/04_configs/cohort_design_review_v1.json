@@ -1,0 +1,20 @@
+{
+  "schema": "cohort_design_review_v1",
+  "anchor_day": 60,
+  "target_day": 90,
+  "expected_cves": 5968,
+  "observation_end": "2026-09-29",
+  "test_end": "2026-01-01",
+  "windows": [
+    {"name": "existing", "validation_start": "2024-01-01", "test_start": "2025-01-01"},
+    {"name": "six_month_validation", "validation_start": "2024-07-01", "test_start": "2025-01-01"},
+    {"name": "later_q1_validation", "validation_start": "2025-01-01", "test_start": "2025-04-01"},
+    {"name": "later_q2_validation", "validation_start": "2025-04-01", "test_start": "2025-07-01"}
+  ],
+  "max_url_review_items": 10,
+  "grouping_modes": ["frozen", "text_only_sensitivity"],
+  "selection_policy": "No automatic winner or new split adoption. Compare counts, temporal coverage and grouping risks only.",
+  "test_access": "Dates, grouping evidence, source presence and observation availability only; no numerical outcomes or model performance.",
+  "training": false,
+  "split_changes": false
+}

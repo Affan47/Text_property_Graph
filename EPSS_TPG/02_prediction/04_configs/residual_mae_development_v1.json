@@ -1,0 +1,30 @@
+{
+  "schema": "r07_residual_mae_development_v1",
+  "scope": "full_eligible_development_cohort_not_all_raw_cves",
+  "cohort": {"train": 1023, "validation": 197, "selection": "Exact frozen R04/DQ17-v2 development IDs; no new split or filtering"},
+  "models": ["epss_only", "no_coref"],
+  "loss": "mae",
+  "config": {
+    "hidden_size": 32, "temporal_hidden_size": 16, "graph_layers": 2,
+    "batch_size": 8, "learning_rate": 0.001, "weight_decay": 0.0001,
+    "huber_beta": 0.01, "gradient_clip_norm": 1, "dropout": 0,
+    "epochs": 100, "patience": 15, "seeds": [17, 29, 43],
+    "device": "cpu", "correction_gain": 0.00885
+  },
+  "initialization": "Fresh fixed-seed weights, matching original R04 initialization; no trained checkpoint warm start",
+  "selection": "Earliest strictly lowest validation MAE among epochs 1 onward; stop after 15 consecutive epochs without improvement; epoch zero excluded",
+  "inputs": "EPSS Days 0-30 with missingness and observation-age channels; cached description graph for no_coref",
+  "target": "Observed stored Day-60 EPSS endpoint",
+  "references": ["persistence", "full-training-fitted median scalar correction", "matched frozen R04 full Smooth L1 fits"],
+  "execution": {"threads": 1, "deterministic_algorithms": true, "device": "cpu"},
+  "additional_bounded_tuning": false,
+  "test_scoring": false,
+  "limitations": [
+    "Development validation has informed prior choices; it is not an independent final test",
+    "Partial input histories remain eligible; no fabricated target scores or future input filling",
+    "Current descriptions remain retrospective rather than authenticated historical Day-30 inputs",
+    "Selecting MAE does not establish a model improvement over persistence or useful TPG contribution",
+    "All seeds and both models are reported; no best-seed selection",
+    "After review, freeze the final evaluation protocol before a separate held-out test stage"
+  ]
+}

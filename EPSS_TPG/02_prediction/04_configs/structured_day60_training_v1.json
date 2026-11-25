@@ -1,0 +1,23 @@
+{
+  "schema": "sf02_retrospective_cvss_training_v1",
+  "variants": ["all_sources_without_cvss", "all_sources_with_current_cvss"],
+  "availability_policy": "retrospective",
+  "anchor_day": 30,
+  "target_day": 60,
+  "history": "days_0_30",
+  "loss": "mae",
+  "structured_hidden_size": 8,
+  "settings_source": "MS06 unchanged training configuration and seeds",
+  "test_scoring": false,
+  "limitations": [
+    "Current CVSS availability at Day 30 is unverified. This is not a leakage-safe historical forecast.",
+    "A CVE identifier establishes record linkage, not feature availability at a past cutoff.",
+    "Descriptions and summaries retain their existing retrospective limitations.",
+    "Stored SMP date checks do not authenticate original post content or publication time.",
+    "The two new variants have identical architecture and initialization; the control zeros the CVSS branch and its masks.",
+    "Compare these two new fits to one another, not as an exact architecture match to older MS06 fits.",
+    "Missing or unsupported CVSS vectors are masked, without removing CVEs or fabricating values.",
+    "Validation has informed development; it is not an independent final test.",
+    "No reference count, CWE, exploit flag, catalogue field or full-window EPSS version flag is used."
+  ]
+}

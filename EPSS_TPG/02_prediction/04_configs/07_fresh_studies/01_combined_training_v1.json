@@ -1,0 +1,30 @@
+{
+  "schema": "combined_training_v1",
+  "target": "retrospective_day60_epss",
+  "test_enabled": false,
+  "hidden": 32,
+  "layers": 2,
+  "readout": "mean",
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "batch_size": 8,
+  "epochs": 100,
+  "patience": 15,
+  "seeds": [17, 29, 43],
+  "edge_chunk_size": 8192,
+  "threads": 4,
+  "device": "cpu",
+  "cache_mib": 1024,
+  "ridge_alpha": 1.0,
+  "bootstrap_repetitions": 1000,
+  "bootstrap_seed": 6029,
+  "smoke_epochs": 2,
+  "smoke_batch_size": 2,
+  "selection": "Earliest strict minimum validation MAE among trained epochs",
+  "checkpoint_policy": "One best checkpoint per model and seed; no last/epoch checkpoints",
+  "full_variants": {
+    "previous": ["D", "M", "U", "DM", "DU", "DMU"],
+    "reddit": ["D", "M", "DM"]
+  },
+  "reddit_summary_gate": "U, DU and DMU implemented and smoke-tested, but full comparison deferred: zero accepted validation webpage summaries"
+}

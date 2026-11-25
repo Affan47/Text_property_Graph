@@ -1,0 +1,176 @@
+{
+  "schema_id": "security_claims",
+  "version": "1.0",
+  "entity_types": {
+    "CVE_ID": "An explicit CVE identifier in the source text, not an ID supplied only as record metadata.",
+    "VULNERABILITY": "A mention of the vulnerability being discussed; do not assume every mentioned CVE refers to the record.",
+    "SOFTWARE": "A software product or component explicitly mentioned in the source.",
+    "VERSION": "A release or version mention, without assuming whether it is affected or fixed.",
+    "VERSION_RANGE": "The original version-range expression. Do not infer unspecified endpoint inclusivity.",
+    "IMPACT": "A security consequence such as denial of service or code execution.",
+    "REMEDIATION": "A patch, update, configuration change or other mitigation mentioned in the source.",
+    "CWE_ID": "An explicit CWE identifier in the source text.",
+    "SEVERITY": "An explicitly stated vulnerability severity or CVSS assessment; not confidence or priority.",
+    "ACTOR": "A person, organization or actor mentioned as reporting or participating in an event.",
+    "EXPLOITATION_EVENT": "A textual mention of exploitation; a possible attack capability alone is not an observed event."
+  },
+  "relations": {
+    "affects": {
+      "description": "The source says a vulnerability affects a product. Preserve denial, uncertainty and conditions as qualifiers.",
+      "roles": {
+        "vulnerability": {
+          "types": [
+            "VULNERABILITY",
+            "CVE_ID"
+          ],
+          "required": true
+        },
+        "product": {
+          "types": [
+            "SOFTWARE"
+          ],
+          "required": true
+        },
+        "version": {
+          "types": [
+            "VERSION",
+            "VERSION_RANGE"
+          ],
+          "required": false
+        }
+      }
+    },
+    "affected_version": {
+      "description": "The source identifies a version or range as affected. A recommendation to upgrade is not an affected-version claim.",
+      "roles": {
+        "product": {
+          "types": [
+            "SOFTWARE"
+          ],
+          "required": true
+        },
+        "version": {
+          "types": [
+            "VERSION",
+            "VERSION_RANGE"
+          ],
+          "required": true
+        }
+      }
+    },
+    "fixed_version": {
+      "description": "The source identifies a version as fixing the issue. Distinguish asserted fixes from recommendations; do not infer this from an affected range endpoint.",
+      "roles": {
+        "product": {
+          "types": [
+            "SOFTWARE"
+          ],
+          "required": true
+        },
+        "version": {
+          "types": [
+            "VERSION",
+            "VERSION_RANGE"
+          ],
+          "required": true
+        }
+      }
+    },
+    "has_impact": {
+      "description": "The source connects a vulnerability to a consequence. May/can language denotes a possible consequence, not observed exploitation.",
+      "roles": {
+        "vulnerability": {
+          "types": [
+            "VULNERABILITY",
+            "CVE_ID"
+          ],
+          "required": true
+        },
+        "impact": {
+          "types": [
+            "IMPACT"
+          ],
+          "required": true
+        }
+      }
+    },
+    "mitigated_by": {
+      "description": "The source connects a vulnerability to a mitigation. Preserve whether it is proposed, conditional or asserted.",
+      "roles": {
+        "vulnerability": {
+          "types": [
+            "VULNERABILITY",
+            "CVE_ID"
+          ],
+          "required": true
+        },
+        "remediation": {
+          "types": [
+            "REMEDIATION"
+          ],
+          "required": true
+        }
+      }
+    },
+    "classified_as": {
+      "description": "The source explicitly links a vulnerability to a CWE identifier. Do not supply remembered classifications.",
+      "roles": {
+        "vulnerability": {
+          "types": [
+            "VULNERABILITY",
+            "CVE_ID"
+          ],
+          "required": true
+        },
+        "weakness": {
+          "types": [
+            "CWE_ID"
+          ],
+          "required": true
+        }
+      }
+    },
+    "has_severity": {
+      "description": "The source assigns severity to a vulnerability. Statement confidence and remediation priority are different concepts.",
+      "roles": {
+        "vulnerability": {
+          "types": [
+            "VULNERABILITY",
+            "CVE_ID"
+          ],
+          "required": true
+        },
+        "severity": {
+          "types": [
+            "SEVERITY"
+          ],
+          "required": true
+        }
+      }
+    },
+    "reports_exploitation": {
+      "description": "The passage reports or denies an exploitation event involving a vulnerability. This records a source claim, not verification or catalogue inclusion.",
+      "roles": {
+        "vulnerability": {
+          "types": [
+            "VULNERABILITY",
+            "CVE_ID"
+          ],
+          "required": true
+        },
+        "event": {
+          "types": [
+            "EXPLOITATION_EVENT"
+          ],
+          "required": true
+        },
+        "reporter": {
+          "types": [
+            "ACTOR"
+          ],
+          "required": false
+        }
+      }
+    }
+  }
+}

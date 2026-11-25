@@ -1,0 +1,20 @@
+{
+  "schema": "trv03_global_adamw_decay_v1",
+  "families": ["v5_node_mean", "v5_subtypes_node_mean", "v5_subtypes_type_balanced"],
+  "seeds": [17, 29, 43],
+  "control_decay": 0.0001,
+  "new_decays": [0.001, 0.01],
+  "expected_counts": {"train": 2870, "validation": 1104},
+  "control_root": "05_results/06_tpg_revision/03_v5_subtypes_comparison_v1/full",
+  "output_root": "05_results/06_tpg_revision/06_v5_regularization_v1/full",
+  "primary_metric": "Validation AP; all families/decays/seeds reported, no automatic promotion",
+  "selection": "Unchanged earliest best validation AP, patience 15, at most 100 epochs",
+  "regularization_scope": "Global AdamW decay, same parameter grouping as controls, including enabled subtype projection; no selective subtype penalty",
+  "saturation_probability_low": 0.0001,
+  "saturation_probability_high": 0.9999,
+  "large_absolute_logit": 10.0,
+  "threshold": 0.5,
+  "test_scoring": false,
+  "graph_or_subtype_changes": false,
+  "interpretation": "Exploratory retrospective VulnCheck listing classification. Weight norm alone does not prove explosion or causality. Existing final cohort remains excluded."
+}

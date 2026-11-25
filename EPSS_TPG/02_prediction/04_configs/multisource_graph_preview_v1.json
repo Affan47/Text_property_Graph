@@ -1,0 +1,24 @@
+{
+  "schema": "ms02_multisource_graph_preview_v1",
+  "preview_counts": {"train": 16, "validation": 8},
+  "selection": "Exact H01 preview IDs retained by H02; no resampling",
+  "anchor_day": 60,
+  "source_order": ["description", "github_summary", "non_github_summary", "smp"],
+  "view": "retrospective_date_screened",
+  "edge_configuration": "no_coref",
+  "extractor": "security_product_version_v4",
+  "embedding_policy": "Frozen SecBERT once per source document, shared by all source-removal views",
+  "document_policy": "Independent graph per document; original text and offsets; no truncation, cross-document links or invented missing-source graphs",
+  "source_feature_policy": "source_text_type on every node/edge; fixed source index at graph routing; no source-audit dates or labels in numeric graph inputs",
+  "training": false,
+  "full_expansion": false,
+  "test_scoring": false,
+  "limitations": [
+    "Descriptions and summaries remain retrospective; stored post dates do not authenticate historical publication.",
+    "Source text itself may describe later events; excluding structured future fields does not guarantee leakage-free text.",
+    "Candidate security relations are not verified facts.",
+    "No GitHub summary exists for the eight fixed validation preview CVEs; do not resample to improve coverage.",
+    "The no-COREF view removes explicit COREF edges, not mention nodes or other structure derived from coreference.",
+    "No graph-model training, EPSS scoring or validation performance assessment is performed in this preview."
+  ]
+}

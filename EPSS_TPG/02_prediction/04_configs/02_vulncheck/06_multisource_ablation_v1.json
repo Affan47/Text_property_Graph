@@ -1,0 +1,23 @@
+{
+  "schema": "vk07_multisource_ablation_v1",
+  "data_root": "04_data/01_records_and_graphs/vulncheck_multisource_v1",
+  "cache_root": "01_tpg/05_workspace/vulncheck_multisource_v1",
+  "result_root": "05_results/05_vulncheck_study/13_multisource_ablation_v1",
+  "source_order": ["description", "github_summary", "non_github_summary", "smp"],
+  "variants": {
+    "D": ["description"],
+    "DGN": ["description", "github_summary", "non_github_summary"],
+    "DM": ["description", "smp"],
+    "DGNM": ["description", "github_summary", "non_github_summary", "smp"]
+  },
+  "representations": ["pooled_text", "security_tpg"],
+  "settings": "Inherit unchanged VK04 per-scale optimizer, loss, seeds, budgets and checkpoint selection.",
+  "pooling": "Mean chunks within document; mean documents within source; masked source attention without an additive source embedding; structured late fusion. D explicitly uses the original VK04 head path.",
+  "source_policy": "Frozen VK02 v2 accepted documents only. Raw platform is used only to reconstruct exact document identity, never as a new predictor.",
+  "missing_sources": "Keep every CVE; exclude absent/disabled sources from attention. No missing-source text or synthetic embeddings.",
+  "reuse": "D checkpoint references unchanged. Reuse graph chunks only for exact text, source/platform identity, offsets, CVE role and processing-resource identity.",
+  "storage": "Verified external chunk references, not copies, hard links or symlinks; preserve referenced source caches. New chunks are local. All referenced files are hash-checked before training.",
+  "interpretation": "Retrospective VulnCheck snapshot classification, not historical forecasting or causal impact of social discussion.",
+  "test_scoring": false,
+  "threshold_tuning": false
+}

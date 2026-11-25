@@ -1,0 +1,19 @@
+{
+  "schema": "rd01_source_lock_v1",
+  "post_policy": "retain_all",
+  "exposure_policy": "retain_matching_prior_roles",
+  "missing_score_policy": "Nulls and status codes preserved; partial histories allowed; missing targets never imputed.",
+  "M_all": "All deduplicated Reddit attachments passing the EPSS disclosure screen, including bare identifiers.",
+  "M_prose": "Same as M_all except bare-CVE-ID-only attachments are not encoded; mask_M is zero when none remain.",
+  "disclosure_policy": "Quarantine the whole D/M document if it mentions EPSS or Exploit Prediction Scoring System. Record numeric cues separately; generic mentions are conservatively screened, not called confirmed score leaks. Apply consistently across roles. Catalogue cues are audit-only for RD02, not verified labels.",
+  "duplicate_normalization": "Unicode NFKC, casefold and whitespace collapse; identifiers, versions and numbers preserved.",
+  "near_duplicate": {"tokenization": "Unicode word tokens", "shingle_words": 5, "min_tokens": 20, "jaccard_threshold": 0.9, "candidate_search": "Exact prefix join using corpus-frequency token ordering, with exact set Jaccard verification. No approximate LSH or outcome-based sampling."},
+  "source_gate": "Unresolved cross-role normalized-exact or near-duplicate documents block RD02 source/cache approval. Freeze CVE roles as a protocol identity, not a certification of source independence. RD04 has no text predictors and is unaffected by text-content approval.",
+  "test_policy": "Audit signatures/flags and role counts only. No test text excerpts, numerical EPSS targets, predictions or descriptive score changes in outputs.",
+  "training_execution": "User only, including smoke fits. This implementation provides audit/event stages only.",
+  "event_cohort": "Frozen RD04 training and validation separately; all new held-out test and excluded records omitted from score analysis.",
+  "event_windows": [1, 7, 14, 30],
+  "event_weighting": "Primary: average event quantities within CVE then equal weight per CVE within each split/window/type/version stratum. Secondary: event-weighted medians/means and first eligible event per CVE sensitivity.",
+  "event_positive_jump": "Strictly positive daily difference, >0, no tuned threshold. Before: consecutive differences from -h to 0. After: 0 to +h. Endpoint changes and their positive fractions also reported.",
+  "event_interpretation": "Descriptive association only; post date does not verify wording history or causal impact. Require full observed window within publication-to-day90 and the role end; no interpolation. Record local release crossing separately from full-history flag."
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "h02_matched_history_controls_v1",
+  "cohort": {"train": 1029, "validation": 173},
+  "variants": ["recent_30_60", "long_0_60"],
+  "anchor_day": 60,
+  "target_day": 90,
+  "loss": "mae",
+  "channels": ["score_zero_padded", "observed_mask", "within_window_age_divided_by_60", "age_known_mask", "publication_day_divided_by_60"],
+  "config": {
+    "temporal_hidden_size": 16, "hidden_size": 32, "batch_size": 8,
+    "learning_rate": 0.001, "weight_decay": 0.0001, "gradient_clip_norm": 1.0,
+    "epochs": 100, "patience": 15, "seeds": [17, 29, 43]
+  },
+  "smoke": {"epochs": 3, "patience": 3, "seeds": [17]},
+  "gain_rule": "clip(median(latest observed EPSS per training CVE), 0.001, 0.05)",
+  "head_rule": "clip(persistence + tanh(gain * zero_initialized_final_linear(GELU(linear(GRU_hidden)))), 0, 1)",
+  "selection": "Earliest strictly best validation MAE from epoch 1; epoch zero excluded",
+  "execution": {"device": "cpu", "threads": 1, "deterministic_algorithms": true},
+  "test_scoring": false,
+  "fusion_training": false,
+  "limitations": [
+    "This task differs from R07 in anchor, target and cohort; headline scores are not a paired comparison with R07.",
+    "Validation informed earlier development; it is not an independent final evaluation.",
+    "Missing inputs remain masked; observed Day-90 targets are never imputed.",
+    "Stored daily EPSS does not establish exact release time within each date.",
+    "Longer history may add missing days rather than new observations.",
+    "Source masks support later retrospective TPG fusion, not authenticated historical text.",
+    "All seeds must be reported; smoke performance does not select settings."
+  ]
+}

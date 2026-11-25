@@ -1,0 +1,11 @@
+{
+  "schema": "ct03_bootstrap_precision_v1",
+  "threads": 4,
+  "seed_sweep": {"first_inclusive": 0, "last_inclusive": 199, "resamples": 1000},
+  "precision_check": {"seed": 6029, "resamples": [1000, 10000, 20000]},
+  "contrasts": ["merged_minus_mean", "source_minus_mean", "source_minus_merged"],
+  "metric": "mean across three seed RMSE values, not ensemble RMSE",
+  "interpretation": "Supplemental Monte Carlo sensitivity only; do not replace the original frozen interval or select a favorable seed.",
+  "training": false,
+  "test_access": false
+}

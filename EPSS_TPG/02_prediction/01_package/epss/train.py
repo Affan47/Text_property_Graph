@@ -1,0 +1,491 @@
+"""
+Training & Evaluation — GNN-based EPSS Prediction
+====================================================
+Trains the EPSSGraphClassifier on CVE TPG graphs with:
+    - Weighted BCE loss (handles ~5% class imbalance)
+    - PR-AUC as primary metric (consistent with EPSS v1/v2/v3 papers)
+    - F1, Brier score, calibration evaluation
+    - Early stopping on validation PR-AUC
+
+Usage:
+    trainer = Trainer(dataset, model, device="cuda")
+    trainer.train(epochs=100)
+    results = trainer.evaluate(split="test")
+"""
+
+import json
+import logging
+import os
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch_geometric.loader import DataLoader
+
+from epss.gnn_model import EPSSGraphClassifier, HybridEPSSClassifier
+
+logger = logging.getLogger(__name__)
+
+
+class Trainer:
+    """Training and evaluation for the EPSS GNN model.
+
+    Args:
+        dataset: CVEGraphDataset instance.
+        model: EPSSGraphClassifier instance.
+        device: 'cuda' or 'cpu'.
+        output_dir: Directory to save checkpoints and results.
+        lr: Learning rate.
+        weight_decay: L2 regularization.
+        batch_size: Training batch size.
+        patience: Early stopping patience (epochs without improvement).
+    """
+
+    def __init__(
+        self,
+        dataset,
+        model: nn.Module,
+        device: str = "cpu",
+        output_dir: str = "output/epss",
+        lr: float = 1e-3,
+        weight_decay: float = 1e-4,
+        batch_size: int = 32,
+        patience: int = 15,
+        external_test_dataset=None,
+    ):
+        self.dataset = dataset
+        self.model = model.to(device)
+        self.device = device
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        self.batch_size = batch_size
+        self.patience = patience
+
+        # Inherit label mode from dataset so compute_metrics knows how to binarize
+        self.label_mode = getattr(dataset, "label_mode", "binary")
+        logger.info("Label mode: %s", self.label_mode)
+
+        # Class weights for imbalanced data
+        class_weights = dataset.get_class_weights()
+        self.pos_weight = torch.tensor(
+            [class_weights[1] / class_weights[0]], device=device
+        )
+        logger.info("Class weights: neg=%.3f, pos=%.3f (pos_weight=%.3f)",
+                     class_weights[0], class_weights[1], self.pos_weight.item())
+
+        self.criterion = nn.BCEWithLogitsLoss(pos_weight=self.pos_weight)
+        self.optimizer = optim.AdamW(
+            model.parameters(), lr=lr, weight_decay=weight_decay
+        )
+        self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+            self.optimizer, mode="max", factor=0.5, patience=5, min_lr=1e-6
+        )
+
+        # Data splits. If an external test dataset is provided, do not create a
+        # random internal test split from the training file. This is the mode
+        # needed for real temporal evaluation: train on older CVEs, test on
+        # later-year CVEs.
+        if external_test_dataset is None:
+            splits = dataset.get_split_indices()
+            self.train_loader = DataLoader(
+                dataset[splits["train"]], batch_size=batch_size, shuffle=True,
+                drop_last=True,
+            )
+            self.val_loader = DataLoader(
+                dataset[splits["val"]], batch_size=batch_size
+            )
+            self.test_loader = DataLoader(
+                dataset[splits["test"]], batch_size=batch_size
+            )
+            self._log_split_stats(splits, dataset)
+            logger.info(
+                "Splits: train=%d, val=%d, test=%d",
+                len(splits["train"]), len(splits["val"]), len(splits["test"]),
+            )
+        else:
+            splits = self._train_val_split_indices(dataset, train_ratio=0.85, seed=42)
+            self.train_loader = DataLoader(
+                dataset[splits["train"]], batch_size=batch_size, shuffle=True,
+                drop_last=True,
+            )
+            self.val_loader = DataLoader(
+                dataset[splits["val"]], batch_size=batch_size
+            )
+            self.test_loader = DataLoader(
+                external_test_dataset, batch_size=batch_size
+            )
+            self._log_split_stats(splits, dataset)
+            self._log_external_dataset_stats("external_test", external_test_dataset)
+            logger.info(
+                "Splits: train=%d, val=%d, external_test=%d",
+                len(splits["train"]), len(splits["val"]), len(external_test_dataset),
+            )
+
+    def train(self, epochs: int = 100) -> Dict[str, list]:
+        """Train the model with early stopping on validation PR-AUC.
+
+        Returns:
+            history dict with train_loss, val_loss, val_prauc per epoch.
+        """
+        history = {"train_loss": [], "val_loss": [], "val_prauc": [], "val_f1": []}
+        best_prauc = 0.0
+        best_epoch = 0
+        no_improve = 0
+
+        for epoch in range(1, epochs + 1):
+            # Train
+            train_loss = self._train_epoch()
+
+            # Validate
+            val_metrics, _, _, _ = self._evaluate(self.val_loader)
+
+            # LR scheduling
+            self.scheduler.step(val_metrics["pr_auc"])
+
+            history["train_loss"].append(train_loss)
+            history["val_loss"].append(val_metrics["loss"])
+            history["val_prauc"].append(val_metrics["pr_auc"])
+            history["val_f1"].append(val_metrics["f1"])
+
+            lr = self.optimizer.param_groups[0]["lr"]
+            logger.info(
+                "Epoch %3d | train_loss=%.4f | val_loss=%.4f | "
+                "val_PR-AUC=%.4f | val_F1=%.4f | lr=%.2e",
+                epoch, train_loss, val_metrics["loss"],
+                val_metrics["pr_auc"], val_metrics["f1"], lr,
+            )
+
+            # Early stopping
+            if val_metrics["pr_auc"] > best_prauc:
+                best_prauc = val_metrics["pr_auc"]
+                best_epoch = epoch
+                no_improve = 0
+                self._save_checkpoint("best_model.pt", epoch, val_metrics)
+            else:
+                no_improve += 1
+                if no_improve >= self.patience:
+                    logger.info(
+                        "Early stopping at epoch %d (best PR-AUC=%.4f at epoch %d)",
+                        epoch, best_prauc, best_epoch,
+                    )
+                    break
+
+        # Save training history
+        with open(self.output_dir / "training_history.json", "w") as f:
+            json.dump(history, f, indent=2)
+
+        return history
+
+    def _train_epoch(self) -> float:
+        """Single training epoch."""
+        self.model.train()
+        total_loss = 0.0
+        n_batches = 0
+
+        for batch in self.train_loader:
+            batch = batch.to(self.device)
+            self.optimizer.zero_grad()
+
+            logits = self.model(batch).view(-1)
+            labels = batch.y.float().view(-1)
+            loss = self.criterion(logits, labels)
+
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
+            self.optimizer.step()
+
+            total_loss += loss.item()
+            n_batches += 1
+
+        return total_loss / max(n_batches, 1)
+
+    def _log_split_stats(self, splits: dict, dataset) -> None:
+        """Log label distribution for each split — essential debug info."""
+        threshold = getattr(dataset, "SOFT_POS_THRESHOLD", 0.1)
+        for split_name, indices in splits.items():
+            if not indices:
+                logger.warning("Split '%s' is empty!", split_name)
+                continue
+            ys = [dataset[i].y.item() for i in indices]
+            arr = np.array(ys)
+            n_pos = sum(1 for v in ys if dataset._is_positive(v))
+            logger.info(
+                "Split %-5s | n=%4d | n_pos=%4d (%.1f%%) | "
+                "y_min=%.4f | y_max=%.4f | y_mean=%.4f",
+                split_name, len(ys), n_pos, 100 * n_pos / max(len(ys), 1),
+                arr.min(), arr.max(), arr.mean(),
+            )
+            if n_pos == 0:
+                logger.warning(
+                    "Split '%s' has 0 positives! label_mode='%s', threshold=%.2f. "
+                    "y values sample: %s",
+                    split_name, self.label_mode, threshold,
+                    [f"{v:.4f}" for v in ys[:10]],
+                )
+
+    def _train_val_split_indices(
+        self, dataset, train_ratio: float = 0.85, seed: int = 42
+    ) -> Dict[str, List[int]]:
+        """Create a stratified train/val split with no internal test split."""
+        rng = np.random.RandomState(seed)
+        pos_indices = []
+        neg_indices = []
+        for i in range(len(dataset)):
+            if dataset._is_positive(dataset[i].y.item()):
+                pos_indices.append(i)
+            else:
+                neg_indices.append(i)
+
+        rng.shuffle(pos_indices)
+        rng.shuffle(neg_indices)
+
+        n_pos_train = int(len(pos_indices) * train_ratio)
+        n_neg_train = int(len(neg_indices) * train_ratio)
+        if len(pos_indices) > 1:
+            n_pos_train = min(max(1, n_pos_train), len(pos_indices) - 1)
+        if len(neg_indices) > 1:
+            n_neg_train = min(max(1, n_neg_train), len(neg_indices) - 1)
+
+        return {
+            "train": pos_indices[:n_pos_train] + neg_indices[:n_neg_train],
+            "val": pos_indices[n_pos_train:] + neg_indices[n_neg_train:],
+        }
+
+    def _log_external_dataset_stats(self, name: str, dataset) -> None:
+        """Log label distribution for an external held-out dataset."""
+        if len(dataset) == 0:
+            logger.warning("External dataset '%s' is empty!", name)
+            return
+        ys = [dataset[i].y.item() for i in range(len(dataset))]
+        arr = np.array(ys)
+        n_pos = sum(1 for v in ys if dataset._is_positive(v))
+        logger.info(
+            "Split %-13s | n=%4d | n_pos=%4d (%.1f%%) | "
+            "y_min=%.4f | y_max=%.4f | y_mean=%.4f",
+            name, len(ys), n_pos, 100 * n_pos / max(len(ys), 1),
+            arr.min(), arr.max(), arr.mean(),
+        )
+
+    def _evaluate(
+        self, loader: DataLoader, collect_ids: bool = False
+    ) -> Tuple[Dict[str, float], Optional[List[str]], Optional[np.ndarray], Optional[np.ndarray]]:
+        """Evaluate model on a data loader.
+
+        Returns:
+            metrics dict, and optionally (cve_ids, y_prob, y_true) if collect_ids=True.
+        """
+        self.model.eval()
+        all_probs = []
+        all_labels = []
+        all_ids = []
+        total_loss = 0.0
+        n_batches = 0
+
+        with torch.no_grad():
+            for batch in loader:
+                batch = batch.to(self.device)
+                logits = self.model(batch).view(-1)
+                labels = batch.y.float().view(-1)
+
+                loss = self.criterion(logits, labels)
+                total_loss += loss.item()
+                n_batches += 1
+
+                probs = torch.sigmoid(logits).cpu().numpy()
+                all_probs.extend(probs.tolist())
+                # Keep as float — soft mode labels are EPSS scores (0.0–1.0)
+                # Do NOT cast to int here; compute_metrics handles binarization
+                all_labels.extend(labels.cpu().numpy().tolist())
+
+                if collect_ids and hasattr(batch, "cve_id"):
+                    ids = batch.cve_id
+                    if isinstance(ids, (list, tuple)):
+                        all_ids.extend(ids)
+                    else:
+                        all_ids.append(str(ids))
+
+        all_probs = np.array(all_probs)
+        all_labels = np.array(all_labels, dtype=np.float32)
+
+        # Debug: log what we're about to score
+        n_pos_raw = int((all_labels >= 0.1).sum()) if self.label_mode == "soft" else int(all_labels.sum())
+        logger.debug(
+            "_evaluate | n=%d | label_mode=%s | y_min=%.4f | y_max=%.4f | n_pos=%d",
+            len(all_labels), self.label_mode, all_labels.min(), all_labels.max(), n_pos_raw,
+        )
+
+        metrics = compute_metrics(all_labels, all_probs, label_mode=self.label_mode)
+        metrics["loss"] = total_loss / max(n_batches, 1)
+
+        if collect_ids:
+            return metrics, all_ids, all_probs, all_labels
+        return metrics, None, None, None
+
+    def evaluate_test(
+        self,
+        backbone: str = "",
+        history: Optional[Dict[str, list]] = None,
+        results_root: Optional[Path] = None,
+    ) -> Dict[str, float]:
+        """Final evaluation on the held-out test set.
+
+        Loads the best checkpoint, runs evaluation, saves predictions.csv
+        and generates all visualization plots.
+
+        Args:
+            backbone:     Backbone name for plot titles.
+            history:      Training history dict (for training curves plot).
+            results_root: Parent of all experiment output dirs (for comparison heatmap).
+        """
+        ckpt_path = self.output_dir / "best_model.pt"
+        if ckpt_path.exists():
+            self._load_checkpoint(ckpt_path)
+
+        # Also dump val predictions so downstream threshold tuning can use a
+        # held-out (non-test) split without re-running inference.
+        try:
+            val_metrics, val_ids, val_prob, val_true = self._evaluate(
+                self.val_loader, collect_ids=True
+            )
+            import pandas as _pd
+            _val_true_arr = np.asarray(val_true, dtype=float)
+            _val_true_bin = (_val_true_arr >= 0.1).astype(int)
+            _pd.DataFrame({
+                "cve_id": val_ids or [""] * len(val_prob),
+                "true_score": np.round(_val_true_arr, 6),
+                "true_label": _val_true_bin,
+                "predicted_prob": np.round(val_prob, 6),
+                "split": "val",
+            }).to_csv(self.output_dir / "predictions_val.csv", index=False)
+            with open(self.output_dir / "val_results.json", "w") as f:
+                json.dump(val_metrics, f, indent=2)
+        except Exception as e:
+            logger.warning("Val prediction dump failed (non-fatal): %s", e)
+
+        metrics, cve_ids, y_prob, y_true = self._evaluate(
+            self.test_loader, collect_ids=True
+        )
+
+        logger.info("=" * 60)
+        logger.info("TEST RESULTS")
+        logger.info("=" * 60)
+        logger.info("PR-AUC:      %.4f", metrics["pr_auc"])
+        logger.info("ROC-AUC:     %.4f", metrics["roc_auc"])
+        logger.info("F1:          %.4f", metrics["f1"])
+        logger.info("Precision:   %.4f", metrics["precision"])
+        logger.info("Recall:      %.4f", metrics["recall"])
+        logger.info("Brier Score: %.4f", metrics["brier"])
+        logger.info("=" * 60)
+
+        with open(self.output_dir / "test_results.json", "w") as f:
+            json.dump(metrics, f, indent=2)
+
+        # ── Visualizations & Predictions ────────────────────────────────────
+        try:
+            from epss.visualize import generate_all
+            generate_all(
+                cve_ids=cve_ids or [],
+                y_true=y_true,
+                y_prob=y_prob,
+                history=history or {},
+                metrics=metrics,
+                output_dir=self.output_dir,
+                backbone=backbone,
+                threshold=metrics.get("threshold", 0.5),
+                results_root=results_root,
+            )
+        except Exception as e:
+            logger.warning("Visualization failed (non-fatal): %s", e)
+
+        return metrics
+
+    def _save_checkpoint(self, name: str, epoch: int, metrics: dict):
+        path = self.output_dir / name
+        torch.save({
+            "epoch": epoch,
+            "model_state_dict": self.model.state_dict(),
+            "optimizer_state_dict": self.optimizer.state_dict(),
+            "metrics": metrics,
+        }, path)
+
+    def _load_checkpoint(self, path):
+        ckpt = torch.load(path, map_location=self.device, weights_only=False)
+        self.model.load_state_dict(ckpt["model_state_dict"])
+        logger.info("Loaded checkpoint from %s (epoch %d)", path, ckpt.get("epoch", "?"))
+
+
+def compute_metrics(
+    y_true: np.ndarray, y_prob: np.ndarray, threshold: float = 0.5,
+    soft_pos_threshold: float = 0.1,
+    label_mode: str = "binary",
+) -> Dict[str, float]:
+    """Compute all evaluation metrics consistent with EPSS papers.
+
+    Handles both label modes:
+      - binary mode: y_true is 0/1 (KEV labels)
+      - soft mode:   y_true is raw EPSS float (0.0–1.0); binarized at
+                     soft_pos_threshold before computing classification metrics.
+
+    Metrics:
+        - PR-AUC (primary metric — used by EPSS v1/v2/v3)
+        - ROC-AUC
+        - F1 score (at given threshold)
+        - Precision (EPSS "efficiency")
+        - Recall (EPSS "coverage")
+        - Brier score (calibration quality)
+
+    Args:
+        y_true:             Ground truth labels (binary 0/1 or soft EPSS float).
+        y_prob:             Predicted probabilities (0.0 to 1.0).
+        threshold:          Decision threshold for binary predictions.
+        soft_pos_threshold: EPSS score cutoff used to binarize soft labels.
+        label_mode:         'soft' or 'binary'. When 'soft', always binarize
+                            at soft_pos_threshold regardless of value range.
+
+    Returns:
+        dict of metric name -> value.
+    """
+    from sklearn.metrics import (
+        precision_recall_curve, auc,
+        roc_auc_score, f1_score,
+        precision_score, recall_score,
+        brier_score_loss,
+    )
+
+    # Binarize based on explicit label_mode — do NOT rely on value range alone.
+    # When label_mode='soft', y_true holds raw EPSS floats; casting to int
+    # would zero out everything below 1.0 (i.e., all of them).
+    if label_mode == "soft":
+        y_true_binary = (y_true >= soft_pos_threshold).astype(int)
+    else:
+        # binary mode: also accept any float representation of {0, 1}
+        y_true_binary = (y_true >= 0.5).astype(int)
+
+    # PR-AUC (primary metric)
+    precision_curve, recall_curve, _ = precision_recall_curve(y_true_binary, y_prob)
+    pr_auc = auc(recall_curve, precision_curve)
+
+    # ROC-AUC
+    try:
+        roc_auc = roc_auc_score(y_true_binary, y_prob)
+    except ValueError:
+        roc_auc = 0.0
+
+    # Binary predictions at threshold
+    y_pred = (y_prob >= threshold).astype(int)
+
+    return {
+        "pr_auc": float(pr_auc),
+        "roc_auc": float(roc_auc),
+        "f1": float(f1_score(y_true_binary, y_pred, zero_division=0)),
+        "precision": float(precision_score(y_true_binary, y_pred, zero_division=0)),
+        "recall": float(recall_score(y_true_binary, y_pred, zero_division=0)),
+        "brier": float(brier_score_loss(y_true_binary, y_prob)),
+        "threshold": threshold,
+        "n_samples": len(y_true_binary),
+        "n_positive": int(y_true_binary.sum()),
+        "prevalence": float(y_true_binary.mean()),
+    }

@@ -1,0 +1,50 @@
+{
+  "schema": "ms04_day60_multisource_preparation_v1",
+  "anchor_day": 30,
+  "target_day": 60,
+  "horizon_days": 30,
+  "history": "days_0_30",
+  "expected_source_cves": 5968,
+  "split_boundary_shift_days": -30,
+  "split_policy": {
+    "validation_start": "2025-03-02",
+    "test_start": "2025-06-01",
+    "test_end": "2025-12-02",
+    "observation_end": "2026-09-29"
+  },
+  "split_rule": "Shift the CD02 anchor-based split boundaries 30 days earlier with the prediction anchor. Keep the dataset observation cutoff unchanged. Require every CVE's role to equal its saved CD02 role. This is a publication-cohort-aligned two-endpoint design, not identical calendar forecast cutoffs.",
+  "smoke_counts": {"train": 16, "validation": 8},
+  "selection_salt": "ms04-day60-multisource-v1:",
+  "source_order": ["description", "github_summary", "non_github_summary", "smp"],
+  "source_view": "retrospective_date_screened_train_overlap_masked",
+  "source_rule": "Reapply the frozen source adapter at Day 30. SMP dates must be strictly before the anchor, present, parseable and nonconflicting. Descriptions and summaries remain retrospective. Build a new full eligible-training text registry; mask only optional matching validation documents. Never reuse Day-60 source masks.",
+  "eligibility_rule": "At least one observed input EPSS on Days 0-30 and an observed Day-60 target. Keep partial histories and missing text sources. Do not require a Day-90 score or select by score magnitude.",
+  "sequence_contract": {
+    "length": 31,
+    "channels": ["score_or_zero", "observed_mask", "age_days_div_60", "age_known_mask", "day_offset_div_60"],
+    "normalization_denominator": 60
+  },
+  "planned_matched_training": {
+    "variants": ["epss_only", "description_epss", "all_sources_epss"],
+    "reference": "latest_observed_input_epss",
+    "loss": "mae",
+    "seeds": [17, 29, 43],
+    "epochs": 100,
+    "patience": 15,
+    "settings_rule": "Reuse the fixed MS03 model family and optimizer settings in a separately versioned Day-60 runner after this export and its graph cache are verified. All three variants must use identical Day-60 CVEs. No optimizer tuning is performed by this preparation."
+  },
+  "training": false,
+  "graph_generation": false,
+  "embedding_generation": false,
+  "test_export": false,
+  "limitations": [
+    "CVE identities are distinct, not proven unrelated vulnerability families. Shared descriptions are retained.",
+    "Current descriptions and summaries are not verified Day-30 snapshots. Text may describe later events.",
+    "Stored SMP date screening is not proof of historical publication or content availability.",
+    "EPSS dates do not prove the exact daily score release time.",
+    "Boundary dates differ between horizons to preserve publication cohorts; horizon-specific eligibility can still differ.",
+    "The existing 651 reserved CVE roles are preserved, but their Day-60 target eligibility is not inspected in this stage.",
+    "Earlier validation has informed development. These are development exports, not final independent evaluation.",
+    "The MS03 learned branches collapsed. Completing this endpoint does not promise an improvement or change its frozen results."
+  ]
+}

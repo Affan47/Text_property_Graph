@@ -1,0 +1,36 @@
+{
+  "schema": "ms03_matched_multisource_training_v1",
+  "variants": ["epss_only", "description_epss", "all_sources_epss"],
+  "history": "recent_30_60",
+  "anchor_day": 60,
+  "target_day": 90,
+  "cohort": {"train": 2548, "validation": 1104},
+  "loss": "mae",
+  "edge_configuration": "no_coref",
+  "source_order": ["description", "github_summary", "non_github_summary", "smp"],
+  "config": {
+    "temporal_hidden_size": 16, "hidden_size": 32, "graph_layers": 2,
+    "dropout": 0.1, "batch_size": 8, "learning_rate": 0.001,
+    "weight_decay": 0.0001, "gradient_clip_norm": 1.0,
+    "epochs": 100, "patience": 15, "seeds": [17, 29, 43],
+    "graph_batch_nodes": 8192, "graph_batch_edges": 32768,
+    "checkpoint_graph_activations": true
+  },
+  "smoke": {"epochs": 3, "patience": 3, "seeds": [17]},
+  "head_rule": "clip(latest_observed_EPSS + tanh(training_gain * zero_initialized_final_linear), 0, 1)",
+  "pooling": "Mean nodes per chunk, mean chunks per document, mean documents per source; masked attention over available sources conditioned on EPSS hidden state; concatenate temporal state, fused text and source masks.",
+  "initialization": "Identical complete initial state per seed across all three modes; inactive graph modules are not executed and receive no gradients in EPSS-only.",
+  "selection": "Earliest strictly best validation MAE from epoch 1; epoch zero excluded; all seeds reported.",
+  "execution": {"device": "cpu", "default_threads": 4, "default_cache_gib": 12},
+  "test_scoring": false,
+  "limitations": [
+    "Current descriptions and summaries are retrospective, not authenticated Day-60 content.",
+    "Stored SMP date screening alone does not establish historical publication or content availability.",
+    "CVE IDs are disjoint; vulnerability families and all shared evidence are not proven disjoint.",
+    "TPG validity and version-edge coverage do not establish semantic correctness or forecasting benefit.",
+    "Long documents are retained without truncation; independent chunks omit cross-chunk relations.",
+    "Validation has informed earlier development; only the reserved test set can provide later final evaluation.",
+    "This expanded cohort requires fresh matched controls; earlier H02/R07 scores are not directly comparable.",
+    "Smoke metrics check integration only; they do not select configurations or seeds."
+  ]
+}

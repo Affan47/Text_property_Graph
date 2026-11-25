@@ -1,0 +1,11 @@
+{
+  "schema": "gv01_gain_validation_v1",
+  "variants": ["epss_only", "all_sources_epss"],
+  "gain": 1.0,
+  "anchor_day": 30,
+  "target_day": 60,
+  "cohort": {"train": 2519, "validation": 1104},
+  "settings": "Inherit unchanged MS06 settings, batch orders and earliest best validation MAE selection from epoch 1.",
+  "controls": "Reuse locked MS06 fits with matching initialization and cohort; do not retrain original controls.",
+  "test_scoring": false
+}

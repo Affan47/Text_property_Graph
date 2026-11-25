@@ -1,0 +1,171 @@
+RD02 / RD04: frozen full-development execution
+============================================
+
+Execution ownership
+-------------------
+The user runs the full cache build and training. Implementation checks replay
+existing smoke results and use synthetic data in unit tests. They do not launch
+the full cache build or fit models to the real development cohorts.
+
+Run commands individually, in order. Stop if a command fails. All commands below
+use CPU; the frozen settings do not offer a GPU switch. The NVML warning does not
+prevent these CPU runs. Do not edit source files while a run is active.
+
+cd /home/ayounas/Text_property_Graph
+conda activate CodeBERTFusion
+RUNNER=EPSS_TPG/02_prediction/03_analysis/06_reddit_dataset/run_reddit_development.py
+
+1. Verify the implementation and existing gates
+----------------------------------------------
+python -m unittest discover -s EPSS_TPG/02_prediction/03_analysis/06_reddit_dataset -p 'test_*.py'
+python "$RUNNER" --stage preflight --verify-only
+python "$RUNNER" --stage replay-gates
+
+The published preflight is an implementation deliverable. If using a fresh
+checkout without that output, run --stage preflight once without --verify-only,
+then verify it. --check-only prints the checks without publishing a preflight.
+The original RD04 verification recomputes the training-only lead medians from
+the tiny smoke cohort; it does not retrain neural models or change old results.
+
+2. Exercise the new runner on the existing small development subset
+----------------------------------------------------------------
+These are optional additional integration fits, separate from the original
+immutable smoke outputs. They are not hyperparameter-selection experiments.
+
+python "$RUNNER" --task RD02 --stage train --scale smoke --resume
+python "$RUNNER" --task RD02 --stage train --scale smoke --verify-only
+python "$RUNNER" --task RD04 --stage train --scale smoke --resume
+python "$RUNNER" --task RD04 --stage train --scale smoke --verify-only
+python "$RUNNER" --task RD04 --stage counterfactuals --scale smoke --resume
+python "$RUNNER" --task RD04 --stage counterfactuals --scale smoke --verify-only
+
+3. Build and independently verify the full RD02 cache
+----------------------------------------------------
+python "$RUNNER" --task RD02 --stage cache --scale full --workers 4 --resume
+python "$RUNNER" --task RD02 --stage cache --scale full --verify-only
+
+The cache contains only 24,213 training and 972 validation CVEs: 53,052 documents
+and 66,800 chunks. Existing matching smoke/gate chunks can be copied after their
+identities are checked. Missing chunks use the frozen v6 frontend, 32 subtype
+channels, no_coref edges and the pinned SecBERT encoder.
+
+Important correction to the proposed instructions: the frozen source chunk
+limit is 1,200 characters, not 4,096. The latter is the graph packet node budget.
+The existing whitespace-boundary behavior is retained, including possible
+overshoot for a long indivisible span. Changing chunking would change the study.
+
+The initial estimate is 43.55 GiB, plus an 8 GiB operating reserve. This is not
+a guaranteed upper bound. Workers check free space while building; a low-space
+stop leaves completed receipts available for --resume. The cache uses durable
+project storage, not /tmp. No old hardlinked cache files are overwritten.
+
+4. Train the full RD02 comparison and replay the saved checkpoints
+----------------------------------------------------------------
+python "$RUNNER" --task RD02 --stage train --scale full --resume
+python "$RUNNER" --task RD02 --stage train --scale full --verify-only
+
+Twenty-one predictors: training mean, training median, structured ridge, and
+the six D/DM_all/DM_prose by pooled_text/v6_tpg families at seeds 17, 29 and 43.
+The graph model includes the 32-channel subtype projection, as in the registered
+v2 specification and accepted smoke results. Hyperparameters remain fixed.
+
+Reports include the full 972 validation CVEs, the 943/29 description-overlap
+partitions, the 968/4 prose-availability partitions and EPSS-version partitions.
+Undefined values are null. The fixed 0.1 high-score threshold is descriptive;
+it is not tuned and does not turn this regression into a KEV classifier.
+
+5. Train the separate RD04 daily forecasting comparison and verify it
+--------------------------------------------------------------------
+python "$RUNNER" --task RD04 --stage train --scale full --resume
+python "$RUNNER" --task RD04 --stage train --scale full --verify-only
+
+RD04 has 24,548 training CVEs / 96,289,074 cells and 1,106 validation CVEs /
+3,692,438 cells. The primary Day-30 to Day-60 slice has 24,179 training and 972
+validation CVEs. Its predictors are persistence, training-only weighted-median
+lead correction and the three fixed-seed GRUs. Inputs end at the anchor; missing
+targets are not imputed. Model selection uses clipped validation primary MAE.
+Epoch 0 must equal persistence exactly but is not eligible for selection.
+
+6. Run frozen-checkpoint diagnostics, then combine the reports
+-------------------------------------------------------------
+python "$RUNNER" --task RD04 --stage counterfactuals --scale full --resume
+python "$RUNNER" --task RD04 --stage counterfactuals --scale full --verify-only
+python "$RUNNER" --stage report --scale full
+python "$RUNNER" --stage report --scale full --verify-only
+
+flat_history tests sensitivity to prior score fluctuations. last_obs_only
+changes value availability, masks, age and known-history together. The constant
+shift is estimated post-hoc from validation primary-slice neural residuals and
+then held fixed across slices. It is not a training-fitted control. Gain-share
+ratios can be negative or above 100%; near-zero denominators yield null. These
+diagnostics do not prove causal mechanisms or universal forecasting limits.
+
+Output locations (relative to EPSS_TPG)
+---------------------------------------
+01_tpg/05_workspace/rd02_primary_v1/full/
+  Human-readable graphs, tensors, receipts, source index, counts and hash lock.
+05_results/07_reddit_studies/02_rd02_primary_v1/full/
+  controls/, fits/, recovery/, report/, artifact_lock.json.
+05_results/07_reddit_studies/01_rd04_daily_v1/full/
+  controls/, seed_17/, seed_29/, seed_43/, recovery/, report/, artifact_lock.json.
+05_results/07_reddit_studies/01_rd04_daily_v1/counterfactuals_v1/full/
+  Frozen-checkpoint predictions and diagnostic reports with their own lock.
+05_results/07_reddit_studies/03_full_development_release_v1/full/
+  Combined REPORT.txt, findings.json, metric CSVs and all three result-lock hashes.
+
+Counterfactuals are deliberately outside the completed RD04 training directory,
+so adding diagnostics cannot invalidate its immutable artifact lock. Each fit
+records selected epoch, epoch history, runtime and checkpoint identity. Tables
+and compressed predictions are canonically ordered for byte-level replay.
+
+Recovery and scientific boundaries
+----------------------------------
+For the later U+200D / U+FE0F formatting-token failure, use the v2 repair below.
+It scans the development chunks for standalone format/control/nonspacing tokens
+outside the original coverage exceptions, then repairs only missing candidates.
+All three currently unfinished candidates were checked with real frozen SecBERT.
+The earlier soft-hyphen repair and all completed chunk receipts remain unchanged.
+
+python EPSS_TPG/02_prediction/03_analysis/06_reddit_dataset/repair_rd02_format_cache.py --check-only
+python EPSS_TPG/02_prediction/03_analysis/06_reddit_dataset/repair_rd02_format_cache.py
+python EPSS_TPG/02_prediction/03_analysis/06_reddit_dataset/repair_rd02_format_cache.py --verify-only
+python "$RUNNER" --task RD02 --stage cache --scale full --workers 4 --resume
+python "$RUNNER" --task RD02 --stage cache --scale full --verify-only
+
+Unicode category alone is never sufficient for an exception: exact source spans,
+empty pinned normalization, zero standalone tokenizer IDs and absence of overlap
+with contextual tokenizer offsets are required. Letters, visible emoji, words
+containing format characters, and other genuinely missing embeddings still fail.
+Existing source identities are preserved; the additive exception is explicitly
+versioned and included in the full cache's eventual artifact lock.
+
+If cache construction stops on the U+00AD-only token in CVE-2021-26414, use
+the bounded, separately recorded coverage repair below. This does not edit the
+frozen extractors, rebuild completed chunks, or launch training. It preserves
+the source text and graph node, with a zero embedding vector and mask=0, only
+after proving the pinned tokenizer removes the token without contextual overlap.
+It does not exempt ordinary words or mixed soft-hyphen/word tokens.
+
+python EPSS_TPG/02_prediction/03_analysis/06_reddit_dataset/repair_rd02_soft_hyphen_cache.py --check-only
+python EPSS_TPG/02_prediction/03_analysis/06_reddit_dataset/repair_rd02_soft_hyphen_cache.py
+python EPSS_TPG/02_prediction/03_analysis/06_reddit_dataset/repair_rd02_soft_hyphen_cache.py --verify-only
+python "$RUNNER" --task RD02 --stage cache --scale full --workers 4 --resume
+python "$RUNNER" --task RD02 --stage cache --scale full --verify-only
+
+The full cache includes the additive coverage_extensions manifest and its source
+hashes in its final lock. The old processing identity remains the identity of
+the unchanged extraction/embedding pipeline; the exception has a separate,
+explicit versioned identity. Verify the repair before continuing to training.
+
+--resume skips verified completed fits and resumes an interrupted fit from its
+last complete epoch, including optimizer and RNG state. It may replay work from
+the interrupted epoch. Completed results require --verify-only, not --resume.
+One CLI job holds an execution lock; run these stages sequentially.
+
+No held-out test adapter, cache or scorer is exposed. RD02 is retrospective
+Day-60 estimation; it does not assert historical text availability. RD04 uses
+EPSS histories only. All three seeds are retained, with arithmetic means of
+metrics and paired same-seed effects, never averaged-prediction ensembles.
+CVE bootstrap intervals do not remove dependence from shared advisories.
+No final results should be claimed until the user completes and verifies the
+full runs. Do not tune settings based on optional smoke outcomes.

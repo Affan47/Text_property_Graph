@@ -1,0 +1,44 @@
+{
+  "schema": "ct08_catalogue_readiness_v1",
+  "training_enabled": false,
+  "network_enabled": false,
+  "test_access_enabled": false,
+  "temporal_anchor_days": [0, 30],
+  "horizons_days": [30, 60, 90],
+  "text_screen_anchor_days": 30,
+  "midnight_event_policy": "Unknown time within the stored day; not proof of a precise midnight event",
+  "naive_publication_timezone": "UTC assumed, explicitly flagged",
+  "output": "05_results/08_fresh_studies/15_catalogue_readiness_v1",
+  "datasets": {
+    "reddit": {
+      "output_name": "01_reddit",
+      "expected_candidates": 24599,
+      "expected_epss_train": 24213,
+      "raw": "04_data/03_reddit_collection/03_official_recovery_v2/reddit_posts_vc_kev_epss_v2.json",
+      "raw_sha256": "b74b501609d68046cb3941c63e511cf80702fdce50bfaa064d0bc343c9be7309",
+      "roles": "05_results/03_dataset_analysis/02_reddit_dataset/08_rd01_source_lock_v1/rd01_frozen_manifest.json",
+      "roles_sha256": "405d471cb732078542a7b41f353b1243f88f41dae2d234e5fa82717d50360c28",
+      "candidates": "05_results/03_dataset_analysis/02_reddit_dataset/04_premodeling_gates_v1/stage1_sanitization/predictor_candidates.jsonl.gz",
+      "candidates_sha256": "194fa67bb0f13a522c7f4bc9591965d58521f57741e36897e9c6ddc1aabf7e38",
+      "components": "05_results/03_dataset_analysis/02_reddit_dataset/04_premodeling_gates_v1/stage1_sanitization/connected_components.json",
+      "components_sha256": "4e4ceb2a4b3dfb637a323fb648c6cab1e67e6b48fb3ff1291f6d13de8d4311f9",
+      "epss_protocol": "05_results/08_fresh_studies/11_training_only_pooled_mse_v1/01_reddit/protocol/protocol.json",
+      "epss_protocol_sha256": "76ff5ad01d652a389a6726115b5a71ff9278ba3f1bf5a6a213b8d44015bde2e2",
+      "default_receipts": "05_results/03_dataset_analysis/02_reddit_dataset/04_premodeling_gates_v1/stage1_vulncheck_bounded"
+    },
+    "previous": {
+      "output_name": "02_previous_multisource",
+      "expected_candidates": 2870,
+      "expected_epss_train": 2546,
+      "raw": "../SummTPGVul/Sec4AI4Sec-EPSS/Data_Files/epss_recollected_2026-09-30_smp.json",
+      "raw_sha256": "506ae7da7c9202ca132e4e7ff8511f1fbbea9ab534630374dde5370e0ecfd43c",
+      "roles": "04_data/01_records_and_graphs/cve_identity_day30_to_day60_v1/full/split_manifest.json",
+      "roles_sha256": "daabdface3324e206e1b0f22e87cb97fd18c10d7e646c72a478c89b154f41d6e",
+      "kev_identity": "04_data/01_records_and_graphs/vulncheck_snapshot_v2/full/run_identity.json",
+      "kev_identity_sha256": "6a4af6321027f54cf3a9e2607640a7a6a810b320bd1025687c8cdecaf8db8788",
+      "epss_protocol": "05_results/08_fresh_studies/11_training_only_pooled_mse_v1/02_previous_multisource/protocol/protocol.json",
+      "epss_protocol_sha256": "63b2a8cc39520884cf35e55a47b99a5b4a96c44fc183cb2838889ea16a231ff2",
+      "default_receipts": null
+    }
+  }
+}

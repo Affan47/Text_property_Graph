@@ -1,0 +1,68 @@
+{
+  "schema": "r04_coreference_residual_development_v2",
+  "status": "planned_not_runnable_pending_smoke_verification_and_review",
+  "prerequisite": "r04_coreference_residual_smoke_v2",
+  "cohort": {
+    "train": 1023,
+    "validation": 197,
+    "source": "unchanged_DQ17_v2_development_ids"
+  },
+  "variants": [
+    "no_coref",
+    "repeated_only",
+    "all_coref",
+    "epss_only"
+  ],
+  "head_rule": "clip(last_observed_input_score + tanh(training_input_gain * zero_initialized_final_linear(concatenated_branch_MLP)), 0, 1)",
+  "gain_rule": "clip(median(latest_observed_EPSS_per_training_CVE), 0.001, 0.05)",
+  "gain_fit": "fit_once_on_all_1023_training_input_histories_then_freeze_across_seeds_and_models",
+  "config": {
+    "hidden_size": 32,
+    "temporal_hidden_size": 16,
+    "graph_layers": 2,
+    "batch_size": 8,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "huber_beta": 0.01,
+    "gradient_clip_norm": 1,
+    "dropout": 0,
+    "epochs": 100,
+    "patience": 15,
+    "seeds": [
+      17,
+      29,
+      43
+    ],
+    "device": "cpu"
+  },
+  "execution": {
+    "torch_threads": 1,
+    "deterministic_algorithms": true
+  },
+  "checkpoint_selection": "earliest strictly lowest validation MAE; stop after 15 non-improving epochs",
+  "epoch_zero_eligible_for_selection": false,
+  "initialization": "fresh_per_seed; shared_fusion_weights_and_batch_orders; no_smoke_warm_start",
+  "comparators": [
+    "persistence",
+    "matched_R03_all_seeds"
+  ],
+  "reporting": "all_12_fits_and_unweighted_three_seed_mean_and_sample_standard_deviation; no_best_seed",
+  "test_performance_evaluated": false,
+  "gate": [
+    "v2_smoke_artifact_and_prediction_verification",
+    "review_initialization_gradients_clipping_and_corrections",
+    "explicit_review_before_implementing_or_starting_full_runner"
+  ],
+  "performance_gate": "not_required_to_beat_persistence_on_the_24_CVE_smoke",
+  "exclusions": [
+    "test_scoring",
+    "new_graphs",
+    "new_embeddings",
+    "SMP",
+    "summaries",
+    "CVSS",
+    "VulnCheck_inputs",
+    "hyperparameter_search",
+    "split_changes"
+  ]
+}

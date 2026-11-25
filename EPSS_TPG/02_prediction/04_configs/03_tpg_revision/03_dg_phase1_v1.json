@@ -1,0 +1,14 @@
+{
+  "schema": "trv04_github_readiness_v1",
+  "packet_root": "01_tpg/09_annotation/10_dg_relevance_v1/packet",
+  "review_file": "01_tpg/09_annotation/10_dg_relevance_v1/review.json",
+  "report_root": "05_results/06_tpg_revision/08_dg_readiness_v1",
+  "selection_salt": "TRV04-training-G-review-1",
+  "base_sample": 8,
+  "risk_quotas": {"other_only_ids": 4, "multiple_ids": 2, "limited_content_cue": 2},
+  "sample_size": 16,
+  "selection_uses_labels": false,
+  "source_policy_changes": false,
+  "training": false,
+  "test_access": false
+}

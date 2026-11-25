@@ -1,0 +1,267 @@
+{
+  "blocking_gate": "No verified negatives/positives available yet; cannot train RD03 from the current receipt status",
+  "bootstrap": {
+    "additional_unit": "shared-post connected component",
+    "confidence": 0.95,
+    "paired": true,
+    "primary_unit": "CVE",
+    "repetitions": 1000,
+    "seed": 6029
+  },
+  "catalogue_predictor_ban": [
+    "in_vckev",
+    "vendor_project",
+    "vckev_cwes",
+    "vckev_date_added",
+    "vckev_updated_at",
+    "cisa_date_added",
+    "due_date",
+    "vckev_known_ransomware_campaign_use",
+    "vckev_reported_exploited_by_canaries",
+    "vckev_reported_exploitation",
+    "vckev_xdb",
+    "derived catalogue counts/masks/nodes/edges"
+  ],
+  "collection_policy": "Bounded API check is a software gate only. Require broader verified labels and a declared <=7-day collection span for the cohort; report drift/times, do not claim a single historical snapshot",
+  "figures": [
+    "PR",
+    "ROC",
+    "calibration",
+    "confusion matrices at both frozen cutoffs",
+    "probability distributions",
+    "source coverage by class",
+    "per-seed training diagnostics"
+  ],
+  "gates": [
+    "Stage 0 hashes verified",
+    "Stage 1 limitations explicitly accepted or resolved",
+    "RD01 component/chronology review and freeze",
+    "source policy review",
+    "matched-batch smoke and deterministic checkpoint reload"
+  ],
+  "graph": {
+    "budgets": "Node/edge/chunk budgets are microbatch limits, never truncation; deterministic VJP replay, no stochastic dropout",
+    "embedding": "Same frozen text encoder revision and token embeddings for matched pooled and graph controls; no fine-tuning",
+    "encoder_identity": {
+      "config_sha256": "2aed0589efb77ac1e838eba595f21376583ebc08c6e9b623d34082471f31b0a1",
+      "device": "cpu",
+      "embedding_dim": 768,
+      "embedding_method": "contextual_mean_nonoverlapping_windows",
+      "frozen": true,
+      "model_name": "jackaduma/SecBERT",
+      "packages": {
+        "tokenizers": "0.21.1",
+        "torch": "2.3.0+cu121",
+        "torch-geometric": "2.6.1",
+        "transformers": "4.51.3"
+      },
+      "pooler": false,
+      "revision": "7c603df5bc4c5ba9c731bcc2ea0ab2db36e104cb",
+      "tokenizer_sha256": "d6c9576fc1a62c7fd193ec4859fb785cae3e177dc18f0671b48787d0b025ed2c",
+      "unused_checkpoint_keys": [
+        "cls.predictions.bias",
+        "cls.predictions.transform.LayerNorm.bias",
+        "cls.predictions.transform.LayerNorm.weight",
+        "cls.predictions.transform.dense.bias",
+        "cls.predictions.transform.dense.weight",
+        "pooler.dense.bias",
+        "pooler.dense.weight"
+      ],
+      "weights_sha256": "9d501f6240552a328358a16f35e3f18af9327b21e88dff987ea3fbf71f436f7c"
+    },
+    "frontend": "SpacyFrontendV6 + versioned security product corrections through v6",
+    "gnn": "Two existing EdgeTypeGNNLayer layers, hidden=32, learned edge-type and edge-semantics channels, residual updates",
+    "new_model_families": "No GAT/RGCN/readout/weight-decay sweep in this bounded study",
+    "normal_text_control": "pooled tokens is a non-graph control; not a general-text TPG",
+    "relations": "no COREF; use saved named edge vocabulary, not hardcoded relation indices",
+    "required_new_input_gate": "32 training CVEs, then 12 train/6 validation integration smoke; audit predicates/subtypes/edge provenance before expansion",
+    "reuse": "Only exact text hash, tokenizer/encoder identity, chunk offsets, parser/resources and all graph pass versions match",
+    "source_absence": "D and DM retain identical CVE cohorts; absent M represented by mask, no source-complete-only selection",
+    "source_policy": "Retain exact-deduplicated posts including tagged bare-ID/bulk candidates for first matched study; review explicit catalogue-answer text before freezing; no outcome-informed filtering",
+    "source_pooling": "mean chunks within document; mean documents within source; masked source attention for D/M; structured late fusion",
+    "subtype_channels": 32,
+    "subtype_initialization": "zero-initialized 32x32 projection; SEVERITY index 31; disabled arm zeros its contribution",
+    "subtype_vocabulary": {
+      "ATTACK_VECTOR": 10,
+      "CARDINAL": 30,
+      "CODE_ELEMENT": 11,
+      "CVE_ID": 3,
+      "CWE_ID": 4,
+      "DATE": 24,
+      "EVENT": 20,
+      "FAC": 15,
+      "GPE": 17,
+      "HARDWARE_VERSION": 7,
+      "IMPACT": 9,
+      "LANGUAGE": 23,
+      "LAW": 22,
+      "LOC": 18,
+      "MISSING": 1,
+      "MONEY": 27,
+      "NORP": 14,
+      "NOT_ENTITY": 0,
+      "ORDINAL": 29,
+      "ORG": 16,
+      "PERCENT": 26,
+      "PERSON": 13,
+      "PRODUCT": 19,
+      "QUANTITY": 28,
+      "REMEDIATION": 12,
+      "SEVERITY": 31,
+      "SOFTWARE": 5,
+      "TIME": 25,
+      "UNKNOWN": 2,
+      "VERSION": 6,
+      "VULN_TYPE": 8,
+      "WORK_OF_ART": 21
+    },
+    "subtypes_enabled": true
+  },
+  "id": "RD03",
+  "metrics": [
+    "AP (primary)",
+    "ROC-AUC",
+    "Brier",
+    "log loss",
+    "precision",
+    "recall",
+    "F1",
+    "accuracy",
+    "balanced accuracy",
+    "MCC",
+    "TP/FP/TN/FN"
+  ],
+  "models": [
+    {
+      "C": 1.0,
+      "fits": 1,
+      "max_iter": 2000,
+      "name": "structured_logistic",
+      "solver": "liblinear"
+    },
+    {
+      "C": 1.0,
+      "fits": 1,
+      "max_iter": 2000,
+      "name": "D_tfidf_structured_logistic",
+      "solver": "liblinear"
+    },
+    {
+      "C": 1.0,
+      "fits": 1,
+      "max_iter": 2000,
+      "name": "DM_tfidf_structured_logistic",
+      "solver": "liblinear"
+    },
+    {
+      "fits": 3,
+      "name": "D_pooled_text",
+      "sources": "D",
+      "structured": true
+    },
+    {
+      "fits": 3,
+      "name": "D_v6_tpg_subtypes",
+      "sources": "D",
+      "structured": true
+    },
+    {
+      "fits": 3,
+      "name": "DM_pooled_text",
+      "sources": "DM",
+      "structured": true
+    },
+    {
+      "fits": 3,
+      "name": "DM_v6_tpg_subtypes",
+      "sources": "DM",
+      "structured": true
+    }
+  ],
+  "neural_settings": {
+    "batch_size": 8,
+    "cache_mib": 512,
+    "device": "cpu",
+    "dropout": 0.0,
+    "edge_view": "no_coref",
+    "epochs": 100,
+    "fresh_initialization": true,
+    "graph_chunk_budget": 16,
+    "graph_edge_budget": 20000,
+    "graph_node_budget": 4096,
+    "hidden": 32,
+    "layers": 2,
+    "learning_rate": 0.001,
+    "loss": "BCEWithLogits; training-only balanced class weights N/(2*Nclass)",
+    "patience": 15,
+    "readout": "node_mean",
+    "seeds": [
+      17,
+      29,
+      43
+    ],
+    "selection": "earliest strict maximum full-validation AP",
+    "threads": 2,
+    "weight_decay": 0.0001
+  },
+  "new_evaluation_warning": "No untouched claim for previously inspected CVEs or connected evidence. This is a proposed later-publication holdout within the saved snapshot, not a prospectively collected cohort.",
+  "reports": [
+    "all seeds and seed means",
+    "per-CVE predictions with actual value, masks and provenance",
+    "fixed-baseline paired differences",
+    "missingness and source-availability strata",
+    "component-aware uncertainty; no test-driven selection"
+  ],
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "stage": 3,
+  "state": "PROPOSED_NOT_FROZEN",
+  "structured": {
+    "binary": [
+      "GitHub URL present"
+    ],
+    "categorical": "CVSS version + version-aware vector components, one-hot with explicit unknown/missing categories; vocabulary fit on train only",
+    "excluded": [
+      "n_references_nvd (retained for audit only)",
+      "CVE identity as feature",
+      "publication/update dates as features",
+      "vuln_status",
+      "CVSS source identity",
+      "all EPSS fields",
+      "all catalogue fields and derived indicators"
+    ],
+    "historical_status": "Current CVSS/reference counts are retrospective, not verified at publication or Day 60",
+    "numeric": [
+      "cvss_vector_score",
+      "log1p(distinct all_sources_urls)",
+      "log1p(distinct github_only_urls)",
+      "log1p(distinct non_github_urls)"
+    ],
+    "numeric_preprocessing": "training-only median imputation, standardization and missing flags for allowed CVSS/count features only"
+  },
+  "target": "verified_in_vckev from per-CVE successful receipts; never use legacy false or unknown as zero",
+  "task": "Fresh verified VulnCheck catalogue inclusion classification; not future exploitation",
+  "test_access_enabled": false,
+  "tfidf": {
+    "DM": "Separate D/M vocabularies; concatenate source vectors and allowed structured features",
+    "fit": "train only",
+    "max_features": 20000,
+    "min_df": 2,
+    "ngram_range": [
+      1,
+      2
+    ],
+    "sublinear_tf": true
+  },
+  "thresholds": {
+    "additional": "One validation-only best-F1 cutoff per fit; candidate unique probabilities plus 0 and 1; highest cutoff wins exact ties; freeze before test",
+    "no_tuning": "No subgroup-specific or test-selected cutoffs",
+    "reference": 0.5
+  },
+  "total_fits": 15,
+  "training_enabled": false,
+  "undefined": "null with reason if single-class or denominator undefined"
+}

@@ -1,0 +1,47 @@
+{
+  "schema": "vk01_snapshot_readiness_v1",
+  "source": "SummTPGVul/Sec4AI4Sec-EPSS/Data_Files/epss_recollected_2026-09-30_smp.json",
+  "source_sha256": "506ae7da7c9202ca132e4e7ff8511f1fbbea9ab534630374dde5370e0ecfd43c",
+  "previous_design_identity": "05_results/04_consolidated_studies/00_design_and_preflight/full/run_identity.json",
+  "previous_manifest": "04_data/01_records_and_graphs/cve_identity_day30_to_day60_v1/full/split_manifest.json",
+  "previous_primary_audit": "05_results/04_consolidated_studies/00_design_and_preflight/full/cohort_audit.json",
+  "output": "05_results/05_vulncheck_study/01_readiness_v1",
+  "source_fields": {
+    "description": "description",
+    "github_summary": "summ_github_only_urls_fast.gpt-oss:120b",
+    "non_github_summary": "summ_non_github_urls_fast.gpt-oss:120b",
+    "smp": "social_media_posts"
+  },
+  "smoke_text_counts": {"train": 16, "validation": 8},
+  "target": {
+    "field": "in_vckev",
+    "one_means": "Listed in the saved VulnCheck KEV snapshot",
+    "zero_means": "Not listed in that snapshot; not evidence of never being exploited",
+    "missing_or_nonboolean": "Ineligible; never silently converted to zero",
+    "interpretation": "Retrospective snapshot classification, not CISA KEV prediction or future inclusion",
+    "requires_epss": false,
+    "requires_day60_score": false
+  },
+  "candidate_text_policy": "Quarantine complete documents containing explicit catalogue cues or numeric EPSS disclosures. Other exploitation or other-CVE mentions are review flags, not automatic rejection. Human review is still pending.",
+  "structured_allowlist": ["cvss_vector", "cvss_vector_version", "cvss_vector_score", "n_references_nvd"],
+  "excluded_predictor_fields": ["in_vckev", "vckev_date_added", "vckev_updated_at", "vendor_project", "vckev_cwes", "vckev_known_ransomware_campaign_use", "vckev_reported_exploited_by_canaries", "vckev_reported_exploitation", "vckev_xdb", "cisa_date_added", "due_date", "epss_scores", "epss_score", "epss_percentile", "epss_version_changed", "epss_from_to_version", "epss_version_change_day", "epss_version_change_date"],
+  "evaluation_status": "No fresh independent final test identified. Existing roles are audited, never reassigned; the previous primary test is already observed.",
+  "training_enabled": false,
+  "test_scoring_enabled": false,
+  "graph_building_enabled": false,
+  "protocol_status": "Frozen audit specification; proposed training protocol pending readiness review",
+  "proposed_training": {
+    "source_sets": ["D", "DM", "DGN", "DGNM"],
+    "representations": ["pooled_text", "security_tpg"],
+    "structured": [false, true],
+    "seeds": [17, 29, 43],
+    "backbone": "Existing two-layer EdgeTypeGNNLayer, fixed no_coref extraction; no new backbone search",
+    "baselines": ["training_prevalence_constant", "structured_logistic_regression"],
+    "loss": "Binary cross-entropy with logits; any positive-class weighting fitted on training only and fixed across matched variants",
+    "selection_metric": "Validation average precision (AP), not a test-selected threshold or best test seed",
+    "threshold": "Report fixed 0.5 and a validation-F1-selected threshold with largest-threshold tie rule; freeze before any designated final evaluation",
+    "metrics": ["average_precision", "roc_auc", "precision", "recall", "f1", "balanced_accuracy", "accuracy", "confusion_matrix", "brier", "log_loss", "calibration_curve"],
+    "uncertainty": "CVE-level paired comparisons with dependency limitations; no multiple-comparison-adjusted superiority claim",
+    "future_epss_addition": "Separate preregistered matched extension; score date must be justified. No EPSS predictor in the initial study."
+  }
+}

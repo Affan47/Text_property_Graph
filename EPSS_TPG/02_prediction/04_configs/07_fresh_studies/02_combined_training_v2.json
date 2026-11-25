@@ -1,0 +1,6 @@
+{
+  "execution_schema": "combined_training_v2",
+  "objective": "mae",
+  "device": "cpu",
+  "cache_mib": 8192
+}

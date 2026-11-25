@@ -1,0 +1,39 @@
+{
+  "schema": "cc01_catalogue_snapshot_v1",
+  "question": "Does text add prioritization value beyond dated EPSS and structured information?",
+  "interpretation": "Retrospective VulnCheck catalogue membership at a verified backup, not absence of exploitation or future exploitation prediction.",
+  "endpoint": "https://api.vulncheck.com/v3/backup/vulncheck-kev",
+  "index": "vulncheck-kev",
+  "download_hosts": ["serve.vulncheck.com"],
+  "max_archive_bytes": 1073741824,
+  "max_uncompressed_bytes": 2147483648,
+  "max_metadata_bytes": 1048576,
+  "max_backup_age_days": 7,
+  "max_members": 1000,
+  "output": "05_results/09_catalogue_classification/01_snapshot_v1",
+  "datasets": {
+    "reddit": {"audit": "05_results/08_fresh_studies/15_catalogue_readiness_v1/01_reddit/audit", "training_candidates": 24599},
+    "previous": {"audit": "05_results/08_fresh_studies/15_catalogue_readiness_v1/02_previous_multisource/audit", "training_candidates": 2870}
+  },
+  "label_definition": {"1": "LISTED in complete verified official backup", "0": "NOT_LISTED in that same backup, not confirmed unexploited", "null": "UNKNOWN until complete backup verification succeeds"},
+  "comparison_design": {
+    "arms": ["training_prevalence", "epss_only", "epss_structured_logistic", "epss_structured_tree", "epss_structured_pooled_D", "epss_structured_tpg_D", "epss_structured_pooled_DM", "epss_structured_tpg_DM"],
+    "primary_metric": "average_precision",
+    "secondary_metrics": ["roc_auc", "precision", "recall", "f1", "brier", "log_loss", "calibration_curve", "precision_at_budget", "recall_at_budget"],
+    "review_budget_fractions": [0.01, 0.05, 0.10],
+    "threshold_policy": "Select alert cutoff on inner selection data only; freeze before assessment. No test or assessment threshold optimization.",
+    "paired_bootstrap_repetitions": 20000,
+    "paired_bootstrap_seed": 6029,
+    "bootstrap_units": ["CVE", "shared_evidence_group"],
+    "seeds": [17, 29, 43, 59, 71],
+    "case_policy": "All arms use identical eligible CVEs and source masks. Report source-present and source-absent subsets.",
+    "epss_policy": "A separate date-verified EPSS snapshot at the catalogue backup UTC date; no silent reuse of publication-Day-60 scores as current EPSS.",
+    "predictor_policy": "Allowlisted CVSS and deduplicated reference counts; all catalogue/CISA fields excluded. Text answer-disclosure review required before reusing graphs.",
+    "split_policy": "Training-role candidates only at this stage. Later evidence-group-disjoint fitting/selection/assessment protocol must be frozen; old test sets are not new independent tests.",
+    "model_status": "Design registered; training runner and hyperparameters are not released by this snapshot stage."
+  },
+  "training_enabled": false,
+  "test_access_enabled": false,
+  "fc01_modified": false,
+  "official_sources": ["https://docs.vulncheck.com/api/v3/backup", "https://docs.vulncheck.com/community/vulncheck-kev/schema", "https://docs.vulncheck.com/community/vulncheck-kev/faq"]
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "r04_coreference_residual_smoke_v2",
+  "scope": "smoke_only",
+  "cohort": {
+    "train": 32,
+    "validation": 24,
+    "selection": "unchanged_DQ16_ids_from_verified_DQ17_v2_cache"
+  },
+  "variants": [
+    "no_coref",
+    "repeated_only",
+    "all_coref",
+    "epss_only"
+  ],
+  "head_rule": "clip(last_observed_input_score + tanh(training_input_gain * zero_initialized_final_linear(concatenated_branch_MLP)), 0, 1)",
+  "epoch_zero_eligible_for_selection": false,
+  "checkpoint_selection": "earliest strictly lowest validation MAE among epochs 1-3; all three epochs run",
+  "config": {
+    "hidden_size": 32,
+    "temporal_hidden_size": 16,
+    "graph_layers": 2,
+    "batch_size": 8,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "huber_beta": 0.01,
+    "gradient_clip_norm": 1,
+    "dropout": 0,
+    "epochs": 3,
+    "patience": 3,
+    "seeds": [
+      17
+    ],
+    "device": "cpu"
+  },
+  "execution": {
+    "torch_threads": 1,
+    "deterministic_algorithms": true
+  },
+  "prediction": {
+    "input_days": [
+      0,
+      30
+    ],
+    "target_day": 60,
+    "horizon_days": 30,
+    "target": "stored_EPSS_score"
+  },
+  "future_development_plan": {
+    "status": "planned_pending_smoke_verification_and_review",
+    "train": 1023,
+    "validation": 197,
+    "seeds": [
+      17,
+      29,
+      43
+    ],
+    "epochs": 100,
+    "patience": 15,
+    "protocol": "coreference_residual_development_v2.json"
+  },
+  "exclusions": [
+    "test_scoring",
+    "new_embeddings",
+    "new_graphs",
+    "SMP",
+    "summaries",
+    "CVSS",
+    "VulnCheck_inputs",
+    "future_input_imputation",
+    "hyperparameter_search"
+  ],
+  "gain_rule": "clip(median(latest_observed_EPSS_per_training_CVE), 0.001, 0.05)"
+}

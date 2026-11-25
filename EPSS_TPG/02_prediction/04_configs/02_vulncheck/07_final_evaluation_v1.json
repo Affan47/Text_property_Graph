@@ -1,0 +1,72 @@
+{
+  "schema": "vk09_final_protocol_v1",
+  "result_root": "05_results/05_vulncheck_study/18_final_protocol_v1",
+  "status": "Post-development protocol freeze; final scoring not performed",
+  "target": {
+    "field": "in_vckev",
+    "mapping": {"false": 0, "true": 1},
+    "meaning": "Listed versus not listed in the frozen VulnCheck snapshot, not CISA KEV, future inclusion, EPSS or exploitation probability",
+    "missing": "Abort evaluation if any frozen cohort record lacks a boolean label; no imputation or silent removal"
+  },
+  "cohort": {
+    "manifest": "04_data/01_records_and_graphs/cve_identity_day30_to_day60_v1/full/split_manifest.json",
+    "counts": {"train": 2870, "validation": 1104, "test": 651, "excluded": 1343},
+    "evaluation_role": "test",
+    "interpretation": "Previously reserved CVEs already exposed in the EPSS study; reused-cohort retrospective evaluation, not a new independent test",
+    "rule": "Exact existing CVE IDs; no reassignment, filtering by score, eligibility expansion, or duplicate-CVE inference from shared wording"
+  },
+  "selection": {
+    "metric": "Mean validation average precision across all three seeds",
+    "eligible_families": "Eight completed VK07 source-by-representation families",
+    "tie_break": "Lexicographically smallest family identifier on exact mean-AP ties",
+    "expected_primary": "DGNM__security_tpg",
+    "matched_comparator": "DGNM__pooled_text",
+    "seeds": [17, 29, 43],
+    "seed_policy": "Report every seed and their mean/population SD; no best-seed headline, ensemble, test-selected replacement, or retraining"
+  },
+  "predictors": {
+    "policy": "Unchanged VK02 v2 source policy, structured encoder, tokenization, SecBERT, security-v4 extractor and saved resource identities",
+    "historical_availability_claim": false,
+    "structured_fit": "Use saved train-fitted 29-column encoder without refitting",
+    "text": "Apply identical accepted-source rules and source/document/chunk pooling; keep absent sources masked; do not repair text from VK08 error cases inside this evaluation",
+    "prohibited": "EPSS and catalogue-derived predictors, label-derived filtering, quarantine metadata as predictors, or evaluation-driven feature changes",
+    "cache": "Separate evaluation cache; reuse only exact text/source/offset/processing identities. Build missing chunks under frozen resources without fitting. No rewriting development caches",
+    "failures": "Abort incomplete evaluation and record failed CVEs; never silently drop them. A necessary semantic preprocessing fix requires a versioned protocol amendment, not an unrecorded change"
+  },
+  "decision_rules": {
+    "fixed_threshold_for_all": 0.5,
+    "neural_source_fits": "Freeze existing VK08 maximum-validation-F1 cutoff per checkpoint for all 24 VK07 fits",
+    "other_controls": "Logistic, prevalence and edge-free controls retain 0.5 only; no new threshold selection",
+    "comparability": "Compare all models at 0.5 and using AP. Selected-threshold F1 comparisons require both models to have VK08 cutoffs; do not claim superiority from selected neural F1 versus fixed-only controls",
+    "prediction": "score >= threshold",
+    "no_evaluation_threshold_search": true,
+    "no_probability_recalibration": true
+  },
+  "reporting": {
+    "primary_metric": "Average precision (AP), not trapezoidal PR-AUC",
+    "primary_comparison": "Mean same-seed AP difference: all-source TPG minus all-source pooled text",
+    "required_metrics": ["average_precision", "roc_auc", "precision", "recall", "f1", "accuracy", "balanced_accuracy", "confusion_matrix", "brier", "log_loss"],
+    "undefined": "Report null and its reason when a metric is undefined; do not replace undefined precision/ROC-AUC with zero",
+    "tables": ["cohort and class counts", "all 36 predictors and checkpoint hashes", "every seed and family mean/SD", "fixed and frozen-selected thresholds separately", "paired comparisons", "source availability by class", "known shared wording subsets with original pooled result retained", "CVE-level predictions and errors"],
+    "figures": ["PR curves with prevalence reference", "ROC curves", "confusion matrices at fixed and applicable frozen thresholds", "reliability plot with fixed 10 equal-width bins and bin counts", "score distributions by true class", "paired AP/F1 comparisons with all seeds", "source coverage"],
+    "subsets": "Shared normalized wording is descriptive, not duplicate identity; report full cohort first and do not select a subgroup winner",
+    "test_metric_sorting": "Keep validation-selected primary designation even if another model scores higher later"
+  },
+  "uncertainty": {
+    "method": "Paired class-stratified CVE bootstrap, percentile 95% intervals",
+    "repetitions": 2000,
+    "seed": 8809,
+    "resampling": "Resample listed and unlisted CVE indices separately with replacement, preserving class sizes. Use the same draws for every model/seed. Average paired differences across seeds within each draw; never average their probabilities",
+    "comparisons": ["all-source TPG minus matched all-source pooled AP", "same comparison F1 at 0.5", "same comparison F1 at frozen VK08 cutoffs"],
+    "interpretation": "Conditional descriptive intervals, not confirmatory significance or a correction for shared evidence, validation selection, prior test exposure or multiple comparisons",
+    "single_class": "Mark these intervals not estimable if either class is absent"
+  },
+  "execution": {
+    "freeze_only": true,
+    "training_enabled": false,
+    "test_scoring_enabled": false,
+    "future_release": "A separate tested evaluation runner and explicit user authorization are required. Never relax the existing development adapters' test guards",
+    "one_evaluation": "One complete frozen comparison; verify-only may reproduce it. No test-driven iterations or silent output overwrites",
+    "independent_external_evaluation": "Not available or claimed here. A new dataset needs its own identity, disjointness/contamination audit and frozen protocol before selection using its labels"
+  }
+}

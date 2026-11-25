@@ -1,0 +1,24 @@
+{
+  "schema": "cd02_cve_identity_development_v1",
+  "anchor_day": 60,
+  "target_day": 90,
+  "review_candidate": "later_q2_validation__frozen",
+  "split_policy": {
+    "validation_start": "2025-04-01",
+    "test_start": "2025-07-01",
+    "test_end": "2026-01-01",
+    "observation_end": "2026-09-29"
+  },
+  "expected_source_cves": 5968,
+  "expected_eligible_counts": {"train": 2548, "validation": 1104, "test": 651},
+  "smoke_counts": {"train": 16, "validation": 8},
+  "selection_salt": "cd02-identity-development-v1:",
+  "identity_rule": "One record per unique CVE ID. No record quarantine from shared URLs, descriptions, original descriptions or posts. This is CVE-disjoint, not established vulnerability-family-disjoint evaluation.",
+  "source_overlap_rule": "Keep descriptions. Keep all nonempty training documents passing the existing Day-60 source adapter. Mask only optional validation documents whose lowercased whitespace-normalized text occurs in any accepted training source. Apply the same training registry in smoke and full exports; never use validation content to alter training.",
+  "future_test_rule": "Test export remains disabled. A later test adapter must screen optional documents against the frozen training and retained-validation text registries, report description overlap, and keep all eligible test CVEs.",
+  "summary_quality_rule": "No new factuality/quality filter. Retain imperfect nonempty summaries; preserve original text. Missing optional sources never exclude a CVE.",
+  "historical_scope": "Retrospective text fusion; stored post-date screening does not authenticate historical content availability.",
+  "training": false,
+  "test_export": false,
+  "graph_generation": false
+}

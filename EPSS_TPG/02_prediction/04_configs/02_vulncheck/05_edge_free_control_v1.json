@@ -1,0 +1,14 @@
+{
+  "schema": "vk06_edge_free_control_v1",
+  "result_root": "05_results/05_vulncheck_study/11_edge_free_control_v1",
+  "reference_schema": "vk04_description_graph_v1",
+  "internal_representation": "security_tpg",
+  "reported_representation": "security_tpg_edge_free",
+  "edge_policy": "Remove every edge after original VK04 packets are formed; preserve every node, feature, embedding, node type, token mask and batch assignment.",
+  "settings_policy": "Inherit VK04 settings exactly for the selected scale. No new hyperparameters, seeds, threshold or selection rule.",
+  "initialization": "Fresh per-seed VK04 model initialization; no checkpoint warm start.",
+  "comparison": "Same-seed edge-free versus saved VK04 security_tpg. Pooled descriptions and all logistic references remain visible. No automatic winner selection.",
+  "resume": "Verify and reuse completed seed fits; restart incomplete seed fits from their original initialization.",
+  "test_scoring": false,
+  "threshold_tuning": false
+}

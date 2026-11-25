@@ -1,0 +1,17 @@
+{
+  "schema": "ps05_final_evaluation_v1",
+  "target_day": 60,
+  "primary_metric": "mae",
+  "thresholds": [0.01, 0.1],
+  "seeds": [17, 29, 43],
+  "validation_selected_leader": "P01_DM_pooled_text_S1",
+  "graph_comparator": "P01_DGNM_security_tpg_S1",
+  "report_all_ps04_models": true,
+  "refit": false,
+  "ensemble": false,
+  "source_policy": "Unchanged primary retrospective text policy, including EPSS-disclosure quarantine. Report cross-role shared text; do not add test-only filtering.",
+  "eligibility": "Reserved MS04 test role, unchanged Day-30/Day-60 date policy, observed Day-60 target. Missing source text never excludes a CVE; missing targets are not imputed.",
+  "test_access": "Explicit --release-test required for every full data/cache/evaluate operation; freeze reads metadata/hashes only.",
+  "smoke": "Existing PS01 smoke validation IDs with full-trained checkpoints; no reserved test content.",
+  "interpretation": "Held-out retrospective Day-60 EPSS estimation, not prospective forecasting or exploitation prediction. No retuning after release."
+}

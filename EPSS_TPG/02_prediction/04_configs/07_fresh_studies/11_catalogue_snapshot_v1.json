@@ -1,0 +1,23 @@
+{
+  "schema": "ct09_saved_catalogue_export_v1",
+  "snapshot": "04_data/04_catalogue_snapshots/vulncheck_3a1e4fbaf9f9.json",
+  "sha256": "3a1e4fbaf9f982ac4df927b5dbb252098edec2e5c902878963e86b2d11969a39",
+  "bytes": 85280274,
+  "records": 5251,
+  "repository": "https://github.com/observatio/SummTPGVul",
+  "branch": "modify-summ-generation",
+  "branch_head_checked": "778a5a51048b438f5affc57e7b00ae5cda4e81f1",
+  "repository_file": "vulncheck_known_exploited_vulnerabilities.json",
+  "file_commit": "f07f59f71601a8b98ef5f6f1f7b9d29b67e4baca",
+  "commit_timestamp": "2026-10-02T09:20:16+02:00",
+  "retrieved_for_this_review_utc": "2026-11-14T12:59:02Z",
+  "original_export_timestamp_verified": false,
+  "export_completeness_verified": false,
+  "live_api_checks": 0,
+  "other_checked_heads": {
+    "new_data_collection": "70615ef948b6063ea47dc5479174e1b2e6a1eb54",
+    "tpg-paper-revision": "8787107701c62aa803895b400020997924f31986"
+  },
+  "collector_sha256_on_both_dataset_branches": "268d13362b8bede6a58c88e84c24d94259ea3df142e0e594a2aac00c1f647a5f",
+  "interpretation": "Git LFS byte identity is verified; this is a repository export, not a dated authenticated API receipt."
+}

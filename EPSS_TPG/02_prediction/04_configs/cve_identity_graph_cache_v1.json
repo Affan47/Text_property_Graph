@@ -1,0 +1,19 @@
+{
+  "schema": "cd03_identity_multisource_graph_cache_v1",
+  "max_chunk_characters": 4096,
+  "chunk_policy": "Prefer the last whitespace boundary in the second half of the bounded window; otherwise split at the character limit. Preserve every character and original offsets; no overlap or truncation.",
+  "edge_configuration": "no_coref",
+  "extractor": "security_product_version_v4",
+  "source_order": ["description", "github_summary", "non_github_summary", "smp"],
+  "non_graph_segments": "Whitespace or U+FFFD-only segments are retained in the document index with a reason; no fake token embeddings.",
+  "training": false,
+  "test_graphs": false,
+  "limitations": [
+    "Independent chunk graphs do not preserve syntax or security relations across chunk boundaries.",
+    "A forced boundary can split an unusually long token; it is recorded explicitly.",
+    "Chunk DOCUMENT nodes represent chunks, not new CVEs. Pool chunks within documents and documents within sources.",
+    "The source masks and retrospective-text limitations of CD02 remain unchanged.",
+    "Unembedded structural/whitespace/replacement-character nodes retain explicit masks; missing ordinary-token embeddings fail the build.",
+    "No training or test graph construction is performed. The fusion runner is a separate stage."
+  ]
+}

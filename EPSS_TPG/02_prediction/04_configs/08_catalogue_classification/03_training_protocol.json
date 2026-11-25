@@ -1,0 +1,32 @@
+{
+  "schema": "cc03_catalogue_training_v1",
+  "meaning": "Retrospective membership in the verified CC01 VulnCheck snapshot; NOT_LISTED is not proof of no exploitation.",
+  "input_directory": "05_results/09_catalogue_classification/03_matched_inputs_v1",
+  "output_directory": "05_results/09_catalogue_classification/05_training_v1",
+  "cache_directory": "01_tpg/05_workspace/08_catalogue_classification_v1",
+  "datasets": ["reddit", "previous"],
+  "views": ["D", "DM"],
+  "seeds": [17, 29, 43, 59, 71],
+  "controls": ["training_prevalence", "epss_only"],
+  "arms": ["epss_structured_logistic", "epss_structured_tree", "pooled_D", "tpg_D", "pooled_DM", "tpg_DM"],
+  "settings": {
+    "hidden": 32, "layers": 2, "readout": "mean", "edge_chunk_size": 8192,
+    "threads": 4, "device": "cpu", "batch_size": 8, "epochs": 100, "patience": 15,
+    "learning_rate": 0.001, "weight_decay": 0.0001,
+    "loss": "unweighted equal-CVE BCEWithLogitsLoss", "optimizer": "AdamW",
+    "class_weights": null, "selection": "strict maximum selection AP; earliest epoch wins ties",
+    "logistic": {"C": 1.0, "max_iter": 2000, "tol": 0.000001, "solver": "lbfgs"},
+    "tree": {"max_iter": 100, "max_leaf_nodes": 15, "learning_rate": 0.1, "l2_regularization": 1.0, "early_stopping": false}
+  },
+  "smoke": {"per_class_per_role": 2, "epochs": 2, "patience": 2, "seeds": [17, 29, 43]},
+  "threshold": "Maximize selection F1 over unique probabilities plus 0 and 1; largest threshold wins exact ties; predict p >= cutoff.",
+  "review_budgets": [0.01, 0.05, 0.1],
+  "bootstrap": {"repetitions": 20000, "seed": 6029, "confidence": 0.95, "units": ["CVE", "evidence_group"], "metric": "mean seed AP difference", "family_size": 6},
+  "contrasts": [["tpg_D", "pooled_D"], ["tpg_DM", "pooled_DM"], ["pooled_D", "epss_structured_logistic"], ["tpg_D", "epss_structured_logistic"], ["pooled_DM", "epss_structured_logistic"], ["tpg_DM", "epss_structured_logistic"]],
+  "source_policy": "Use only frozen CC02 screened D and prose M; no G/N or catalogue answer fields. Reuse only byte-identical text/spans with identical processing and encoder identities.",
+  "epss_policy": "Use only CC02 verified prepared date-aligned EPSS plus its observation mask. Never substitute an older archive or Day-60 target.",
+  "assessment_policy": "All selected checkpoints and selection-fitted cutoffs locked before inner assessment joins. Existing official validation/test roles are never adapted.",
+  "calibration": "No post-hoc calibrator; report uncalibrated probabilities, Brier, log loss and ten fixed equal-width bins.",
+  "test_access_enabled": false,
+  "historical_forecasting_claim": false
+}

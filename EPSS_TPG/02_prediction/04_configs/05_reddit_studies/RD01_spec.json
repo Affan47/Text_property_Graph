@@ -1,0 +1,103 @@
+{
+  "anchor_for_role": "NVD published_date; rolling windows inherit CVE role and never split one CVE across roles",
+  "bootstrap": {
+    "additional_unit": "shared-post connected component",
+    "confidence": 0.95,
+    "paired": true,
+    "primary_unit": "CVE",
+    "repetitions": 1000,
+    "seed": 6029
+  },
+  "catalogue_predictor_ban": [
+    "in_vckev",
+    "vendor_project",
+    "vckev_cwes",
+    "vckev_date_added",
+    "vckev_updated_at",
+    "cisa_date_added",
+    "due_date",
+    "vckev_known_ransomware_campaign_use",
+    "vckev_reported_exploited_by_canaries",
+    "vckev_reported_exploitation",
+    "vckev_xdb",
+    "derived catalogue counts/masks/nodes/edges"
+  ],
+  "cutoff": "2026-11-03",
+  "distributions": {
+    "after_rules_frozen": "Per-role CVE counts, verified/unknown classes and fixed score bands; do not revise cuts to improve them",
+    "band_boundaries": "[0,.001), [.001,.01), [.01,.1), [.1,1]",
+    "before_freeze": "Counts by dates, component sizes, previous exposure and observed-target availability; no adaptive cutoff search on outcomes",
+    "score_bands": [
+      0,
+      0.001,
+      0.01,
+      0.1,
+      1
+    ],
+    "untouched_test": "Restricted report only until final evaluation release; no per-CVE test labels/text in development exports"
+  },
+  "eligibility": "NVD published_date >= 2021-04-14; study-specific targets must be observed, never imputed",
+  "freeze_checks": [
+    "all CVEs assigned or given an exclusion reason",
+    "no connected component spans roles",
+    "no old exposure component in test",
+    "no training target crosses validation boundary",
+    "no vocabulary/scaler/threshold fit on validation/test",
+    "RD03 labels contain both classes in development or stop"
+  ],
+  "gates": [
+    "Stage 0 hashes verified",
+    "Stage 1 limitations explicitly accepted or resolved",
+    "RD01 component/chronology review and freeze",
+    "source policy review",
+    "matched-batch smoke and deterministic checkpoint reload"
+  ],
+  "group_policy": {
+    "cross_interval_components": "Quarantine entire component; do not move late CVEs into earlier training",
+    "future_test": "Reject entire component if any member has any previous-study role, including excluded",
+    "graph": "conservative shared fingerprints + co-mentioned CVE IDs + exact old Reddit text reuse",
+    "prior_test": "Quarantine every current CVE connected to any prior test CVE from all new study cohorts",
+    "prior_train_validation": "Preserve old role when it matches chronological interval; quarantine a whole component on role conflict",
+    "shared_urls": "Report separately; shared URL alone is not proof of same vulnerability",
+    "text_identity": "Also audit repeated descriptions and normalized/near-duplicate posts before freeze; no automatic merging of distinct vulnerabilities"
+  },
+  "id": "RD01",
+  "new_evaluation_warning": "No untouched claim for previously inspected CVEs or connected evidence. This is a proposed later-publication holdout within the saved snapshot, not a prospectively collected cohort.",
+  "not_yet_assigned": true,
+  "proposed_publication_intervals": {
+    "test": [
+      "2025-01-01",
+      "2026-11-03"
+    ],
+    "train": [
+      "2021-04-14",
+      "2023-12-31"
+    ],
+    "validation": [
+      "2024-01-01",
+      "2024-12-31"
+    ]
+  },
+  "reports": [
+    "all seeds and seed means",
+    "per-CVE predictions with actual value, masks and provenance",
+    "fixed-baseline paired differences",
+    "missingness and source-availability strata",
+    "component-aware uncertainty; no test-driven selection"
+  ],
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "stage": 2,
+  "state": "PROPOSED_NOT_FROZEN",
+  "target_maturity": {
+    "RD02": "published+60 must be <= role period end and collection cutoff and have an observed score",
+    "RD03": "Require explicit successful per-CVE receipt; unknown excluded; label is fresh catalogue inclusion, not a historical outcome",
+    "RD04": "For each t in 0..89, u in t+1..90, date(pub+u) must remain inside the CVE role period and <= cutoff; require actual target score"
+  },
+  "task": "Chronological component-disjoint split proposal",
+  "test_access_enabled": false,
+  "training_enabled": false
+}

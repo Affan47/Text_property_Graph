@@ -1,0 +1,27 @@
+{
+  "schema": "mh01_day30_multihorizon_v1",
+  "anchor_day": 30,
+  "history_lengths": [10, 20, 31],
+  "horizons": [7, 14, 30],
+  "target_days": [37, 44, 60],
+  "cohort": {"train": 2519, "validation": 1104},
+  "gain": 1.0,
+  "config": {
+    "temporal_hidden_size": 16, "hidden_size": 32,
+    "batch_size": 8, "learning_rate": 0.001, "weight_decay": 0.0001,
+    "gradient_clip_norm": 1.0, "epochs": 100, "patience": 15, "seeds": [17, 29, 43]
+  },
+  "smoke": {"epochs": 3, "patience": 3, "seeds": [17]},
+  "loss": "Average absolute error over observed horizons within each CVE, then average CVEs; no group weighting or target imputation.",
+  "selection": "Earliest strictly lowest validation per-CVE observed-horizon mean MAE from epoch 1. Report each horizon separately and all seeds.",
+  "history_policy": "Recompute masks and observation age inside each visible window. No carry from earlier excluded days. Require at least one observation in every compared window.",
+  "test_scoring": false,
+  "limitations": [
+    "This is a new joint three-output task, not a pure gain/loss ablation against single-output GV01 or GB01.",
+    "The parent cohort already requires an observed Day-60 score; shorter-horizon coverage is conditional on that selection.",
+    "Fixed chronological CVE roles are inherited; they do not guarantee independence of related vulnerability families.",
+    "Daily score dates do not establish exact release times or recover FIRST's daily predictor features.",
+    "Validation has informed prior development and is not independent final evaluation.",
+    "No adaptive window selection, daily trajectory, rolling anchors, TPG fusion or test scoring in this stage."
+  ]
+}
