@@ -1,25 +1,59 @@
 # Can public text help decide which vulnerabilities to review first?
 
-A security team knows the severity of a software flaw, but severity alone does
-not say how likely someone is to exploit it. This project asks whether reading
-the description, social posts or webpage summaries adds useful information.
-It compares two ways of reading **the same text**: average the word vectors,
-or build a graph that also records how the words and entities relate.
+A security team may have time to investigate only a few of the vulnerabilities
+on its list. Severity tells the team how much damage a flaw could cause, not
+whether anyone is likely to use it soon. **Can public discussion give the team
+an early reason to look at one flaw before another?** That question is why we
+collected social-media posts, including reports of exploitation, and linked
+them to the vulnerabilities they name. A post is a possible clue, not a
+verified attack. A warning before an incident and a repost after it may
+contain the very same words.
 
 **Start here:** [Run the example or a study, step by step](RUNBOOK.md) ·
 [Find a script or config](INDEX.md) · [See the published results](published_results/MANIFEST.json).
 
-## 1. What is the model trying to predict?
+## 1. Why start with EPSS, and what do we predict?
 
-**CVE** is the public identifier for a vulnerability. **CVSS** describes its
-severity. **EPSS** is a different score: it estimates the probability of
-exploitation in the next 30 days. **Day 60** in this project means 60 days after
-the CVE was published, not a 60-day EPSS forecast horizon.
+The **Exploit Prediction Scoring System (EPSS)** inspired the project because
+it asks about *likelihood*, not just severity. It also gives us a public,
+[dated score](https://www.first.org/epss/data.html) that can be joined to a
+description or post using the same **CVE**, the public identifier for a
+vulnerability. This lets us compare many cases on the same basis without
+pretending we have a record of every attack.
+
+**How the official system works.** The [original EPSS paper](https://doi.org/10.1145/3436242)
+studied exploitation in the first year after disclosure. Today's EPSS answers
+a different question: *how likely is exploitation in the next 30 days?*
+FIRST describes roughly 2,850 features per vulnerability per day in its
+current model. Examples include the age of the flaw, the affected product,
+individual severity fields (such as what privileges are needed), how recently
+security sources discussed it, and whether public exploit code or tools
+exist. The model learns from exploitation activity observed by data partners.
+It then updates the published scores each day as new information arrives.
+Those observations are training evidence, not a complete list of attacks.
+[How FIRST builds and scores EPSS](https://www.first.org/epss/how-it-works.html).
+
+**What we do differently.** We use two smaller collections and far fewer
+sources: the public description, social posts, webpage summaries where
+available, **CVSS** (Common Vulnerability Scoring System) severity fields, and
+counts of reference links. We do not have FIRST's partner sensor feeds.
+Rather than rebuild EPSS, we compare the same CVEs with and without post text,
+and compare averaging the words' vectors with reading their relationships in
+a text property graph. The question is what those public sources *add*.
+
+**How to read the cutoff.** FIRST does not define one EPSS score at which
+everyone should act; that depends on the team's capacity and the systems it
+protects. Our high-score study needed one repeatable yes/no question, so we
+used **0.10**: an observed Day-60 score of 0.10 counts as high; 0.09 does not;
+a missing score stays unknown. A score of 0.10 means an estimated 10% chance
+of exploitation over the next 30 days, **not** the top 10% of CVEs or evidence
+of an attack. Day 60 is when we read the score, measured from CVE publication.
+[FIRST's threshold guidance](https://www.first.org/epss/faq).
 
 | Study | Question | What counts as an answer? |
 |---|---|---|
 | FC01: estimate a score | Can the saved text and severity fields explain the EPSS score recorded on Day 60? | A number between 0 and 1. Compare errors against simple guesses such as the training mean. |
-| ET02: identify a high score | Was the observed Day-60 EPSS **at least 0.1**? | Yes or no. We chose 0.1 for this study; the classifier never sees the score it is labeling. |
+| ET02: identify a high score | Was the observed Day-60 EPSS **at least 0.1**? | Yes or no. The classifier never sees the score it is labeling. |
 | CC03: identify a catalogue entry | Was this CVE in the verified VulnCheck catalogue snapshot? | Listed or not listed **in that snapshot**. A separately dated EPSS score is an allowed input here. |
 | CF01: forecast a later score | Given only scores already observed, what will a later EPSS score be? | A later observed score. Compare against simply carrying forward the last known score. **No text graph** is used here. |
 
@@ -36,6 +70,13 @@ flowchart TD
 ```
 
 ## 2. Where do the two datasets come from?
+
+The daily EPSS file gives us a score, not the words people used when
+discussing a flaw. We built the collections to put that discussion beside
+the official description and the score history for the *same* CVE. Posts
+were linked by CVE mention, not selected only when someone claimed an attack.
+That distinction matters: a patch announcement, a bare CVE ID and a report
+of active exploitation all mention a flaw, but they offer different evidence.
 
 | Collection | Distinct CVEs in the collection | Train / validation for the Day-60 high-score study |
 |---|---:|---:|
@@ -195,6 +236,14 @@ stay unchanged. [Model implementation](EPSS_TPG/02_prediction/01_package/epss/co
   accepted webpage summary, so those results cannot measure the benefit of
   reading a summary there. [Reddit comparison](published_results/ET02/reddit/validation_summary.csv)
   · [Older comparison](published_results/ET02/previous/validation_summary.csv).
+* **Early warning remains unproven.** A separate check asked whether a model
+  reading the description could improve on the EPSS score already known by
+  Day 7. Of 7,797 cases, 62 later reached 0.10 by Day 90. Adding the model did
+  not give a clear ranking gain under the agreed test. Even a gain there would
+  concern a later **score rise**, not a later **attack**. Demonstrating an
+  early warning from posts would require the actual wording available at the
+  time and independent evidence of exploitation *after* that warning.
+  [Early-warning comparison and decision](EPSS_TPG/02_prediction/05_studies/07_combined_text_fresh/21_DESCRIPTION_SURROGATE_RESULTS.md).
 
 ## Run it or check the results
 
