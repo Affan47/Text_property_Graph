@@ -33,6 +33,23 @@ It then updates the published scores each day as new information arrives.
 Those observations are training evidence, not a complete list of attacks.
 [How FIRST builds and scores EPSS](https://www.first.org/epss/how-it-works.html).
 
+**Which paper describes which version?** The newest peer-reviewed model paper
+listed on [FIRST's research page](https://www.first.org/epss/research) is
+[Jacobs and colleagues' 2023 paper on EPSS v3](https://doi.org/10.1109/EuroSPW59978.2023.00027).
+It describes 1,477 inputs, including three numerical measures of Twitter
+discussion ([Table 1, open paper](https://weis2023.econinfosec.org/wp-content/uploads/sites/11/2023/06/weis23-jacobs.pdf)).
+Public discussion was therefore already part of EPSS. Our question is narrower:
+does reading the *words* of posts, rather than just knowing a CVE was
+discussed, help prioritize it in our collections?
+
+The latest production release is **v5**, which [started publishing scores on
+15 June 2026](https://www.first.org/epss/data). FIRST reports changes to how it
+detects and measures interest in public GitHub exploit code, how it converts
+model output into probabilities, and the addition of VulnCheck KEV data.
+The [v5 announcement](https://www.first.org/newsroom/releases/202606-036) is a
+release note, not the v3 research paper. A score can change across a version
+boundary even if nothing new happened to the vulnerability.
+
 **What we do differently.** We use two smaller collections and far fewer
 sources: the public description, social posts, webpage summaries where
 available, **CVSS** (Common Vulnerability Scoring System) severity fields, and
@@ -230,6 +247,10 @@ stay unchanged. [Model implementation](EPSS_TPG/02_prediction/01_package/epss/co
   measures how well listed CVEs rise to the top of a ranking; it is not the
   percentage classified correctly. The Reddit pooled DM result also rounds to
   0.505. These results came from an assessment split inside the training role.
+  One limitation: the [EPSS input was dated 17 November 2026](EPSS_TPG/02_prediction/04_configs/08_catalogue_classification/02_inputs_protocol.json),
+  when v5 already incorporated VulnCheck data. The score and catalogue label
+  may therefore share evidence. This does not tell us which individual scores
+  were affected, and the ranking is not independent confirmation of exploitation.
 * **High Day-60 EPSS:** only **9 of 972** Reddit validation CVEs and **50 of
   1,104** older validation CVEs had scores at or above 0.1. On Reddit, one
   additional hit changes recall by one ninth. No Reddit validation CVE had an
