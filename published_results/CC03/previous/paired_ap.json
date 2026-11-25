@@ -1,0 +1,830 @@
+[
+  {
+    "difference": -0.0029444971763335826,
+    "family_adjusted_interval": [
+      -0.060362785623446394,
+      0.05212332022258885
+    ],
+    "family_size": 6,
+    "groups": 387,
+    "interval95": [
+      -0.04273037102039509,
+      0.03911818259497448
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "pooled_D",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.0029444971763335826,
+    "family_adjusted_interval": [
+      -0.06130181618634618,
+      0.05235360532477767
+    ],
+    "family_size": 6,
+    "groups": 332,
+    "interval95": [
+      -0.044601482363597525,
+      0.03882748501015376
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "pooled_D",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.018857504457879305,
+    "family_adjusted_interval": [
+      -0.08542984768864646,
+      0.04458175229360648
+    ],
+    "family_size": 6,
+    "groups": 380,
+    "interval95": [
+      -0.06457276183602952,
+      0.029818944244445506
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "pooled_D",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.018857504457879305,
+    "family_adjusted_interval": [
+      -0.0891144681487293,
+      0.04322235746301412
+    ],
+    "family_size": 6,
+    "groups": 325,
+    "interval95": [
+      -0.06709980789668486,
+      0.028563652842831435
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "pooled_D",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.014285714285714369,
+    "family_adjusted_interval": [
+      0.0,
+      0.1285714285714286
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      0.0,
+      0.06857142857142853
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "pooled_D",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.014285714285714369,
+    "family_adjusted_interval": [
+      0.0,
+      0.1285714285714286
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      0.0,
+      0.06857142857142853
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "pooled_D",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.025170161677724966,
+    "family_adjusted_interval": [
+      -0.06419111623071493,
+      0.012021887763219108
+    ],
+    "family_size": 6,
+    "groups": 387,
+    "interval95": [
+      -0.05336321115296641,
+      0.003001580601815576
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "pooled_DM",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.025170161677724966,
+    "family_adjusted_interval": [
+      -0.06455508862462045,
+      0.013702197825864201
+    ],
+    "family_size": 6,
+    "groups": 332,
+    "interval95": [
+      -0.05326264789731498,
+      0.0034445029216202258
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "pooled_DM",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.024166033252813655,
+    "family_adjusted_interval": [
+      -0.06829599476905178,
+      0.017794955765836017
+    ],
+    "family_size": 6,
+    "groups": 380,
+    "interval95": [
+      -0.05624308390556512,
+      0.007608442444565181
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "pooled_DM",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.024166033252813655,
+    "family_adjusted_interval": [
+      -0.0679474299854912,
+      0.01993244415088908
+    ],
+    "family_size": 6,
+    "groups": 325,
+    "interval95": [
+      -0.05539240821977045,
+      0.007459649621234323
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "pooled_DM",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.004761904761904789,
+    "family_adjusted_interval": [
+      -0.04285714285714286,
+      0.0
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      -0.022857142857142843,
+      0.0
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "pooled_DM",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.004761904761904789,
+    "family_adjusted_interval": [
+      -0.04285714285714286,
+      0.0
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      -0.022857142857142843,
+      0.0
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "pooled_DM",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.00041470855065059984,
+    "family_adjusted_interval": [
+      -0.08688190133036354,
+      0.09306779398429184
+    ],
+    "family_size": 6,
+    "groups": 387,
+    "interval95": [
+      -0.06356307692696359,
+      0.06613917883008355
+    ],
+    "left": "pooled_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.00041470855065059984,
+    "family_adjusted_interval": [
+      -0.09273372303663435,
+      0.09228881152840554
+    ],
+    "family_size": 6,
+    "groups": 332,
+    "interval95": [
+      -0.06680024888981861,
+      0.06763636289901917
+    ],
+    "left": "pooled_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.024749248774064325,
+    "family_adjusted_interval": [
+      -0.07211528420099991,
+      0.13490556568095702
+    ],
+    "family_size": 6,
+    "groups": 380,
+    "interval95": [
+      -0.046877981213072,
+      0.10002946966491923
+    ],
+    "left": "pooled_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.024749248774064325,
+    "family_adjusted_interval": [
+      -0.07483288470303204,
+      0.13394318914358969
+    ],
+    "family_size": 6,
+    "groups": 325,
+    "interval95": [
+      -0.048909354942782514,
+      0.10173138264302962
+    ],
+    "left": "pooled_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.019047619047619157,
+    "family_adjusted_interval": [
+      -0.17142857142857143,
+      0.0
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      -0.09142857142857137,
+      0.0
+    ],
+    "left": "pooled_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.019047619047619157,
+    "family_adjusted_interval": [
+      -0.17142857142857143,
+      0.0
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      -0.09142857142857137,
+      0.0
+    ],
+    "left": "pooled_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.0025297886256829827,
+    "family_adjusted_interval": [
+      -0.09337703742930287,
+      0.08211256243874988
+    ],
+    "family_size": 6,
+    "groups": 387,
+    "interval95": [
+      -0.06917615865817871,
+      0.060829957362930544
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.0025297886256829827,
+    "family_adjusted_interval": [
+      -0.10105370806604408,
+      0.07916728844409057
+    ],
+    "family_size": 6,
+    "groups": 332,
+    "interval95": [
+      -0.07073141570550646,
+      0.059616625956014614
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.005891744316185022,
+    "family_adjusted_interval": [
+      -0.09612060551390808,
+      0.1067272261756359
+    ],
+    "family_size": 6,
+    "groups": 380,
+    "interval95": [
+      -0.06795438666102539,
+      0.08014529207465154
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.005891744316185022,
+    "family_adjusted_interval": [
+      -0.10390523077590008,
+      0.10495916404055658
+    ],
+    "family_size": 6,
+    "groups": 325,
+    "interval95": [
+      -0.07325480903519427,
+      0.07876695661691646
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.004761904761904789,
+    "family_adjusted_interval": [
+      -0.04285714285714286,
+      0.0
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      -0.022857142857142843,
+      0.0
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.004761904761904789,
+    "family_adjusted_interval": [
+      -0.04285714285714286,
+      0.0
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      -0.022857142857142843,
+      0.0
+    ],
+    "left": "tpg_D",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.03322527248033633,
+    "family_adjusted_interval": [
+      -0.061124031331506554,
+      0.135375908802791
+    ],
+    "family_size": 6,
+    "groups": 387,
+    "interval95": [
+      -0.03514096818411935,
+      0.10512426393965123
+    ],
+    "left": "pooled_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.03322527248033633,
+    "family_adjusted_interval": [
+      -0.09072682100331067,
+      0.13614824159916766
+    ],
+    "family_size": 6,
+    "groups": 332,
+    "interval95": [
+      -0.052797006461845084,
+      0.10907517036417963
+    ],
+    "left": "pooled_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.0463921098925294,
+    "family_adjusted_interval": [
+      -0.06459618690766929,
+      0.16538500367026723
+    ],
+    "family_size": 6,
+    "groups": 380,
+    "interval95": [
+      -0.03732365615717938,
+      0.1317835456403069
+    ],
+    "left": "pooled_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.0463921098925294,
+    "family_adjusted_interval": [
+      -0.10182230399450495,
+      0.17088104425886713
+    ],
+    "family_size": 6,
+    "groups": 325,
+    "interval95": [
+      -0.05724515487274642,
+      0.1360085373386043
+    ],
+    "left": "pooled_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.004761904761904789,
+    "family_adjusted_interval": [
+      -0.04285714285714286,
+      0.0
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      -0.022857142857142843,
+      0.0
+    ],
+    "left": "pooled_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.004761904761904789,
+    "family_adjusted_interval": [
+      -0.04285714285714286,
+      0.0
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      -0.022857142857142843,
+      0.0
+    ],
+    "left": "pooled_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.008055110802611365,
+    "family_adjusted_interval": [
+      -0.09711050701467579,
+      0.11642998252644439
+    ],
+    "family_size": 6,
+    "groups": 387,
+    "interval95": [
+      -0.0672492237996088,
+      0.08573818819616655
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.008055110802611365,
+    "family_adjusted_interval": [
+      -0.1312476662608435,
+      0.12309342800308969
+    ],
+    "family_size": 6,
+    "groups": 332,
+    "interval95": [
+      -0.09055071786533125,
+      0.0936767367609978
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "all",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "prespecified full-cohort family",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.022226076639715743,
+    "family_adjusted_interval": [
+      -0.10001798626406774,
+      0.15053934103218383
+    ],
+    "family_size": 6,
+    "groups": 380,
+    "interval95": [
+      -0.06619794032573312,
+      0.11326687172161007
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": 0.022226076639715743,
+    "family_adjusted_interval": [
+      -0.14204678496017553,
+      0.15802047287657445
+    ],
+    "family_size": 6,
+    "groups": 325,
+    "interval95": [
+      -0.09099319321003298,
+      0.12190010302002516
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_present",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.009523809523809578,
+    "family_adjusted_interval": [
+      -0.08571428571428572,
+      0.0
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      -0.045714285714285686,
+      0.0
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "CVE",
+    "valid_resamples": 20000
+  },
+  {
+    "difference": -0.009523809523809578,
+    "family_adjusted_interval": [
+      -0.08571428571428572,
+      0.0
+    ],
+    "family_size": 6,
+    "groups": 7,
+    "interval95": [
+      -0.045714285714285686,
+      0.0
+    ],
+    "left": "tpg_DM",
+    "limitation": "Conditional on fitted seeds; does not estimate training-population or seed uncertainty.",
+    "partition": "M_absent",
+    "requested_resamples": 20000,
+    "right": "epss_structured_logistic",
+    "scope": "exploratory source subset",
+    "seed": 6029,
+    "status": "COMPLETE",
+    "unit": "evidence_group",
+    "valid_resamples": 20000
+  }
+]

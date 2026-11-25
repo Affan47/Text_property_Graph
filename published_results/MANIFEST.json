@@ -1,8 +1,38 @@
 [
   {
+    "path": "published_results/CC03/previous/calibration.json",
+    "sha256": "b99c1a8fb22e523b4751c64137bd13d6b000d2a3eef017052ea4ac688f12ff44",
+    "source": "EPSS_TPG/05_results/09_catalogue_classification/05_training_v1/previous/full/assessment/calibration.json"
+  },
+  {
+    "path": "published_results/CC03/previous/paired_ap.json",
+    "sha256": "24d18313191d80345688750f62f78929990ecd88e3eae18db82a43dde5211935",
+    "source": "EPSS_TPG/05_results/09_catalogue_classification/05_training_v1/previous/full/assessment/paired_ap.json"
+  },
+  {
+    "path": "published_results/CC03/previous/review_budgets.json",
+    "sha256": "318fc2e4d0fa381a484106cb7d8303ea56248f96e9aed4d1f4b31c73190acb25",
+    "source": "EPSS_TPG/05_results/09_catalogue_classification/05_training_v1/previous/full/assessment/review_budgets.json"
+  },
+  {
     "path": "published_results/CC03/previous/summary.json",
     "sha256": "3ef300eb5fb5b08be4fd88eb76493450f1fe98c6e79ee77f5a150b6b2f5b8697",
     "source": "EPSS_TPG/05_results/09_catalogue_classification/05_training_v1/previous/full/assessment/summary.json"
+  },
+  {
+    "path": "published_results/CC03/reddit/calibration.json",
+    "sha256": "db94e520eaf91defa504569c769f486a295105186d6b29fbc1954d06432af243",
+    "source": "EPSS_TPG/05_results/09_catalogue_classification/05_training_v1/reddit/full/assessment/calibration.json"
+  },
+  {
+    "path": "published_results/CC03/reddit/paired_ap.json",
+    "sha256": "b7c2d07761ec1f63780589f6c5864aec577bfb7d9b54fd9ed58bba949cbde90c",
+    "source": "EPSS_TPG/05_results/09_catalogue_classification/05_training_v1/reddit/full/assessment/paired_ap.json"
+  },
+  {
+    "path": "published_results/CC03/reddit/review_budgets.json",
+    "sha256": "be2f8c3ec3cc18f71d8662cb625f47444c599968f639f6ee62f1f52439e28c75",
+    "source": "EPSS_TPG/05_results/09_catalogue_classification/05_training_v1/reddit/full/assessment/review_budgets.json"
   },
   {
     "path": "published_results/CC03/reddit/summary.json",
@@ -10,9 +40,29 @@
     "source": "EPSS_TPG/05_results/09_catalogue_classification/05_training_v1/reddit/full/assessment/summary.json"
   },
   {
+    "path": "published_results/ET02/previous/support.json",
+    "sha256": "278e71d9331167f2a9142e24ba8ab784c02b88fc3b28072bb50db693f42aacb7",
+    "source": "EPSS_TPG/05_results/10_epss_threshold/02_graph_ablation_v1/previous/full/report/support.json"
+  },
+  {
+    "path": "published_results/ET02/previous/training_prevalence.json",
+    "sha256": "87dc18e881afa27a29b5a8c4e9fd66a4bae5d8751145fb17ed781040ed2c0ff5",
+    "source": "EPSS_TPG/05_results/10_epss_threshold/02_graph_ablation_v1/previous/full/report/training_prevalence.json"
+  },
+  {
     "path": "published_results/ET02/previous/validation_summary.csv",
     "sha256": "a9572004dae83cdc7f981b2b5ff33b264279e2fbd0843bc3d9a7e7a0a955ec75",
     "source": "EPSS_TPG/05_results/10_epss_threshold/02_graph_ablation_v1/previous/full/report/validation_summary.csv"
+  },
+  {
+    "path": "published_results/ET02/reddit/support.json",
+    "sha256": "d18b9dab14ae81d2f5184824e26aca01a2600e2f51bc1cdac80ff17d229a50e4",
+    "source": "EPSS_TPG/05_results/10_epss_threshold/02_graph_ablation_v1/reddit/full/report/support.json"
+  },
+  {
+    "path": "published_results/ET02/reddit/training_prevalence.json",
+    "sha256": "127067845f4f3a542d81222fe8aee6cd30f9f40956b31117b3416ee4136be104",
+    "source": "EPSS_TPG/05_results/10_epss_threshold/02_graph_ablation_v1/reddit/full/report/training_prevalence.json"
   },
   {
     "path": "published_results/ET02/reddit/validation_summary.csv",
@@ -20,8 +70,28 @@
     "source": "EPSS_TPG/05_results/10_epss_threshold/02_graph_ablation_v1/reddit/full/report/validation_summary.csv"
   },
   {
+    "path": "published_results/FC01/run1/baseline_differences.csv",
+    "sha256": "d5d75d156f26fdbc81c75209d45e2097b94b1a17f1612ce45309417ab6748298",
+    "source": "EPSS_TPG/05_results/08_fresh_studies/27_final_comparison_v1/01_reddit/runs/run1/report/baseline_differences.csv"
+  },
+  {
+    "path": "published_results/FC01/run1/intervals.csv",
+    "sha256": "4056df05200fbf7559028920ebb5355b9bbcb34e842b8b4940c486b3ef27df8f",
+    "source": "EPSS_TPG/05_results/08_fresh_studies/27_final_comparison_v1/01_reddit/runs/run1/report/intervals.csv"
+  },
+  {
+    "path": "published_results/FC01/run1/metrics.csv",
+    "sha256": "6c975ce51b492bbdf9faee77d7126c179ab52ba199b274c6109348b9aea8fd98",
+    "source": "EPSS_TPG/05_results/08_fresh_studies/27_final_comparison_v1/01_reddit/runs/run1/report/metrics.csv"
+  },
+  {
     "path": "published_results/FC01/run1/point_changes.csv",
     "sha256": "4b161701c20f868ff8f405d1e1d2c3b004b93efce8ab5b963003c828e572ccfd",
     "source": "EPSS_TPG/05_results/08_fresh_studies/30_fc01_run1_review_v1/review/point_changes.csv"
+  },
+  {
+    "path": "published_results/FC01/run1/supports.csv",
+    "sha256": "7d64e014fce195c980e62490f81375e7914bf86ff6890ec0b5b99bd870917c07",
+    "source": "EPSS_TPG/05_results/08_fresh_studies/27_final_comparison_v1/01_reddit/runs/run1/report/supports.csv"
   }
 ]

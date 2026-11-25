@@ -1,0 +1,116 @@
+{
+  "metrics": {
+    "accuracy": 0.9547101449275363,
+    "average_precision": 0.04528985507246377,
+    "brier": 0.04328166756890381,
+    "calibration": [
+      {
+        "high_score_fraction": 0.04528985507246377,
+        "lower": 0.0,
+        "mean_probability": 0.0518460329929301,
+        "n": 1104,
+        "upper": 0.1
+      },
+      {
+        "high_score_fraction": null,
+        "lower": 0.1,
+        "mean_probability": null,
+        "n": 0,
+        "upper": 0.2
+      },
+      {
+        "high_score_fraction": null,
+        "lower": 0.2,
+        "mean_probability": null,
+        "n": 0,
+        "upper": 0.3
+      },
+      {
+        "high_score_fraction": null,
+        "lower": 0.3,
+        "mean_probability": null,
+        "n": 0,
+        "upper": 0.4
+      },
+      {
+        "high_score_fraction": null,
+        "lower": 0.4,
+        "mean_probability": null,
+        "n": 0,
+        "upper": 0.5
+      },
+      {
+        "high_score_fraction": null,
+        "lower": 0.5,
+        "mean_probability": null,
+        "n": 0,
+        "upper": 0.6
+      },
+      {
+        "high_score_fraction": null,
+        "lower": 0.6,
+        "mean_probability": null,
+        "n": 0,
+        "upper": 0.7
+      },
+      {
+        "high_score_fraction": null,
+        "lower": 0.7,
+        "mean_probability": null,
+        "n": 0,
+        "upper": 0.8
+      },
+      {
+        "high_score_fraction": null,
+        "lower": 0.8,
+        "mean_probability": null,
+        "n": 0,
+        "upper": 0.9
+      },
+      {
+        "high_score_fraction": null,
+        "lower": 0.9,
+        "mean_probability": null,
+        "n": 0,
+        "upper": 1.0
+      }
+    ],
+    "cves": 1104,
+    "f1": 0.0,
+    "fn": 50,
+    "fp": 0,
+    "high_score": 50,
+    "log_loss": 0.18486149698302295,
+    "mean_probability": 0.0518460329929301,
+    "precision": 0.0,
+    "recall": 0.0,
+    "review_budgets": [
+      {
+        "fraction": 0.01,
+        "hits": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reviewed": 12
+      },
+      {
+        "fraction": 0.05,
+        "hits": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "reviewed": 56
+      },
+      {
+        "fraction": 0.1,
+        "hits": 1,
+        "precision": 0.009009009009009009,
+        "recall": 0.02,
+        "reviewed": 111
+      }
+    ],
+    "roc_auc": 0.5,
+    "threshold": 0.5,
+    "tn": 1054,
+    "tp": 0
+  },
+  "probability": 0.051846032992930086
+}

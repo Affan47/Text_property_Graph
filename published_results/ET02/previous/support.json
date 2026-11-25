@@ -1,0 +1,134 @@
+{
+  "train": {
+    "cves": 2546,
+    "positive": 132,
+    "views": {
+      "D": {
+        "positive_with_text": 132,
+        "source_cves": {
+          "D": 2546,
+          "G": 0,
+          "M": 0,
+          "N": 0
+        },
+        "text_present": 2546
+      },
+      "DM": {
+        "positive_with_text": 132,
+        "source_cves": {
+          "D": 2546,
+          "G": 0,
+          "M": 2533,
+          "N": 0
+        },
+        "text_present": 2546
+      },
+      "DMU": {
+        "positive_with_text": 132,
+        "source_cves": {
+          "D": 2546,
+          "G": 533,
+          "M": 2533,
+          "N": 1779
+        },
+        "text_present": 2546
+      },
+      "DU": {
+        "positive_with_text": 132,
+        "source_cves": {
+          "D": 2546,
+          "G": 533,
+          "M": 0,
+          "N": 1779
+        },
+        "text_present": 2546
+      },
+      "M": {
+        "positive_with_text": 127,
+        "source_cves": {
+          "D": 0,
+          "G": 0,
+          "M": 2533,
+          "N": 0
+        },
+        "text_present": 2533
+      },
+      "U": {
+        "positive_with_text": 124,
+        "source_cves": {
+          "D": 0,
+          "G": 533,
+          "M": 0,
+          "N": 1779
+        },
+        "text_present": 2043
+      }
+    }
+  },
+  "validation": {
+    "cves": 1104,
+    "positive": 50,
+    "views": {
+      "D": {
+        "positive_with_text": 50,
+        "source_cves": {
+          "D": 1104,
+          "G": 0,
+          "M": 0,
+          "N": 0
+        },
+        "text_present": 1104
+      },
+      "DM": {
+        "positive_with_text": 50,
+        "source_cves": {
+          "D": 1104,
+          "G": 0,
+          "M": 1104,
+          "N": 0
+        },
+        "text_present": 1104
+      },
+      "DMU": {
+        "positive_with_text": 50,
+        "source_cves": {
+          "D": 1104,
+          "G": 201,
+          "M": 1104,
+          "N": 745
+        },
+        "text_present": 1104
+      },
+      "DU": {
+        "positive_with_text": 50,
+        "source_cves": {
+          "D": 1104,
+          "G": 201,
+          "M": 0,
+          "N": 745
+        },
+        "text_present": 1104
+      },
+      "M": {
+        "positive_with_text": 50,
+        "source_cves": {
+          "D": 0,
+          "G": 0,
+          "M": 1104,
+          "N": 0
+        },
+        "text_present": 1104
+      },
+      "U": {
+        "positive_with_text": 45,
+        "source_cves": {
+          "D": 0,
+          "G": 201,
+          "M": 0,
+          "N": 745
+        },
+        "text_present": 885
+      }
+    }
+  }
+}
