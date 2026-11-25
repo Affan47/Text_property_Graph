@@ -1,13 +1,17 @@
 # Can public text help decide which vulnerabilities to review first?
 
-A security team may have time to investigate only a few of the vulnerabilities
-on its list. Severity tells the team how much damage a flaw could cause, not
-whether anyone is likely to use it soon. **Can public discussion give the team
-an early reason to look at one flaw before another?** That question is why we
-collected social-media posts, including reports of exploitation, and linked
-them to the vulnerabilities they name. A post is a possible clue, not a
-verified attack. A warning before an incident and a repost after it may
-contain the very same words.
+Suppose two software flaws have the same severity rating, but a security team
+has time to investigate only one today. People are discussing one of them
+online. **Does reading what they say help the team decide which flaw to review
+first?** We collected posts that name vulnerabilities so we could test that
+idea. A mention alone is not proof of an attack: a warning posted before an
+incident and a story shared afterward can use exactly the same words.
+
+We started with a simple comparison: give a model the public description of
+each flaw, then let it read the posts as well. Other comparisons ask what
+linked webpages add and whether a graph helps the model read the same words.
+The [six text cases](#4-what-did-each-case-study-read) explain the shorthand
+used in the results.
 
 **Start here:** [Run the example or a study, step by step](RUNBOOK.md) ·
 [Find a script or config](INDEX.md) · [See the published results](published_results/MANIFEST.json).
@@ -54,9 +58,9 @@ boundary even if nothing new happened to the vulnerability.
 sources: the public description, social posts, webpage summaries where
 available, **CVSS** (Common Vulnerability Scoring System) severity fields, and
 counts of reference links. We do not have FIRST's partner sensor feeds.
-Rather than rebuild EPSS, we compare the same CVEs with and without post text,
-and compare averaging the words' vectors with reading their relationships in
-a text property graph. The question is what those public sources *add*.
+We are not trying to rebuild FIRST's system. Its published score gives us
+one way to check whether these smaller collections contain information that
+matters for prioritization.
 
 **How to read the cutoff.** FIRST does not define one EPSS score at which
 everyone should act; that depends on the team's capacity and the systems it
@@ -100,11 +104,12 @@ of active exploitation all mention a flaw, but they offer different evidence.
 | Previous multisource collection | 5,968 | 2,546 / 1,104 |
 | Reddit collection | 44,985 | 24,213 / 972 |
 
-The collections share some CVEs. They are **not** added together or trained
-as one dataset. The Day-60 study needs an observed Day-60 score and an eligible
-split. The Reddit design separately reserves 3,977 test CVEs; the earlier
-primary regression on the previous collection had 651 held-out CVEs. ET02 did
-not score either test set.
+Why not train on every CVE in the table? A CVE without a recorded Day-60 score
+has no answer for the high-score study. The remaining records must also meet
+the study's split rules. Some CVEs appear in both collections, so we report
+the datasets separately rather than adding their totals. The Reddit design
+reserves 3,977 CVEs for testing; the earlier score-estimation study on the
+older collection had 651 test CVEs. ET02 did not score either test set.
 
 ```mermaid
 flowchart TD
@@ -130,8 +135,9 @@ collector was recovered byte for byte.
 
 ## 3. What does one record contain?
 
-The diagram groups fields by meaning. It is a map of a JSON record, not a
-database schema that requires every field to be present.
+Think of a record as a folder for one vulnerability. It can contain a
+description, posts that mention it, links, and a history of scores. An empty
+list of posts means there is no post to read, not that the flaw went unused.
 
 ```mermaid
 flowchart LR
@@ -150,7 +156,56 @@ has `post`, `platform` and `date`. The keys in `epss_scores` and
 Days 0 through 90 give up to 91 observations. A missing score is not zero.
 Raw catalogue flags are not used as proof of a negative outcome.
 
-## 4. Which information goes into the experiment?
+## 4. What did each case study read?
+
+The letters describe **what the model gets to read about one CVE**. They
+do not describe different kinds of vulnerabilities. In these comparisons,
+**D** is the public CVE description, **M** is the text of accepted social-media
+posts (SMPs), and **U** is the saved, generated summary text of linked
+webpages. U can include GitHub pages (**G**) and other reference pages (**N**).
+The model reads the summary, not the URL itself.
+
+| Case | Text the model can read | Question it helps answer |
+|---|---|---|
+| **D only** | The description, with no posts or summaries. | What can we learn from the published account of the flaw? |
+| **M only** | Posts, without the description or summaries. | How useful is the public discussion when it is the only text available? |
+| **U only** | Webpage summaries, without the description or posts. | How much can the material behind the reference links tell us on its own? |
+| **DM** | The description and the posts. | Compared with D, does letting the model read the discussion help? |
+| **DU** | The description and the webpage summaries. | Compared with D, do the linked pages add information the description left out? |
+| **DMU** | The description, posts and webpage summaries. | Compared with DM, do summaries still help when the model can already read the posts? |
+
+**“Only” applies to the text.** For example, the M-only model still gets the
+same allowed severity fields and reference counts as the D-only model. The
+structured-only control (**S** in the ET02 tables) gets those fields but no
+text. The model also knows which text sources are present. If a CVE has no
+accepted post, it stays in the DM comparison: the model reads its description
+and gets a flag saying there was no post.
+
+There are two different comparisons to read. Compare **pooled D with pooled
+DM** to ask what posts add while keeping the reader the same. Compare
+**pooled DM with TPG DM** to ask whether the graph helps while keeping the
+text the same. In a combined case such as DM, the description and posts keep
+their document boundaries; they are not treated as one author's statement.
+
+**Which studies used these cases?** The Day-60 threshold study (ET02) ran
+all six on each dataset. The final Reddit score comparison (FC01 Run 1) and
+the catalogue study (CC03) used D and DM for their text models. The daily
+forecast (CF01) read past EPSS scores, not text. A U row in ET02 means
+summaries were allowed, not that every CVE had one: **885 of 1,104** older
+validation CVEs had at least one accepted summary, versus **0 of 972** on
+Reddit. On Reddit, 606 training CVEs did have one, so separately trained
+DU and D models can give different answers even though both read just the
+description at validation. [Older source counts](published_results/ET02/previous/support.json)
+· [Reddit source counts](published_results/ET02/reddit/support.json).
+
+Two earlier comparisons asked more specific questions. In [TRV04](EPSS_TPG/02_prediction/05_studies/05_tpg_revision/04_D_VS_DG.md),
+**DG** added *only GitHub summaries* to the description, leaving out posts
+and other webpages. In [CT07](EPSS_TPG/02_prediction/05_studies/07_combined_text_fresh/12_WITHIN_VERSION_FULL_RESULTS.md),
+**DF** gave the model the description and a yes/no flag saying whether a post
+existed, but not the post's words. Comparing DF with DM asks whether reading
+the post helps beyond knowing someone wrote one.
+
+This is how we prepare those comparisons without giving the model the answer:
 
 ```mermaid
 flowchart TD
@@ -162,18 +217,14 @@ flowchart TD
     T --> P
 ```
 
-**D** means description; **M** means accepted social-media prose; **U** means
-summaries of GitHub (**G**) and other (**N**) reference pages. ET02 compares
-**D, M, U, DM, DU and DMU**. For DM, for example, the description and accepted
-posts form one text view with boundaries between documents. A missing source
-gets an explicit flag; it is not a reason to drop the CVE. CC03 uses only D
-and DM and screens for direct catalogue answers.
-
-Duplicate references are counted once **within** each CVE. Shared references
-are not deleted from other CVEs. The split rules account for time and shared
-evidence; a random split could place the same post on both sides. Some residual
-overlap is reported rather than assumed away. The [structured encoder](EPSS_TPG/02_prediction/01_package/epss/reddit_primary/structured.py)
-shows which fields are allowed and how missing values are represented.
+A vendor can publish one advisory about three different flaws. We count its
+link once for each CVE, not three times for one CVE and not just once for the
+entire dataset. Shared posts also matter when splitting the data: a random
+split could let a model see the same post in training and evaluation. The
+studies track shared evidence and report overlap where it remains. CC03 also
+screens text for passages that give away the catalogue answer. The
+[structured encoder](EPSS_TPG/02_prediction/01_package/epss/reddit_primary/structured.py)
+lists the allowed fields and shows how missing values are recorded.
 
 ## 5. How does text become a graph?
 
@@ -212,6 +263,14 @@ and [node-to-vector mapping](EPSS_TPG/01_tpg/10_extensions/tpg_combined_v3/compa
 
 ## 6. How does the model make a prediction?
 
+SecureBERT represents each token (a word or part of one) with a list of
+numbers. The **pooled reader** averages those lists. The **text property
+graph (TPG) reader** starts with
+the same text but also follows its connections: in the example above, the
+version belongs to a particular product. Both readers produce 32 numbers for
+the text. Each model then joins its own 32 numbers with the structured
+information to make a prediction.
+
 ```mermaid
 flowchart TD
     A["Same text view and frozen vectors"] --> P["Pooled reader: average the observed token vectors, 768 to 32"]
@@ -226,7 +285,6 @@ flowchart TD
     J --> O["68 to 32 to 1: estimated score or probability for the selected task"]
 ```
 
-The pooled and graph readers are **alternatives**, not two inputs used together.
 In the graph reader, each node starts with 13 node-type indicators, 768 text
 values, an embedding-present flag and a target-CVE-mention flag. Entity nodes
 also get a projected subtype. For each edge the model uses its relation type
@@ -237,8 +295,9 @@ stay unchanged. [Model implementation](EPSS_TPG/02_prediction/01_package/epss/co
 
 ## 7. What did the comparisons show?
 
-* **Day-60 score:** none of FC01 Run 1's six main comparisons showed a clear
-  reduction in error under the rule fixed before training. [Errors](published_results/FC01/run1/metrics.csv)
+* **Could we estimate the exact Day-60 score more closely?** None of FC01
+  Run 1's six main comparisons showed a clear reduction in error under the
+  rule fixed before training. [Errors](published_results/FC01/run1/metrics.csv)
   · [Paired differences and uncertainty](published_results/FC01/run1/intervals.csv).
 * **Catalogue membership:** the tree using EPSS and structured fields had the
   highest observed average precision on both datasets: **0.813** on the
@@ -251,11 +310,15 @@ stay unchanged. [Model implementation](EPSS_TPG/02_prediction/01_package/epss/co
   when v5 already incorporated VulnCheck data. The score and catalogue label
   may therefore share evidence. This does not tell us which individual scores
   were affected, and the ranking is not independent confirmation of exploitation.
-* **High Day-60 EPSS:** only **9 of 972** Reddit validation CVEs and **50 of
-  1,104** older validation CVEs had scores at or above 0.1. On Reddit, one
-  additional hit changes recall by one ninth. No Reddit validation CVE had an
-  accepted webpage summary, so those results cannot measure the benefit of
-  reading a summary there. [Reddit comparison](published_results/ET02/reddit/validation_summary.csv)
+* **Did posts help rank high Day-60 scores?** On the older validation set,
+  the pooled reader's average precision went from **0.214** with the
+  description (D) to **0.309** with the description and posts (DM). The graph
+  reader scored **0.300** on that same DM case. Here, reading more text gave
+  a higher observed ranking score; switching readers did not improve it.
+  These are averages across training seeds, not evidence that a post predicted
+  an attack. Only **50 of 1,104** older and **9 of 972** Reddit validation CVEs
+  had high scores. On Reddit, finding just one more changes recall by one ninth.
+  [Reddit comparison](published_results/ET02/reddit/validation_summary.csv)
   · [Older comparison](published_results/ET02/previous/validation_summary.csv).
 * **Early warning remains unproven.** A separate check asked whether a model
   reading the description could improve on the EPSS score already known by
